@@ -1,30 +1,47 @@
 #include "acceptor.h"
 
-Acceptor_thread::Acceptor_thread(Socket skt, Queue<Command>& q_commands):
-        skt(std::move(skt)), speakers(), q_commands(q_commands), id_match_generator(0) {}
+AcceptorThread::AcceptorThread(const char* servname): skt(servname) {}
 
 
-void Acceptor_thread::run() {
+void AcceptorThread::run() {
     try {
-        accept_loop();
+        acceptLoop();
     } catch (const LibError& e) {
 
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
     }
-    //    kill_all();
+    // killAll();
 }
 
-void Acceptor_thread::accept_loop() {
-    size_t id_client = 0;
+void AcceptorThread::acceptLoop() {
+    size_t idClient = 0;
     while (_keep_running) {
-
         Socket peer = skt.accept();
-        Receiver_thread* client =
-                new Receiver_thread(q_commands, std::move(peer), id_client, speakers);
-        clients.push_back(client);
+        ReceiverThread* client = new ReceiverThread(matches, std::move(peer), idClient);
+        clients.pushBack(client);
         client->start();
-        reap_dead();
-        id_client++;
+        reapDead();
+        idClient++;
     }
 }
+
+void AcceptorThread::reapDead() {
+    clients.remove_if([](ReceiverThread* client) {
+        if (!client->is_alive()) {
+            client->join();
+            delete client;
+            return true;
+        }
+        return false;
+    });
+}
+
+// void AcceptorThread::killAll() {
+//     for (auto& client: clients) {
+//         client->forceEnd();
+//         client->join();
+//         delete client;
+//     }
+//     clients.clear();
+// }

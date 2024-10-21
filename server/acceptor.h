@@ -4,32 +4,33 @@
 #include <list>
 #include <utility>
 
-#include "../common/common_socket.h"
-#include "../common/common_thread.h"
-#include "../common_queue.h"
+#include "../common/queue.h"
+#include "../common/socket.h"
+#include "../common/thread.h"
 
+#include "monitorMatches.h"
 #include "receiver.h"
-// inlcude monitor
 
-class Acceptor_thread: public Thread {
+class AcceptorThread: public Thread {
 private:
     Socket skt;
-    std::list<Receiver_thread*> clients;
+    std::list<ReceiverThread*> clients;
+    MonitorMatches matches;
 
-    void accept_loop();
-    // void kill_all();
-    // void reap_dead();
+    void acceptLoop();
+    void reapDead();
+    // void killAll();
 public:
-    explicit Acceptor_thread(Socket skt);
+    explicit AcceptorThread(const char* servname);
     void run() override;
 
     // not copyable
-    Acceptor_thread(const Acceptor_thread&) = delete;
-    Acceptor_thread& operator=(const Acceptor_thread&) = delete;
+    AcceptorThread(const AcceptorThread&) = delete;
+    AcceptorThread& operator=(const AcceptorThread&) = delete;
 
     // not movable
-    Acceptor_thread(Acceptor_thread&&) = delete;
-    Acceptor_thread& operator=(Acceptor_thread&&) = delete;
+    AcceptorThread(AcceptorThread&&) = delete;
+    AcceptorThread& operator=(AcceptorThread&&) = delete;
 };
 
 #endif

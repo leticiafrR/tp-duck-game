@@ -1,12 +1,22 @@
 #ifndef SENDER_H
 #define SENDER_H
-#include "../common/common_thread.h"
-#include "../common_queue.h"
+#include <cstddef>
 
-class Sender_thread: public Thread {
+#include "../common/queue.h"
+#include "../common/thread.h"
+
+#include "match.h"
+
+class ProtocolServer;
+
+class SenderThread: public Thread {
 private:
-    /* data */
+    Match* myMatch;
+    ProtocolServer& protocol;
+    size_t idClient;
+
 public:
+    explicit SenderThread(Match* myMatch, ProtocolServer& protocol, size_t idClient);
 };
 
 #endif
