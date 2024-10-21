@@ -1,9 +1,12 @@
 #include <exception>
 #include <iostream>
+#include <thread>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "Camera.h"
+#include "Object2D.h"
 
 using namespace SDL2pp;  // NOLINT
 
@@ -12,20 +15,59 @@ int main() try {
     SDL sdl(SDL_INIT_VIDEO);
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
+    Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720,
                   SDL_WINDOW_RESIZABLE);
 
     // Create accelerated video renderer with default driver
-    Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
+    render.SetDrawColor(100, 100, 100, 255);
 
-    // Clear screen
-    renderer.Clear();
+    Camera cam(std::move(render), 10);
 
-    // Show rendered frame
-    renderer.Present();
+    Object2D& spr = cam.CreateObject2D(Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
+    spr.SetColor(Color(255, 255, 255));
 
-    // 5 second delay
-    SDL_Delay(5000);
+    Transform& sprTransform = spr.GetTransform();
+
+    bool running = true;
+
+    float speed = 1.5;
+
+    while (running) {
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN: {
+                    SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+                    switch (keyEvent.keysym.sym) {
+                        case SDLK_a:
+                            sprTransform.Move(Vector2D::Left() * speed);
+                            break;
+                        case SDLK_d:
+                            sprTransform.Move(Vector2D::Right() * speed);
+                            break;
+                        case SDLK_w:
+                            sprTransform.Move(Vector2D::Up() * speed);
+                            break;
+                        case SDLK_s:
+                            sprTransform.Move(Vector2D::Down() * speed);
+                            break;
+                    }
+                } break;
+                case SDL_MOUSEMOTION:
+                    // std::cout << "Oh! Mouse" << std::endl;
+                    break;
+                case SDL_QUIT:
+                    running = false;
+                    break;
+            }
+        }
+
+        sprTransform.Rotate(0.1);
+        cam.Render();
+        SDL_Delay(1);
+    }
 
     // Here all resources are automatically released and library deinitialized
     return 0;
