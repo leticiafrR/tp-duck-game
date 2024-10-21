@@ -1,18 +1,19 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include <cstdint>
 #include <exception>
 #include <string>
 
 #include "socket.h"
 
 
-class Protocol {
-    Socket skt;
+class ProtocolAssistant {
+    Socket& skt;
 
 public:
     // Constructor por referencia
-    explicit Protocol(Socket&& skt);
+    explicit ProtocolAssistant(Socket& skt);
 
     /*  Sends a string by first sending two bytes representing the string's size,
      *   followed by the string itself

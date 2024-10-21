@@ -1,4 +1,4 @@
-#include "protocol.h"
+#include "protocolAssistant.h"
 
 #include <exception>
 #include <iostream>
@@ -10,17 +10,17 @@
 #include "socket.h"
 
 
-Protocol::Protocol(Socket&& skt): skt(std::move(skt)) {}
+ProtocolAssistant::ProtocolAssistant(Socket& skt): skt(skt) {}
 
-uint8_t Protocol::reciveInt(bool& wasClosed) {
-    uint8_t int;
+uint8_t ProtocolAssistant::reciveInt(bool& wasClosed) {
+    uint8_t num;
 
-    skt.recvall(&int, sizeof(int), &wasClosed);
+    skt.recvall(&num, sizeof(int), &wasClosed);
 
-    return int;
+    return num;
 }
 
-std::string Protocol::reciveString(bool& wasClosed) {
+std::string ProtocolAssistant::reciveString(bool& wasClosed) {
     uint16_t size;
     skt.recvall(&size, sizeof(size), &wasClosed);
 
@@ -34,11 +34,11 @@ std::string Protocol::reciveString(bool& wasClosed) {
     return string;
 }
 
-void Protocol::sendInt(const uint8_t& int, bool& wasClosed) {
-    skt.sendall(&int, sizeof(int), &wasClosed);
+void ProtocolAssistant::sendInt(const uint8_t& num, bool& wasClosed) {
+    skt.sendall(&num, sizeof(int), &wasClosed);
 }
 
-void Protocol::sendString(const std::string& string, bool& wasClosed) {
+void ProtocolAssistant::sendString(const std::string& string, bool& wasClosed) {
     uint16_t size = htons(string.size());
     skt.sendall(reinterpret_cast<const char*>(&size), sizeof(size), &wasClosed);
     skt.sendall(string.c_str(), string.size(), &wasClosed);

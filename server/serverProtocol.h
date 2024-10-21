@@ -4,15 +4,42 @@
 #include <list>
 #include <string>
 
-#include "protocol.h"
-#include "socket.h"
+#include "../common/dataMatch.h"
+#include "../common/dataMove.h"
+#include "../common/protocolAssistant.h"
+#include "../common/socket.h"
+
+typedef enum: uint8_t {
+    NEW_GAME = 1,
+    JOIN_A_GAME,
+    ERROR_JOIN,
+    ACTIVE_MATCHES,
+    MOVEMENT,
+    EQUIPMENT,
+    ATACK,
+    FINAL_STATUS,
+
+} MESSAGE_TYPE;
+
+typedef enum: uint8_t {
+    UP = 1,
+    RIGHT,
+    LEFT,
+    DOWN,
+    KEY_UP,
+    KEY_DOWN,
+} KEYS;
+
 // El nick name se envia cada vez que envia algo
 
-class ServerProtocol: public Protocol {
+class ServerProtocol {
 private:
+    Socket skt;
+    ProtocolAssistant assistant;
+
 public:
     // Constructor
-    ServerProtocol(Socket&& skt);
+    explicit ServerProtocol(Socket&& skt);
 
     // Send the connection status: Indicate whether the client successfully joined and if it is
     // still connected.
@@ -25,18 +52,19 @@ public:
     void Receive(bool& isConnected);  // Todavia no tiene un uso
 
     // Receive a move message.
-    Move ReceiveAMove(bool& isConnected);
+    dataMove ReceiveAMove(bool& isConnected);
 
     // Receive a match
-    Match ReceiveAMatch(bool& isConnected);
+    dataMatch ReceiveAMatch(bool& isConnected);
 
     // Send matches list
-    void SendMatches(const std::list<Match> matches,
+    void SendMatches(const std::list<dataMatch>& matches,
                      bool& isConnected);  // Asumo que como parametro va una lista C++ pero espero
                                           // confirmacion
 
     // Receive a client: the nickname and whether the client wants to open a new match or join an
     // existing one.
-    Match ReceiveAClient(bool& isConnected);
-}
+    dataMatch ReceiveAClient(bool& isConnected);
+};
+
 #endif
