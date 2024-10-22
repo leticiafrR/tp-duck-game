@@ -15,7 +15,7 @@ void AcceptorThread::run() {
 }
 
 void AcceptorThread::acceptLoop() {
-    size_t idClient = 0;
+    size_t idClient = 1;
     while (_keep_running) {
         Socket peer = skt.accept();
         ReceiverThread* client = new ReceiverThread(matches, std::move(peer), idClient);
