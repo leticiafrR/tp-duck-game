@@ -61,3 +61,15 @@ dataMove ServerProtocol::ReceiveAMove(bool& isConnected) {
     }
     return newMove;
 }
+
+void ServerProtocol::SendMatch(const uint8_t& matchID, const uint8_t& quantityP,
+                               const uint8_t& maxP, bool& isConnected) {
+    bool wasClosed = false;
+    assistant.sendInt(A_MATCH, wasClosed);
+    assistant.sendInt(matchID, wasClosed);
+    assistant.sendInt(quantityP, wasClosed);
+    assistant.sendInt(maxP, wasClosed);
+    if (wasClosed) {
+        isConnected = false;
+    }
+}
