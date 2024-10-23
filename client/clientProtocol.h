@@ -17,6 +17,7 @@ typedef enum: uint8_t {
     ERROR_JOIN,
     ACTIVE_MATCHES,
     NAME,
+    A_MATCH,
     MOVEMENT,
     EQUIPMENT,
     ATACK,
@@ -58,6 +59,9 @@ public:
     // Send key state: Send whether the key is pressed (on) or released (off), and which key it is.
     void SendKeyHeld(const std::string& name, const bool& keyOn, const uint8_t& keyId,
                      bool& isConnected);
+
+    //
+    dataMatch ReceiveMatch(bool& isConnected);
 
     // Receive matches list
     std::list<dataMatch> ReceiveMatches(bool& isConnected);

@@ -55,3 +55,23 @@ void ClientProtocol::SendName(const std::string& playerName, bool& isConnected) 
         isConnected = false;
     }
 }
+dataMatch ClientProtocol::ReceiveMatch(bool& isConnected) {
+    dataMatch match;
+    bool wasClosed = false;
+    uint8_t type = assistant.reciveInt(wasClosed);
+    if (type != A_MATCH) {
+        // lanzo excepcion
+    }
+
+    uint8_t newMatchID = assistant.reciveInt(wasClosed);
+    match.ID = newMatchID;
+    uint8_t newQuantityPlayers = assistant.reciveInt(wasClosed);
+    match.quantityPlayers = newQuantityPlayers;
+    uint8_t newMAXPlayers = assistant.reciveInt(wasClosed);
+    match.MAXPlayers = newMAXPlayers;
+
+    if (wasClosed) {
+        isConnected = false;
+    }
+    return match;
+}
