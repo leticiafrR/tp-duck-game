@@ -18,8 +18,9 @@ void AcceptorThread::acceptLoop() {
     size_t idClient = 1;
     while (_keep_running) {
         Socket peer = skt.accept();
-        //with a single match we already know the queue of commands where the receiver pushes, 
-        //but also the client needs to know the match so when it realizes it has disconected it aks to the match to loggOut it self
+        // with a single match we already know the queue of commands where the receiver pushes,
+        // but also the client needs to know the match so when it realizes it has disconected it aks
+        // to the match to loggOut it self
         ReceiverThread* client = new ReceiverThread(match, std::move(peer), idClient);
         clients.push_back(client);
         client->start();

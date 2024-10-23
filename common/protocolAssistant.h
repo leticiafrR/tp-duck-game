@@ -30,5 +30,11 @@ public:
      *   followed by the string itself
      */
     std::string reciveString(bool& wasClosed);
+
+    // Send a float
+    void ProtocolAssistant::SendFloat(const float& ang, bool& wasClosed);
+
+    // Receive a float
+    float ProtocolAssistant::ReceiveFloat(bool& wasClosed);
 };
 #endif

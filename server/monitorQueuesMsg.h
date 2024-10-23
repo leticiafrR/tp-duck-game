@@ -2,6 +2,7 @@
 #define MONITOR_QUEUES_MSG_H
 #include <cstddef>
 #include <map>
+
 #include "../common/queue.h"
 
 typedef struct Message Message;  // desaparece con la integraciòn del protocolo
@@ -9,7 +10,7 @@ typedef struct Message Message;  // desaparece con la integraciòn del protocolo
 
 class MonitorQueuesMsg {
 private:
-    std::map<size_t, Queue<Message>*> queuesMsg;
+    std::map<size_t, Queue<Message>*> queuesMsg;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
 public:

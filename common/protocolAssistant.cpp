@@ -43,3 +43,14 @@ void ProtocolAssistant::sendString(const std::string& string, bool& wasClosed) {
     skt.sendall(reinterpret_cast<const char*>(&size), sizeof(size), &wasClosed);
     skt.sendall(string.c_str(), string.size(), &wasClosed);
 }
+
+void ProtocolAssistant::SendFloat(const float& ang, bool& wasClosed) {
+
+    skt.sendall(&ang, sizeof(float), &wasClosed);
+}
+
+float ProtocolAssistant::ReceiveFloat(bool& wasClosed) {
+    float ang;
+    skt.recvall(&ang, sizeof(ang), &wasClosed);
+    return ang;
+}

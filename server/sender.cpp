@@ -1,9 +1,6 @@
 #include "sender.h"
 
 
-SenderThread::SenderThread(ServerProtocol& protocol):
-       protocol(protocol) {}
+SenderThread::SenderThread(ServerProtocol& protocol): protocol(protocol) {}
 
-Queue<Message>* SenderThread::getMssgQueue() {
-        return &mssgQueue;
-}
+Queue<Message>* SenderThread::getMssgQueue() { return &mssgQueue; }

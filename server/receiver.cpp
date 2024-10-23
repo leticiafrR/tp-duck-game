@@ -1,11 +1,14 @@
 #include "receiver.h"
 
 ReceiverThread::ReceiverThread(Match& match, Socket sktPeer, size_t idClient):
-        match(match), protocol(std::move(sktPeer)), idClient(idClient), commandQueue(match.getCommandQueue()) {}
+        match(match),
+        protocol(std::move(sktPeer)),
+        idClient(idClient),
+        commandQueue(match.getCommandQueue()) {}
 
 void ReceiverThread::run() {
     try {
-        SenderThread sender (protocol);
+        SenderThread sender(protocol);
         match.addClient(idClient, sender.getMssgQueue());
 
         sender.start();
@@ -20,7 +23,5 @@ void ReceiverThread::run() {
     }
 }
 
-void ReceiverThread::receiveLoop() {
-    
-}
+void ReceiverThread::receiveLoop() {}
 void ReceiverThread::forceEnd() {}
