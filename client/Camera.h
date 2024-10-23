@@ -48,14 +48,20 @@ void Camera::DrawTexture(Texture& tex, const Transform& transform) {
 
     int screenWidth = render.GetOutputWidth();
     int screenHeight = render.GetOutputHeight();
-    int screenX = (screenWidth / 2) + (transform.GetPos().x - position.x);
-    int screenY = (screenHeight / 2) - (transform.GetPos().y - position.y);
 
     float screenScale = Vector2D(screenWidth, screenHeight).GetMagnitude() / size;
 
+    // Mantiene completamente la relación de aspecto
+    // float screenScale = std::min(static_cast<float>(screenWidth)/size,
+    // static_cast<float>(screenHeight)/size);
+
+    int screenX = (screenWidth / 2) + (transform.GetPos().x - position.x) * screenScale;
+    int screenY = (screenHeight / 2) - (transform.GetPos().y - position.y) * screenScale;
+
+
     render.Copy(tex, SDL2pp::NullOpt,
-                Rect(screenX - ((sprSize.x / 2) * screenScale),
-                     screenY - ((sprSize.y / 2) * screenScale), ((sprSize.x) * screenScale),
+                Rect(screenX - ((sprSize.x) * screenScale) / 2,
+                     screenY - ((sprSize.y) * screenScale) / 2, ((sprSize.x) * screenScale),
                      ((sprSize.y) * screenScale)),
                 angle);
 }
