@@ -16,6 +16,7 @@ typedef enum: uint8_t {
     JOIN_A_GAME,
     ERROR_JOIN,
     ACTIVE_MATCHES,
+    NAME,
     MOVEMENT,
     EQUIPMENT,
     ATACK,
@@ -43,6 +44,9 @@ public:
 
     // Send a request to open a new game
     void SendNewGame(const std::string& name, bool& isConnected);
+
+    // Send the nickname
+    void SendName(const std::string& name, bool& isConnected);
 
     // Send a request to join in a exiting game
     void JoinGame(const std::string& name, bool& isConnected);

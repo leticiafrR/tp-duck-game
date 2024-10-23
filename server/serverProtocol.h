@@ -14,6 +14,7 @@ typedef enum: uint8_t {
     JOIN_A_GAME,
     ERROR_JOIN,
     ACTIVE_MATCHES,
+    NAME,
     MOVEMENT,
     EQUIPMENT,
     ATACK,
@@ -50,6 +51,9 @@ public:
 
     // Receive a message from the client.
     void Receive(bool& isConnected);  // Todavia no tiene un uso
+
+    // Receive the player's name
+    std::string ReceiveNickName(bool& isConnected);
 
     // Receive a move message.
     dataMove ReceiveAMove(bool& isConnected);
