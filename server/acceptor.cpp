@@ -21,8 +21,7 @@ void AcceptorThread::acceptLoop() {
         //with a single match we already know the queue of commands where the receiver pushes, 
         //but also the client needs to know the match so when it realizes it has disconected it aks to the match to loggOut it self
         ReceiverThread* client = new ReceiverThread(match, std::move(peer), idClient);
-        //fix i a new commit that the method do not use camelCase
-        clients.pushBack(client);
+        clients.push_back(client);
         client->start();
         reapDead();
         idClient++;
