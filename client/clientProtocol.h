@@ -63,6 +63,9 @@ public:
     //
     dataMatch ReceiveMatch(bool& isConnected);
 
+    //
+    void ReceiveBackGround(bool& isConnected);
+
     // Receive matches list
     std::list<dataMatch> ReceiveMatches(bool& isConnected);
 };

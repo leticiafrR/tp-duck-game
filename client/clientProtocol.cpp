@@ -64,7 +64,7 @@ dataMatch ClientProtocol::ReceiveMatch(bool& isConnected) {
     }
 
     uint8_t newMatchID = assistant.reciveInt(wasClosed);
-    match.ID = newMatchID;
+    match.ID = static_cast<size_t>(newMatchID);
     uint8_t newQuantityPlayers = assistant.reciveInt(wasClosed);
     match.quantityPlayers = newQuantityPlayers;
     uint8_t newMAXPlayers = assistant.reciveInt(wasClosed);

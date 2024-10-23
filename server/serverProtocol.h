@@ -54,8 +54,11 @@ public:
     void Receive(bool& isConnected);  // Todavia no tiene un uso
 
     //
-    void SendMatch(const uint8_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
+    void SendMatch(const size_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
                    bool& isConnected);
+
+    //
+    void SendBackGround(const uint8_t& backgroundID);
 
     // Receive the player's name
     std::string ReceiveNickName(bool& isConnected);

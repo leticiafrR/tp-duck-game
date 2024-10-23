@@ -17,7 +17,7 @@ class ReceiverThread: public Thread {
     // lo que tendrìa que pasar es que se lance al Reciver y este de alguna forma se consigue un
     // puntero a
 private:
-    size_t idClient;  // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] size_t idClient;  // cppcheck-suppress unusedStructMember
     // a priori sè que necesitamos a la partida para pedirle a la misma que saque a este jugador
     // cuando nos demos cuenta que està muerto (por diversas razones) ademàs de que en el
     // constructor esta nos proporciona la queue que necesita el hilo

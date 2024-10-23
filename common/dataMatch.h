@@ -4,10 +4,10 @@
 #include <string>
 
 struct dataMatch {
-    std::string clientName;   // cppcheck-suppress unusedStructMember
-    size_t ID;                // cppcheck-suppress unusedStructMember
-    uint8_t quantityPlayers;  // cppcheck-suppress unusedStructMember
-    uint8_t MAXPlayers;       // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] std::string clientName;
+    [[clang::supress_unused]] size_t ID;
+    [[clang::supress_unused]] uint8_t quantityPlayers;
+    [[clang::supress_unused]] uint8_t MAXPlayers;
     dataMatch(): clientName(), ID(0), quantityPlayers(), MAXPlayers() {}
 };
 #endif

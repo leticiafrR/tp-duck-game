@@ -14,7 +14,8 @@
 class AcceptorThread: public Thread {
 private:
     Socket skt;
-    std::list<ReceiverThread*> clients;  // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] std::list<ReceiverThread*>
+            clients;  // cppcheck-suppress unusedStructMember
     // should it be a object active? i mean should it be allocated in the heap?
     Match match;
 

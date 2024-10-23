@@ -12,7 +12,7 @@ class ProtocolAssistant {
     Socket& skt;
 
 public:
-    // Constructor por referencia
+    // Constructor
     explicit ProtocolAssistant(Socket& skt);
 
     /*  Sends a string by first sending two bytes representing the string's size,
