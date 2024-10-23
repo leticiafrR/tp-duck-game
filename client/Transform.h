@@ -24,9 +24,9 @@ public:
     void Move(Vector2D add);
     void Rotate(float add);
 
-    Vector2D GetPos() { return this->position; }
-    Vector2D GetSize() { return this->size; }
-    float GetAngle() { return this->angle; }
+    Vector2D GetPos() const { return this->position; }
+    Vector2D GetSize() const { return this->size; }
+    float GetAngle() const { return this->angle; }
 
     ~Transform() = default;
 };
