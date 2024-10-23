@@ -22,15 +22,14 @@ int main() try {
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
     render.SetDrawColor(100, 100, 100, 255);
 
-    Camera cam(std::move(render), 10);
+    Camera cam(std::move(render), 100);
 
     cam.CreateObject2D("../client/assets/bg_forest.png",
-                       Transform(Vector2D::Zero(), Vector2D(10, 10)));
+                       Transform(Vector2D::Zero(), Vector2D(100, 100)));
 
-    cam.CreateObject2D("../client/assets/bg_city.png",
-                       Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
+    cam.CreateObject2D("../client/assets/bg_city.png", Transform(Vector2D::Zero(), Vector2D(5, 5)));
     Object2D& spr = cam.CreateObject2D("../client/assets/img.png",
-                                       Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
+                                       Transform(Vector2D::Zero(), Vector2D(5, 5)));
     spr.SetColor(Color(255, 255, 255));
 
     Transform& sprTransform = spr.GetTransform();
