@@ -36,5 +36,11 @@ public:
 
     // Receive a float
     float ProtocolAssistant::ReceiveFloat(bool& wasClosed);
+
+    // Send a float
+    void ProtocolAssistant::SendSizet(const size_t& ang, bool& wasClosed);
+
+    // Receive a float
+    size_t ProtocolAssistant::ReceiveSizet(bool& wasClosed);
 };
 #endif

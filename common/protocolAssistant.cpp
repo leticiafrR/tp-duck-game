@@ -54,3 +54,14 @@ float ProtocolAssistant::ReceiveFloat(bool& wasClosed) {
     skt.recvall(&ang, sizeof(ang), &wasClosed);
     return ang;
 }
+
+void ProtocolAssistant::SendSizet(const size_t& ang, bool& wasClosed) {
+
+    skt.sendall(&ang, sizeof(float), &wasClosed);
+}
+
+size_t ProtocolAssistant::ReceiveSizet(bool& wasClosed) {
+    size_t ang;
+    skt.recvall(&ang, sizeof(ang), &wasClosed);
+    return ang;
+}
