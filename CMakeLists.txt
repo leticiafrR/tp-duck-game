@@ -48,6 +48,10 @@ target_include_directories(taller_common PUBLIC .)
 # Install libSDL2pp (for client or editor)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
 if(TALLER_CLIENT OR TALLER_EDITOR)
+    set(SDL2PP_WITH_IMAGE ON)
+    set(SDL2PP_WITH_TTF ON)
+    set(SDL2PP_WITH_MIXER ON)
+    
     include(FetchContent)
     FetchContent_Declare(
         libSDL2pp
