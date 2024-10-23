@@ -15,7 +15,7 @@ int main() try {
     SDL sdl(SDL_INIT_VIDEO);
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720,
+    Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 940,
                   SDL_WINDOW_RESIZABLE);
 
     // Create accelerated video renderer with default driver
@@ -24,7 +24,13 @@ int main() try {
 
     Camera cam(std::move(render), 10);
 
-    Object2D& spr = cam.CreateObject2D(Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
+    cam.CreateObject2D("../client/assets/bg_forest.png",
+                       Transform(Vector2D::Zero(), Vector2D(10, 10)));
+
+    cam.CreateObject2D("../client/assets/bg_city.png",
+                       Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
+    Object2D& spr = cam.CreateObject2D("../client/assets/img.png",
+                                       Transform(Vector2D::Zero(), Vector2D(0.5, 0.5)));
     spr.SetColor(Color(255, 255, 255));
 
     Transform& sprTransform = spr.GetTransform();
