@@ -18,7 +18,8 @@ private:
 public:
     explicit Match(size_t idClientCreator);
     void run() override;
-    void addClient(size_t idClient, Queue<Message>* queueMsg);
+    //returns a boolean that indicating if the client was succesfully added
+    bool addClient(size_t idClient, Queue<Message>* queueMsg);
     void removeClient(size_t idClient);
     Queue<Command>& getCommandQueue();
 };
