@@ -1,5 +1,9 @@
 #include "sender.h"
 
 
-SenderThread::SenderThread(Match* myMatch, ProtocolServer& protocol, size_t idClient):
-        myMatch(myMatch), protocol(protocol), idClient(idClient) {}
+SenderThread::SenderThread(ServerProtocol& protocol):
+       protocol(protocol) {}
+
+Queue<Message>* SenderThread::getMssgQueue() {
+        return &mssgQueue;
+}

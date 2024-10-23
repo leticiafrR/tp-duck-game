@@ -1,13 +1,13 @@
 #include "receiver.h"
 
-ReceiverThread::ReceiverThread(MonitorMatches& matches, Socket sktPeer, size_t idClient):
-        matches(matches), protocol(std::move(sktPeer)), idClient(idClient), myMatch(nullptr) {}
+ReceiverThread::ReceiverThread(Match& match, Socket sktPeer, size_t idClient):
+        match(match), protocol(std::move(sktPeer)), idClient(idClient), commandQueue(match.getCommandQueue()) {}
 
 void ReceiverThread::run() {
     try {
-        Lobby lobby();
-        // lobby.asignMatch();
-        SenderThread sender(myMatch, protocol, idClient);
+        SenderThread sender (protocol);
+        match.addClient(idClient, sender.getMssgQueue());
+
         sender.start();
         receiveLoop();
         //
@@ -20,5 +20,7 @@ void ReceiverThread::run() {
     }
 }
 
-void ReceiverThread::receiveLoop() {}
+void ReceiverThread::receiveLoop() {
+    
+}
 void ReceiverThread::forceEnd() {}

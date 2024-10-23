@@ -13,13 +13,14 @@ private:
     size_t idClientCreator;
     int numberPlayers;
     MonitorQueuesMsg queuesMsg;
-    Queue<Command> queueCmmd;
+    Queue<Command> commandQueue;
 
 public:
     explicit Match(size_t idClientCreator);
     void run() override;
     void addClient(size_t idClient, Queue<Message>* queueMsg);
     void removeClient(size_t idClient);
+    Queue<Command>& getCommandQueue();
 };
 
 #endif

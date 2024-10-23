@@ -11,3 +11,7 @@ void Match::removeClient(size_t idClient) {
     queuesMsg.removeQueueMsg(idClient);
     numberPlayers--;
 }
+
+Queue<Command>& Match::getCommandQueue(){
+    return commandQueue;
+}

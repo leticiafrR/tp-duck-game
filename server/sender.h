@@ -6,17 +6,21 @@
 #include "../common/thread.h"
 
 #include "match.h"
-
-class ProtocolServer;
+#include "serverProtocol.h"
 
 class SenderThread: public Thread {
 private:
-    Match* myMatch;
-    ProtocolServer& protocol;
-    size_t idClient;
+    Queue<Message> mssgQueue;
+    ServerProtocol& protocol;
+    void recevierLoop();
 
 public:
-    explicit SenderThread(Match* myMatch, ProtocolServer& protocol, size_t idClient);
+    explicit SenderThread(ServerProtocol& protocol);
+    Queue<Message>* getMssgQueue();
+    void run() override;
+    void kill();
+
+    ~SenderThread() override;
 };
 
 #endif

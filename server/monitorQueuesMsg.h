@@ -2,6 +2,7 @@
 #define MONITOR_QUEUES_MSG_H
 #include <cstddef>
 #include <map>
+#include "../common/queue.h"
 
 typedef struct Message Message;  // desaparece con la integraciòn del protocolo
 
