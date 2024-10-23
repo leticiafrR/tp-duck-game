@@ -11,6 +11,7 @@
 #include "Object2D.h"
 #include "Vector2D.h"
 
+using SDL2pp::Rect;
 using SDL2pp::Renderer;
 using SDL2pp::Texture;
 using std::string;
@@ -23,7 +24,7 @@ private:
 
     float size;
 
-    vector<Object2D> sprites;
+    std::vector<Object2D> sprites;
     void DrawTexture(Texture& tex, const Transform& transform);
 
 public:
@@ -52,7 +53,7 @@ void Camera::DrawTexture(Texture& tex, const Transform& transform) {
 
     float screenScale = Vector2D(screenWidth, screenHeight).GetMagnitude() / size;
 
-    render.Copy(tex, NullOpt,
+    render.Copy(tex, SDL2pp::NullOpt,
                 Rect(screenX - ((sprSize.x / 2) * screenScale),
                      screenY - ((sprSize.y / 2) * screenScale), ((sprSize.x) * screenScale),
                      ((sprSize.y) * screenScale)),
