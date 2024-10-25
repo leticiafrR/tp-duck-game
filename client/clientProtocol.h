@@ -31,9 +31,11 @@ typedef enum: uint8_t {
     RIGHT,
     LEFT,
     DOWN,
+    SHOOT,
     KEY_UP,
     KEY_DOWN,
 } KEYS;
+
 
 class ClientProtocol {
 private:

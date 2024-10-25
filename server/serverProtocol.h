@@ -29,6 +29,7 @@ typedef enum: uint8_t {
     RIGHT,
     LEFT,
     DOWN,
+    SHOOT,
     KEY_UP,
     KEY_DOWN,
 } KEYS;
@@ -65,10 +66,12 @@ public:
     void SendAObject(const dataObject& player, bool& isConnected);
 
     //
-    void SendATransform(const Transform& transform, bool& isConnected);
+    void SendATransform(const Transform& transform, bool& isConnected);  // tiene que ser privado
 
     //
-    void SendAWeapon(bool& isConnected);
+    void SendAWeapon(bool& isConnected);  // tiene que ser privado
+
+    void SendADuck(const Duck& duck);  // tiene que ser privado
 
     // Receive the player's name
     std::string ReceiveNickName(bool& isConnected);

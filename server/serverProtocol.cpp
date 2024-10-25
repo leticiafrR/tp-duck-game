@@ -89,3 +89,10 @@ void ServerProtocol::SendAObject(const dataObject& object, bool& isConnected) {
 }
 
 void ServerProtocol::SendAWeapon(bool& isConnected) {}
+
+void ServerProtocol::SendADuck(const Duck& duck, bool& isConnected) {
+    // send skin
+    // send Transform
+    // send if equipped
+    // if equipped send the weapon
+}
