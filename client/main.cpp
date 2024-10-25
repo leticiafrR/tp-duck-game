@@ -6,6 +6,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
+#include "Collision.h"
 #include "Object2D.h"
 
 using namespace SDL2pp;  // NOLINT
@@ -27,20 +28,21 @@ int main() try {
     cam.CreateObject2D("../client/assets/bg_forest.png",
                        Transform(Vector2D::Zero(), Vector2D(100, 100)));
 
-    cam.CreateObject2D("../client/assets/bg_city.png", Transform(Vector2D::Zero(), Vector2D(5, 5)));
+    Object2D& other = cam.CreateObject2D("../client/assets/bg_city.png",
+                                         Transform(Vector2D(8.2, -4.2), Vector2D(5, 5)));
     Object2D& spr = cam.CreateObject2D("../client/assets/img.png",
                                        Transform(Vector2D::Zero(), Vector2D(5, 5)));
     spr.SetColor(Color(255, 255, 255));
 
     Transform& sprTransform = spr.GetTransform();
+    Transform& otherTransform = other.GetTransform();
 
     bool running = true;
 
-    float speed = 1.5;
+    float speed = 1;
 
     while (running) {
         SDL_Event event;
-
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_KEYDOWN: {
@@ -69,7 +71,14 @@ int main() try {
             }
         }
 
-        sprTransform.Rotate(0.1);
+        if (Collision::RectCollision(sprTransform, otherTransform)) {
+            std::cout << "Collision por recta!"
+                      << "\n";
+        } else {
+            std::cout << "Nada colisionando"
+                      << "\n";
+        }
+        // sprTransform.Rotate(0.1);
         cam.Render();
         SDL_Delay(1);
     }

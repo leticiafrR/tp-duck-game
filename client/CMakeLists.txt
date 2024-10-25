@@ -9,4 +9,5 @@ target_sources(taller_client
     Object2D.h
     Transform.h
     Camera.h
+    Collision.h
     )
