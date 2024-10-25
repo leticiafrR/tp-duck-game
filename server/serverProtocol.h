@@ -1,11 +1,12 @@
-#ifndef SERVER_PROTOCOL_H
-#define SERVER_PROTOCOL_H
+#ifndef SERVERPROTOCOL_H
+#define SERVERPROTOCOL_H
 
 #include <list>
 #include <string>
 
 #include "../common/dataMatch.h"
 #include "../common/dataMove.h"
+#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
@@ -59,6 +60,15 @@ public:
 
     //
     void SendBackGround(const uint8_t& backgroundID);
+
+    // Sends what is the player skin and the position
+    void SendAObject(const dataObject& player, bool& isConnected);
+
+    //
+    void SendATransform(const Transform& transform, bool& isConnected);
+
+    //
+    void SendAWeapon(bool& isConnected);
 
     // Receive the player's name
     std::string ReceiveNickName(bool& isConnected);

@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "../common/dataMatch.h"
+#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
@@ -64,7 +65,10 @@ public:
     dataMatch ReceiveMatch(bool& isConnected);
 
     //
-    void ReceiveBackGround(bool& isConnected);
+    uint8_t ReceiveBackGround(bool& isConnected);
+
+    //
+    dataPlayer ReceiveAPlayer(bool& isConnected);
 
     // Receive matches list
     std::list<dataMatch> ReceiveMatches(bool& isConnected);

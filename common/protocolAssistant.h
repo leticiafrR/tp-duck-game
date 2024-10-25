@@ -32,15 +32,15 @@ public:
     std::string reciveString(bool& wasClosed);
 
     // Send a float
-    void ProtocolAssistant::SendFloat(const float& ang, bool& wasClosed);
+    void SendFloat(const float& ang, bool& wasClosed);
 
     // Receive a float
-    float ProtocolAssistant::ReceiveFloat(bool& wasClosed);
+    float ReceiveFloat(bool& wasClosed);
 
     // Send a float
-    void ProtocolAssistant::SendSizeT(const size_t& ang, bool& wasClosed);
+    void SendSizeT(const size_t& ang, bool& wasClosed);
 
     // Receive a float
-    size_t ProtocolAssistant::ReceiveSizeT(bool& wasClosed);
+    size_t ReceiveSizeT(bool& wasClosed);
 };
 #endif

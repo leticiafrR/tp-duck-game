@@ -2,7 +2,7 @@
 
 #include <utility>
 
-ClientProtocol::ClientProtocol(Socket&& skt): skt(std::move(skt)), assistant(skt) {}
+ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 void ClientProtocol::SendNewGame(const std::string& name, bool& is_connected) {
     bool wasClosed = false;
@@ -19,6 +19,7 @@ void ClientProtocol::JoinGame(const std::string& name, bool& is_connected) {
         is_connected = false;
     }
 }
+
 void ClientProtocol::SendMove(const std::string& name, const u_int8_t& move_id,
                               bool& is_connected) {
     bool wasClosed = false;
@@ -29,6 +30,7 @@ void ClientProtocol::SendMove(const std::string& name, const u_int8_t& move_id,
         is_connected = false;
     }
 }
+
 void ClientProtocol::SendKeyHeld(const std::string& name, const bool& keyUp, const u_int8_t& moveID,
                                  bool& isConnected) {
     bool wasClosed = false;
@@ -55,6 +57,7 @@ void ClientProtocol::SendName(const std::string& playerName, bool& isConnected) 
         isConnected = false;
     }
 }
+
 dataMatch ClientProtocol::ReceiveMatch(bool& isConnected) {
     dataMatch match;
     bool wasClosed = false;
@@ -74,4 +77,23 @@ dataMatch ClientProtocol::ReceiveMatch(bool& isConnected) {
         isConnected = false;
     }
     return match;
+}
+
+dataPlayer ClientProtocol::ReceiveAPlayer(bool& isConnected) {
+    bool wasClosed = false;
+    dataPlayer player;
+    Vector2D pos;
+    uint8_t sk = assistant.reciveInt(wasClosed);
+    player.skin = sk;
+    float x = assistant.ReceiveFloat(wasClosed);
+    pos.x = x;
+    float y = assistant.ReceiveFloat(wasClosed);
+    pos.y = y;
+    printf("%f\n", y);
+    Transform trans;
+    trans.SetPos(pos);
+    trans.SetAngle(assistant.ReceiveFloat(wasClosed));
+    player.transform = trans;
+
+    return player;
 }

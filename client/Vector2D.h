@@ -20,7 +20,7 @@ public:
         this->x = x;
         this->y = y;
     }
-    Vector2D() = default;
+    Vector2D(): x(0.0f), y(0.0f) {}  // = default
     ~Vector2D() = default;
 
     float GetMagnitude() { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }

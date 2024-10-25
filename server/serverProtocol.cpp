@@ -2,7 +2,7 @@
 
 #include <utility>
 
-ServerProtocol::ServerProtocol(Socket&& skt): skt(std::move(skt)), assistant(skt) {}
+ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 dataMatch ServerProtocol::ReceiveAMatch(bool& isConnected) {
     bool wasClosed = false;
@@ -73,3 +73,19 @@ void ServerProtocol::SendMatch(const size_t& matchID, const uint8_t& quantityP, 
         isConnected = false;
     }
 }
+
+void ServerProtocol::SendATransform(const Transform& transform, bool& isConnected) {
+    bool wasClosed = false;
+    Vector2D pos = transform.GetPos();
+    assistant.SendFloat(pos.x, wasClosed);
+    assistant.SendFloat(pos.y, wasClosed);
+    assistant.SendFloat(transform.GetAngle(), wasClosed);
+}
+
+void ServerProtocol::SendAObject(const dataObject& object, bool& isConnected) {
+    bool wasClosed = false;
+    assistant.sendInt(object.customID, wasClosed);
+    SendATransform(object.transform, isConnected);
+}
+
+void ServerProtocol::SendAWeapon(bool& isConnected) {}

@@ -10,8 +10,8 @@ private:
     float angle;
 
 public:
-    Transform(Vector2D position = Vector2D::Zero(), Vector2D size = Vector2D::Zero(),
-              float angle = 0) {
+    explicit Transform(Vector2D position = Vector2D::Zero(), Vector2D size = Vector2D::Zero(),
+                       float angle = 0) {
         SetPos(position);
         SetSize(size);
         SetAngle(angle);
