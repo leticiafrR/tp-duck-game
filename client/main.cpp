@@ -5,8 +5,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "common/Collision.h"
+
 #include "Camera.h"
-#include "Collision.h"
 #include "Object2D.h"
 
 using namespace SDL2pp;  // NOLINT
@@ -40,6 +41,8 @@ int main() try {
     bool running = true;
 
     float speed = 1;
+
+    float zoom = cam.GetSize();
 
     while (running) {
         SDL_Event event;
@@ -78,6 +81,11 @@ int main() try {
             std::cout << "Nada colisionando"
                       << "\n";
         }
+
+        cam.SetSize(zoom);
+        if (zoom > 20)
+            zoom -= 0.01;
+
         // sprTransform.Rotate(0.1);
         cam.Render();
         SDL_Delay(1);

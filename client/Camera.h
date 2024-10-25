@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <utility>
@@ -8,8 +9,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "common/Vector2D.h"
+
 #include "Object2D.h"
-#include "Vector2D.h"
 
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -31,7 +33,10 @@ public:
     Camera(Renderer render, float size);
     void Render();
     Object2D& CreateObject2D(std::string filename, Transform transform);
-    void SetSize();
+    void SetPos(Vector2D position) { this->position = position; }
+    Vector2D GetPos() { return position; }
+    void SetSize(float size) { this->size = size; }
+    float GetSize() { return this->size; }
     ~Camera();
 };
 
@@ -49,11 +54,11 @@ void Camera::DrawTexture(Texture& tex, const Transform& transform) {
     int screenWidth = render.GetOutputWidth();
     int screenHeight = render.GetOutputHeight();
 
-    float screenScale = Vector2D(screenWidth, screenHeight).GetMagnitude() / size;
+    // float screenScale = Vector2D(screenWidth, screenHeight).GetMagnitude() / size;
 
     // Mantiene completamente la relación de aspecto
-    // float screenScale = std::min(static_cast<float>(screenWidth)/size,
-    // static_cast<float>(screenHeight)/size);
+    float screenScale = std::min(static_cast<float>(screenWidth) / size,
+                                 static_cast<float>(screenHeight) / size);
 
     int screenX = (screenWidth / 2) + (transform.GetPos().x - position.x) * screenScale;
     int screenY = (screenHeight / 2) - (transform.GetPos().y - position.y) * screenScale;
