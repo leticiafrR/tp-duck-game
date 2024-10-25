@@ -13,4 +13,7 @@ target_sources(taller_common
     socket.h
     queue.h
     thread.h
+    Vector2D.h
+    Collision.h
+    Transform.h
     )
