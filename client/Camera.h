@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <list>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
@@ -24,7 +24,7 @@ private:
 
     float size;
 
-    std::vector<Object2D> sprites;
+    std::list<Object2D> sprites;
     void DrawTexture(Texture& tex, const Transform& transform);
 
 public:
@@ -69,7 +69,7 @@ void Camera::DrawTexture(Texture& tex, const Transform& transform) {
 void Camera::Render() {
     render.Clear();
     for (auto& spr: sprites) {
-        Transform transform = spr.GetTransform();
+        Transform& transform = spr.GetTransform();
         DrawTexture(spr.GetTexture(), transform);
     }
     render.Present();
