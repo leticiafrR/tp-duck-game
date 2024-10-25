@@ -42,6 +42,8 @@ public:
         return *this;
     }
 
+    bool operator==(const Vector2D& other) { return (this->x == other.x && this->y == other.y); }
+
     Vector2D operator*(const float& other) { return Vector2D(this->x * other, this->y * other); }
     Vector2D operator/(const float& other) { return Vector2D(this->x / other, this->y / other); }
 

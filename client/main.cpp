@@ -8,6 +8,7 @@
 #include "common/Collision.h"
 
 #include "Camera.h"
+#include "CameraController.h"
 #include "Object2D.h"
 
 using namespace SDL2pp;  // NOLINT
@@ -26,11 +27,12 @@ int main() try {
 
     Camera cam(std::move(render), 100);
 
+
     cam.CreateObject2D("../client/assets/bg_forest.png",
-                       Transform(Vector2D::Zero(), Vector2D(100, 100)));
+                       Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
     Object2D& other = cam.CreateObject2D("../client/assets/bg_city.png",
-                                         Transform(Vector2D(8.2, -4.2), Vector2D(5, 5)));
+                                         Transform(Vector2D(8.2, -4.2), Vector2D(10, 5)));
     Object2D& spr = cam.CreateObject2D("../client/assets/img.png",
                                        Transform(Vector2D::Zero(), Vector2D(5, 5)));
     spr.SetColor(Color(255, 255, 255));
@@ -38,11 +40,13 @@ int main() try {
     Transform& sprTransform = spr.GetTransform();
     Transform& otherTransform = other.GetTransform();
 
+    CameraController camController(cam);
+    camController.AddTransform(&sprTransform);
+    camController.AddTransform(&otherTransform);
+
     bool running = true;
 
     float speed = 1;
-
-    float zoom = cam.GetSize();
 
     while (running) {
         SDL_Event event;
@@ -82,10 +86,7 @@ int main() try {
                       << "\n";
         }
 
-        cam.SetSize(zoom);
-        if (zoom > 20)
-            zoom -= 0.01;
-
+        camController.Update();
         // sprTransform.Rotate(0.1);
         cam.Render();
         SDL_Delay(1);
