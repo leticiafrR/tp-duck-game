@@ -24,7 +24,7 @@ std::string Parser::WhatCommandIs(const uint8_t& ID) {
     return "";
 }
 
-std::: string Parser::WhatBackGroundIs(const uint8_t& ID) {
+std::string Parser::WhatBackGroundIs(const uint8_t& ID) {
     switch (ID) {
         case CITY_ID:
             return CITY_BACKGROUND;

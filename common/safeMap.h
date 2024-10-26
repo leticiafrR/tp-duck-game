@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 /* This is an implementation of a map that can be acced concurrently, the operations of
- * reading/writing are mutually exclusive */
+ * reading/writing are mutually exclusive and atomic*/
 template <typename K, typename V>
 class SafeMap {
 private:

@@ -1,13 +1,14 @@
 #ifndef MATCH_H
 #define MATCH_H
 #include <atomic>
-#include <cstdint>
 #include <unordered_map>
 
+#include "../common/command.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
+#include "../common/snapShoot.h"
 #include "../common/thread.h"
-// #include "/data/"-> esto es para el alias PlayerID_ty
+#include "../data/idTypes.h"
 
 #include "serverProtocol.h"
 
@@ -15,9 +16,6 @@
 
 #define MAX_COMMANDS 100
 
-typedef uint32_t PlayerID_ty;    // esto se obtiene de la carpeta data y desaparecerà despuès
-typedef struct Message Message;  // desaparece con la integraciòn del protocolo
-typedef struct Command {};       // desaparece con la integraciòn del protocolo
 class GameWorld;
 
 class Match: public Thread {
@@ -29,7 +27,7 @@ private:
     const unsigned int numberPlayers;
 
     Queue<Command> commandQueue;
-    SafeMap<PlayerID_ty, Queue<Message>*> playersToBroadcast;
+    SafeMap<PlayerID_ty, Queue<SnapShoot>*> playersToBroadcast;
     std::mutex m;
 
     // GameWorld game;
@@ -44,7 +42,7 @@ public:
      * the pointer Queue<Command> to point the queue from where this match process.
      * Also it will start the Match thread when the `currentPlayers`reachs the quatity `cantPlayers`
      */
-    bool loggInPlayer(PlayerID_ty idClient, Queue<Message>* queueMsg);
+    bool loggInPlayer(PlayerID_ty idClient, Queue<SnapShoot>* queueMsg);
 
     /* If the client who wants to push in the command queue doesnt have the permissions to affect
      * the state of the match (he/she is dead in the current game/round) it wont push nothing and
@@ -55,8 +53,9 @@ public:
     bool pushCommand(PlayerID_ty idClient, const Command& cmmd);
 
     /* Method called whenthe sender thread reconizes that the client/player has disconnected, may be
-     * called concurrently to "write" (delete) the resource: playersToBroadcast to not send messages
-     * to the disconnected client and also it should take off the player of the WorldMap (write)*/
+     * called concurrently to "write" (delete) the resource: playersToBroadcast to not send
+     * SnapShoots to the disconnected client and also it should take off the player of the WorldMap
+     * (write)*/
     void loggOutPlayer(PlayerID_ty idClient);
 
     void run() override;

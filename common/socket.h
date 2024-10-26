@@ -7,8 +7,8 @@
  * */
 class Socket {
 private:
-    int skt;      // cppcheck-suppress unusedStructMember
-    bool closed;  // cppcheck-suppress unusedStructMember
+    int skt;
+    bool closed;
 
     /*
      * Construye el socket pasándole directamente el file descriptor.

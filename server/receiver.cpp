@@ -10,7 +10,7 @@ void ReceiverThread::run() {
 
     try {
         /* If loggInPlayer returns false the match has already started */
-        if (match.loggInPlayer(idClient, sender.getQueueMessage())) {
+        if (match.loggInPlayer(idClient, sender.getSenderQueue())) {
             sender.start();
             receiveLoop();
             sender.kill();
@@ -26,14 +26,13 @@ void ReceiverThread::run() {
 void ReceiverThread::receiveLoop() {
     /*discomment whhen checked what does the protocol returns*/
     while (_keep_running) {
-        /* dont forget to delete the part "= false" */
-        bool client_alive = false;
-        // Command cmmd = protocol.getCommand(std::ref(client_alive));
-        if (!client_alive) {  // cppcheck-suppress knownConditionTrueFalse
+        bool client_alive;
+        Command cmmd = protocol.getCommand(std::ref(client_alive));
+        if (!client_alive) {
             stop();
-        }  // else {
-        //     match.pushCommand(idClient, cmmd);
-        // }
+        } else {
+            match.pushCommand(idClient, cmmd);
+        }
     }
 }
 // this method ends the comunication with the client making sure that the Sender thread finishes its
@@ -52,10 +51,5 @@ void ReceiverThread::kill() {
         sender.join();
     }
 
-    /*>
-    mètodo del protocolo para cerrar la conexiòn
-        skt_peer.shutdown(2);
-        skt_peer.close();
-    */
-    // protocol.endConnection();
+    protocol.endConnection();
 }

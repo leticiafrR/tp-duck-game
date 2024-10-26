@@ -11,7 +11,7 @@
 #define MAX_MESSAGES 250
 class SenderThread: public Thread {
 private:
-    Queue<SnapShoot> mssgQueue;
+    Queue<SnapShoot> senderQueue;
     ServerProtocol& protocol;
     // its up to the sender to, when finished the sendingLoop, ask the match to logOut this client.
     Match& match;
@@ -20,10 +20,9 @@ private:
     void sendLoop();
 
 public:
-    // saves the match so the thread asks it to loggOut this client when it is detected disncoected
     explicit SenderThread(ServerProtocol& protocol, Match& match, size_t idClient);
 
-    Queue<Message>* getQueueMessage();
+    Queue<SnapShoot>* getSenderQueue();
 
     void run() override;
 

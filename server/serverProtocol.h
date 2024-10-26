@@ -4,10 +4,11 @@
 #include <list>
 #include <string>
 
-#include "../common/dataCommand.h"
+#include "../common/command.h"
 #include "../common/dataMatch.h"
 #include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
+#include "../common/snapShoot.h"
 #include "../common/socket.h"
 
 typedef enum: uint8_t {
@@ -76,20 +77,40 @@ public:
     // Receive the player's name
     std::string ReceiveNickName(bool& isConnected);
 
-    // Receive a move message.
-    dataMove ReceiveAMove(bool& isConnected);
+    /* The following methods had been commented (by me Andrea) because the conflict of working with
+     * different structures (i have changed the names: dataMove/dataCommand -> Command,
+     * dataMatch->SnapShoot), meanwhile i preffer to just comment this methods*/
 
-    // Receive a match
-    dataMatch ReceiveAMatch(bool& isConnected);
+    // // Receive a move message.
+    // dataMove ReceiveAMove(bool& isConnected);
 
-    // Send matches list
-    void SendMatches(const std::list<dataMatch>& matches,
-                     bool& isConnected);  // Asumo que como parametro va una lista C++ pero espero
-                                          // confirmacion
+    // // Receive a match
+    // dataMatch ReceiveAMatch(bool& isConnected);
 
-    // Receive a client: the nickname and whether the client wants to open a new match or join an
-    // existing one.
-    dataMatch ReceiveAClient(bool& isConnected);
+    // // Send matches list
+    // void SendMatches(const std::list<dataMatch>& matches,
+    //                  bool& isConnected);  // Asumo que como parametro va una lista C++ pero
+    //                  espero
+    //                                       // confirmacion
+
+    // // Receive a client: the nickname and whether the client wants to open a new match or join an
+    // // existing one.
+    // dataMatch ReceiveAClient(bool& isConnected);
+
+    /*The following methods werent implemmented neigther by Candela nor me. But this is how i need
+     * the API to be.*/
+
+    // sets the value of `clientAlive` depending on whether the client was connected.
+    Command getCommand(bool& clientAlive);
+
+    // returns false if the message couldnt be send (ej the client has disconnected)
+    bool sendSnapShoot(const SnapShoot& gameStatus);
+
+    void endConnection();
+    /*{
+        skt_peer.shutdown(2);
+        skt_peer.close();
+    }*/
 };
 
 #endif
