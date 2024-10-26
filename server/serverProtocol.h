@@ -4,8 +4,8 @@
 #include <list>
 #include <string>
 
+#include "../common/dataCommand.h"
 #include "../common/dataMatch.h"
-#include "../common/dataMove.h"
 #include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
