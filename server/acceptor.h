@@ -8,14 +8,14 @@
 #include "../common/socket.h"
 #include "../common/thread.h"
 
-#include "receiver.h"
 #include "match.h"
+#include "receiver.h"
 
 class AcceptorThread: public Thread {
 private:
     Socket skt;
     std::list<ReceiverThread*> clients;
-    //should it be a object active? i mean should it be allocated in the heap?
+    // should it be a object active? i mean should it be allocated in the heap?
     Match match;
 
     void acceptLoop();

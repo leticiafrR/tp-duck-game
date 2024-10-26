@@ -6,9 +6,9 @@
 #include <stdint.h>
 
 struct dataMove {
-    bool block;              // cppcheck-suppress unusedStructMember
-    std::string playerName;  // cppcheck-suppress unusedStructMember
-    uint8_t ID;              // cppcheck-suppress unusedStructMember
+    bool block;
+    std::string playerName;
+    uint8_t ID;
 
     dataMove(): block(false), playerName(), ID(0) {}
 };

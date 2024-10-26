@@ -8,16 +8,25 @@
 #include "match.h"
 #include "serverProtocol.h"
 
+#define MAX_MESSAGES 250
 class SenderThread: public Thread {
 private:
-    Queue<Message> mssgQueue;
+    Queue<SnapShoot> mssgQueue;
     ServerProtocol& protocol;
-    void recevierLoop();
+    // its up to the sender to, when finished the sendingLoop, ask the match to logOut this client.
+    Match& match;
+    size_t idClient;
+
+    void sendLoop();
 
 public:
-    explicit SenderThread(ServerProtocol& protocol);
-    Queue<Message>* getMssgQueue();
+    // saves the match so the thread asks it to loggOut this client when it is detected disncoected
+    explicit SenderThread(ServerProtocol& protocol, Match& match, size_t idClient);
+
+    Queue<Message>* getQueueMessage();
+
     void run() override;
+
     void kill();
 
     ~SenderThread() override;
