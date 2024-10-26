@@ -63,4 +63,8 @@ private:
     SafeMap& operator=(const SafeMap&) = delete;
 };
 
+// OJO: Tambien me gustaria que se pueda obtener la losta de claves para poder (luego de que un game
+// termine y soo contenga a un id de un client) instanciar una nueva ronda/game con los ids que se
+// guardaron aquì
+
 #endif

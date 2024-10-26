@@ -64,3 +64,4 @@ public:
 };
 
 #endif
+// Al instanciarse la partida se intancia unna game con un mapa ya predefinido

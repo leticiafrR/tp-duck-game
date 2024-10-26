@@ -7,8 +7,8 @@ Match::Match(PlayerID_ty idClientCreator, unsigned int numberPlayers):
         commandQueue(MAX_COMMANDS),
         playersToBroadcast(numberPlayers) {}
 
-/* method that will be called from the different Receivers threads. Has to be thread safe*/
-bool Match::loggInPlayer(PlayerID_ty idClient, Queue<Message>* queueMsg) {
+/* method that will be called from the different Receivers threads. Has to be thread safe */
+bool Match::loggInPlayer(PlayerID_ty idClient, Queue<SnapShoot>* queueMsg) {
     if (!playersToBroadcast.tryInsert(idClient, queueMsg)) {
         /* If we couldnt add the queue to the map then it means that the full cpaacity of players
          * has been reached.*/
@@ -26,10 +26,17 @@ bool Match::loggInPlayer(PlayerID_ty idClient, Queue<Message>* queueMsg) {
     return true;
 }
 
-/* method that will be called from the different Receivers threads. Has to be thread safe*/
+/* method that will be called from the different Receivers threads. Has to be thread safe.
+ * OJO PARA RECORDARLE A LETICIA  SI YO LO IMPLEMENTO:
+ * Mètodos de lectura y escritura sobre los participantes del modelo de game/ronda (solo son ids a
+ * priori) deben ser thread safe, por ejemplo el mètodo de preguntar si un cliente esta vivo debe
+ * fijarse si es que el jugador esta en el juego (no estarìa si perdiò o nunca formò parte) de algun
+ * contanier thread safe porque el metodo GameWorld::playerQuiting(id) editarìa el mismo contanier y
+ * tambien es llamado concurrentemente
+ */
 bool Match::pushCommand(PlayerID_ty idClient, const Command& cmmd) {
     // // the client is not able to affect the state of the current game/round
-    // if (!game.isAlive(idClient)) {
+    // if (!game.PlayerAlive(idClient)) {
     //     return false;
     // }
     commandQueue.push(cmmd);
