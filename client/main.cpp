@@ -78,12 +78,14 @@ int main() try {
             }
         }
 
+        Vector2D dMax = sprTransform.GetPos() + sprTransform.GetSize() / 2;
+        Vector2D dMin = sprTransform.GetPos() - sprTransform.GetSize() / 2;
+        Vector2D sMax = otherTransform.GetPos() + otherTransform.GetSize() / 2;
+        Vector2D sMin = otherTransform.GetPos() - otherTransform.GetSize() / 2;
+
+
         if (Collision::RectCollision(sprTransform, otherTransform)) {
-            std::cout << "Collision por recta!"
-                      << "\n";
-        } else {
-            std::cout << "Nada colisionando"
-                      << "\n";
+            Collision::ResolveStaticCollision(sprTransform, otherTransform);
         }
 
         camController.Update();
