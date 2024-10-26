@@ -19,7 +19,7 @@ private:
 
     Match& match;
 
-    size_t idClient;
+    PlayerID_t idClient;
 
     SenderThread sender;
 
@@ -31,7 +31,7 @@ public:
     // initializates the command queue where the reciever pushes with the command queue that the
     // match recieved gives us and also binds this client with the only one match that we have (i
     // mean its queue of messages is included to the broadcast list)
-    explicit ReceiverThread(Match& match, Socket&& sktPeer, size_t idClient);
+    explicit ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClient);
 
     void run() override;
     void kill();

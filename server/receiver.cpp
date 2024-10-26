@@ -1,6 +1,6 @@
 #include "receiver.h"
 
-ReceiverThread::ReceiverThread(Match& match, Socket&& sktPeer, size_t idClient):
+ReceiverThread::ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClient):
         match(match),
         protocol(std::move(sktPeer)),
         sender(protocol, match, idClient),

@@ -1,6 +1,6 @@
 #include "match.h"
 
-Match::Match(PlayerID_ty idClientCreator, unsigned int numberPlayers):
+Match::Match(PlayerID_t idClientCreator, unsigned int numberPlayers):
         idClientCreator(idClientCreator),
         currentPlayers(0),
         numberPlayers(numberPlayers),
@@ -8,7 +8,7 @@ Match::Match(PlayerID_ty idClientCreator, unsigned int numberPlayers):
         playersToBroadcast(numberPlayers) {}
 
 /* method that will be called from the different Receivers threads. Has to be thread safe */
-bool Match::loggInPlayer(PlayerID_ty idClient, Queue<SnapShoot>* queueMsg) {
+bool Match::loggInPlayer(PlayerID_t idClient, Queue<SnapShoot>* queueMsg) {
     if (!playersToBroadcast.tryInsert(idClient, queueMsg)) {
         /* If we couldnt add the queue to the map then it means that the full cpaacity of players
          * has been reached.*/
@@ -34,7 +34,7 @@ bool Match::loggInPlayer(PlayerID_ty idClient, Queue<SnapShoot>* queueMsg) {
  * contanier thread safe porque el metodo GameWorld::playerQuiting(id) editarìa el mismo contanier y
  * tambien es llamado concurrentemente
  */
-bool Match::pushCommand(PlayerID_ty idClient, const Command& cmmd) {
+bool Match::pushCommand(PlayerID_t idClient, const Command& cmmd) {
     // // the client is not able to affect the state of the current game/round
     // if (!game.PlayerAlive(idClient)) {
     //     return false;

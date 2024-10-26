@@ -8,7 +8,7 @@
 #include "../common/safeMap.h"
 #include "../common/snapShoot.h"
 #include "../common/thread.h"
-#include "../data/idTypes.h"
+#include "../data/id.h"
 
 #include "serverProtocol.h"
 
@@ -20,21 +20,21 @@ class GameWorld;
 
 class Match: public Thread {
 private:
-    PlayerID_ty idClientCreator;
+    PlayerID_t idClientCreator;
 
     std::atomic<unsigned int> currentPlayers;
     // when this quantity is reached the match is started
     const unsigned int numberPlayers;
 
     Queue<Command> commandQueue;
-    SafeMap<PlayerID_ty, Queue<SnapShoot>*> playersToBroadcast;
+    SafeMap<PlayerID_t, Queue<SnapShoot>*> playersToBroadcast;
     std::mutex m;
 
     // GameWorld game;
 
 
 public:
-    explicit Match(PlayerID_ty idClientCreator = 1, unsigned int numberPlayers = TEST_MAX_PLAYERS);
+    explicit Match(PlayerID_t idClientCreator = 1, unsigned int numberPlayers = TEST_MAX_PLAYERS);
 
     /* returns a boolean indicating if the client was succesfully added. If the Match has
      * already started the method will return false, else (success) the method will include in the
@@ -42,7 +42,7 @@ public:
      * the pointer Queue<Command> to point the queue from where this match process.
      * Also it will start the Match thread when the `currentPlayers`reachs the quatity `cantPlayers`
      */
-    bool loggInPlayer(PlayerID_ty idClient, Queue<SnapShoot>* queueMsg);
+    bool loggInPlayer(PlayerID_t idClient, Queue<SnapShoot>* queueMsg);
 
     /* If the client who wants to push in the command queue doesnt have the permissions to affect
      * the state of the match (he/she is dead in the current game/round) it wont push nothing and
@@ -50,13 +50,13 @@ public:
      * execute a blocking push over the queue of commands of the match*/
 
     /* Method called by multiple recieverThreads, but uses a queue multithreat safe*/
-    bool pushCommand(PlayerID_ty idClient, const Command& cmmd);
+    bool pushCommand(PlayerID_t idClient, const Command& cmmd);
 
     /* Method called whenthe sender thread reconizes that the client/player has disconnected, may be
      * called concurrently to "write" (delete) the resource: playersToBroadcast to not send
      * SnapShoots to the disconnected client and also it should take off the player of the WorldMap
      * (write)*/
-    void loggOutPlayer(PlayerID_ty idClient);
+    void loggOutPlayer(PlayerID_t idClient);
 
     void run() override;
 

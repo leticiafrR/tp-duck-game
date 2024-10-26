@@ -1,7 +1,7 @@
 #include "sender.h"
 
 
-SenderThread::SenderThread(ServerProtocol& protocol, Match& match, size_t idClient):
+SenderThread::SenderThread(ServerProtocol& protocol, Match& match, PlayerID_t idClient):
         senderQueue(MAX_MESSAGES), protocol(protocol), match(match), idClient(idClient) {}
 
 Queue<SnapShoot>* SenderThread::getSenderQueue() { return &senderQueue; }

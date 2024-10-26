@@ -15,12 +15,12 @@ private:
     ServerProtocol& protocol;
     // its up to the sender to, when finished the sendingLoop, ask the match to logOut this client.
     Match& match;
-    size_t idClient;
+    PlayerID_t idClient;
 
     void sendLoop();
 
 public:
-    explicit SenderThread(ServerProtocol& protocol, Match& match, size_t idClient);
+    explicit SenderThread(ServerProtocol& protocol, Match& match, PlayerID_t idClient);
 
     Queue<SnapShoot>* getSenderQueue();
 
