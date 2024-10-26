@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "../common/dataMatch.h"
+#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
@@ -30,9 +31,11 @@ typedef enum: uint8_t {
     RIGHT,
     LEFT,
     DOWN,
+    SHOOT,
     KEY_UP,
     KEY_DOWN,
 } KEYS;
+
 
 class ClientProtocol {
 private:
@@ -62,6 +65,12 @@ public:
 
     //
     dataMatch ReceiveMatch(bool& isConnected);
+
+    //
+    uint8_t ReceiveBackGround(bool& isConnected);
+
+    //
+    dataPlayer ReceiveAPlayer(bool& isConnected);
 
     // Receive matches list
     std::list<dataMatch> ReceiveMatches(bool& isConnected);

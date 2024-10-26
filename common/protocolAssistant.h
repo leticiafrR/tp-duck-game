@@ -12,7 +12,7 @@ class ProtocolAssistant {
     Socket& skt;
 
 public:
-    // Constructor por referencia
+    // Constructor
     explicit ProtocolAssistant(Socket& skt);
 
     /*  Sends a string by first sending two bytes representing the string's size,
@@ -30,5 +30,17 @@ public:
      *   followed by the string itself
      */
     std::string reciveString(bool& wasClosed);
+
+    // Send a float
+    void SendFloat(const float& ang, bool& wasClosed);
+
+    // Receive a float
+    float ReceiveFloat(bool& wasClosed);
+
+    // Send a float
+    void SendSizeT(const size_t& ang, bool& wasClosed);
+
+    // Receive a float
+    size_t ReceiveSizeT(bool& wasClosed);
 };
 #endif

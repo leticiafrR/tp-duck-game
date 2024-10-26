@@ -16,6 +16,7 @@ class ReceiverThread: public Thread {
 private:
     // we push to the queue of the match through a method bc there are some verifications in the
     // state of the match that could dont let us to push
+
     Match& match;
 
     size_t idClient;
@@ -23,7 +24,6 @@ private:
     SenderThread sender;
 
     ServerProtocol protocol;
-
 
     void receiveLoop();
 

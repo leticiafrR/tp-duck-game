@@ -2,7 +2,7 @@
 
 #include <utility>
 
-ServerProtocol::ServerProtocol(Socket&& skt): skt(std::move(skt)), assistant(skt) {}
+ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 dataMatch ServerProtocol::ReceiveAMatch(bool& isConnected) {
     bool wasClosed = false;
@@ -62,14 +62,37 @@ dataMove ServerProtocol::ReceiveAMove(bool& isConnected) {
     return newMove;
 }
 
-void ServerProtocol::SendMatch(const uint8_t& matchID, const uint8_t& quantityP,
-                               const uint8_t& maxP, bool& isConnected) {
+void ServerProtocol::SendMatch(const size_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
+                               bool& isConnected) {
     bool wasClosed = false;
     assistant.sendInt(A_MATCH, wasClosed);
-    assistant.sendInt(matchID, wasClosed);
+    assistant.sendInt(static_cast<uint8_t>(matchID), wasClosed);
     assistant.sendInt(quantityP, wasClosed);
     assistant.sendInt(maxP, wasClosed);
     if (wasClosed) {
         isConnected = false;
     }
+}
+
+void ServerProtocol::SendATransform(const Transform& transform, bool& isConnected) {
+    bool wasClosed = false;
+    Vector2D pos = transform.GetPos();
+    assistant.SendFloat(pos.x, wasClosed);
+    assistant.SendFloat(pos.y, wasClosed);
+    assistant.SendFloat(transform.GetAngle(), wasClosed);
+}
+
+void ServerProtocol::SendAObject(const dataObject& object, bool& isConnected) {
+    bool wasClosed = false;
+    assistant.sendInt(object.customID, wasClosed);
+    SendATransform(object.transform, isConnected);
+}
+
+void ServerProtocol::SendAWeapon(bool& isConnected) {}
+
+void ServerProtocol::SendADuck(const Duck& duck, bool& isConnected) {
+    // send skin
+    // send Transform
+    // send if equipped
+    // if equipped send the weapon
 }

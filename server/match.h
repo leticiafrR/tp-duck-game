@@ -7,7 +7,7 @@
 #include "../common/queue.h"
 #include "../common/safeMap.h"
 #include "../common/thread.h"
-// #include "/data/"-> esto es para el alias
+// #include "/data/"-> esto es para el alias PlayerID_ty
 
 #include "serverProtocol.h"
 
@@ -52,7 +52,7 @@ public:
      * execute a blocking push over the queue of commands of the match*/
 
     /* Method called by multiple recieverThreads, but uses a queue multithreat safe*/
-    bool pushCommand(PlayerID_ty idClient, Command& cmmd);
+    bool pushCommand(PlayerID_ty idClient, const Command& cmmd);
 
     /* Method called whenthe sender thread reconizes that the client/player has disconnected, may be
      * called concurrently to "write" (delete) the resource: playersToBroadcast to not send messages
@@ -60,7 +60,6 @@ public:
     void loggOutPlayer(PlayerID_ty idClient);
 
     void run() override;
-
 
     Queue<Command>& getCommandQueue();
 };

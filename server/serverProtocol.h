@@ -1,11 +1,12 @@
-#ifndef SERVER_PROTOCOL_H
-#define SERVER_PROTOCOL_H
+#ifndef SERVERPROTOCOL_H
+#define SERVERPROTOCOL_H
 
 #include <list>
 #include <string>
 
+#include "../common/dataCommand.h"
 #include "../common/dataMatch.h"
-#include "../common/dataMove.h"
+#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
@@ -28,6 +29,7 @@ typedef enum: uint8_t {
     RIGHT,
     LEFT,
     DOWN,
+    SHOOT,
     KEY_UP,
     KEY_DOWN,
 } KEYS;
@@ -54,8 +56,22 @@ public:
     void Receive(bool& isConnected);  // Todavia no tiene un uso
 
     //
-    void SendMatch(const uint8_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
+    void SendMatch(const size_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
                    bool& isConnected);
+
+    //
+    void SendBackGround(const uint8_t& backgroundID);
+
+    // Sends what is the player skin and the position
+    void SendAObject(const dataObject& player, bool& isConnected);
+
+    //
+    void SendATransform(const Transform& transform, bool& isConnected);  // tiene que ser privado
+
+    //
+    void SendAWeapon(bool& isConnected);  // tiene que ser privado
+
+    void SendADuck(const Duck& duck);  // tiene que ser privado
 
     // Receive the player's name
     std::string ReceiveNickName(bool& isConnected);
