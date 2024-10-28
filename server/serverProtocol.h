@@ -101,7 +101,7 @@ public:
      * the API to be.*/
 
     // sets the value of `clientAlive` depending on whether the client was connected.
-    Command getCommand(bool& clientAlive);
+    Command receiveCommand(bool& clientAlive);
 
     // returns false if the message couldnt be send (ej the client has disconnected)
     bool sendSnapShoot(const SnapShoot& gameStatus);
