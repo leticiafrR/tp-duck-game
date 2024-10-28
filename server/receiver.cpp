@@ -31,10 +31,12 @@ void ReceiverThread::receiveLoop() {
         if (!client_alive) {
             stop();
         } else {
+            cmmd.playerID = idClient;
             match.pushCommand(idClient, cmmd);
         }
     }
 }
+
 // this method ends the comunication with the client making sure that the Sender thread finishes its
 // execution (as long as the match producer of SnapShoots stops make boradcasts over this client)
 // and cleaning the resources of it (join)
