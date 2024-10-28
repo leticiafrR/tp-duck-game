@@ -27,7 +27,7 @@ void ReceiverThread::receiveLoop() {
     /*discomment whhen checked what does the protocol returns*/
     while (_keep_running) {
         bool client_alive;
-        Command cmmd = protocol.getCommand(std::ref(client_alive));
+        Command cmmd = protocol.receiveCommand(std::ref(client_alive));
         if (!client_alive) {
             stop();
         } else {
