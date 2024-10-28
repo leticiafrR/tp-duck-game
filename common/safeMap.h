@@ -78,6 +78,11 @@ public:
 
         return keys;
     }
+    void clear() {
+        std::unique_lock<std::mutex> lck(rw_mtx);
+        map.clear();
+    }
+
 
 private:
     SafeMap(const SafeMap&) = delete;
