@@ -22,40 +22,23 @@ private:
     std::unordered_map<ObjectID_t, SpawnPlace*> spawnPlaces;
     std::unordered_map<ObjectID_t, Box*> boxes;
     std::vector<StaticObjects*> staticObjects;  // walls, plattaforms
-
-
-    void jump(PlayerID_t id);
-    void flutter(PlayerID_t id);  // if the duck is in the air
-    void stoop(PlayerID_t id);    // get down
-    void stopStooping(PlayerID_t id);
-    void moveRight(PlayerID_t id);
-    void moveLeft(PlayerID_t id);
-    void stopMoving(PlayerID_t id);
-    void lookUp(PlayerID_t id);
-    void stopLookingUp(PlayerID_t id);
-
-    void shoot(PlayerID_t id);  // to the current direction
-    void stopShooting();
-    void equipWeapon();
-    void unequipWeapon();
-    void createMap();
-
-    //*******************************************
-    void reapDead();
-    void checkCollisions();
+    bool isGameOver;
+    void ReapDead();
+    void CheckCollisions();
 
 public:
     GameWorld();
-    void handleCommand(const dataCommand& cmd);
-
-    void addPlayers(const std::vector<PlayerID_t>& idsPlayers);
-    Snapshot getSnapshot();
-    void update();
-    bool isGameOver();
+    void HandleCommand(const dataCommand& cmd);
+    void AddPlayers(const std::vector<PlayerID_t>& idsPlayers);
+    Snapshot GetSnapshot();
+    void Update();
+    bool IsGameOver();
 };
 
+GameWorld::GameWorld(): isGameOver(false) {}
+GameWorld::IsGameOver(): { return isGameOver; }
 
-void GameWorld::handleCommand(const dataCommand& cmd) {
+void GameWorld::HandleCommand(const dataCommand& cmd) {
     Duck* player = players[cmd.playerID];
     switch (cmd.commandID) {
         case CommandID::MoveLeft:
