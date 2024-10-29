@@ -10,7 +10,7 @@
 #include "../../data/id.h"
 #include "/ammo/ammo.h"
 #include "/weapon/weapon.h"
-#include "duck/duck.h"
+#include "/duck/duck.h"
 // #include "/data/duckData.h"
 #include "gameMap.h"
 // represents a round
