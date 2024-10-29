@@ -4,4 +4,5 @@ target_sources(taller_server
     main.cpp
     PUBLIC
     # .h files
+    model/gameWorld.h
     )
