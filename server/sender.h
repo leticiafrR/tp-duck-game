@@ -26,6 +26,9 @@ public:
 
     void run() override;
 
+    /* The method causes the sending thread to stop accepting new snapshoots in its queue (closing
+     * it) so that it can finish sending the snapshoots it has at the moment and then finish its
+     * execution in an orderly manner.*/
     void kill();
 
     ~SenderThread() override;
