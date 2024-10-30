@@ -1,5 +1,6 @@
 #ifndef MATCH_H
 #define MATCH_H
+
 #include <atomic>
 #include <string>
 
@@ -10,16 +11,13 @@
 #include "../common/thread.h"
 #include "../data/id.h"
 
-#include "gameWorld.h"
+#include "gamesHandler.h"
 #include "serverProtocol.h"
 
 #define TEST_MAX_PLAYERS 1
-
 #define MAX_COMMANDS 500
+#define MAX_COMMANDS_PER_LOOP 100
 
-#define MAX_COMMANDS_PER_LOOP 50
-
-class GameWorld;
 
 struct PlayerInfo {
     std::string nickName;
@@ -44,10 +42,7 @@ private:
     // queues de jugadores (que se da ya iniciado el juego) ademàs
     SafeMap<PlayerID_t, PlayerInfo> players;
 
-
-    // mutex para proteger el acceso concurrente a la logica del juego y hacerlo atòmicamente
-    std::mutex mutexModel;
-
+    // GamesHandler gamesHandler;
     GameWorld game;
 
 
@@ -61,14 +56,10 @@ public:
      */
     bool loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
 
-    /* If the client who wants to push in the command queue doesnt have the permissions to affect
-     * the state of the match (he/she is dead in the current game/round) it wont push nothing and
-     * will only return False. In the other hand, if the client is able to push commands it will
-     * execute a blocking push over the queue of commands of the match*/
-
-    /* Method called by multiple recieverThreads so it uses a queue thread safe, but also needs the
-     * method of the GameWorld::isPlayerAlive(idCLient) to be thread safe */
-    bool pushCommand(PlayerID_t idClient, const Command& cmmd);
+    /* Executes a blocking push over the command queue (the validation over if the client is alive
+     * in the current round must be done inside the  Game)*/
+    /* Method called by multiple recieverThreads so it uses a queue thread safe*/
+    void pushCommand(PlayerID_t idClient, const Command& cmmd);
 
     /* This method takes out of the container with the players to broadcast the queue of the client
      * with the ID received. It means that it is called when the client in the middle of the match
