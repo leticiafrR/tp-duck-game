@@ -1,8 +1,8 @@
 #ifndef SAFE_MAP_H_
 #define SAFE_MAP_H_
 
-#include <algorithm>
 #include <climits>
+#include <functional>
 #include <map>
 #include <mutex>
 #include <shared_mutex>
@@ -27,7 +27,7 @@ public:
      * exists, in that cse also returns false.*/
     bool tryInsert(const K& key, const V& value) {
         // Exclusive lock for write operation
-        std::unique_lock<std::mutex> lck(mtx);
+        std::unique_lock<std::mutex> lck(rw_mtx);
         if (map.size() == max_size || map.find(key) != map.end()) {
             // if the map was fulled or if the key already was in the mp returns false
             return false;
@@ -39,7 +39,7 @@ public:
     /* Removes an element in a non-blocking way; returns true if it existed and was deleted.*/
     bool tryErase(const K& key) {
         // Exclusive lock for write operation
-        std::unique_lock<std::mutex> lck(mtx);
+        std::unique_lock<std::mutex> lck(rw_mtx);
         auto it = map.find(key);
         if (it == map.end()) {
             return false;
@@ -73,16 +73,31 @@ public:
         std::vector<K> keys;
         keys.reserve(map.size());
 
-        std::transform(map.begin(), map.end(), std::back_inserter(keys),
-                       [](const auto& pair) { return pair.first; });
+        for (const auto& pair: map) {
+            // cppcheck-suppress useStlAlgorithm
+            keys.push_back(pair.first);
+        }
 
         return keys;
     }
+
     void clear() {
         std::unique_lock<std::mutex> lck(rw_mtx);
         map.clear();
     }
 
+    /* Ejemplo de uso:
+    safeMap.applyToValues([](MyClass& obj) {
+        obj.doSomething();
+    });
+    */
+    void applyToValues(const std::function<void(V&)>& func) {
+        std::shared_lock<std::shared_mutex> lck(rw_mtx);
+        // cppcheck-suppress unusedVariable
+        for (auto& [_, value]: map) {
+            func(value);
+        }
+    }
 
 private:
     SafeMap(const SafeMap&) = delete;
