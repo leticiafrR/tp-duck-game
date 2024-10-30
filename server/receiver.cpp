@@ -9,13 +9,21 @@ ReceiverThread::ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClie
 void ReceiverThread::run() {
 
     try {
-        /* If loggInPlayer returns false the match has already started */
+        // this could be a great place to ask the nickname
+
+        /* If loggInPlayer returns true the client was added to the match successfully */
         if (match.loggInPlayer(idClient, sender.getSenderQueue())) {
+            // once here the client has joined to a match that could have more than a round
+
             sender.start();
             receiveLoop();
             sender.kill();
             sender.join();
+        } else {
+            // this method should make the client know that the match was fulled
+            // protocol.sendRejection();
         }
+
     } catch (const LibError& e) {
 
     } catch (const std::runtime_error& e) {
@@ -23,12 +31,15 @@ void ReceiverThread::run() {
     }
 }
 
+// here we know that the match has started-> whe only receive coomands to apply to a game
+// me parece que tendrìa que ser llamado cada vez que
 void ReceiverThread::receiveLoop() {
-    /*discomment whhen checked what does the protocol returns*/
     while (_keep_running) {
-        bool client_alive;
-        Command cmmd = protocol.receiveCommand(std::ref(client_alive));
-        if (!client_alive) {
+
+        bool isConnected;
+        Command cmmd = protocol.receiveCommand(std::ref(isConnected));
+
+        if (!isConnected) {
             stop();
         } else {
             cmmd.playerID = idClient;
@@ -37,21 +48,22 @@ void ReceiverThread::receiveLoop() {
     }
 }
 
-// this method ends the comunication with the client making sure that the Sender thread finishes its
-// execution (as long as the match producer of SnapShoots stops make boradcasts over this client)
-// and cleaning the resources of it (join)
-//  Respect of this thread it ends the execution of the receiveLoop by ending the conextion with the
-//  client. The explicit call to ReceiverThread::join() has to be done
+// Meanwhile this method is only called by the acceptor thread, maybe the acceptor could do a
+// readEndedMatches -> and then killing all the client threads of those matches
 void ReceiverThread::kill() {
-    /*
-     * Got here because the match has naturally ended or  because the server is closing the serving
-     * (killing the match): -first end the sender (if it is neeedt), only when it ends sending the
-     * data that it has to: send end all comunication with the client
-     */
+    /* Got here because ¿the match has naturally ended? or  ** because the server is closing the
+     * serving** (the aceptor: ended the match and it is killing all its clients) */
+
+    /* Making the receiver loop to not keep running (we dont want to keep recieving commands while
+     * the sender is ending) */
+    stop();
+
     if (sender.is_alive()) {
+        /* closing its queue */
         sender.kill();
+        /*wait for all the left snapshoots to be send */
         sender.join();
     }
-
+    /* Ending all the connection with the client */
     protocol.endConnection();
 }

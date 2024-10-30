@@ -27,5 +27,5 @@ void SenderThread::sendLoop() {
         }
     }
 }
-// method called by the receiver thread when the match is over. The senderQueue has to be closed
+
 void SenderThread::kill() { senderQueue.close(); }

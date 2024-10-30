@@ -28,12 +28,15 @@ private:
     void receiveLoop();
 
 public:
-    // initializates the command queue where the reciever pushes with the command queue that the
-    // match recieved gives us and also binds this client with the only one match that we have (i
-    // mean its queue of messages is included to the broadcast list)
     explicit ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClient);
 
     void run() override;
+
+    /* Method that softly ends the receiver, definitely ends the sending thread (if it has not
+     * finished because of the client disconnection) by killing it, once done this ends the
+     * protocool communication with the client which would make the receiver end definitely */
+
+    /*  The explicit call to ReceiverThread::join() has to be done. */
     void kill();
 
     ~ReceiverThread() override;
