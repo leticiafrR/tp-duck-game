@@ -5,56 +5,68 @@ Match::Match(PlayerID_t idClientCreator, unsigned int numberPlayers):
         currentPlayers(0),
         numberPlayers(numberPlayers),
         commandQueue(MAX_COMMANDS),
-        playersToBroadcast(numberPlayers) {}
+        players(numberPlayers) {}
 
 /* method that will be called from the different Receivers threads. Has to be thread safe */
-bool Match::loggInPlayer(PlayerID_t idClient, Queue<SnapShoot>* queueMsg) {
-    if (!playersToBroadcast.tryInsert(idClient, queueMsg)) {
-        /* If we couldnt add the queue to the map then it means that the full cpaacity of players
-         * has been reached.*/
+/* ACCESO CONCURRENTE AL RECURSO: MATCH (en especifico a los atributos)-> creo que esto metodo
+ * deberìa ser protegido por otra entidad*/
+bool Match::loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
+    if (!players.tryInsert(idClient, playerInfo)) {
         return false;
     }
-    /* Here we are efectivly adding a player to the match: increase the currentPlayers, and also if
-     * this number is */
     currentPlayers++;
-    /* Here we have a critical section: we want to make the checking and start the match
-     * atomically*/
-    std::unique_lock<std::mutex> lock(m);
     if (currentPlayers == numberPlayers && !_is_alive) {
         this->start();
     }
     return true;
 }
 
-/* method that will be called from the different Receivers threads. Has to be thread safe.
- * OJO PARA RECORDARLE A LETICIA  SI YO LO IMPLEMENTO:
- * Mètodos de lectura y escritura sobre los participantes del modelo de game/ronda (solo son ids a
- * priori) deben ser thread safe, por ejemplo el mètodo de preguntar si un cliente esta vivo debe
- * fijarse si es que el jugador esta en el juego (no estarìa si perdiò o nunca formò parte) de algun
- * contanier thread safe porque el metodo GameWorld::playerQuiting(id) editarìa el mismo contanier y
- * tambien es llamado concurrentemente
- */
+/* method that will be called from the different Receivers threads. Has to be thread safe.*/
+/* ACCESO CONCURRENTE AL RECUSURSO: MODELO DE LA PARTIDA (este mètodo deberìa ser protegido por la
+ * misma match)*/
 bool Match::pushCommand(PlayerID_t idClient, const Command& cmmd) {
-    // // the client is not able to affect the state of the current game/round
-    // if (!game.PlayerAlive(idClient)) {
-    //     return false;
-    // }
+
+    std::unique_lock<std::mutex> lock(mutexModel);
+    if (!game.isPlayerAlive(idClient)) {
+        return false;
+    }
     commandQueue.push(cmmd);
     return true;
 }
 
-// void Match::loggOutPlayer(size_t idClient) {
-//     if (map_jugadores.find(id_jugador) != map_jugadores.end()) {
-//         map_jugadores.erase(id_jugador);
-//         logica_partida.abandonar_partida(id_jugador);
-//     }
+/*Method that wpuld be called concurrently (by the senderThreads) ante la desconexiòn de un jugador
+ */
+/* ACCESO CONCURRENTE AL RECURSO: MODELO DE LA PARTIDA */
+void Match::loggOutPlayer(PlayerID_t idClient) {
+    std::unique_lock<std::mutex> lock(mutexModel);
+    if (players.tryErase(idClient)) {
+        game.quitPlayer(idClient);
+        currentPlayers--;
+    }
+}
 
-//     if (map_jugadores.empty()) {
-//         return true;
-//     }
-//     return false;
-//     queuesMsg.removeQueueMsg(idClient);
-//     numberPlayers--;
-// }
+void Match::run() {
+    /*Se iniciò el thread porque ya se tiene la cantidad de juagdores -> inciializo los players en
+     * a la partida (estos podrìan ir variando y entre cada ronda se debe volver a setear)*/
+    game.setPlayers(players.getKeys());
 
-Queue<Command>& Match::getCommandQueue() { return commandQueue; }
+    /* seguimos ejecutando en tanto no haya querido detener a la partida por un cierre forzado y por
+     * lo pronto en tanto no hay un ganador de esta unica ronda.*/
+    while (_keep_running && !game.hasEnded()) {
+        Command cmmd;
+        for (int i = 0; i < MAX_COMMANDS_PER_LOOP; i++) {
+            if (commandQueue.try_pop(std::ref(cmmd))) {
+                game.ejecutar(cmmd);
+            } else {
+                break;
+            }
+        }
+        game.update();
+        broadcast(game.getSnapshoot());
+    }
+}
+
+void Match::broadcast(SnapShoot snapshoot) {
+    players.applyToValues(
+            [&snapshoot](PlayerInfo& player) { player.senderQueue->try_push(snapshoot); });
+}
