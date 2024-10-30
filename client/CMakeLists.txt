@@ -7,5 +7,7 @@ target_sources(taller_client
     # .h files
     Object2D.h
     Camera.h
-    ZoomController.h
+    CameraController.h
+    Animator.h
+    AnimationParser.h
     )

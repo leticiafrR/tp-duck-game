@@ -27,7 +27,8 @@ private:
     float size;
 
     std::list<Object2D> sprites;
-    void DrawTexture(Texture& tex, const Transform& transform);
+    void DrawTexture(Texture& tex, SDL2pp::Optional<Rect> sourceRect, const Transform& transform,
+                     int flip);
 
 public:
     Camera(Renderer render, float size);
@@ -47,7 +48,8 @@ Object2D& Camera::CreateObject2D(string filename, Transform transform = Transfor
     return sprites.back();
 }
 
-void Camera::DrawTexture(Texture& tex, const Transform& transform) {
+void Camera::DrawTexture(Texture& tex, SDL2pp::Optional<Rect> sourceRect,
+                         const Transform& transform, int flip) {
     Vector2D sprSize = transform.GetSize();
     float angle = transform.GetAngle();
 
@@ -63,19 +65,18 @@ void Camera::DrawTexture(Texture& tex, const Transform& transform) {
     int screenX = (screenWidth / 2) + (transform.GetPos().x - position.x) * screenScale;
     int screenY = (screenHeight / 2) - (transform.GetPos().y - position.y) * screenScale;
 
-
-    render.Copy(tex, SDL2pp::NullOpt,
+    render.Copy(tex, sourceRect,
                 Rect(screenX - ((sprSize.x) * screenScale) / 2,
                      screenY - ((sprSize.y) * screenScale) / 2, ((sprSize.x) * screenScale),
                      ((sprSize.y) * screenScale)),
-                angle);
+                angle, SDL2pp::NullOpt, flip);
 }
 
 void Camera::Render() {
     render.Clear();
     for (auto& spr: sprites) {
         Transform& transform = spr.GetTransform();
-        DrawTexture(spr.GetTexture(), transform);
+        DrawTexture(spr.GetTexture(), spr.GetSourceRect(), transform, spr.GetFlipSDL());
     }
     render.Present();
 }
