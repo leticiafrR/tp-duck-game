@@ -9,20 +9,31 @@ ReceiverThread::ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClie
 void ReceiverThread::run() {
 
     try {
-        // this could be a great place to ask the nickname
+
+        PlayerInfo playerInfo;
+        playerInfo.senderQueue = sender.getSenderQueue();
+        bool playerConnected;
+        playerInfo.nickName = protocol.ReceiveNickName(std::ref(playerConnected));
+
+        /* trying to join  match, repeat while it is not in a succesfullyJoinedMatch */
+        // while (playerConnected && !succesfullyJoinedMatch) {
 
         /* If loggInPlayer returns true the client was added to the match successfully */
-        if (match.loggInPlayer(idClient, sender.getSenderQueue())) {
+        if (match.loggInPlayer(idClient, playerInfo)) {
             // once here the client has joined to a match that could have more than a round
-
             sender.start();
             receiveLoop();
             sender.kill();
             sender.join();
         } else {
-            // this method should make the client know that the match was fulled
-            // protocol.sendRejection();
+            // this method should make the client know that the match was fulled (in the future it
+            // would send all the options )
+            /* NOTE: Andrea, dont forget to make candela know about the need of this method or
+             * implement it by yourself */
+            protocol.sendRejection(std::ref(playerConnected));
         }
+        //}
+
 
     } catch (const LibError& e) {
 
