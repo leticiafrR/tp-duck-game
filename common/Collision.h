@@ -9,14 +9,15 @@ class Collision {
 private:
 public:
     static bool RectCollision(const Transform& a, const Transform& b) {
-        Vector2D aPos = a.GetPos();
-        Vector2D aSize = a.GetSize();
-        Vector2D bPos = b.GetPos();
-        Vector2D bSize = b.GetSize();
-        return (aPos.x - (aSize.x / 2) < bPos.x + (bSize.x / 2) &&
-                aPos.x + (aSize.x / 2) > bPos.x - (bSize.x) / 2 &&
-                aPos.y - (aSize.y / 2) < bPos.y + (bSize.y / 2) &&
-                aPos.y + (aSize.y / 2) > bPos.y - (bSize.y / 2));
+        Vector2D dMax = a.GetPos() + a.GetSize() / 2;
+        Vector2D dMin = a.GetPos() - a.GetSize() / 2;
+        Vector2D sMax = b.GetPos() + b.GetSize() / 2;
+        Vector2D sMin = b.GetPos() - b.GetSize() / 2;
+
+        float overlapX = std::min(dMax.x, sMax.x) - std::max(dMin.x, sMin.x);
+        float overlapY = std::min(dMax.y, sMax.y) - std::max(dMin.y, sMin.y);
+
+        return (overlapX > 0) && (overlapY > 0);
     }
 
     static void ResolveStaticCollision(Transform& dynamicT, const Transform& staticT) {
