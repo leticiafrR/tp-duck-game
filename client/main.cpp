@@ -135,6 +135,12 @@ int main() try {
 
         spr.SetSourceRect(duckAnim.GetTargetRect());
 
+        if (Collision::Raycast(sprTransform.GetPos(), Vector2D::Down(), 4, otherTransform)) {
+            std::cout << "Puede saltar!" << std::endl;
+        } else {
+            std::cout << "No puede saltar" << std::endl;
+        }
+
         if (Collision::RectCollision(sprTransform, otherTransform)) {
             Collision::ResolveStaticCollision(sprTransform, otherTransform);
         }

@@ -28,6 +28,9 @@ public:
     Vector2D GetSize() const { return this->size; }
     float GetAngle() const { return this->angle; }
 
+    Vector2D Min() const { return position - size / 2; }
+    Vector2D Max() const { return position + size / 2; }
+
     ~Transform() = default;
 };
 
