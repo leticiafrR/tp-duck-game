@@ -27,7 +27,7 @@ public:
      * exists, in that cse also returns false.*/
     bool tryInsert(const K& key, const V& value) {
         // Exclusive lock for write operation
-        std::unique_lock<std::mutex> lck(rw_mtx);
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
         if (map.size() == max_size || map.find(key) != map.end()) {
             // if the map was fulled or if the key already was in the mp returns false
             return false;
@@ -39,7 +39,7 @@ public:
     /* Removes an element in a non-blocking way; returns true if it existed and was deleted.*/
     bool tryErase(const K& key) {
         // Exclusive lock for write operation
-        std::unique_lock<std::mutex> lck(rw_mtx);
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
         auto it = map.find(key);
         if (it == map.end()) {
             return false;
@@ -69,7 +69,7 @@ public:
      * necesitarà instanciar una nueva ronda/game con los id que se guardaron aquì*/
     std::vector<K> getKeys() const {
         // Shared lock for read operation
-        std::shared_lock<std::shared_mutex> lck(rw_mtx);
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
         std::vector<K> keys;
         keys.reserve(map.size());
 
@@ -87,7 +87,7 @@ public:
     }
 
     void applyToItems(const std::function<void(K&, V&)>& func) {
-        std::shared_lock<std::shared_mutex> lck(rw_mtx);
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
         for (auto& [key, value]: map) {
             func(key, value);
         }
@@ -95,7 +95,8 @@ public:
 
     int size() {
         std::shared_lock<std::shared_mutex> lck(rw_mtx);
-        return map.size();
+        int n = map.size();
+        return n;
     }
 
 private:
