@@ -74,8 +74,8 @@ public:
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
     bool sendGameUpdate(const SnapShoot& update);
 
-    // END OF A GAME
-    bool sendGameResult(PlayerID_t gameWinner);
+    // RECOUNT OF GAMES
+    bool sendGamesRecount(const std::unordered_map<PlayerID_t, int>& results);
 
     // END OF A MATCH
     bool sendMatchResult(PlayerID_t finalWinner);
@@ -92,8 +92,10 @@ public:
     -un mensaje del inicio de la match: que comunica la asignaciòn de las skins (ids-> {nickname,
    skinNumber})
         /-un mensaje del inicio de un game: que comunica el nombre del fondo donde se lleva a cabo
-   el nivel y las las plataformas de este
+          el nivel y las las plataformas de este
         /-actualizaciones durante un game: snapshoots
-        -un mensaje del fin de un game: que comunica el id del jugador que ganò el game
+
+        -cada 5 partidas un listado con los games ganados por cada participante
+
     -un mensaje del final de toda la match: que comunica el id de jugador ganador.
 */

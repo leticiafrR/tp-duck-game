@@ -63,21 +63,15 @@ public:
     bool sendMyself(ServerProtocol& protocol) override;
 };
 
-// /********************************* GAME RESULT MSSG ************************************/
+// /********************************* GAMES RECOUNT MSSG ************************************/
 
+class GamesRecount: public ClientMessage {
+    std::unordered_map<PlayerID_t, int> results;
+    explicit GamesRecount(std::unordered_map<PlayerID_t, int> results);
+    bool sendMyself(ServerProtocol& protocol) override;
+};
 
-// /* comunica al cliente quien fue el ganador de esta ronda. Debe iniciarse una nueva ronda hasta
-// que
-//  * llegue el mensaje de que acabo el juego*/
-// class GameResult: public ClientMessage {
-//     PlayerID_t gameWinner;
-
-// public:
-//     explicit GameResult(PlayerID_t winner);
-//     bool sendMyself(ServerProtocol& protocol) override;
-// };
-
-/************************ IMPLEMENTATION OF MATCH RESULT MSSG *****************************/
+/************************************* MATCH RESULT MSSG ************************************/
 class MatchResult: public ClientMessage {
     PlayerID_t finalWinner;
 

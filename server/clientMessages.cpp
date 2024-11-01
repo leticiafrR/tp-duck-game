@@ -33,12 +33,13 @@ bool GameStartSettings::sendMyself(ServerProtocol& protocol) {
     return protocol.sendGameStartSettings(theme, std::ref(gamePlatforms));
 }
 
-// /************************ IMPLEMENTATION OF GAME RESULT MSSG *****************************/
-// GameResult::GameResult(PlayerID_t gameWinner): gameWinner(gameWinner) {}
+// /************************ IMPLEMENTATION OF GAMES RECOUNT MSSG *****************************/
+// cppcheck-suppress passedByValue
+GamesRecount::GamesRecount(std::unordered_map<PlayerID_t, int> results): results(results) {}
 
-// bool GameResult::sendMyself(ServerProtocol& protocol) {
-//     return protocol.sendGameResult(gameWinner);
-// }
+bool GamesRecount::sendMyself(ServerProtocol& protocol) {
+    return protocol.sendGamesRecount(std::ref(results));
+}
 
 /************************ IMPLEMENTATION OF MATCH RESULT MSSG *****************************/
 MatchResult::MatchResult(PlayerID_t finalWinner): finalWinner(finalWinner) {}
