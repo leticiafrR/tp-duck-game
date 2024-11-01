@@ -1,0 +1,48 @@
+#include "clientMessages.h"
+
+/********************** IMPLEMENTATION OF MATCH START SETTING MSSG ******************************/
+MatchStartSettings::MatchStartSettings(SafeMap<PlayerID_t, PlayerInfo>& players, int numberSkins) {
+    if (players.size() > numberSkins) {
+        throw std::runtime_error(
+                "ERROR: A unique assignment of skins to players cannot be made. Too many players");
+    }
+    // Generador de números aleatorios
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, numberSkins - 1);
+
+    players.applyToItems([this, &gen, &dis](PlayerID_t playerID, PlayerInfo& playerInfo) {
+        int skinIndx;
+        do {
+            skinIndx = dis(gen);
+        } while (skinsAssignation.find(skinIndx) != skinsAssignation.end());
+        skinsAssignation[skinIndx] = std::make_tuple(playerID, playerInfo.nickName);
+    });
+}
+
+bool MatchStartSettings::sendMyself(ServerProtocol& protocol) {
+    return protocol.sendMatchStartSettings(skinsAssignation);
+}
+
+/*********************** IMPLEMENTATION OF GAME START SETTINGS MSSG ***************************/
+GameStartSettings::GameStartSettings(const std::string& theme,
+                                     std::vector<Transform>&& gamePlatforms):
+        theme(theme), gamePlatforms(std::move(gamePlatforms)) {}
+
+bool GameStartSettings::sendMyself(ServerProtocol& protocol) {
+    return protocol.sendGameStartSettings(theme, std::ref(gamePlatforms));
+}
+
+// /************************ IMPLEMENTATION OF GAME RESULT MSSG *****************************/
+// GameResult::GameResult(PlayerID_t gameWinner): gameWinner(gameWinner) {}
+
+// bool GameResult::sendMyself(ServerProtocol& protocol) {
+//     return protocol.sendGameResult(gameWinner);
+// }
+
+/************************ IMPLEMENTATION OF MATCH RESULT MSSG *****************************/
+MatchResult::MatchResult(PlayerID_t finalWinner): finalWinner(finalWinner) {}
+
+bool MatchResult::sendMyself(ServerProtocol& protocol) {
+    return protocol.sendMatchResult(finalWinner);
+}

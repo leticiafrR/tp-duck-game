@@ -1,6 +1,7 @@
 #ifndef SENDER_H
 #define SENDER_H
 #include <cstddef>
+#include <memory>
 
 #include "../common/queue.h"
 #include "../common/thread.h"
@@ -9,9 +10,10 @@
 #include "serverProtocol.h"
 
 #define MAX_MESSAGES 250
+
 class SenderThread: public Thread {
 private:
-    Queue<SnapShoot> senderQueue;
+    Queue<std::shared_ptr<ClientMessage>> senderQueue;
     ServerProtocol& protocol;
     // its up to the sender to, when finished the sendingLoop, ask the match to logOut this client.
     Match& match;
@@ -22,7 +24,7 @@ private:
 public:
     explicit SenderThread(ServerProtocol& protocol, Match& match, PlayerID_t idClient);
 
-    Queue<SnapShoot>* getSenderQueue();
+    Queue<std::shared_ptr<ClientMessage>>* getSenderQueue();
 
     void run() override;
 
