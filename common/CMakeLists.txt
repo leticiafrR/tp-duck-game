@@ -5,7 +5,6 @@ target_sources(taller_common
     resolver.cpp
     resolvererror.cpp
     socket.cpp
-    protocolAssistant.cpp
     PUBLIC
     # .h files
     liberror.h
@@ -14,5 +13,7 @@ target_sources(taller_common
     socket.h
     queue.h
     thread.h
-    protocolAssistant.h
+    Vector2D.h
+    Collision.h
+    Transform.h
     )

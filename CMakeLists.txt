@@ -59,6 +59,13 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
+
+    FetchContent_Declare(
+        yaml-cpp
+        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.zip
+    )
+
+    FetchContent_MakeAvailable(yaml-cpp)
 endif()
 
 # Program section
@@ -68,7 +75,7 @@ if(TALLER_CLIENT)
     add_executable(taller_client)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_client taller_common SDL2pp::SDL2pp)
+    add_dependencies(taller_client taller_common SDL2pp::SDL2pp yaml-cpp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -80,7 +87,7 @@ if(TALLER_CLIENT)
     target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp yaml-cpp)
 endif()
 
 if(TALLER_SERVER)
@@ -105,7 +112,7 @@ if(TALLER_EDITOR)
     add_executable(taller_editor)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -117,7 +124,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp)
 endif()
 
 

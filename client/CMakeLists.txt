@@ -5,8 +5,9 @@ target_sources(taller_client
     main.cpp
     PUBLIC
     # .h files
-    Vector2D.h
     Object2D.h
-    Transform.h
     Camera.h
+    CameraController.h
+    Animator.h
+    AnimationParser.h
     )
