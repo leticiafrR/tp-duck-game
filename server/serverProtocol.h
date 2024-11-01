@@ -3,12 +3,12 @@
 
 #include <list>
 #include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 #include "../common/command.h"
-#include "../common/dataMatch.h"
-#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
-#include "../common/snapShoot.h"
 #include "../common/socket.h"
 
 typedef enum: uint8_t {
@@ -46,71 +46,54 @@ public:
     // Constructor
     explicit ServerProtocol(Socket&& skt);
 
-    // Send the connection status: Indicate whether the client successfully joined and if it is
-    // still connected.
-    void SendConectionStatus(const bool& ok, bool& isConnected);
+    /* Send the result of trying to joing the match. Returns a boolean depending on whether the
+     * player was still conected or not*/
+    bool sendResultOfJoining(const bool& success);
 
-    // Send the final status: Indicate whether the client won or lost.
-    void SendFinalStatus(const bool& won, bool& isConnected);
 
-    // Receive a message from the client.
-    void Receive(bool& isConnected);  // Todavia no tiene un uso
+    /* Receives through the socket  the player's name and sets the value of the boolean received
+     * (isConnected)*/
+    std::string receiveNickName(bool& isConnected);
 
-    //
-    void SendMatch(const size_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
-                   bool& isConnected);
+    // BEGGINING OF A MATCH
+    /* Sends to the client a message with the ids of the participants of the match, their nickName,
+     * and the number of skin assigned to each player ( K:id, V:{nickname, skinNumber} ), this is
+     * the information related to the start of the whole match*/
+    bool sendMatchStartSettings(
+            const std::unordered_map<int, std::tuple<PlayerID_t, std::string> >& skinsAssignation);
 
-    //
-    void SendBackGround(const uint8_t& backgroundID);
+    // BEGINING OF A GAME
+    //  OJO: CAMBIAR AL CORRECTO TIPADO DE LAS PLATAFORMAS DEL JUEGO
+    bool sendGameStartSettings(const std::string& theme, std::vector<Transform>& gamePlatforms);
 
-    // Sends what is the player skin and the position
-    void SendAObject(const dataObject& player, bool& isConnected);
-
-    //
-    void SendATransform(const Transform& transform, bool& isConnected);  // tiene que ser privado
-
-    //
-    void SendAWeapon(bool& isConnected);  // tiene que ser privado
-
-    void SendADuck(const Duck& duck);  // tiene que ser privado
-
-    // Receive the player's name
-    std::string ReceiveNickName(bool& isConnected);
-
-    /* The following methods had been commented (by me Andrea) because the conflict of working with
-     * different structures (i have changed the names: dataMove/dataCommand -> Command,
-     * dataMatch->SnapShoot), meanwhile i preffer to just comment this methods*/
-
-    // // Receive a move message.
-    // dataMove ReceiveAMove(bool& isConnected);
-
-    // // Receive a match
-    // dataMatch ReceiveAMatch(bool& isConnected);
-
-    // // Send matches list
-    // void SendMatches(const std::list<dataMatch>& matches,
-    //                  bool& isConnected);  // Asumo que como parametro va una lista C++ pero
-    //                  espero
-    //                                       // confirmacion
-
-    // // Receive a client: the nickname and whether the client wants to open a new match or join an
-    // // existing one.
-    // dataMatch ReceiveAClient(bool& isConnected);
-
-    /*The following methods werent implemmented neigther by Candela nor me. But this is how i need
-     * the API to be.*/
-
-    // sets the value of `clientAlive` depending on whether the client was connected.
+    // DURING A GAME
+    /* Receives through the socket the command (to apply to its player in the current game) and sets
+     * the boolean received*/
     Command receiveCommand(bool& clientAlive);
 
-    // returns false if the message couldnt be send (ej the client has disconnected)
-    bool sendSnapShoot(const SnapShoot& gameStatus);
+    /* Sends an update of the world of the current game: changes regarding the state of the world*/
+    bool sendGameUpdate(const SnapShoot& update);
+
+    // END OF A GAME
+    bool sendGameResult(PlayerID_t gameWinner);
+
+    // END OF A MATCH
+    bool sendMatchResult(PlayerID_t finalWinner);
 
     void endConnection();
-    /*{
-        skt_peer.shutdown(2);
-        skt_peer.close();
-    }*/
 };
 
 #endif
+
+// desde el punto de vista del clientee:
+/* Entonces el cliente recibirà al intentar unirse a una partida:
+    -un mensaje del resultado de unirse a la partida (true-> exito, false-> fracaso)
+    (en caso de que se haya podido ingresar a la partida)
+    -un mensaje del inicio de la match: que comunica la asignaciòn de las skins (ids-> {nickname,
+   skinNumber})
+        /-un mensaje del inicio de un game: que comunica el nombre del fondo donde se lleva a cabo
+   el nivel y las las plataformas de este
+        /-actualizaciones durante un game: snapshoots
+        -un mensaje del fin de un game: que comunica el id del jugador que ganò el game
+    -un mensaje del final de toda la match: que comunica el id de jugador ganador.
+*/

@@ -7,11 +7,10 @@
 
 struct Command {
     [[clang::supress_unused]] bool block;
-    [[clang::supress_unused]] std::string playerName;
     [[clang::supress_unused]] uint8_t commandID;
-    [[clang::supress_unused]] uint8_t playerID;
+    [[clang::supress_unused]] uint32_t playerID;
 
-    Command(): block(false), playerName(), commandID(0), playerID(0) {}
+    Command(): block(false), commandID(0), playerID(0) {}
 };
 
 #endif
