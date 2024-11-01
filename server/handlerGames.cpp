@@ -1,17 +1,28 @@
 #include "handlerGames.h"
 
+#include "timeManager.h"
+#define FPS 20
+#define MAX_CMMDS_PER_TICK 50
+
+
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
         availableLevels(config.getAvailableLevels()),
         players(players),
         commandQueue(commandQueue),
-        matchWinner(0) {}
+        matchWinner(0) {
+    auto playerIDs = players.getKeys();
+    for (auto& id: playerIDs) {
+        gameResults[id] = 0;
+    }
+}
 
 void HandlerGames::playGroupOfGames() {
     for (int i = 0; i < 5; i++) {
         playOneGame();
     }
-    // aqui envia el recuento/marcador de las rondas
+    /* sending the recount of the games won by each player*/
+    broadcastGameMssg(std::make_shared<GamesRecount>(gameResults));
 }
 
 void HandlerGames::playOneGame() {
@@ -22,18 +33,25 @@ void HandlerGames::playOneGame() {
     /*sending the initial setting of the game*/
     broadcastGameMssg(std::make_shared<GameStartSettings>(theme, currentGame->getGamePlatforms()));
 
-    /* during a game*/
     gameLoop();
-
-    // /*sending the winner of the game*/
-    // broadcastGameMssg(std::make_shared<GameResult>(currentGame->whoWon()));
+    gameResults[currentGame->whoWon()] += 1;
 }
 
 
 void HandlerGames::gameLoop() {
-    // deberìa de enviar 10 frames por segundo... o a 60 jejejje
+
+    TimeManager timeManager(FPS);
     while (!currentGame->hasWinner()) {
-        // envio snapshoots { posicones..., bool hasWinner}
+        timeManager.synchronizeTick();
+
+        int countCommands = 0;
+        Command cmmd;
+        while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
+            currentGame->handleCommand(cmmd);
+            countCommands++;
+        }
+        currentGame->update();
+        broadcastGameMssg(std::make_shared<GameUpdate>(currentGame->getSnapshoot()));
     }
 }
 
