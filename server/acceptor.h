@@ -8,6 +8,7 @@
 #include "../common/socket.h"
 #include "../common/thread.h"
 
+#include "config.h"
 #include "match.h"
 #include "receiver.h"
 
@@ -33,7 +34,7 @@ private:
     void cleanUpClientsResources();
 
 public:
-    explicit AcceptorThread(const char* servname);
+    explicit AcceptorThread(const char* servname, Config& config);
     void run() override;
 
     /* Method called by the main thread, executes the shutdoown and closes the acepctor socket, and
