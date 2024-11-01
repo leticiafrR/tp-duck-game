@@ -2,6 +2,7 @@
 #define MATCH_H
 
 #include <atomic>
+#include <memory>
 #include <string>
 
 #include "../common/command.h"
@@ -11,43 +12,32 @@
 #include "../common/thread.h"
 #include "../data/id.h"
 
-#include "gamesHandler.h"
+#include "clientMessages.h"
+#include "config.h"
+#include "handlerGames.h"
 #include "serverProtocol.h"
 
-#define TEST_MAX_PLAYERS 1
 #define MAX_COMMANDS 500
 #define MAX_COMMANDS_PER_LOOP 100
 
 
-struct PlayerInfo {
-    std::string nickName;
-    Queue<SnapShoot>* senderQueue;  // cppcheck-suppress unusedStructMember
-};
-
 class Match: public Thread {
 private:
-    // looks like i dont need it anymore
-    PlayerID_t idClientCreator;
-
-
     // useful to see when to start the match and also when it... has ended
     std::atomic<unsigned int> currentPlayers;
     // when this quantity is reached the match is started
     const unsigned int numberPlayers;
 
     Queue<Command> commandQueue;
-    // SafeMap<PlayerID_t, Queue<SnapShoot>*> playersToBroadcast;
 
-    // me parece que este serìa el ocntainer màs aproìado: engloba el acceso concurrente a las
-    // queues de jugadores (que se da ya iniciado el juego) ademàs
     SafeMap<PlayerID_t, PlayerInfo> players;
 
-    // GamesHandler gamesHandler;
-    GameWorld game;
-
+    Config& config;
 
 public:
-    explicit Match(PlayerID_t idClientCreator = 1, unsigned int numberPlayers = TEST_MAX_PLAYERS);
+    /* has to be instanced making sure the numberPlayers is smaller than MAX_PLAYERS defined in
+     * Config*/
+    explicit Match(Config& config, unsigned int numberPlayers);
 
     /* returns a boolean indicating if the client was succesfully added. If the Match has
      * already started the method will return false, else (success) the method will include in the
@@ -74,7 +64,7 @@ public:
 
 private:
     /* */
-    void Match::broadcast(SnapShoot snapshoot);
+    void broadcastMatchMssg(const std::shared_ptr<ClientMessage>& message);
 };
 
 #endif

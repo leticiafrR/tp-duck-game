@@ -1,21 +1,26 @@
 #include "match.h"
 
-Match::Match(PlayerID_t idClientCreator, unsigned int numberPlayers):
-        idClientCreator(idClientCreator),
+Match::Match(Config& config, unsigned int numberPlayers):
+        config(config),
         currentPlayers(0),
         numberPlayers(numberPlayers),
         commandQueue(MAX_COMMANDS),
         players(numberPlayers) {
-    // hacer random de los 5 mapas
+    if (numberPlayers > config.getMaxPlayers()) {
+        throw std::runtime_error(
+                "ERROR: Too many players, can't manage a match with so many players.");
+    }
 }
 
 /* method that will be called from the different Receivers threads. Has to be thread safe */
 /* CONCURRENT ACCESS TO THE RESOURCE: MATCH (specifically to the attributes) -> I think this method
- *should be protected by another entity a monitor of matches*/
+ * should be protected by another entity a monitor of matches*/
 bool Match::loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
+    // std::unique_lock<std::mutex> lock(m);
     if (!players.tryInsert(idClient, playerInfo)) {
         return false;
     }
+    // maybe could do this check with the size of the map that is atomic still being a CS
     currentPlayers++;
     if (currentPlayers == numberPlayers && !_is_alive) {
         this->start();
@@ -41,29 +46,20 @@ void Match::loggOutPlayer(PlayerID_t idClient) {
 
 
 void Match::run() {
-    /*Se iniciò el thread porque ya se tiene la cantidad de juagdores -> inciializo los players en
-     * a la partida (estos podrìan ir variando y entre cada ronda se debe volver a setear)*/
-    game.setPlayers(players.getKeys());
-    // hacer el s
-    // enviar la informacion de los 5 mapas, asignaciòn de las skins.
-
-
-    /* seguimos ejecutando en tanto no haya querido detener a la partida por un cierre forzado y por
-     * lo pronto en tanto no hay un ganador de esta unica ronda.*/
-    while (_keep_running && !game.hasEnded()) {
-        Command cmmd;
-
-        int countCommands = 0;
-        while (countCommands < MAX_COMMANDS_PER_LOOP && commandQueue.try_pop(std::ref(cmmd))) {
-            game.handleCommand(cmmd);
-            countCommands++;
-        }
-        game.update();
-        broadcast(game.getSnapshoot());
+    broadcastMatchMssg(std::make_shared<MatchStartSettings>(players, config.getAvailableSkins()));
+    HandlerGames handlerGames(config, players, commandQueue);
+    while (!handlerGames.isThereFinalWinner()) {
+        handlerGames.playGroupOfGames();
     }
+    broadcastMatchMssg(std::make_shared<MatchResult>(handlerGames.whoWon()));
 }
 
-void Match::broadcast(SnapShoot snapshoot) {
-    players.applyToValues(
-            [&snapshoot](PlayerInfo& player) { player.senderQueue->try_push(snapshoot); });
+void Match::broadcastMatchMssg(const std::shared_ptr<ClientMessage>& message) {
+    players.applyToItems([&message](PlayerID_t _, PlayerInfo& player) {
+        try {
+            player.senderQueue->try_push(message);
+        } catch (const ClosedQueue& e) {
+            /* The client has disconeccted, eventually will be taken out of the SafeMap players*/
+        }
+    });
 }
