@@ -10,10 +10,10 @@
 #include "../common/command.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
+#include "model/gameWorld.h"
 
 #include "clientMessages.h"
 #include "config.h"
-#include "gameWorld.h"
 
 #define GAMES_TO_WIN_MATCH 10
 
