@@ -86,17 +86,16 @@ public:
         map.clear();
     }
 
-    /* Ejemplo de uso:
-    safeMap.applyToValues([](MyClass& obj) {
-        obj.doSomething();
-    });
-    */
-    void applyToValues(const std::function<void(V&)>& func) {
+    void applyToItems(const std::function<void(K&, V&)>& func) {
         std::shared_lock<std::shared_mutex> lck(rw_mtx);
-        // cppcheck-suppress unusedVariable
-        for (auto& [_, value]: map) {
-            func(value);
+        for (auto& [key, value]: map) {
+            func(key, value);
         }
+    }
+
+    int size() {
+        std::shared_lock<std::shared_mutex> lck(rw_mtx);
+        return map.size();
     }
 
 private:
