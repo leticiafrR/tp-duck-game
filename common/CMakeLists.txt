@@ -16,4 +16,5 @@ target_sources(taller_common
     Vector2D.h
     Collision.h
     Transform.h
+    RigidBody.h
     )
