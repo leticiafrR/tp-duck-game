@@ -1,7 +1,7 @@
 #include "handlerGames.h"
 
-#include "timeManager.h"
-#define FPS 20
+#include "serverTimeManager.h"
+
 #define MAX_CMMDS_PER_TICK 50
 
 
@@ -40,7 +40,7 @@ void HandlerGames::playOneGame() {
 
 void HandlerGames::gameLoop() {
 
-    TimeManager timeManager(FPS);
+    ServerTimeManager timeManager(FPS);
     while (!currentGame->hasWinner()) {
         timeManager.synchronizeTick();
 

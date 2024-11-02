@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "../common/command.h"
@@ -33,6 +34,8 @@ private:
     SafeMap<PlayerID_t, PlayerInfo> players;
 
     Config& config;
+
+    std::mutex m;
 
 public:
     /* has to be instanced making sure the numberPlayers is smaller than MAX_PLAYERS defined in

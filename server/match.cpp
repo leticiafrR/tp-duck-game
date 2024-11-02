@@ -13,14 +13,13 @@ Match::Match(Config& config, unsigned int numberPlayers):
 }
 
 /* method that will be called from the different Receivers threads. Has to be thread safe */
-/* CONCURRENT ACCESS TO THE RESOURCE: MATCH (specifically to the attributes) -> I think this method
- * should be protected by another entity a monitor of matches*/
+/* CONCURRENT ACCESS TO THE RESOURCE: MATCH (specifically to the attributes)*/
+
 bool Match::loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
-    // std::unique_lock<std::mutex> lock(m);
+    std::unique_lock<std::mutex> lock(m);
     if (!players.tryInsert(idClient, playerInfo)) {
         return false;
     }
-    // maybe could do this check with the size of the map that is atomic still being a CS
     currentPlayers++;
     if (currentPlayers == numberPlayers && !_is_alive) {
         this->start();
@@ -32,7 +31,7 @@ void Match::pushCommand(PlayerID_t idClient, const Command& cmmd) { commandQueue
 
 /*Method that wpuld be called concurrently (by the senderThreads) ante la desconexiòn de un jugador
  */
-/*Quito acceso concurrente al modeloencolando el evento de salir de la partida para ser procesado
+/*Quito acceso concurrente al modelo encolando el evento de salir de la partida para ser procesado
  * secuencialmente */
 void Match::loggOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient)) {
