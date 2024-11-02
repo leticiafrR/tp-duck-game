@@ -47,7 +47,7 @@ public:
      * list of Queues where the match does the broadcast the queueMesg recieved, also it will start
      * the Match thread when the `currentPlayers`reachs the quatity `cantPlayers`
      */
-    bool loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
+    bool logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
 
     /* Executes a blocking push over the command queue (the validation over if the client is alive
      * in the current round must be done inside the  Game)*/
@@ -61,7 +61,7 @@ public:
 
     /* SnapShoots to the disconnected client and also it should take off the player of the WorldMap
      * (if hasnt end) (write)*/
-    void loggOutPlayer(PlayerID_t idClient);
+    void logOutPlayer(PlayerID_t idClient);
 
     void run() override;
 

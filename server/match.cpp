@@ -15,7 +15,7 @@ Match::Match(Config& config, unsigned int numberPlayers):
 /* method that will be called from the different Receivers threads. Has to be thread safe */
 /* CONCURRENT ACCESS TO THE RESOURCE: MATCH (specifically to the attributes)*/
 
-bool Match::loggInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
+bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
     std::unique_lock<std::mutex> lock(m);
     if (!players.tryInsert(idClient, playerInfo)) {
         return false;
@@ -33,7 +33,7 @@ void Match::pushCommand(PlayerID_t idClient, const Command& cmmd) { commandQueue
  */
 /*Quito acceso concurrente al modelo encolando el evento de salir de la partida para ser procesado
  * secuencialmente */
-void Match::loggOutPlayer(PlayerID_t idClient) {
+void Match::logOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient)) {
         Command quit;
         quit.playerID = idClient;

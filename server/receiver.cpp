@@ -14,7 +14,7 @@ void ReceiverThread::run() {
         bool playerConnected;
         playerInfo.nickName = protocol.receiveNickName(std::ref(playerConnected));
 
-        if (match.loggInPlayer(idClient, playerInfo)) {
+        if (match.logInPlayer(idClient, playerInfo)) {
             sender.start();
             receiveLoop();
             sender.kill();
