@@ -8,6 +8,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common/Collision.h"
+#include "common/RigidBody.h"
 
 #include "Animator.h"
 #include "Camera.h"
@@ -37,7 +38,7 @@ int main() try {
                        Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
     Object2D& other = cam.CreateObject2D("../client/assets/sprites/bg_city.png",
-                                         Transform(Vector2D(8.2, -4.2), Vector2D(10, 5)));
+                                         Transform(Vector2D(0, -10), Vector2D(10, 5)));
     Object2D& spr = cam.CreateObject2D("../client/assets/sprites/base_duck.png",
                                        Transform(Vector2D::Zero(), Vector2D(5, 5)));
 
@@ -45,18 +46,23 @@ int main() try {
 
     spr.SetColor(Color(255, 255, 255));
 
-    Transform& sprTransform = spr.GetTransform();
-    Transform& otherTransform = other.GetTransform();
+    Transform& duckT = spr.GetTransform();
+    RigidBody rb(duckT, 8);
+    Transform& platformT = other.GetTransform();
 
     CameraController camController(cam);
-    camController.AddTransform(&sprTransform);
-    camController.AddTransform(&otherTransform);
+    camController.AddTransform(&duckT);
+    camController.AddTransform(&platformT);
 
     std::set<int> pressedKeysSet;
     bool running = true;
     Vector2D dir = Vector2D::Zero();
 
-    float speed = 1;
+    int fps = 25;
+    float sleepMS = 1000.0f / fps;
+    float deltaTime = 1.0f / fps;
+    float speed = 0.7f;
+    bool isGrounded = false;
     while (running) {
         SDL_Event event;
         duckAnim.SetTarget("idle", false);
@@ -79,11 +85,11 @@ int main() try {
                         case SDLK_d:
                             dir += Vector2D::Right();
                             break;
-                        case SDLK_w:
-                            dir += Vector2D::Up();
-                            break;
-                        case SDLK_s:
-                            dir += Vector2D::Down();
+                        case SDLK_SPACE:
+                            if (isGrounded) {
+                                rb.ApplyForce(Vector2D::Up() * 40);
+                                std::cout << "jump!" << std::endl;
+                            }
                             break;
                     }
                 } break;
@@ -101,12 +107,6 @@ int main() try {
                             spr.SetHorizontalFlip(false);
                             dir += Vector2D::Right() * -1;
                             break;
-                        case SDLK_w:
-                            dir += Vector2D::Up() * -1;
-                            break;
-                        case SDLK_s:
-                            dir += Vector2D::Down() * -1;
-                            break;
                     }
                     break;
                 }
@@ -118,7 +118,7 @@ int main() try {
                     break;
             }
         }
-        sprTransform.Move(dir * speed);
+        duckT.Move(dir * speed);
 
         if (dir.GetMagnitude() > 0.001) {
             duckAnim.SetTarget("run", false);
@@ -135,20 +135,21 @@ int main() try {
 
         spr.SetSourceRect(duckAnim.GetTargetRect());
 
-        if (Collision::Raycast(sprTransform.GetPos(), Vector2D::Down(), 4, otherTransform)) {
-            std::cout << "Puede saltar!" << std::endl;
-        } else {
-            std::cout << "No puede saltar" << std::endl;
-        }
 
-        if (Collision::RectCollision(sprTransform, otherTransform)) {
-            Collision::ResolveStaticCollision(sprTransform, otherTransform);
+        isGrounded = Collision::Raycast(duckT.GetPos(), Vector2D::Down(), 4, platformT);
+
+        rb.Update(deltaTime);
+
+        if (Collision::RectCollision(duckT, platformT)) {
+            Collision::ResolveStaticCollision(duckT, platformT);
+            if (isGrounded) {
+                rb.ResetGravity();
+            }
         }
 
         camController.Update();
-        // sprTransform.Rotate(0.1);
         cam.Render();
-        SDL_Delay(50);
+        SDL_Delay(sleepMS);
     }
 
     // Here all resources are automatically released and library deinitialized
