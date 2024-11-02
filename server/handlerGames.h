@@ -5,6 +5,7 @@
 #include <memory>
 #include <random>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -37,9 +38,12 @@ private:
     /* The match thread give us a reference to its
      * command queue to process the commands in each
      * Game*/
-    Queue<Command>& commandQueue;  // a un inicio es -1
+    Queue<Command>& commandQueue;
 
-    PlayerID_t matchWinner;
+    int recordGamesWon = 0;
+    PlayerID_t matchWinner = 0;
+    bool existsMatchWinner = false;
+
     std::unordered_map<PlayerID_t, int> gameResults;
 
     std::unique_ptr<GameWorld> currentGame;

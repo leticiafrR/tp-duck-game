@@ -11,22 +11,41 @@
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
-        availableLevels(config.getAvailableLevels()),
-        players(players),
-        commandQueue(commandQueue),
-        matchWinner(0) {
+        availableLevels(config.getAvailableLevels()), players(players), commandQueue(commandQueue) {
+
     auto playerIDs = players.getKeys();
     for (auto& id: playerIDs) {
         gameResults[id] = 0;
     }
 }
+bool HandlerGames::isThereFinalWinner() { return existsMatchWinner; }
+PlayerID_t HandlerGames::whoWon() { return matchWinner; }
 
 void HandlerGames::playGroupOfGames() {
     for (int i = 0; i < 5; i++) {
         playOneGame();
     }
+
     /* sending the recount of the games won by each player*/
     broadcastGameMssg(std::make_shared<GamesRecount>(gameResults));
+
+    /* loking if there is a matchWinner*/
+    if (recordGamesWon >= GAMES_TO_WIN_MATCH) {
+        /* if the record is greater than the necesary to win a match we look if there is just one
+         * player with that number of games won. If not there is not a matchWinner*/
+        for (auto it = gameResults.begin(); it != gameResults.end(); ++it) {
+            /*first player found with that record*/
+            if (!existsMatchWinner && it->second == recordGamesWon) {
+                existsMatchWinner = true;
+                matchWinner = it->first;
+            } else if (existsMatchWinner && it->second == recordGamesWon) {
+                /* second player found with that record-> there is no match winner*/
+                existsMatchWinner = false;
+                matchWinner = 0;
+                break;
+            }
+        }
+    }
 }
 
 void HandlerGames::playOneGame() {
@@ -38,7 +57,13 @@ void HandlerGames::playOneGame() {
     broadcastGameMssg(std::make_shared<GameStartSettings>(theme, currentGame->getGamePlatforms()));
 
     gameLoop();
-    gameResults[currentGame->whoWon()] += 1;
+
+    PlayerID_t gameWinner = currentGame->whoWon();
+    int playerRecord = gameResults[gameWinner] += 1;
+
+    if (playerRecord > recordGamesWon) {
+        recordGamesWon = playerRecord;
+    }
 }
 
 
@@ -46,6 +71,7 @@ void HandlerGames::gameLoop() {
 
     TimeManager timeManager(FPS);
     while (!currentGame->hasWinner()) {
+
         if (timeManager.synchronizeTick() < std::chrono::duration<double, std::milli>(0)) {
             PRINT_TEST_OVERFLOW_TICK();
         }
