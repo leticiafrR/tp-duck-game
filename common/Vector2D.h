@@ -14,6 +14,11 @@ public:
     static Vector2D Up() { return Vector2D(0, 1); }
     static Vector2D Down() { return Vector2D(0, -1); }
 
+    // Lineal Interpolation
+    static Vector2D Lerp(const Vector2D& start, const Vector2D& end, float t) {
+        return start + (end - start) * t;
+    }
+
     float x;
     float y;
     Vector2D(float x, float y) {
