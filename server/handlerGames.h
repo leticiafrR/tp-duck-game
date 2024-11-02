@@ -1,6 +1,7 @@
 #ifndef HANDLER_GAMES_
 #define HANDLER_GAMES_
 
+#include <iostream>
 #include <memory>
 #include <random>
 #include <string>

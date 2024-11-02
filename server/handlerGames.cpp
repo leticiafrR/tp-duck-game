@@ -1,8 +1,12 @@
 #include "handlerGames.h"
 
-#include "serverTimeManager.h"
+#include "../common/timeManager.h"
 
 #define MAX_CMMDS_PER_TICK 50
+#define FPS 10
+#define PRINT_TEST_OVERFLOW_TICK()                                                                 \
+    std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per tick" \
+              << std::endl;
 
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
@@ -40,9 +44,11 @@ void HandlerGames::playOneGame() {
 
 void HandlerGames::gameLoop() {
 
-    ServerTimeManager timeManager(FPS);
+    TimeManager timeManager(FPS);
     while (!currentGame->hasWinner()) {
-        timeManager.synchronizeTick();
+        if (timeManager.synchronizeTick() < std::chrono::duration<double, std::milli>(0)) {
+            PRINT_TEST_OVERFLOW_TICK();
+        }
 
         int countCommands = 0;
         Command cmmd;

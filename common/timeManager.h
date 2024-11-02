@@ -2,7 +2,6 @@
 #define TIME_MANAGER_
 
 #include <chrono>
-#include <iostream>
 #include <thread>
 
 class TimeManager {
@@ -17,24 +16,20 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> lastUpdateTime =
             std::chrono::steady_clock::now();
 
-protected:
-    virtual void handleOverflowOfTimeInTick() = 0;
-
-
 public:
     explicit TimeManager(int targetFPS):
-            targetFPS(targetFPS), frameTime(std::chrono::milliseconds(1000 / targetFPS)) {}
+            targetFPS(targetFPS),
+            frameTime(std::chrono::duration<double, std::milli>(1000.0 / targetFPS)) {}
 
-    void synchronizeTick() {
+    std::chrono::duration<double, std::milli> synchronizeTick() {
         auto currentTime = std::chrono::steady_clock::now();
-        auto timeRemaining = frameTime - (currentTime - lastUpdateTime);
-        if (timeRemaining > frameTime.zero()) {
-            std::this_thread::sleep_for(timeRemaining);
-        } else {
-            handleOverflowOfTimeInTick();
-        }
 
+        auto deltaTime = frameTime - (currentTime - lastUpdateTime);
+        if (deltaTime > std::chrono::duration<double, std::milli>(0)) {
+            std::this_thread::sleep_for(deltaTime);
+        }
         lastUpdateTime = currentTime;
+        return deltaTime;
     }
 };
 
