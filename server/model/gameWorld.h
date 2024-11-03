@@ -17,7 +17,7 @@ public:
     /* must parse (use a parser) the name of the file received to build the platforms*/
     explicit GameWorld(std::string levelName, std::vector<PlayerID_t> playerIds);
 
-    std::vector<Transform> getGamePlatforms();
+    std::vector<Transform>& getGamePlatforms();
 
     void handleCommand(Command cmmd);
     void update();
