@@ -37,6 +37,7 @@ void Match::logOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient)) {
         Command quit;
         quit.playerID = idClient;
+
         /* Falta configurar un commandID para este comando */
         commandQueue.push(quit);
         currentPlayers--;
@@ -45,7 +46,8 @@ void Match::logOutPlayer(PlayerID_t idClient) {
 
 
 void Match::run() {
-    broadcastMatchMssg(std::make_shared<MatchStartSettings>(players, config.getAvailableSkins()));
+    broadcastMatchMssg(std::make_shared<MatchStartSettings>(players, config.getAvailableSkins(),
+                                                            config.getDuckSize()));
     HandlerGames handlerGames(config, players, commandQueue);
     while (!handlerGames.isThereFinalWinner()) {
         handlerGames.playGroupOfGames();
