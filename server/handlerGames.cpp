@@ -27,7 +27,7 @@ void HandlerGames::playGroupOfGames() {
     }
 
     /* sending the recount of the games won by each player*/
-    broadcastGameMssg(std::make_shared<GamesRecount>(gameResults));
+    broadcastGameMssg(std::make_shared<GamesRecount>(gameResults, existsMatchWinner));
 
     /* loking if there is a matchWinner*/
     if (recordGamesWon >= GAMES_TO_WIN_MATCH) {
@@ -50,11 +50,21 @@ void HandlerGames::playGroupOfGames() {
 
 void HandlerGames::playOneGame() {
     auto level = getRandomLevel();
-    auto theme = getThemeName(level);
+
+    auto theme = getThemeName(level);  // retorna una copia independiente
     currentGame = std::make_unique<GameWorld>(level, players.getKeys());
 
     /*sending the initial setting of the game*/
-    broadcastGameMssg(std::make_shared<GameStartSettings>(theme, currentGame->getGamePlatforms()));
+    broadcastGameMssg(std::make_shared<GameStartSettings>(
+            std::move(theme),
+            std::ref(currentGame->getGamePlatforms())));  // respecto al gamePlatforms, este no
+                                                          // cambiarìa durante el game -> no es
+                                                          // necesario que se copie, podemos
+                                                          // trabajar con una referencia. Supongo
+                                                          // que me dan una referencia. (no deberìa
+                                                          // de cambiar) (no queremos que haya
+                                                          // acceso de lecto escritura concurrente)
+    // el constructor de GameStartSetting se adueña del theme-> no usarlo
 
     gameLoop();
 

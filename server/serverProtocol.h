@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "../common/command.h"
+#include "../common/dataTransferObjects.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
@@ -59,12 +60,10 @@ public:
     /* Sends to the client a message with the ids of the participants of the match, their nickName,
      * and the number of skin assigned to each player ( K:id, V:{nickname, skinNumber} ), this is
      * the information related to the start of the whole match*/
-    bool sendMatchStartSettings(
-            const std::unordered_map<int, std::tuple<PlayerID_t, std::string> >& skinsAssignation);
+    bool sendMatchStartSettings(MatchStartSettingsDto matchStartSettings);
 
     // BEGINING OF A GAME
-    //  OJO: CAMBIAR AL CORRECTO TIPADO DE LAS PLATAFORMAS DEL JUEGO
-    bool sendGameStartSettings(const std::string& theme, std::vector<Transform>& gamePlatforms);
+    bool sendGameStartSettings(GameStartSettingsDto gameStartSettings);
 
     // DURING A GAME
     /* Receives through the socket the command (to apply to its player in the current game) and sets
@@ -72,13 +71,13 @@ public:
     Command receiveCommand(bool& clientAlive);
 
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
-    bool sendGameUpdate(const SnapShoot& update);
+    bool sendGameUpdate(SnapShoot update);
 
     // RECOUNT OF GAMES
-    bool sendGamesRecount(const std::unordered_map<PlayerID_t, int>& results);
+    bool sendGamesRecount(GamesRecountDto gamesRecount);
 
     // END OF A MATCH
-    bool sendMatchResult(PlayerID_t finalWinner);
+    bool sendMatchWinner(PlayerID_t finalWinner);
 
     void endConnection();
 };
