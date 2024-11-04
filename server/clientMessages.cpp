@@ -25,7 +25,7 @@ MatchStartSettings::MatchStartSettings(SafeMap<PlayerID_t, PlayerInfo>& players,
 }
 // construyo un matchStartSetting y se lo regalo (move semantics) al protocolo para que lo envie
 // aqui se deberìa enviar un MatchStartSettingsDto
-bool MatchStartSettings::sendMyself(ServerProtocol& protocol) const {
+void MatchStartSettings::sendMyself(ServerProtocol& protocol) const {
     MatchStartSettingsDto dto((int)skinsAssignation.size(), duckSize);
     int i = 0;
     for (auto it = skinsAssignation.begin(); it != skinsAssignation.end(); ++it) {
@@ -33,7 +33,7 @@ bool MatchStartSettings::sendMyself(ServerProtocol& protocol) const {
         dto.playerSkins[i] = it->first;
         i++;
     }
-    return protocol.sendMatchStartSettings(std::move(dto));
+    protocol.sendMatchStartSettings(std::move(dto));
 }
 
 /*********************** IMPLEMENTATION OF GAME START SETTINGS MSSG ***************************/
@@ -44,18 +44,20 @@ bool MatchStartSettings::sendMyself(ServerProtocol& protocol) const {
 GameStartSettings::GameStartSettings(std::string theme, std::vector<Transform> platforms):
         theme(theme), platforms(platforms) {}
 
-bool GameStartSettings::sendMyself(ServerProtocol& protocol) const {
+void GameStartSettings::sendMyself(ServerProtocol& protocol) const {
     // construyo un dto que sea totalmente independiente de la existencia de este objeto
     GameStartSettingsDto dto(theme, platforms);
-    return protocol.sendGameStartSettings(std::move(dto));
+    protocol.sendGameStartSettings(std::move(dto));
+    return;
 }
 
 /*********************** IMPLEMENTATION OF GAME UPDATE MSSG ***************************/
 // en el caso en que el gameWorld si me de una copia del snapdhoot original (que irà editando)
-GameUpdate::GameUpdate(SnapShoot snapShoot): snapShoot(snapShoot) {}
+GameUpdate::GameUpdate(Snapshot snapshot): snapshot(snapshot) {}
 
-bool GameUpdate::sendMyself(ServerProtocol& protocol) const {
-    return protocol.sendGameUpdate(snapShoot);
+void GameUpdate::sendMyself(ServerProtocol& protocol) const {
+    protocol.sendGameUpdate(snapshot);
+    return;
 }
 
 // /************************ IMPLEMENTATION OF GAMES RECOUNT MSSG *****************************/
@@ -64,14 +66,17 @@ bool GameUpdate::sendMyself(ServerProtocol& protocol) const {
 GamesRecount::GamesRecount(std::unordered_map<PlayerID_t, int> results, bool matchEnded):
         results(results), matchEnded(matchEnded) {}
 
-bool GamesRecount::sendMyself(ServerProtocol& protocol) const {
+void GamesRecount::sendMyself(ServerProtocol& protocol) const {
     GamesRecountDto dto(matchEnded, results);
-    return protocol.sendGamesRecount(std::move(dto));
+    protocol.sendGamesRecount(std::move(dto));
+    return;
 }
 
 /************************ IMPLEMENTATION OF MATCH RESULT MSSG *****************************/
 MatchResult::MatchResult(PlayerID_t finalWinner): finalWinner(finalWinner) {}
 
-bool MatchResult::sendMyself(ServerProtocol& protocol) const {
-    return protocol.sendMatchWinner(finalWinner);
+void MatchResult::sendMyself(ServerProtocol& protocol) const {
+    protocol.sendMatchWinner(finalWinner);
+    protocol.endConnection();
+    return;
 }
