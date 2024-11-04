@@ -31,7 +31,7 @@ struct PlayerInfo {
 /**************************** ABSTRACT class: THE  MESSAGES********************************/
 class ClientMessage {
 public:
-    virtual bool sendMyself(ServerProtocol& protocol) const = 0;
+    virtual void sendMyself(ServerProtocol& protocol) const = 0;
 };
 
 /******************************* MATCH START SETTING MSSG *********************************/
@@ -49,7 +49,7 @@ public:
     MatchStartSettings(SafeMap<PlayerID_t, PlayerInfo>& players, int numberSkins,
                        Vector2D duckSize);
 
-    bool sendMyself(ServerProtocol& protocol) const override;
+    void sendMyself(ServerProtocol& protocol) const override;
 };
 
 /******************************* GAME START SETTINGS MSSG *********************************/
@@ -63,18 +63,18 @@ private:
 public:
     GameStartSettings(std::string theme, std::vector<Transform> platforms);
 
-    bool sendMyself(ServerProtocol& protocol) const override;
+    void sendMyself(ServerProtocol& protocol) const override;
 };
 
 /******************************* GAME UPDATE MSSG *********************************/
 // must contain a boolean indicating if the game has been won
 class GameUpdate: public ClientMessage {
 private:
-    const SnapShoot snapShoot;
+    Snapshot snapshot;
 
 public:
-    explicit GameUpdate(SnapShoot);
-    bool sendMyself(ServerProtocol& protocol) const override;
+    explicit GameUpdate(Snapshot);
+    void sendMyself(ServerProtocol& protocol) const override;
 };
 
 // /********************************* GAMES RECOUNT MSSG ************************************/
@@ -87,7 +87,7 @@ private:
 public:
     explicit GamesRecount(std::unordered_map<PlayerID_t, int> results, bool matchEnded);
 
-    bool sendMyself(ServerProtocol& protocol) const override;
+    void sendMyself(ServerProtocol& protocol) const override;
 };
 
 /************************************* MATCH RESULT MSSG ************************************/
@@ -97,7 +97,8 @@ private:
 
 public:
     explicit MatchResult(PlayerID_t finalWinner);
-    bool sendMyself(ServerProtocol& protocol) const override;
+    // this method sends the winner of all the match and also closes the munication with the client
+    void sendMyself(ServerProtocol& protocol) const override;
 };
 
 #endif
