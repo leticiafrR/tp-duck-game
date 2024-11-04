@@ -1,28 +1,35 @@
 #include "handlerGames.h"
 
-#include "../common/timeManager.h"
-
 #define MAX_CMMDS_PER_TICK 50
-#define FPS 10
+#define FPS 20
 #define PRINT_TEST_OVERFLOW_TICK()                                                                 \
     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per tick" \
               << std::endl;
 
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                           Queue<Command>& commandQueue):
-        availableLevels(config.getAvailableLevels()), players(players), commandQueue(commandQueue) {
+                           Queue<Command>& commandQueue, std::atomic<uint>& currentPlayers):
+        availableLevels(config.getAvailableLevels()),
+        players(players),
+        commandQueue(commandQueue),
+        currentPlayers(currentPlayers) {
 
     auto playerIDs = players.getKeys();
     for (auto& id: playerIDs) {
         gameResults[id] = 0;
     }
 }
+
 bool HandlerGames::isThereFinalWinner() { return existsMatchWinner; }
 PlayerID_t HandlerGames::whoWon() { return matchWinner; }
 
 void HandlerGames::playGroupOfGames() {
     for (int i = 0; i < 5; i++) {
+        // decido parar todo si ya no hay ningun jugador
+        // en el futuro tambièn serìa si es que solo queda  un juagdor
+        if (currentPlayers == 0) {
+            return;
+        }
         playOneGame();
     }
 
@@ -64,13 +71,9 @@ void HandlerGames::playOneGame() {
                                                           // que me dan una referencia. (no deberìa
                                                           // de cambiar) (no queremos que haya
                                                           // acceso de lecto escritura concurrente)
-    // el constructor de GameStartSetting se adueña del theme-> no usarlo
-
     gameLoop();
-
     PlayerID_t gameWinner = currentGame->whoWon();
     int playerRecord = gameResults[gameWinner] += 1;
-
     if (playerRecord > recordGamesWon) {
         recordGamesWon = playerRecord;
     }
@@ -80,6 +83,7 @@ void HandlerGames::playOneGame() {
 void HandlerGames::gameLoop() {
 
     TimeManager timeManager(FPS);
+
     while (!currentGame->hasWinner()) {
 
         if (timeManager.synchronizeTick() < std::chrono::duration<double, std::milli>(0)) {
@@ -87,13 +91,18 @@ void HandlerGames::gameLoop() {
         }
 
         int countCommands = 0;
-        Command cmmd;
+        Command cmmd(0, 0);
         while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
-            currentGame->handleCommand(cmmd);
-            countCommands++;
+
+            if (cmmd.commandID == CONTROL_MATCH_STATE::QUIT_MATCH) {
+                currentGame->quitPlayer(cmmd.playerID);
+            } else {
+                currentGame->handleCommand(cmmd);
+                countCommands++;
+            }
         }
         currentGame->update();
-        broadcastGameMssg(std::make_shared<GameUpdate>(currentGame->getSnapshoot()));
+        broadcastGameMssg(std::make_shared<GameUpdate>(currentGame->getSnapshot()));
     }
 }
 
@@ -116,5 +125,5 @@ std::string HandlerGames::getRandomLevel() {
 
 std::string HandlerGames::getThemeName(const std::string& level) {
     // EJEMPLO DE TEST-> luego se deberìa obtener el cotenido del archivo yaml de nombre level
-    return "bosque";
+    return "dark";
 }
