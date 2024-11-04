@@ -5,8 +5,7 @@
 #include <vector>
 
 #include "../common/Transform.h"
-#include "../common/command.h"
-#include "../common/snapShoot.h"
+#include "../common/dataTransferObjects.h"
 #include "../data/id.h"
 
 
@@ -21,11 +20,13 @@ public:
 
     void handleCommand(Command cmmd);
     void update();
-    SnapShoot getSnapshoot();
+
+    Snapshot getSnapshot();
 
     bool hasWinner();
 
     PlayerID_t whoWon();
+    void quitPlayer(PlayerID_t);
 };
 
 
