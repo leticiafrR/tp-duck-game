@@ -27,6 +27,8 @@ public:
 
     Snapshot receiveGameUpdate();
 
+    void sendCommand(Command);
+
     GamesRecountDto receiveGamesRecount();
 
     PlayerID_t receiveMatchWinner();
