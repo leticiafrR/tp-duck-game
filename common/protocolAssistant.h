@@ -1,46 +1,55 @@
-#ifndef PROTOCOL_H
-#define PROTOCOL_H
+#ifndef PROTOCOL_ASSISTANT_H
+#define PROTOCOL_ASSISTANT_H
 
-#include <cstdint>
-#include <exception>
+#include <cstdint>  //para enteros de tamaño exacto
+#include <stdexcept>
 #include <string>
 
+#include <arpa/inet.h>
+
+#include "Vector2D.h"
 #include "socket.h"
 
+struct ConnectionClosed: public std::runtime_error {
+    ConnectionClosed(): std::runtime_error("Connection with the other endpoint was lost") {}
+};
 
 class ProtocolAssistant {
+
+private:
     Socket& skt;
+    bool wasClosed = false;
+
+    void checkShipping(int cantBytes);
 
 public:
-    // Constructor
     explicit ProtocolAssistant(Socket& skt);
 
-    /*  Sends a string by first sending two bytes representing the string's size,
-     *   followed by the string itself
-     */
-    void sendString(const std::string& name, bool& wasClosed);
 
-    // Send an integer using a single byte
-    void sendInt(const uint8_t& boxId, bool& wasClosed);
+    // envia por el socket el mensaje con el formato esperado para un string: (1byte:largo del
+    // mensaje)
+    void sendString(const std::string&);
+    // recibe del socket un mensaje con el formato esperado
+    std::string receiveString();
 
-    // Receive an integer using a single byte
-    uint8_t reciveInt(bool& wasClosed);
 
-    /*  Receives a string by first reading two bytes representing the string's size,
-     *   followed by the string itself
-     */
-    std::string reciveString(bool& wasClosed);
+    // Envia en un byte el numero indicado
+    void sendNumber(uint8_t);
+    // Recibe un byte con un numero entero
+    uint8_t receiveNumberOneByte();
 
-    // Send a float
-    void SendFloat(const float& ang, bool& wasClosed);
 
-    // Receive a float
-    float ReceiveFloat(bool& wasClosed);
+    void sendNumber(uint32_t);
+    uint32_t receiveNumberFourBytes();
+
 
     // Send a float
-    void SendSizeT(const size_t& ang, bool& wasClosed);
-
+    void sendFloat(const float& fl);
     // Receive a float
-    size_t ReceiveSizeT(bool& wasClosed);
+    float receiveFloat();
+
+
+    void sendVector2D(const Vector2D& vector);
+    Vector2D receiveVector2D();
 };
 #endif

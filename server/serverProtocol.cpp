@@ -1,98 +1,77 @@
 #include "serverProtocol.h"
 
-#include <utility>
-
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
-dataMatch ServerProtocol::ReceiveAMatch(bool& isConnected) {
-    bool wasClosed = false;
-    dataMatch newMatch;
-    uint8_t typeMessage = assistant.reciveInt(wasClosed);
-    if (typeMessage != NEW_GAME && typeMessage != JOIN_A_GAME) {
-        return newMatch;  // o una excepcion
-    }
-    std::string name = assistant.reciveString(wasClosed);
-    newMatch.clientName = name;
-    if (typeMessage == NEW_GAME) {
-        newMatch.ID = 0;
-
-    } else if (typeMessage == JOIN_A_GAME) {
-        uint8_t matchId = assistant.reciveInt(wasClosed);
-        newMatch.ID = static_cast<size_t>(matchId);
-    }
-
-    if (wasClosed) {
-        isConnected = false;
-    }
-    return newMatch;
+void ServerProtocol::sendResultOfJoining(const bool& success) {
+    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(response);
 }
 
-dataMove ServerProtocol::ReceiveAMove(bool& isConnected) {
+std::string ServerProtocol::receiveNickName() { return assistant.receiveString(); }
 
-    bool wasClosed = false;
-    dataMove newMove;
-    uint8_t typeMessage = assistant.reciveInt(wasClosed);
-    if (typeMessage != MOVEMENT) {
-        // excepcion
+void ServerProtocol::sendMatchStartSettings(MatchStartSettingsDto matchStartSettings) {
+    // sending the quatity of players
+    uint8_t numberPlayers = (uint8_t)matchStartSettings.playerIDs.size();
+    assistant.sendNumber(numberPlayers);
+    // sending the data of each player
+    for (uint8_t i = 0; i < numberPlayers; i++) {
+        // ID
+        assistant.sendNumber(matchStartSettings.playerIDs[i]);
+        // Nickname
+        assistant.sendString(matchStartSettings.playerNicknames[i]);
+        // number skin
+        assistant.sendNumber((uint8_t)matchStartSettings.playerSkins[i]);
     }
-    std::string name = assistant.reciveString(wasClosed);
-    newMove.playerName = name;
-    uint8_t key = assistant.reciveInt(wasClosed);
-
-    // No me convence el usar un booleano para manejar cuando se mantiene
-    // o no presionada la tecla ya que deberia agregar otro atributo
-    // que represente si la esta presionando o dejando de presionar
-    // podria derivarse en la logica del servidor
-    if (key == UP || key == LEFT || key == RIGHT || key == DOWN) {
-        newMove.block = false;
-        newMove.ID = key;
-
-    } else if (key == KEY_UP || key == KEY_DOWN) {
-        newMove.block = true;
-        uint8_t moveID = assistant.reciveInt(wasClosed);
-        newMove.ID = moveID;
-
-    } else {
-        // no es ninguna de las teclas
-    }
-
-    if (wasClosed) {
-        isConnected = false;
-    }
-    return newMove;
+    // sending a duck size (vector)
+    assistant.sendFloat(matchStartSettings.duckSize.x);
+    assistant.sendFloat(matchStartSettings.duckSize.y);
 }
 
-void ServerProtocol::SendMatch(const size_t& matchID, const uint8_t& quantityP, const uint8_t& maxP,
-                               bool& isConnected) {
-    bool wasClosed = false;
-    assistant.sendInt(A_MATCH, wasClosed);
-    assistant.sendInt(static_cast<uint8_t>(matchID), wasClosed);
-    assistant.sendInt(quantityP, wasClosed);
-    assistant.sendInt(maxP, wasClosed);
-    if (wasClosed) {
-        isConnected = false;
+void ServerProtocol::sendGameStartSettings(GameStartSettingsDto gameStartSettings) {
+    // sending the theme of the game
+    assistant.sendString(gameStartSettings.theme);
+    // sending the vector of size y luego posicion
+    uint8_t numberPlatforms = (uint8_t)gameStartSettings.platforms.size();
+    assistant.sendNumber(numberPlatforms);
+    for (uint8_t i = 0; i < numberPlatforms; i++) {
+        assistant.sendVector2D(gameStartSettings.platforms[i].GetSize());
+        assistant.sendVector2D(gameStartSettings.platforms[i].GetPos());
+    }
+}
+// its up to the server to set the id of the client
+Command ServerProtocol::receiveCommand() {
+    uint8_t headerCommandType = assistant.receiveNumberOneByte();
+    uint8_t commandID = assistant.receiveNumberOneByte();
+    Command cmmd(std::move(headerCommandType), std::move(commandID));
+    return cmmd;
+}
+
+void ServerProtocol::sendGameUpdate(Snapshot update) {
+    uint8_t gameEnded = update.gameEnded ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(gameEnded);
+    // sending the cont of the map player ID and position vector
+    uint8_t numberElements = (uint8_t)update.positionsUpdate.size();
+    assistant.sendNumber(numberElements);
+    for (auto it = update.positionsUpdate.begin(); it != update.positionsUpdate.end(); ++it) {
+        assistant.sendNumber(it->first);
+        assistant.sendVector2D(it->second);
     }
 }
 
-void ServerProtocol::SendATransform(const Transform& transform, bool& isConnected) {
-    bool wasClosed = false;
-    Vector2D pos = transform.GetPos();
-    assistant.SendFloat(pos.x, wasClosed);
-    assistant.SendFloat(pos.y, wasClosed);
-    assistant.SendFloat(transform.GetAngle(), wasClosed);
+void ServerProtocol::sendGamesRecount(GamesRecountDto gamesRecount) {
+    uint8_t matchEnded = gamesRecount.matchEnded ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(matchEnded);
+    uint8_t numberElements = (uint8_t)gamesRecount.results.size();
+    assistant.sendNumber(numberElements);
+    for (auto it = gamesRecount.results.begin(); it != gamesRecount.results.end(); ++it) {
+        assistant.sendNumber(it->first);
+        assistant.sendNumber((uint8_t)it->second);
+    }
 }
 
-void ServerProtocol::SendAObject(const dataObject& object, bool& isConnected) {
-    bool wasClosed = false;
-    assistant.sendInt(object.customID, wasClosed);
-    SendATransform(object.transform, isConnected);
-}
+void ServerProtocol::sendMatchWinner(PlayerID_t finalWinner) { assistant.sendNumber(finalWinner); }
 
-void ServerProtocol::SendAWeapon(bool& isConnected) {}
-
-void ServerProtocol::SendADuck(const Duck& duck, bool& isConnected) {
-    // send skin
-    // send Transform
-    // send if equipped
-    // if equipped send the weapon
+void ServerProtocol::endConnection() {
+    skt.shutdown(1);
+    skt.close();
 }

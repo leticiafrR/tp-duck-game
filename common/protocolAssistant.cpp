@@ -1,67 +1,66 @@
 #include "protocolAssistant.h"
 
-#include <exception>
-#include <iostream>
-#include <string>
-#include <vector>
-
-#include <arpa/inet.h>
-
-#include "socket.h"
-
-
 ProtocolAssistant::ProtocolAssistant(Socket& skt): skt(skt) {}
 
-uint8_t ProtocolAssistant::reciveInt(bool& wasClosed) {
-    uint8_t num;
-
-    skt.recvall(&num, sizeof(int), &wasClosed);
-
-    return num;
+void ProtocolAssistant::checkShipping(int cantBytes) {
+    if (cantBytes == 0)
+        throw ConnectionClosed();
+}
+void ProtocolAssistant::sendString(const std::string& cont) {
+    uint16_t lenMessage = cont.size();
+    lenMessage = htons(lenMessage);
+    checkShipping(skt.sendall(&lenMessage, sizeof(uint16_t), &wasClosed));
+    checkShipping(skt.sendall(cont.data(), cont.size(), &wasClosed));
 }
 
-std::string ProtocolAssistant::reciveString(bool& wasClosed) {
-    uint16_t size;
-    skt.recvall(&size, sizeof(size), &wasClosed);
-
-    uint16_t sizeHost = ntohs(size);
-    std::vector<char> stringBuffer(sizeHost + 1);
-
-    skt.recvall(stringBuffer.data(), sizeHost, &wasClosed);
-
-    stringBuffer[sizeHost] = '\0';
-    std::string string(stringBuffer.data());
-    return string;
+std::string ProtocolAssistant::receiveString() {
+    uint16_t lenMessage;
+    checkShipping(skt.recvall(&lenMessage, sizeof(lenMessage), &wasClosed));
+    lenMessage = ntohs(lenMessage);
+    std::string buffer(lenMessage, '\0');
+    checkShipping(skt.recvall(&buffer[0], lenMessage, &wasClosed));
+    return buffer;
 }
 
-void ProtocolAssistant::sendInt(const uint8_t& num, bool& wasClosed) {
-    skt.sendall(&num, sizeof(int), &wasClosed);
+void ProtocolAssistant::sendNumber(uint8_t number) {
+    checkShipping(skt.sendsome(&number, sizeof(number), &wasClosed));
 }
 
-void ProtocolAssistant::sendString(const std::string& string, bool& wasClosed) {
-    uint16_t size = htons(string.size());
-    skt.sendall(reinterpret_cast<const char*>(&size), sizeof(size), &wasClosed);
-    skt.sendall(string.c_str(), string.size(), &wasClosed);
+uint8_t ProtocolAssistant::receiveNumberOneByte() {
+    uint8_t number;
+    checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
+    return number;
 }
 
-void ProtocolAssistant::SendFloat(const float& ang, bool& wasClosed) {
-
-    skt.sendall(&ang, sizeof(float), &wasClosed);
+void ProtocolAssistant::sendNumber(uint32_t number) {
+    checkShipping(skt.sendsome(&number, sizeof(number), &wasClosed));
 }
 
-float ProtocolAssistant::ReceiveFloat(bool& wasClosed) {
-    float ang;
-    skt.recvall(&ang, sizeof(ang), &wasClosed);
-    return ang;
+uint32_t ProtocolAssistant::receiveNumberFourBytes() {
+    uint32_t number;
+    checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
+    return number;
 }
 
-void ProtocolAssistant::SendSizeT(const size_t& ang, bool& wasClosed) {
 
-    skt.sendall(&ang, sizeof(float), &wasClosed);
+void ProtocolAssistant::sendFloat(const float& fl) {
+    checkShipping(skt.sendall(&fl, sizeof(fl), &wasClosed));
 }
 
-size_t ProtocolAssistant::ReceiveSizeT(bool& wasClosed) {
-    size_t ang;
-    skt.recvall(&ang, sizeof(ang), &wasClosed);
-    return ang;
+float ProtocolAssistant::receiveFloat() {
+    float fl;
+    skt.recvall(&fl, sizeof(fl), &wasClosed);
+    return fl;
+}
+
+void ProtocolAssistant::sendVector2D(const Vector2D& vector) {
+    sendFloat(vector.x);
+    sendFloat(vector.y);
+}
+
+Vector2D ProtocolAssistant::receiveVector2D() {
+    auto x = receiveFloat();
+    auto y = receiveFloat();
+    Vector2D vec(x, y);
+    return vec;
 }

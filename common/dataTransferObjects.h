@@ -9,15 +9,12 @@
 #include "../common/Vector2D.h"
 #include "../data/id.h"
 
-// creo que estos objetos no deberìan de recibir referenciaas a algo porque sino lo que se pase al
-// protocolo se contarìa como un recurso compartido
-// de igual forma se deberìa copiar todo al pushear a las diferentes colas
 
 struct MatchStartSettingsDto {
     std::vector<PlayerID_t> playerIDs;
     std::vector<std::string> playerNicknames;
     std::vector<int> playerSkins;
-    Vector2D duckSize;  // igual el protocolo enviarìa esto como enteros creo.
+    Vector2D duckSize;
 
     MatchStartSettingsDto(int numberPlayers, Vector2D duckSize):
             playerIDs(numberPlayers),
@@ -42,6 +39,27 @@ struct Snapshot {
     // cppcheck-suppress passedByValue
     Snapshot(bool gameEnded, std::unordered_map<PlayerID_t, Vector2D> positionsUpdate):
             gameEnded(gameEnded), positionsUpdate(positionsUpdate) {}
+};
+
+typedef enum: uint8_t { MOVEMENT = 1 } MESSAGE_TYPE;
+
+// Note: the jump cmmd its not prolonged
+typedef enum: uint8_t {
+    LEFT_KEY_DOWN = 1,
+    LEFT_KEY_UP,
+    RIGHT_KEY_DOWN,
+    RIGHT_KEY_UP,
+    JUMP
+} MOVEMENT_IDS;
+
+struct Command {
+
+    uint8_t commandType;
+    uint8_t commandID;
+    uint32_t playerID;
+
+    Command(uint8_t commandType, uint8_t commandID, u_int32_t playerID = 0):
+            commandType(commandType), commandID(commandID), playerID(playerID) {}
 };
 
 struct GamesRecountDto {
