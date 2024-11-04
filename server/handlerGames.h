@@ -10,9 +10,9 @@
 #include <utility>
 #include <vector>
 
-#include "../common/command.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
+#include "../common/timeManager.h"
 #include "model/gameWorld.h"
 
 #include "clientMessages.h"
@@ -33,6 +33,7 @@ private:
     /* ¿And finally used when the Game is over to communicate
      * who was the winner of it?<---- NOT SURE */
     SafeMap<PlayerID_t, PlayerInfo>& players;
+    std::atomic<uint> currentPlayers;
 
 
     /* Used during each Game*/
@@ -51,7 +52,7 @@ private:
 
 public:
     HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                 Queue<Command>& commandQueue);
+                 Queue<Command>& commandQueue, std::atomic<uint>& currentPlayers);
 
     void playGroupOfGames();
 
