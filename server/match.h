@@ -6,10 +6,8 @@
 #include <mutex>
 #include <string>
 
-#include "../common/command.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
-#include "../common/snapShoot.h"
 #include "../common/thread.h"
 #include "../data/id.h"
 
@@ -71,7 +69,6 @@ private:
 };
 
 #endif
-// Al instanciarse la partida se intancia unna game con un mapa ya predefinido
 
 /* En el loop del match cada vez que se pide un snapshoot, justo despuès se le pregunta al gameWorld
  * si es que el juego acabò (gameIsOver) si sì acabo se envìa ese ùltimo SnapShoot a los jugadores y
