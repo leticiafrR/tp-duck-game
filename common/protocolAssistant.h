@@ -7,11 +7,14 @@
 
 #include <arpa/inet.h>
 
+#include "../common/liberror.h"
+
 #include "Vector2D.h"
 #include "socket.h"
 
-struct ConnectionClosed: public std::runtime_error {
-    ConnectionClosed(): std::runtime_error("Connection with the other endpoint was lost") {}
+
+struct ConnectionFailed: public std::runtime_error {
+    ConnectionFailed(): std::runtime_error("Connection with the other endpoint was lost") {}
 };
 
 class ProtocolAssistant {
