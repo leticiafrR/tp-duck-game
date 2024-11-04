@@ -27,18 +27,18 @@ bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
     return true;
 }
 
+// will be closed when the match is over. If someone tries to push a commd it will throw an
+// exception (CosedQueue)
 void Match::pushCommand(PlayerID_t idClient, const Command& cmmd) { commandQueue.push(cmmd); }
 
-/*Method that wpuld be called concurrently (by the senderThreads) ante la desconexiòn de un jugador
- */
-/*Quito acceso concurrente al modelo encolando el evento de salir de la partida para ser procesado
- * secuencialmente */
+/*Method that wpuld be called concurrently (by the senderThreads) when the sender thread of the
+ * client notices the disconection */
 void Match::logOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient)) {
-        Command quit;
+        Command quit(MESSAGE_TYPE::CONTROL_MATCH_STATE, CONTROL_MATCH_STATE::QUIT_MATCH);
         quit.playerID = idClient;
-
-        /* Falta configurar un commandID para este comando */
+        // eventually it will be removed from the current game but it is already removed from the
+        // list to which the match make the broadcasts.
         commandQueue.push(quit);
         currentPlayers--;
     }
@@ -48,19 +48,20 @@ void Match::logOutPlayer(PlayerID_t idClient) {
 void Match::run() {
     broadcastMatchMssg(std::make_shared<MatchStartSettings>(players, config.getAvailableSkins(),
                                                             config.getDuckSize()));
-    HandlerGames handlerGames(config, players, commandQueue);
-    while (!handlerGames.isThereFinalWinner()) {
+    HandlerGames handlerGames(config, players, commandQueue, currentPlayers);
+    while (!handlerGames.isThereFinalWinner() && currentPlayers != 0) {
         handlerGames.playGroupOfGames();
     }
     broadcastMatchMssg(std::make_shared<MatchResult>(handlerGames.whoWon()));
+    // match is forcing their clients threads to end
+    commandQueue.close();
+    players.applyToItems(
+            [](PlayerID_t _, PlayerInfo& playerInfo) { playerInfo.senderQueue->close(); });
 }
 
 void Match::broadcastMatchMssg(const std::shared_ptr<ClientMessage>& message) {
     players.applyToItems([&message](PlayerID_t _, PlayerInfo& player) {
-        try {
-            player.senderQueue->try_push(message);
-        } catch (const ClosedQueue& e) {
-            /* The client has disconeccted, eventually will be taken out of the SafeMap players*/
-        }
+        player.senderQueue->try_push(message);
+        // this do not throws a exeption, bacause the clients do not close therir queues. I do it
     });
 }
