@@ -1,35 +1,58 @@
 #include "sender.h"
 
 
-SenderThread::SenderThread(ServerProtocol& protocol, Match& match, PlayerID_t idClient):
-        senderQueue(MAX_MESSAGES), protocol(protocol), match(match), idClient(idClient) {}
+SenderThread::SenderThread(Socket&& sktPeer, Match& match, PlayerID_t idClient):
+        senderQueue(MAX_MESSAGES), protocol(std::move(sktPeer)), match(match), idClient(idClient) {}
 
-Queue<std::shared_ptr<ClientMessage>>* SenderThread::getSenderQueue() { return &senderQueue; }
+bool SenderThread::joinedAMatch() { return _joinedAMatch; }
 
-// as the sender is started only once the client could join a match  we communicate it
 void SenderThread::run() {
     try {
-        if (protocol.sendResultOfJoining(true)) {
+        std::string nickname = protocol.receiveNickName();
+        PlayerInfo info(nickname, &senderQueue);
+        if (!match.logInPlayer(idClient, info)) {
+            protocol.sendResultOfJoining(false);
+        } else {
+            _joinedAMatch = true;
+            // CLIENT THAT IS PART OF A MATCH!
             sendLoop();
         }
-    } catch (const ClosedQueue& e) {
-        /* graceful shutdown! */
-    } catch (const std::runtime_error& e) {
+    } catch (const ConnectionFailed& c) {
+        // conexion failed even before the player has joined a match
+        protocol.endConnection();
+    } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
+                  << idClient << "\n";
     }
-    match.logOutPlayer(idClient);
 }
 
+// got here once the client is really loged in into a match
 void SenderThread::sendLoop() {
-    while (_keep_running) {
-        auto message = senderQueue.pop();
-        if (!message->sendMyself(std::ref(protocol))) {
-            stop();
+    ReceiverThread receiver(idClient, match, protocol);
+    receiver.start();
+
+    try {
+        protocol.sendResultOfJoining(true);
+        while (_keep_running) {
+            auto message = senderQueue.pop();
+            message->execute(std::ref(protocol));
         }
+    } catch (const ConnectionFailed& c) {
+        match.logOutPlayer(idClient);
+        protocol.endConnection();  // this will make the receiver fail (if it hasnt yet)
+    } catch (const ClosedQueue& q) {
+        // siempre que se envia el mensaje de que terminò la partida en la que estàbamos se catchea
+        // este error
+        // si nos terminò la partida -> ya cerrò nuestro protocolo y todas las queues
     }
+
+    receiver.join();
 }
 
-void SenderThread::kill() { senderQueue.close(); }
-
-// 1 donde comunicar que se terminò una ronda o que una nueva esta inciiando y tambien comunicar el
-// seteo de esta nueva ronda (mapa)
+void SenderThread::kill() {
+    if (!_joinedAMatch) {
+        protocol.endConnection();
+    }
+}

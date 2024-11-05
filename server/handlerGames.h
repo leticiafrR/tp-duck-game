@@ -1,6 +1,7 @@
 #ifndef HANDLER_GAMES_
 #define HANDLER_GAMES_
 
+#include <atomic>
 #include <iostream>
 #include <memory>
 #include <random>
@@ -15,10 +16,15 @@
 #include "../common/timeManager.h"
 #include "model/gameWorld.h"
 
-#include "clientMessages.h"
 #include "config.h"
+#include "messageSender.h"
 
 #define GAMES_TO_WIN_MATCH 10
+#define NOT_ENOUGH_NUMBER_PLAYERS 0
+
+struct RunOutOfPlayers: public std::runtime_error {
+    RunOutOfPlayers(): std::runtime_error("The match has no players to continue with. ") {}
+};
 
 class HandlerGames {
 private:
@@ -33,8 +39,6 @@ private:
     /* ¿And finally used when the Game is over to communicate
      * who was the winner of it?<---- NOT SURE */
     SafeMap<PlayerID_t, PlayerInfo>& players;
-    std::atomic<uint> currentPlayers;
-
 
     /* Used during each Game*/
     /* The match thread give us a reference to its
@@ -52,7 +56,7 @@ private:
 
 public:
     HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                 Queue<Command>& commandQueue, std::atomic<uint>& currentPlayers);
+                 Queue<Command>& commandQueue);
 
     void playGroupOfGames();
 
@@ -61,6 +65,12 @@ public:
 
 
 private:
+    void checkNumberPlayers();
+    /* if the record of games won by a player is greater than the necesary to win a match we look if
+     * there is just one player with that number of games won. If there is just one: found the match
+     * winner! */
+    void updateMatchWinnerStatus();
+
     void playOneGame();
 
     std::string getRandomLevel();
@@ -69,7 +79,7 @@ private:
 
     void gameLoop();
 
-    void broadcastGameMssg(const std::shared_ptr<ClientMessage>& message);
+    void broadcastGameMssg(const std::shared_ptr<MessageSender>& message);
 };
 
 #endif

@@ -8,6 +8,18 @@
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
 
+typedef enum: uint8_t {
+    RESULT_JOINING = 1,
+    MATCH_STARTING,
+    GAME_SCENE,
+    SNAPSHOT,
+    GAMES_RECOUNT,
+    END_MATCH
+} MSSG_HEADER;
+
+typedef enum: uint8_t { NONE = 1, TOP, BTTM, BOTH } V_BTTM_TOP;
+typedef enum: uint8_t { NONE = 1, RG, LF, BOTH } V_RG_LF;
+
 class ServerProtocol {
 private:
     Socket skt;
@@ -19,7 +31,7 @@ public:
 
     /* Send the result of trying to joing the match. If the connection with the client has been
      * detected lost it throws an exeption*/
-    void sendResultOfJoining(const bool& success);
+    void sendResultOfJoining(bool success);
 
 
     /* Receives through the socket  the player's name. If the connection with the client has been
@@ -30,10 +42,11 @@ public:
     /* Sends to the client a message with the ids of the participants of the match, their nickName,
      * and the number of skin assigned to each player ( K:id, V:{nickname, skinNumber} ), this is
      * the information related to the start of the whole match*/
-    void sendMatchStartSettings(MatchStartSettingsDto matchStartSettings);
+    void sendMatchStartSettings(const MatchStartDto& matchStartDto);
 
     // BEGINING OF A GAME
-    void sendGameStartSettings(GameStartSettingsDto gameStartSettings);
+    void sendGameStartSettings(const GameSceneDto& gameSceneDto);
+
 
     // DURING A GAME
     /* Receives through the socket the command (to apply to its player in the current game) and sets
@@ -41,10 +54,10 @@ public:
     Command receiveCommand();
 
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
-    void sendGameUpdate(Snapshot update);
+    void sendGameUpdate(const Snapshot& update);
 
     // RECOUNT OF GAMES
-    void sendGamesRecount(GamesRecountDto gamesRecount);
+    void sendGamesRecount(const GamesRecountDto& gamesRecount);
 
     // END OF A MATCH
     void sendMatchWinner(PlayerID_t finalWinner);

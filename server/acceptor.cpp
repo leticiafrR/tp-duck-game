@@ -6,7 +6,16 @@
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
 
-
+void AcceptorThread::forceClosure() {
+    skt.shutdown(1);
+    skt.close();
+}
+void AcceptorThread::killAllClients() {
+    // first we kill the ones that arent part of a match
+    for (auto& client: clients) {
+        client->kill();
+    }
+}
 void AcceptorThread::run() {
     try {
         acceptLoop();
@@ -15,19 +24,14 @@ void AcceptorThread::run() {
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
     }
-
-    /* Forcing the end of the loops of the threads */
-    match.stop();  // maybe sould override this method to also close its command queue
-    killAllClients();
+    /* Forcing the end of the match that will kill all of its clients  */
+    match.forceEnd();
+    // note if a client couldnt join a match then (the receiver never existed) and the sender will
+    // be already over.
 
     /* cleaning the resources of the  threads*/
     match.join();
     cleanUpClientsResources();
-}
-
-void AcceptorThread::forceClosure() {
-    skt.shutdown(1);
-    skt.close();
 }
 
 /* Method that will fail (throw an execption) when the main thread ask the acceptor to forceClosure
@@ -39,7 +43,7 @@ void AcceptorThread::acceptLoop() {
 
         PRINT_NEW_CONNECTION();
 
-        ReceiverThread* client = new ReceiverThread(std::ref(match), std::move(peer), idClient);
+        SenderThread* client = new SenderThread(std::move(peer), std::ref(match), idClient);
         clients.push_back(client);
         client->start();
         reapDead();
@@ -48,7 +52,7 @@ void AcceptorThread::acceptLoop() {
 }
 
 void AcceptorThread::reapDead() {
-    clients.remove_if([](ReceiverThread* client) {
+    clients.remove_if([](SenderThread* client) {
         if (!client->is_alive()) {
             client->join();
             delete client;
@@ -58,11 +62,6 @@ void AcceptorThread::reapDead() {
     });
 }
 
-void AcceptorThread::killAllClients() {
-    for (auto& client: clients) {
-        client->kill();
-    }
-}
 
 void AcceptorThread::cleanUpClientsResources() {
     for (auto& client: clients) {
