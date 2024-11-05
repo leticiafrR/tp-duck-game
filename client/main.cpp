@@ -13,7 +13,9 @@
 #include "Animator.h"
 #include "Camera.h"
 #include "CameraController.h"
+#include "MapBlock2D.h"
 #include "Object2D.h"
+#include "SheetDataCache.h"
 
 using namespace SDL2pp;  // NOLINT
 
@@ -34,21 +36,25 @@ int main() try {
     Camera cam(std::move(render), 100);
 
 
-    cam.CreateObject2D("../client/assets/sprites/bg_forest.png",
-                       Transform(Vector2D::Zero(), Vector2D(200, 200)));
+    Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
-    Object2D& other = cam.CreateObject2D("../client/assets/sprites/bg_city.png",
-                                         Transform(Vector2D(0, -10), Vector2D(10, 5)));
-    Object2D& spr = cam.CreateObject2D("../client/assets/sprites/base_duck.png",
-                                       Transform(Vector2D::Zero(), Vector2D(5, 5)));
+    Object2D spr("base_duck.png", Transform(Vector2D::Zero(), Vector2D(5, 5)));
+
+    Object2D akSpr("machine_guns.png", Transform(Vector2D::Zero(), Vector2D(4, 4)));
+    akSpr.SetSourceRect(Rect(1, 19, 32, 32));
 
     Animator duckAnim("duck.yaml", "idle");
+
+    MapBlock2D mapBlock("tile_set.png", "tile_set.yaml",
+                        Transform(Vector2D(0, -10), Vector2D(40, 20)), 5);
+
+    mapBlock.SetBorders(true, true, true, true);
 
     spr.SetColor(Color(255, 255, 255));
 
     Transform& duckT = spr.GetTransform();
     RigidBody rb(duckT, 8);
-    Transform& platformT = other.GetTransform();
+    Transform& platformT = mapBlock.transform;
 
     CameraController camController(cam);
     camController.AddTransform(&duckT);
@@ -61,9 +67,11 @@ int main() try {
     int fps = 25;
     float sleepMS = 1000.0f / fps;
     float deltaTime = 1.0f / fps;
-    float speed = 0.7f;
+    float speed = 15;
     bool isGrounded = false;
+
     while (running) {
+        cam.Clean();
         SDL_Event event;
         duckAnim.SetTarget("idle", false);
 
@@ -88,7 +96,6 @@ int main() try {
                         case SDLK_SPACE:
                             if (isGrounded) {
                                 rb.ApplyForce(Vector2D::Up() * 40);
-                                std::cout << "jump!" << std::endl;
                             }
                             break;
                     }
@@ -100,11 +107,11 @@ int main() try {
 
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
-                            spr.SetHorizontalFlip(true);
+                            spr.SetFlip(true);
                             dir += Vector2D::Left() * -1;
                             break;
                         case SDLK_d:
-                            spr.SetHorizontalFlip(false);
+                            spr.SetFlip(false);
                             dir += Vector2D::Right() * -1;
                             break;
                     }
@@ -118,7 +125,7 @@ int main() try {
                     break;
             }
         }
-        duckT.Move(dir * speed);
+        duckT.Move(dir * speed * deltaTime);
 
         if (dir.GetMagnitude() > 0.001) {
             duckAnim.SetTarget("run", false);
@@ -129,23 +136,30 @@ int main() try {
         duckAnim.Update();
 
         if (dir.x > 0)
-            spr.SetHorizontalFlip(false);
+            spr.SetFlip(false);
         else if (dir.x < 0)
-            spr.SetHorizontalFlip(true);
+            spr.SetFlip(true);
 
         spr.SetSourceRect(duckAnim.GetTargetRect());
 
 
-        isGrounded = Collision::Raycast(duckT.GetPos(), Vector2D::Down(), 4, platformT);
-
         rb.Update(deltaTime);
 
+        isGrounded = Collision::Raycast(duckT.GetPos(), Vector2D::Down(), 4, platformT);
         if (Collision::RectCollision(duckT, platformT)) {
             Collision::ResolveStaticCollision(duckT, platformT);
             if (isGrounded) {
                 rb.ResetGravity();
             }
         }
+
+        bgSpr.Draw(cam);
+        mapBlock.Draw(cam);
+        spr.Draw(cam);
+
+        akSpr.GetTransform().SetPos(duckT.GetPos() + Vector2D::Down() * 0.8f);
+        akSpr.SetFlip(spr.GetFlip());
+        akSpr.Draw(cam);
 
         camController.Update();
         cam.Render();

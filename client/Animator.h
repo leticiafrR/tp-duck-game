@@ -9,8 +9,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "AnimationParser.h"
 #include "Object2D.h"
+#include "SheetDataCache.h"
 
 using SDL2pp::Rect;
 
@@ -29,7 +29,7 @@ public:
     }
 
     Animator(const std::string& filename, const std::string& target):
-            animations(std::move(AnimationParser::ParseAnimationData(filename))) {
+            animations(std::move(SheetDataParser::GetData(filename))) {
         frameIndex = 0;
         this->target = target;
     }
