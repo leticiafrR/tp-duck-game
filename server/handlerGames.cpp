@@ -43,34 +43,22 @@ void HandlerGames::playGroupOfGames() {
         playOneGame();
     }
     /* sending the recount of the games won by each player*/
-    broadcastGameMssg(std::make_shared<GamesRecount>(gameResults, existsMatchWinner));
+    broadcastGameMssg(std::make_shared<GamesRecountSender>(gameResults, existsMatchWinner));
     /* loking if there is a final matchWinner*/
     updateMatchWinnerStatus();
 }
-// acabo de hacer un review de que pasarìa en un apartida (grupos de games) si es que ya se
-// concretizò un forcedEnd nota creo que todas las veces que me fijè en el numero de currentplayers
-// deberìa fijarme en el size de players porque podrìa generar race conditions
 
 void HandlerGames::playOneGame() {
     auto level = getRandomLevel();
-
     auto playerIDs = players.getKeys();
-    // cppcheck-suppress unsignedLessThanZero
-    if (playerIDs.size() <= NOT_ENOUGH_NUMBER_PLAYERS) {
-        return;
-    }
-    // instanciamos un game que sì o sì tiene suficientes jugadores
-    // leticia estaba preguntando si es que es necesario tener el gameWorld en el heap.
+    checkNumberPlayers();
     currentGame = std::make_unique<GameWorld>(level, playerIDs);
 
     /*sending the initial setting of the game*/
     // Si es que ya se cerraron las queues seguro que salta excepciòn
-    // al objeto que està en el heap le doy a su completo uso un objeto que sea movible
     auto gameSceneDto = currentGame->getSceneDto();
-    broadcastGameMssg(std::make_shared<GameStartSettings>(std::move(gameSceneDto)));
-
-    gameLoop();  // if this throws us an exeption this means that the match is forcing the game to
-                 // end
+    broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(gameSceneDto)));
+    gameLoop();
 
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         // this means that we went out of the gameLoop because there is a game winner
@@ -84,10 +72,8 @@ void HandlerGames::playOneGame() {
 
 
 void HandlerGames::gameLoop() {
-
     TimeManager timeManager(FPS);
 
-    // believe that here  should check the number if the current players too
     while (!currentGame->hasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
 
         if (timeManager.synchronizeTick() < std::chrono::duration<double, std::milli>(0)) {
@@ -97,17 +83,13 @@ void HandlerGames::gameLoop() {
         int countCommands = 0;
         Command cmmd(0, 0);
         while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
-            if (cmmd.commandID == CONTROL_MATCH_STATE::QUIT_MATCH) {
-                currentGame->quitPlayer(cmmd.playerID);
-            } else {
-                currentGame->handleCommand(cmmd);
-                countCommands++;
-            }
+            currentGame->handleCommand(cmmd);
+            countCommands++;
         }
 
         currentGame->update();
 
-        broadcastGameMssg(std::make_shared<GameUpdate>(currentGame->getSnapshot()));
+        broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->getSnapshot()));
     }
 }
 
@@ -120,11 +102,13 @@ void HandlerGames::broadcastGameMssg(const std::shared_ptr<MessageSender>& messa
     });
     checkNumberPlayers();
 }
+
 void HandlerGames::checkNumberPlayers() {
     if (players.size() == 0) {
         throw RunOutOfPlayers();
     }
 }
+
 std::string HandlerGames::getRandomLevel() {
     std::random_device rd;
     std::mt19937 gen(rd());
