@@ -20,17 +20,6 @@
 
 #include "serverProtocol.h"
 
-// a la par definirè los data objects que recibirà el cliente (structs que empaqueten esta
-// informaciòn)
-struct PlayerInfo {
-    std::string nickName;
-    Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    // cppcheck-suppress passedByValue
-    PlayerInfo(std::string nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
-            nickName(nickName), senderQueue(senderQueue) {}
-};
-
-
 /**************************** ABSTRACT class: THE  MESSAGES********************************/
 class MessageSender {
 public:
@@ -71,7 +60,7 @@ public:
     void execute(ServerProtocol& protocol) const override;
 };
 
-// /********************************* GAMES RECOUNT MSSG ************************************/
+/********************************* GAMES RECOUNT MSSG ************************************/
 
 class GamesRecountSender: public MessageSender {
 private:
@@ -92,5 +81,14 @@ public:
     // this method sends the winner of all the match and also closes the munication with the client
     void execute(ServerProtocol& protocol) const override;
 };
+
+struct PlayerInfo {
+    std::string nickName;
+    Queue<std::shared_ptr<MessageSender>>* senderQueue;
+    // cppcheck-suppress passedByValue
+    PlayerInfo(std::string nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
+            nickName(nickName), senderQueue(senderQueue) {}
+};
+
 
 #endif

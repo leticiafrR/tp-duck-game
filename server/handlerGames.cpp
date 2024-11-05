@@ -10,7 +10,6 @@
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
         availableLevels(config.getAvailableLevels()), players(players), commandQueue(commandQueue) {
-
     auto playerIDs = players.getKeys();
     for (auto& id: playerIDs) {
         gameResults[id] = 0;

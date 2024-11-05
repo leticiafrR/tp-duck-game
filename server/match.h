@@ -68,7 +68,7 @@ public:
 private:
     std::vector<PlayerData> assignSkins(int numberSkins);
     void setEndOfMatch(PlayerID_t winner);
-    /* */
+    void checkNumberPlayers();
     void broadcastMatchMssg(const std::shared_ptr<MessageSender>& message);
 };
 

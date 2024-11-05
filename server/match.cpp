@@ -1,6 +1,6 @@
 #include "match.h"
 #define NO_WINNER_FORCED_END 0
-// si se tiene menos de esta cantidad se pararà de jugar màs partidas
+// si se tiene menos de esta cantidad o igual se pararà de jugar màs partidas
 
 Match::Match(Config& config, unsigned int numberPlayers):
         config(config),
@@ -14,8 +14,6 @@ Match::Match(Config& config, unsigned int numberPlayers):
 }
 
 /* method that will be called from the different Receivers threads. Has to be thread safe */
-/* CONCURRENT ACCESS TO THE RESOURCE: MATCH (specifically to the attributes)*/
-
 bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
     std::unique_lock<std::mutex> lock(m);
     if (!players.tryInsert(idClient, playerInfo)) {
@@ -31,11 +29,11 @@ bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
 // exception (CosedQueue)
 void Match::pushCommand(PlayerID_t idClient, const Command& cmmd) { commandQueue.push(cmmd); }
 
-/*Method that wpuld be called concurrently (by the senderThreads) when the sender thread of the
+/*Method that would be called concurrently (by the senderThreads) when the sender thread of the
  * client notices the disconection */
 void Match::logOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient)) {
-        Command quit(MESSAGE_TYPE::CONTROL_MATCH_STATE, CONTROL_MATCH_STATE::QUIT_MATCH);
+        Command quit(Command::COMMAND_ID::QUIT);
         quit.playerID = idClient;
         // eventually it will be removed from the current game but it is already removed from the
         // list to which the match make the broadcasts.
@@ -43,10 +41,7 @@ void Match::logOutPlayer(PlayerID_t idClient) {
     }
 }
 std::vector<PlayerData> Match::assignSkins(int numberSkins) {
-    if (players.size() > numberSkins) {
-        throw std::runtime_error(
-                "ERROR: A unique assignment of skins to players cannot be made. Too many players");
-    }
+    checkNumberPlayers();
     // Generador de números aleatorios
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -70,9 +65,11 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
 
 void Match::run() {
     try {
+
         auto playersData = assignSkins(config.getAvailableSkins());
+
         broadcastMatchMssg(
-                std::make_shared<MatchStartSettings>(std::move(playersData), config.getDuckSize()));
+                std::make_shared<MatchStartSender>(std::move(playersData), config.getDuckSize()));
 
         HandlerGames handlerGames(config, players, commandQueue);
 
@@ -94,11 +91,13 @@ void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
 void Match::setEndOfMatch(PlayerID_t winner) {
     // only makes sence to do this operation if there are more than 0 players.
     // and also in this way i know that im not doing this twice.
+    try {
+        commandQueue.close();
+    } catch (const ClosedQueue& q) {}
+
     std::unique_lock<std::mutex> lock(m);
     if (players.size() != 0) {
-        auto messageSender = std::make_shared<MatchResult>(winner);
-        commandQueue.close();
-
+        auto messageSender = std::make_shared<MatchExitSender>(winner);
         players.applyToItems([&messageSender](PlayerID_t _, PlayerInfo& playerInfo) {
             // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
             playerInfo.senderQueue->push(messageSender);
@@ -108,13 +107,16 @@ void Match::setEndOfMatch(PlayerID_t winner) {
     }
 }
 
-void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {
-    // want to interrumpt the game if there are no players and ia notice that
+void Match::checkNumberPlayers() {
     if (players.size() == 0) {
         throw RunOutOfPlayers();
     }
-
+}
+void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {
+    // want to interrumpt the game if there are no players and ia notice that
+    checkNumberPlayers();
     players.applyToItems([&message](PlayerID_t _, PlayerInfo& player) {
         player.senderQueue->try_push(message);
     });
+    checkNumberPlayers();
 }
