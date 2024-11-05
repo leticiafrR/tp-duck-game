@@ -43,7 +43,7 @@ int main() try {
     Object2D akSpr("machine_guns.png", Transform(Vector2D::Zero(), Vector2D(4, 4)));
     akSpr.SetSourceRect(Rect(1, 19, 32, 32));
 
-    Animator duckAnim("duck.yaml", "idle");
+    Animator duckAnim("duck.yaml", "idle", 17);
 
     MapBlock2D mapBlock("tile_set.png", "tile_set.yaml",
                         Transform(Vector2D(0, -10), Vector2D(40, 20)), 5);
@@ -64,7 +64,7 @@ int main() try {
     bool running = true;
     Vector2D dir = Vector2D::Zero();
 
-    int fps = 25;
+    int fps = 60;
     float sleepMS = 1000.0f / fps;
     float deltaTime = 1.0f / fps;
     float speed = 15;
@@ -133,7 +133,7 @@ int main() try {
             duckAnim.SetTarget("idle");
         }
 
-        duckAnim.Update();
+        duckAnim.Update(deltaTime);
 
         if (dir.x > 0)
             spr.SetFlip(false);
