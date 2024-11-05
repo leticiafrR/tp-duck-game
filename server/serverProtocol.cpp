@@ -60,9 +60,9 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
 // its up to the server to set the id of the client
 Command ServerProtocol::receiveCommand() {
     // deberìa recibir algun header?
-    uint8_t headerCommandType = assistant.receiveNumberOneByte();
+    // uint8_t headerCommandType = assistant.receiveNumberOneByte();
     uint8_t commandID = assistant.receiveNumberOneByte();
-    Command cmmd(std::move(headerCommandType), std::move(commandID));
+    Command cmmd(commandID);
     return cmmd;
 }
 
@@ -71,12 +71,17 @@ void ServerProtocol::sendGameUpdate(const Snapshot& update) {
 
     uint8_t gameEnded = update.gameEnded ? (uint8_t)1 : (uint8_t)0;
     assistant.sendNumber(gameEnded);
+
     // sending the cont of the map player ID and position vector
-    uint8_t numberElements = (uint8_t)update.positionsUpdate.size();
+    uint8_t numberElements = (uint8_t)update.ducksUpdate.size();
     assistant.sendNumber(numberElements);
-    for (auto it = update.positionsUpdate.begin(); it != update.positionsUpdate.end(); ++it) {
+    for (auto it = update.ducksUpdate.begin(); it != update.ducksUpdate.end(); ++it) {
+        // playerID
         assistant.sendNumber(it->first);
-        assistant.sendVector2D(it->second);
+        // duckupdate
+        assistant.sendVector2D(it->second.position);
+        assistant.sendNumber(it->second.status);
+        assistant.sendNumber(it->second.flip);
     }
 }
 
