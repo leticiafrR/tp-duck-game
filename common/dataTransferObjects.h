@@ -11,7 +11,7 @@
 #include "Transform.h"
 #include "Vector2D.h"
 
-/******************************MATCH STARTING DATA**************************************/
+/******************************MATCH STARTING DATA***********************************/
 struct PlayerData {
     PlayerID_t playerID;
     uint8_t playerSkin;
@@ -31,7 +31,7 @@ struct MatchStartDto {
             playersData(playersData), duckSize(duckSize) {}
 };
 
-/******************************GAME STARTING DATA**************************************/
+/******************************GAME STARTING DATA************************************/
 
 struct GroundDto {
     typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
@@ -56,7 +56,7 @@ struct GameSceneDto {
             theme(theme), platforms(platforms), groundBlocks(groundBlocks) {}
 };
 
-/******************************GAME UPDATING DATA**************************************/
+/******************************GAME UPDATING DATA************************************/
 
 struct DuckUpdate {
     typedef enum: uint8_t { RIGHT, LEFT, UP } FLIP;
@@ -94,7 +94,7 @@ struct Command {
             commandID(commandID), playerID(playerID) {}
 };
 
-/******************************GROUP GAMES RECOUNT DATA**************************************/
+/******************************GROUP GAMES RECOUNT DATA******************************/
 
 struct GamesRecountDto {
     bool matchEnded;
