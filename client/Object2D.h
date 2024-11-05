@@ -9,6 +9,8 @@
 
 #include "common/Transform.h"
 
+#include "Camera.h"
+
 using SDL2pp::Color;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -17,28 +19,36 @@ using std::string;
 
 class Object2D {
 private:
-    Texture tex;
+    string filename;
     SDL2pp::Optional<Rect> sourceRect;
 
     Transform transform;
+    Color color;
 
     bool flipH = false;
 
 public:
-    Object2D(Renderer& render, const Transform& transform, const std::string& filename);
+    Object2D(const std::string& filename, const Transform& transform,
+             Color color = Color(255, 255, 255));
 
     void SetColor(Color color);
+    Color GetColor();
 
     Transform& GetTransform() { return this->transform; }
 
-    Texture& GetTexture() { return tex; }
+    std::string& GetFileName() { return filename; }
 
     void SetSourceRect(const SDL2pp::Optional<Rect>& rect) { this->sourceRect = rect; }
     SDL2pp::Optional<Rect> GetSourceRect() { return this->sourceRect; }
 
-    void SetHorizontalFlip(bool flipH) { this->flipH = flipH; }
+    void SetFlip(bool flipH) { this->flipH = flipH; }
+    bool GetFlip() { return flipH; }
 
     int GetFlipSDL() { return flipH ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE; }
+
+    void Draw(Camera& cam) {
+        cam.DrawTexture(filename, sourceRect, color, transform, GetFlipSDL());
+    }
 
     ~Object2D();
 
@@ -49,10 +59,11 @@ public:
     Object2D& operator=(Object2D&& other) = default;
 };
 
-Object2D::Object2D(Renderer& render, const Transform& transform, const string& filename):
-        tex(render, filename), sourceRect(SDL2pp::NullOpt), transform(transform) {}
+Object2D::Object2D(const std::string& filename, const Transform& transform, Color color):
+        filename(filename), sourceRect(SDL2pp::NullOpt), transform(transform), color(color) {}
 
-void Object2D::SetColor(Color color) { tex.SetColorAndAlphaMod(color); }
+void Object2D::SetColor(Color color) { this->color = color; }
+Color Object2D::GetColor() { return color; }
 
 Object2D::~Object2D() {}
 
