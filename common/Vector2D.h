@@ -16,6 +16,7 @@ public:
 
     // Lineal Interpolation
     static Vector2D Lerp(const Vector2D& start, const Vector2D& end, float t) {
+        t = std::clamp(t, 0.0f, 1.0f);
         return start + (end - start) * t;
     }
 
@@ -25,7 +26,11 @@ public:
         this->x = x;
         this->y = y;
     }
-    Vector2D() = default;
+    Vector2D() {
+        x = 0;
+        y = 0;
+    }
+
     ~Vector2D() = default;
 
     float GetMagnitude() { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
