@@ -1,61 +1,43 @@
 #include "receiver.h"
 
-ReceiverThread::ReceiverThread(Match& match, Socket&& sktPeer, PlayerID_t idClient):
-        match(match),
-        protocol(std::move(sktPeer)),
-        sender(protocol, match, idClient),
-        idClient(idClient) {}
+ReceiverThread::ReceiverThread(PlayerID_t idClient, Match& match, ServerProtocol& protocol):
+        match(match), protocol(protocol), idClient(idClient) {}
 
 void ReceiverThread::run() {
     try {
-
-        PlayerInfo playerInfo;
-        playerInfo.senderQueue = sender.getSenderQueue();
-        bool playerConnected;
-        playerInfo.nickName = protocol.receiveNickName(std::ref(playerConnected));
-
-        if (match.logInPlayer(idClient, playerInfo)) {
-            sender.start();
-            receiveLoop();
-            sender.kill();
-            sender.join();
-        } else {
-            protocol.sendResultOfJoining(false);
-        }
-    } catch (const LibError& e) {
-
-    } catch (const std::runtime_error& e) {
+        receiveLoop();
+    } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
+                  << idClient << "\n";
     }
 }
 
 void ReceiverThread::receiveLoop() {
-    while (_keep_running) {
-
-        bool isConnected;
-        Command cmmd = protocol.receiveCommand(std::ref(isConnected));
-
-        if (!isConnected) {
-            stop();
-        } else {
-            cmmd.playerID = idClient;
+    try {
+        while (_keep_running) {
+            Command cmmd = protocol.receiveCommand();
+            cmmd.playerId = idClient;
             match.pushCommand(idClient, cmmd);
         }
+    } catch (const ConnectionFailed& c) {
+        // the conexion is failing becasuse the client is dead (and the sender will notice that too)
+        // and it will end the conexion (it it hasnt done that ) or because literally the sender is
+        // who ended the conexion with the client.
+        // or even if the match is over and it has closed our connexion before we fell into push a
+        // command
+    } catch (const ClosedQueue& q) {
+        // got here because the queue has been closed by the match.
+        //  nothing to do.
     }
 }
 
 void ReceiverThread::kill() {
-    /* Got here because ¿the match has naturally ended? or  ** because the server is closing the
+    /* Got here because the server is closing the
      * serving** (the aceptor: ended the match and it is killing all its clients) */
 
     /* Making the receiver loop to not keep running (we dont want to keep recieving commands while
      * the sender is ending) */
     stop();
-    if (sender.is_alive()) {
-        /* closing its queue */
-        sender.kill();
-        /*wait for all the left snapshoots to be send */
-        sender.join();
-    }
-    protocol.endConnection();
 }

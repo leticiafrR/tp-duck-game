@@ -4,18 +4,20 @@
 #include <atomic>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <string>
+#include <utility>
+#include <vector>
 
-#include "../common/command.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
-#include "../common/snapShoot.h"
 #include "../common/thread.h"
 #include "../data/id.h"
+#include "model/types.h"
 
-#include "clientMessages.h"
 #include "config.h"
 #include "handlerGames.h"
+#include "messageSender.h"
 #include "serverProtocol.h"
 
 #define MAX_COMMANDS 500
@@ -24,8 +26,6 @@
 
 class Match: public Thread {
 private:
-    // useful to see when to start the match and also when it... has ended
-    std::atomic<unsigned int> currentPlayers;
     // when this quantity is reached the match is started
     const unsigned int numberPlayers;
 
@@ -64,14 +64,16 @@ public:
     void logOutPlayer(PlayerID_t idClient);
 
     void run() override;
+    void forceEnd();
 
 private:
-    /* */
-    void broadcastMatchMssg(const std::shared_ptr<ClientMessage>& message);
+    std::vector<PlayerData> assignSkins(int numberSkins);
+    void setEndOfMatch(PlayerID_t winner);
+    void checkNumberPlayers();
+    void broadcastMatchMssg(const std::shared_ptr<MessageSender>& message);
 };
 
 #endif
-// Al instanciarse la partida se intancia unna game con un mapa ya predefinido
 
 /* En el loop del match cada vez que se pide un snapshoot, justo despuès se le pregunta al gameWorld
  * si es que el juego acabò (gameIsOver) si sì acabo se envìa ese ùltimo SnapShoot a los jugadores y
