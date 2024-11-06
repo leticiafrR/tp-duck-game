@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "../common/Transform.h"
-#include "../common/dataTransferObjects.h"
+#include "../data/dataTransferObjects.h"
 #include "../data/id.h"
 
 

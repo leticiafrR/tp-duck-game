@@ -96,24 +96,24 @@ Command ServerProtocol::receiveCommand() {
     throw BrokenProtocol();
 }
 
-void ServerProtocol::sendGameUpdate(const Snapshot& update) {
-    assistant.sendNumber(SNAPSHOT);
+// void ServerProtocol::sendGameUpdate(const Snapshot& update) {
+//     assistant.sendNumber(SNAPSHOT);
 
-    uint8_t gameEnded = update.gameEnded ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(gameEnded);
+//     uint8_t gameEnded = update.gameEnded ? (uint8_t)1 : (uint8_t)0;
+//     assistant.sendNumber(gameEnded);
 
-    // sending the cont of the map player ID and position vector
-    uint8_t numberElements = (uint8_t)update.ducksUpdate.size();
-    assistant.sendNumber(numberElements);
-    for (auto it = update.ducksUpdate.begin(); it != update.ducksUpdate.end(); ++it) {
-        // playerID
-        assistant.sendNumber(it->first);
-        // duckupdate
-        assistant.sendVector2D(it->second.position);
-        assistant.sendNumber(it->second.status);
-        assistant.sendNumber(it->second.flip);
-    }
-}
+//     // sending the cont of the map player ID and position vector
+//     uint8_t numberElements = (uint8_t)update.ducksUpdate.size();
+//     assistant.sendNumber(numberElements);
+//     for (auto it = update.ducksUpdate.begin(); it != update.ducksUpdate.end(); ++it) {
+//         // playerID
+//         assistant.sendNumber(it->first);
+//         // duckupdate
+//         assistant.sendVector2D(it->second.position);
+//         assistant.sendNumber(it->second.status);
+//         assistant.sendNumber(it->second.flip);
+//     }
+// }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
     assistant.sendNumber(GAMES_RECOUNT);
