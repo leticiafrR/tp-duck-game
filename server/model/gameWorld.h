@@ -15,9 +15,10 @@
 #include "types.h"
 
 class GameWorld {
+    // vector de jugadores (solo habrà uno)
     std::vector<PlayerID_t> players;
     const std::string level;
-    int procesedCmmds = 0;
+    int countTicks = 0;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
     Vector2D posicionInicial;
 
@@ -40,8 +41,9 @@ public:
     }
 
     void HandleCommand(const Command& cmd) {
-        std::cout << "Recibimos un comando del jugador: " << cmd.playerId << "\n";
-        procesedCmmds++;
+
+        std::cout << "MODELO: Recibimos un comando del jugador: " << cmd.playerId << "y còdigo "
+                  << (int)cmd.cmd << "\n";
         posicionInicial.x += 1;
         // simulamos hacer que la posicion inicial se aumenta a la derecha
         PlayerEvent playerEvent;
@@ -52,17 +54,25 @@ public:
         updates[cmd.playerId] = playerEvent;
     }
 
-    void Update() { std::cout << "Tick del mundo del juego\n"; }
+    void Update() {
+        std::cout << "MODELO: Tick " << countTicks << " en el mundo del juego\n";
+        countTicks++;
+    }
 
     bool HasWinner() {
-        // paramos a los 5 comandos
-        return procesedCmmds == 5;
+        // paramos solo 200 ticks
+        return countTicks == 200;
     }
 
     PlayerID_t WhoWon() { return players[0]; }
 
     Snapshot GetSnapshot() {
+        bool hayGanador = HasWinner();
         Snapshot snp(HasWinner(), updates);
+        std::cout << "MODELO: Snapshot del tick " << countTicks << " :\n";
+        std::cout << "-GaveOver? " << hayGanador << "; \n -Playermotion: "
+                  << "x:" << snp.updates[players[0]].motion.x
+                  << " y:" << snp.updates[players[0]].motion.y << "\n";
         return snp;
     }
 

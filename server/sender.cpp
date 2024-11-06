@@ -9,12 +9,19 @@ bool SenderThread::joinedAMatch() { return _joinedAMatch; }
 void SenderThread::run() {
     try {
         std::string nickname = protocol.receiveNickName();
+
+        std::cout << "SENDER OF CLIENT:" << idClient << " with Nickname " << nickname << "\n";
+
         PlayerInfo info;
         info.nickName = nickname;
         info.senderQueue = &senderQueue;
+
         if (!match.logInPlayer(idClient, info)) {
+            std::cout << "SENDER OF CLIENT: looks like the match didnt let us join!!...\n "
+                         "...Sending false to the client\n ";
             protocol.sendResultOfJoining(false);
         } else {
+            std::cout << "SENDER OF CLIENT: Our client was able to join the match \n ";
             _joinedAMatch = true;
             // CLIENT THAT IS PART OF A MATCH!
             sendLoop();
@@ -32,13 +39,17 @@ void SenderThread::run() {
 
 // got here once the client is really loged in into a match
 void SenderThread::sendLoop() {
+    std::cout << "SENDER OF CLIENT: lanzando el receiver\n";
     ReceiverThread receiver(idClient, match, protocol);
     receiver.start();
 
     try {
         protocol.sendResultOfJoining(true);
+        std::cout << "SENDER: comunicandole al cliente que pudo unirse\n";
+
         while (_keep_running) {
             auto message = senderQueue.pop();
+            std::cout << "SENDER: popeamos un senderMessage que nos dio la match (harà su magia)\n";
             message->execute(std::ref(protocol));
         }
     } catch (const ConnectionFailed& c) {
