@@ -53,7 +53,7 @@ public:
     Command receiveCommand();
 
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
-    void sendGameUpdate(const Snapshot& update);
+    void sendGameUpdate(const Snapshot& snapshot);
 
     // RECOUNT OF GAMES
     void sendGamesRecount(const GamesRecountDto& gamesRecount);
