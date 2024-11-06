@@ -8,7 +8,13 @@ void ServerProtocol::sendResultOfJoining(bool success) {
     assistant.sendNumber(response);
 }
 
-std::string ServerProtocol::receiveNickName() { return assistant.receiveString(); }
+std::string ServerProtocol::receiveNickName() {
+    if (assistant.receiveNumberOneByte() == NICKNAME) {
+        auto nickname = assistant.receiveString();
+        return nickname;
+    }
+    throw BrokenProtocol();
+}
 
 void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) {
     assistant.sendNumber(MATCH_STARTING);
@@ -27,6 +33,34 @@ void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) 
     // probably latter this mssg will contain the size of other items
 }
 
+
+V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(
+        const std::set<GroundDto::VISIBLE_EDGES>& edges) {
+    if (edges.find(GroundDto::VISIBLE_EDGES::TOP) == edges.end()) {
+        if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
+            return V_BTTM_TOP::NONE;
+        }
+        return V_BTTM_TOP::BTTM;
+    }
+    if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
+        return V_BTTM_TOP::TOP;
+    }
+    return V_BTTM_TOP::BOTH;
+}
+V_RG_LF ServerProtocol::encodeVisibleRightLeftEdges(
+        const std::set<GroundDto::VISIBLE_EDGES>& edges) {
+    if (edges.find(GroundDto::VISIBLE_EDGES::LEFT) == edges.end()) {
+        if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
+            return V_RG_LF::NONE;
+        }
+        return V_RG_LF::RG;
+    }
+    if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
+        return V_RG_LF::LF;
+    }
+    return V_RG_LF::BOTH;
+}
+
 void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
     assistant.sendNumber(GAME_SCENE);
     // sending the theme of the game
@@ -43,27 +77,23 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
     uint8_t numbGroundBlocks = (uint8_t)gameSceneDto.groundBlocks.size();
     assistant.sendNumber(numbGroundBlocks);
     for (auto& groundDto: gameSceneDto.groundBlocks) {
-        auto numbEdges = groundDto.visibleEdges.size();
-        // to indicate the visible edges we send two bytes: about the BTTM_TP and about the sides
-        if (numbEdges == 4) {
-            assistant.sendNumber(V_BTTM_TOP::BOTH);
-            assistant.sendNumber(V_RG_LF::BOTH);
-        } else if (numbEdges == 0) {
-            assistant.sendNumber(V_BTTM_TOP::NONE);
-            assistant.sendNumber(V_RG_LF::NONE);
-        } else if (numbEdges == 3) {
-            // at least has two sides
-        }
+        // sending data of the visible edges
+        assistant.sendNumber(encodeVisibleBottomTopEdges(groundDto.visibleEdges));
+        assistant.sendNumber(encodeVisibleRightLeftEdges(groundDto.visibleEdges));
+        // sending data of the  transform
+        assistant.sendVector2D(groundDto.transform.GetSize());
+        assistant.sendVector2D(groundDto.transform.GetPos());
     }
 }
 
 // its up to the server to set the id of the client
 Command ServerProtocol::receiveCommand() {
-    // deberìa recibir algun header?
-    // uint8_t headerCommandType = assistant.receiveNumberOneByte();
-    uint8_t commandID = assistant.receiveNumberOneByte();
-    Command cmmd(commandID);
-    return cmmd;
+    if (assistant.receiveNumberOneByte() == COMMAND) {
+        uint8_t commandID = assistant.receiveNumberOneByte();
+        Command cmmd(commandID);
+        return cmmd;
+    }
+    throw BrokenProtocol();
 }
 
 void ServerProtocol::sendGameUpdate(const Snapshot& update) {

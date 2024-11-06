@@ -1,99 +1,126 @@
 #include "clientProtocol.h"
 
-#include <utility>
-
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
-void ClientProtocol::SendNewGame(const std::string& name, bool& is_connected) {
-    bool wasClosed = false;
-    assistant.sendInt(NEW_GAME, wasClosed);
-    if (wasClosed) {
-        is_connected = false;
-    }
-}
-void ClientProtocol::JoinGame(const std::string& name, bool& is_connected) {
-    bool wasClosed = false;
-    assistant.sendInt(JOIN_A_GAME, wasClosed);
-    assistant.sendString(name, wasClosed);
-    if (wasClosed) {
-        is_connected = false;
-    }
+void ClientProtocol::sendNickname(const std::string& nickname) {
+    assistant.sendNumber(NICKNAME);
+    assistant.sendString(nickname);
 }
 
-void ClientProtocol::SendMove(const std::string& name, const u_int8_t& move_id,
-                              bool& is_connected) {
-    bool wasClosed = false;
-    assistant.sendInt(MOVEMENT, wasClosed);
-    assistant.sendString(name, wasClosed);
-    assistant.sendInt(move_id, wasClosed);
-    if (wasClosed) {
-        is_connected = false;
+bool ClientProtocol::receiveStateOfJoining() {
+    if (assistant.receiveNumberOneByte() == RESULT_JOINING) {
+        uint8_t response = assistant.receiveNumberOneByte();
+        if (response == (uint8_t)1)
+            return true;
+        else if (response == (uint8_t)0)
+            return false;
     }
+    throw BrokenProtocol();
 }
 
-void ClientProtocol::SendKeyHeld(const std::string& name, const bool& keyUp, const u_int8_t& moveID,
-                                 bool& isConnected) {
-    bool wasClosed = false;
-    assistant.sendInt(MOVEMENT, wasClosed);
-    assistant.sendString(name, wasClosed);
-    if (keyUp) {
-        assistant.sendInt(KEY_UP, wasClosed);
-    } else {
-        assistant.sendInt(KEY_DOWN, wasClosed);
-    }
+MatchStartDto ClientProtocol::receiveMachStartDto() {
+    if (assistant.receiveNumberOneByte() == MATCH_STARTING) {
+        // debo de recibir un vector de PlayerData
+        auto numberPlayers = assistant.receiveNumberOneByte();
+        std::vector<PlayerData> playersData((size_t)numberPlayers);
+        for (uint8_t i = 0; i < numberPlayers; i++) {
+            // recibimos los datos de cada Player y construimos PlayersData
+            auto ID = assistant.receiveNumberFourBytes();
+            auto nickname = assistant.receiveString();
+            auto numberSkin = assistant.receiveNumberOneByte();
+            playersData[i] = PlayerData(ID, numberSkin, std::move(nickname));
+        }
+        Vector2D duckSize = assistant.receiveVector2D();
 
-    assistant.sendInt(moveID, wasClosed);
-
-    if (wasClosed) {
-        isConnected = false;
+        return MatchStartDto(std::move(playersData), std::move(duckSize));
     }
+    throw BrokenProtocol();
 }
 
-void ClientProtocol::SendName(const std::string& playerName, bool& isConnected) {
-    bool wasClosed = false;
-    assistant.sendInt(NAME, wasClosed);
-    assistant.sendString(playerName, wasClosed);
-    if (wasClosed) {
-        isConnected = false;
+GameSceneDto ClientProtocol::receiveGameSceneDto() {
+    if (assistant.receiveNumberOneByte() == GAME_SCENE) {
+        auto theme = assistant.receiveString();
+
+        // receiving the vector of transforms of the platforms
+        auto numberPlatforms = assistant.receiveNumberOneByte();
+        std::vector<Transform> platforms(numberPlatforms);
+        for (uint8_t i = 0; i < numberPlatforms; i++) {
+            // recibimos cada uno de los Transforms
+            Vector2D size = assistant.receiveVector2D();
+            Vector2D pos = assistant.receiveVector2D();
+            platforms[i] = Transform(pos, size);
+        }
+
+        // receiving the vector of GroundDto's of the groundBlocks
+        auto numberGroundB = assistant.receiveNumberOneByte();
+        std::vector<GroundDto> groundBlocks(numberGroundB);
+        for (uint8_t i = 0; i < numberGroundB; i++) {
+            // receiving the visible edges
+            std::set<GroundDto::VISIBLE_EDGES> edges;
+            auto bttm_tp = assistant.receiveNumberOneByte();
+            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::TOP)
+                edges.insert(GroundDto::VISIBLE_EDGES::TOP);
+
+            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::BTTM)
+                edges.insert(GroundDto::VISIBLE_EDGES::BOTTOM);
+
+            auto rg_lf = assistant.receiveNumberOneByte();
+            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::RG)
+                edges.insert(GroundDto::VISIBLE_EDGES::RIGHT);
+
+            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::LF)
+                edges.insert(GroundDto::VISIBLE_EDGES::LEFT);
+
+            // receiving the data of their transforms
+            auto size = assistant.receiveVector2D();
+            auto pos = assistant.receiveVector2D();
+            Transform transform(pos, size);
+
+            // building the GroundDto
+            groundBlocks[i] = GroundDto(std::move(transform), std::move(edges));
+        }
+        return GameSceneDto(theme, platforms, groundBlocks);
     }
+    throw BrokenProtocol();
 }
 
-dataMatch ClientProtocol::ReceiveMatch(bool& isConnected) {
-    dataMatch match;
-    bool wasClosed = false;
-    uint8_t type = assistant.reciveInt(wasClosed);
-    if (type != A_MATCH) {
-        // lanzo excepcion
-    }
+// // FALTA CORROBORAR COMO QUEDA EL STRUCT DEL SNAPSHOT PARA ENVIARLO
+// Snapshot ClientProtocol::receiveGameUpdateDto() {
 
-    uint8_t newMatchID = assistant.reciveInt(wasClosed);
-    match.ID = static_cast<size_t>(newMatchID);
-    uint8_t newQuantityPlayers = assistant.reciveInt(wasClosed);
-    match.quantityPlayers = newQuantityPlayers;
-    uint8_t newMAXPlayers = assistant.reciveInt(wasClosed);
-    match.MAXPlayers = newMAXPlayers;
+// }
 
-    if (wasClosed) {
-        isConnected = false;
+GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
+    if (assistant.receiveNumberOneByte() == GAMES_RECOUNT) {
+        auto matchEndedCode = assistant.receiveNumberOneByte();
+        if (matchEndedCode != 1 && matchEndedCode != 0)
+            throw BrokenProtocol();
+        bool matchEnded = matchEndedCode == 1 ? true : false;
+        // receiving the map of games won by each player
+        std::unordered_map<PlayerID_t, int> results;
+        auto numberElements = assistant.receiveNumberOneByte();
+        for (uint8_t i = 0; i < numberElements; i++) {
+            auto id = assistant.receiveNumberFourBytes();
+            auto count = assistant.receiveNumberOneByte();
+            results[id] = (int)count;
+        }
+        return GamesRecountDto(matchEnded, std::move(results));
     }
-    return match;
+    throw BrokenProtocol();
 }
 
-dataPlayer ClientProtocol::ReceiveAPlayer(bool& isConnected) {
-    bool wasClosed = false;
-    dataPlayer player;
-    Vector2D pos;
-    uint8_t sk = assistant.reciveInt(wasClosed);
-    player.skin = sk;
-    float x = assistant.ReceiveFloat(wasClosed);
-    pos.x = x;
-    float y = assistant.ReceiveFloat(wasClosed);
-    pos.y = y;
-    printf("%f\n", y);
-    Transform trans;
-    trans.SetPos(pos);
-    trans.SetAngle(assistant.ReceiveFloat(wasClosed));
-    player.transform = trans;
+PlayerID_t ClientProtocol::receiveMatchWinner() {
+    if (assistant.receiveNumberOneByte() == END_MATCH) {
+        return assistant.receiveNumberFourBytes();
+    }
+    throw BrokenProtocol();
+}
 
-    return player;
+// //falta corroborar como lo implementò leticia
+// void ClientProtocol::sendCommand(Command cmmd) {
+
+// }
+
+void ClientProtocol::endConnection() {
+    skt.shutdown(1);
+    skt.close();
 }

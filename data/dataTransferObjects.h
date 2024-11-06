@@ -2,6 +2,7 @@
 #define DTO_H
 
 #include <algorithm>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -35,11 +36,11 @@ struct MatchStartDto {
 
 struct GroundDto {
     typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
-    std::vector<VISIBLE_EDGES> visibleEdges;
+    std::set<VISIBLE_EDGES> visibleEdges;
     Transform transform;
 
     // cppcheck-suppress passedByValue
-    GroundDto(Transform transform, std::vector<VISIBLE_EDGES> visibleEdges):
+    GroundDto(Transform transform, std::set<VISIBLE_EDGES> visibleEdges):
             transform(transform), visibleEdges(visibleEdges) {}
 };
 

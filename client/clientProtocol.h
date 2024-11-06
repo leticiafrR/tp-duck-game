@@ -1,13 +1,24 @@
 #ifndef CLIENTPROTOCOL_H
 #define CLIENTPROTOCOL_H
 
+#include <algorithm>
+#include <set>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include <stdint.h>
 
-#include "../common/dataTransferObjects.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
+#include "../data/communicationCodes.h"
+#include "../data/dataTransferObjects.h"
+
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error("Error: client perceived that the server broke the protocol!") {}
+};
 
 class ClientProtocol {
 private:
@@ -17,21 +28,21 @@ private:
 public:
     explicit ClientProtocol(Socket&& skt);
 
-    void sendNickName(const std::string& nickname);
+    void sendNickname(const std::string& nickname);
 
     bool receiveStateOfJoining();
 
-    MatchStartSettingsDto receiveMachStartSttings();
+    MatchStartDto receiveMachStartDto();
 
-    GameStartSettingsDto receiveGameStartSettings();
+    GameSceneDto receiveGameSceneDto();
 
-    Snapshot receiveGameUpdate();
+    Snapshot receiveGameUpdateDto();
 
-    void sendCommand(Command);
-
-    GamesRecountDto receiveGamesRecount();
+    GamesRecountDto receiveGamesRecountDto();
 
     PlayerID_t receiveMatchWinner();
+
+    void sendCommand(Command);
 
     void endConnection();
 };

@@ -1,29 +1,27 @@
 #ifndef SERVERPROTOCOL_H
 #define SERVERPROTOCOL_H
 
+#include <set>
 #include <string>
 #include <utility>
 
-#include "../common/dataTransferObjects.h"
+#include "../data/dataTransferObjects.h"
+//#include "../data/command.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
+#include "../data/communicationCodes.h"
 
-typedef enum: uint8_t {
-    RESULT_JOINING = 1,
-    MATCH_STARTING,
-    GAME_SCENE,
-    SNAPSHOT,
-    GAMES_RECOUNT,
-    END_MATCH
-} MSSG_HEADER;
-
-typedef enum: uint8_t { NONE = 1, TOP, BTTM, BOTH } V_BTTM_TOP;
-typedef enum: uint8_t { NONE = 1, RG, LF, BOTH } V_RG_LF;
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error("Error: server perceived that the client broke the protocol!") {}
+};
 
 class ServerProtocol {
 private:
     Socket skt;
     ProtocolAssistant assistant;
+    V_BTTM_TOP encodeVisibleBottomTopEdges(const std::set<GroundDto::VISIBLE_EDGES>&);
+    V_RG_LF encodeVisibleRightLeftEdges(const std::set<GroundDto::VISIBLE_EDGES>&);
 
 public:
     // Constructor
