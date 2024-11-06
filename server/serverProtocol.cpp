@@ -89,8 +89,8 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
 // its up to the server to set the id of the client
 Command ServerProtocol::receiveCommand() {
     if (assistant.receiveNumberOneByte() == COMMAND) {
-        uint8_t commandID = assistant.receiveNumberOneByte();
-        Command cmmd(commandID);
+        auto commandCode = (CommandCode)assistant.receiveNumberOneByte();
+        Command cmmd(commandCode);
         return cmmd;
     }
     throw BrokenProtocol();
