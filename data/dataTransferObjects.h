@@ -32,9 +32,9 @@ struct MatchStartDto {
 };
 
 /******************************GAME STARTING DATA************************************/
+typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
 
 struct GroundDto {
-    typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
     std::set<VISIBLE_EDGES> visibleEdges;
     Transform transform;
 
