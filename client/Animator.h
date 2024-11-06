@@ -28,7 +28,7 @@ public:
     std::map<std::string, std::vector<Rect>> animations;
 
     Animator(const std::string& filename, const std::string& target, int targetFPS):
-            animations(std::move(SheetDataParser::GetData(filename))) {
+            animations(std::move(SheetDataCache::GetData(filename))) {
         frameIndex = 0;
         this->target = target;
 

@@ -16,13 +16,13 @@ using std::vector;
 
 #define SHEET_DATA_PATH "../client/assets/sheet_data/"
 
-class SheetDataParser {
+class SheetDataCache {
 private:
     static map<string, map<string, vector<Rect>>> cache;
 
 public:
-    SheetDataParser() = delete;
-    ~SheetDataParser() = delete;
+    SheetDataCache() = delete;
+    ~SheetDataCache() = delete;
 
     static map<string, vector<Rect>> GetData(string filename) {
         auto it = cache.find(filename);
@@ -52,6 +52,6 @@ public:
 
     static void Clear() { cache.clear(); }
 };
-map<string, map<string, vector<Rect>>> SheetDataParser::cache;
+map<string, map<string, vector<Rect>>> SheetDataCache::cache;
 
 #endif

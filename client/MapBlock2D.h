@@ -32,7 +32,7 @@ public:
             imageFilename(imageFilename),
             transform(transform),
             tileSize(tileSize),
-            mapBlockData(SheetDataParser::GetData(sheetDataFilename)) {}
+            mapBlockData(SheetDataCache::GetData(sheetDataFilename)) {}
 
     void SetTopBorder(bool value) { borderTop = value; }
     void SetBottomBorder(bool value) { borderBottom = value; }
