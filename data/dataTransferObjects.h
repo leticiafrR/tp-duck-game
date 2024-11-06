@@ -19,6 +19,7 @@ struct PlayerData {
     uint8_t playerSkin;
     std::string nickname;
 
+    PlayerData():playerID(0), playerSkin(0), nickname("") {}; 
     PlayerData(PlayerID_t playerID, uint8_t playerSkin, const std::string& nickname):
             playerID(playerID), playerSkin(playerSkin), nickname(nickname) {}
 };
@@ -39,7 +40,8 @@ struct GroundDto {
     Transform transform;
 
     GroundDto(const Transform& transform, const std::set<VISIBLE_EDGES>& visibleEdges):
-            transform(transform), visibleEdges(visibleEdges) {}
+            visibleEdges(visibleEdges), transform(transform) {}
+    GroundDto() = default;
 };
 
 struct GameSceneDto {
