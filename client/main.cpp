@@ -11,6 +11,8 @@
 #include "common/RigidBody.h"
 
 #include "Animator.h"
+#include "Button.h"
+#include "ButtonsManager.h"
 #include "Camera.h"
 #include "CameraController.h"
 #include "MapBlock2D.h"
@@ -35,13 +37,20 @@ int main() try {
 
     Camera cam(std::move(render), 100);
 
+    Button btn(
+            Rect(20, 20, 200, 80),
+            []() {
+                std::cout << "Button Clicked"
+                          << "\n";
+            },
+            Color(255, 255, 255));
 
     Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
     Object2D spr("base_duck.png", Transform(Vector2D::Zero(), Vector2D(5, 5)));
 
     Object2D akSpr("machine_guns.png", Transform(Vector2D::Zero(), Vector2D(4, 4)));
-    akSpr.SetSourceRect(Rect(1, 19, 32, 32));
+    akSpr.SetSourceRect(SheetDataCache::GetData("machine_guns.yaml")["ak_47"][0]);
 
     Animator duckAnim("duck.yaml", "idle", 17);
 
@@ -124,6 +133,7 @@ int main() try {
                     running = false;
                     break;
             }
+            ButtonsManager::GetInstance().HandleEvent(event);
         }
         duckT.Move(dir * speed * deltaTime);
 
@@ -160,6 +170,8 @@ int main() try {
         akSpr.GetTransform().SetPos(duckT.GetPos() + Vector2D::Down() * 0.8f);
         akSpr.SetFlip(spr.GetFlip());
         akSpr.Draw(cam);
+
+        ButtonsManager::GetInstance().Draw(cam);
 
         camController.Update();
         cam.Render();
