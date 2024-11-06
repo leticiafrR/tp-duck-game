@@ -15,6 +15,8 @@ public:
     RigidBody(Transform& transform, float mass): sourceT(transform), mass(mass) {}
     ~RigidBody() = default;
 
+    Vector2D GetVelocity() const { return this->velocity; }
+
     // Reset gravity should be called once it's sure that the object is grounded
     void ResetGravity() { velocity.y = 0; }
 

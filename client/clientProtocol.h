@@ -1,41 +1,26 @@
 #ifndef CLIENTPROTOCOL_H
 #define CLIENTPROTOCOL_H
 
-#include <cstdint>
-#include <list>
+#include <algorithm>
+#include <set>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include <stdint.h>
 
-#include "../common/dataMatch.h"
-#include "../common/dataObject.h"
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
+#include "../data/command.h"
+#include "../data/communicationCodes.h"
+#include "../data/dataTransferObjects.h"
 
-typedef enum: uint8_t {
-    NEW_GAME = 1,
-    JOIN_A_GAME,
-    ERROR_JOIN,
-    ACTIVE_MATCHES,
-    NAME,
-    A_MATCH,
-    MOVEMENT,
-    EQUIPMENT,
-    ATACK,
-    FINAL_STATUS,
 
-} MESSAGE_TYPE;
-
-typedef enum: uint8_t {
-    UP = 1,
-    RIGHT,
-    LEFT,
-    DOWN,
-    SHOOT,
-    KEY_UP,
-    KEY_DOWN,
-} KEYS;
-
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error("Error: client perceived that the server broke the protocol!") {}
+};
 
 class ClientProtocol {
 private:
@@ -43,36 +28,24 @@ private:
     ProtocolAssistant assistant;
 
 public:
-    // Constructor
     explicit ClientProtocol(Socket&& skt);
 
-    // Send a request to open a new game
-    void SendNewGame(const std::string& name, bool& isConnected);
+    void sendNickname(const std::string& nickname);
 
-    // Send the nickname
-    void SendName(const std::string& name, bool& isConnected);
+    bool receiveStateOfJoining();
 
-    // Send a request to join in a exiting game
-    void JoinGame(const std::string& name, bool& isConnected);
+    MatchStartDto receiveMachStartDto();
 
-    // Send a move: Send a message with 4 as first byte ( that indicate that is a move message)
-    // then send the movment id
-    void SendMove(const std::string& name, const uint8_t& keyId, bool& isConnected);
+    GameSceneDto receiveGameSceneDto();
 
-    // Send key state: Send whether the key is pressed (on) or released (off), and which key it is.
-    void SendKeyHeld(const std::string& name, const bool& keyOn, const uint8_t& keyId,
-                     bool& isConnected);
+    // Snapshot receiveGameUpdateDto();
 
-    //
-    dataMatch ReceiveMatch(bool& isConnected);
+    GamesRecountDto receiveGamesRecountDto();
 
-    //
-    uint8_t ReceiveBackGround(bool& isConnected);
+    PlayerID_t receiveMatchWinner();
 
-    //
-    dataPlayer ReceiveAPlayer(bool& isConnected);
+    void sendCommand(Command);
 
-    // Receive matches list
-    std::list<dataMatch> ReceiveMatches(bool& isConnected);
+    void endConnection();
 };
 #endif
