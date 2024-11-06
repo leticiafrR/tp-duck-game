@@ -33,6 +33,10 @@ public:
 
     ~Vector2D() = default;
 
+    bool IsFarFrom(const Vector2D& other, float tolerance = 0.001) const {
+        return Distance(*this, other) > tolerance;
+    }
+
     float GetMagnitude() { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
 
     Vector2D Normalized() {
@@ -50,10 +54,6 @@ public:
         this->x *= other;
         this->y *= other;
         return *this;
-    }
-
-    bool operator==(const Vector2D& other) const {
-        return (this->x == other.x && this->y == other.y);
     }
 
     Vector2D operator*(const float& other) const {
