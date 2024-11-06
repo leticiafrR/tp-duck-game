@@ -44,7 +44,6 @@ struct GroundDto {
             transform(transform), visibleEdges(visibleEdges) {}
 };
 
-// no comunicar el valor de los angulos
 struct GameSceneDto {
     std::string theme;
     std::vector<Transform> platforms;
@@ -78,22 +77,6 @@ struct Snapshot {
             gameEnded(gameEnded), ducksUpdate(ducksUpdate) {}
 };
 
-struct Command {
-    typedef enum: uint8_t {
-        LEFT_KEY_DOWN = 1,
-        LEFT_KEY_UP,
-        RIGHT_KEY_DOWN,
-        RIGHT_KEY_UP,
-        JUMP,
-        QUIT
-    } COMMAND_ID;
-
-    uint8_t commandID;
-    uint32_t playerID;
-
-    explicit Command(uint8_t commandID, u_int32_t playerID = 0):
-            commandID(commandID), playerID(playerID) {}
-};
 
 /******************************GROUP GAMES RECOUNT DATA******************************/
 

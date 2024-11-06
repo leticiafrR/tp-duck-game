@@ -115,10 +115,10 @@ PlayerID_t ClientProtocol::receiveMatchWinner() {
     throw BrokenProtocol();
 }
 
-// //falta corroborar como lo implementò leticia
-// void ClientProtocol::sendCommand(Command cmmd) {
-
-// }
+void ClientProtocol::sendCommand(Command cmmd) {
+    assistant.sendNumber(COMMAND);
+    assistant.sendNumber((uint8_t)cmmd.cmd);
+}
 
 void ClientProtocol::endConnection() {
     skt.shutdown(1);

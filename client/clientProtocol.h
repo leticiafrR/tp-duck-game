@@ -12,8 +12,10 @@
 
 #include "../common/protocolAssistant.h"
 #include "../common/socket.h"
+#include "../data/command.h"
 #include "../data/communicationCodes.h"
 #include "../data/dataTransferObjects.h"
+
 
 struct BrokenProtocol: public std::runtime_error {
     BrokenProtocol():
