@@ -19,7 +19,7 @@ struct PlayerData {
     uint8_t playerSkin;
     std::string nickname;
 
-    PlayerData():playerID(0), playerSkin(0), nickname("") {}; 
+    PlayerData():playerID(0), playerSkin(0), nickname("") {}
     PlayerData(PlayerID_t playerID, uint8_t playerSkin, const std::string& nickname):
             playerID(playerID), playerSkin(playerSkin), nickname(nickname) {}
 };
