@@ -13,7 +13,7 @@ enum class CommandCode : uint8_t {
 struct Command {
     CommandCode cmd;
     PlayerID_t playerId;
-    Command(CommandCode _cmd, PlayerID_t _playerId): cmd(_cmd), playerId(_playerId) {}
+    Command(CommandCode _cmd, PlayerID_t _playerId = 0): cmd(_cmd), playerId(_playerId) {}
 };
 
 #endif
