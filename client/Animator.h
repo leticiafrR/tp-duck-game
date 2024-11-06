@@ -16,19 +16,17 @@ using SDL2pp::Rect;
 
 class Animator {
 private:
+    Object2D& sprite;
+    std::map<std::string, std::vector<Rect>> animations;
+    std::string target;
     int frameIndex;
 
     float animFrameTime;
     float updateTimer;
 
-    std::string target;
-    Rect currentFrameRect;
-
 public:
-    std::map<std::string, std::vector<Rect>> animations;
-
-    Animator(const std::string& filename, const std::string& target, int targetFPS):
-            animations(std::move(SheetDataCache::GetData(filename))) {
+    Animator(Object2D& spr, const std::string& filename, const std::string& target, int targetFPS):
+            sprite(spr), animations(std::move(SheetDataCache::GetData(filename))) {
         frameIndex = 0;
         this->target = target;
 
@@ -39,12 +37,16 @@ public:
     ~Animator() = default;
 
     void Update(float deltaTime) {
+        // std::cout <<  frameIndex << "\n";
+
         updateTimer -= deltaTime;
         if (updateTimer <= 0) {
             updateTimer = animFrameTime;
             frameIndex += 1;
             frameIndex = (frameIndex % animations[target].size());
         }
+        // std::cout <<  sprite.GetFileName() << "\n";
+        sprite.SetSourceRect(GetTargetRect());
     }
 
     Rect GetTargetRect() { return animations[target][frameIndex]; }
