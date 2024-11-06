@@ -12,11 +12,11 @@
 
 #include "../common/Transform.h"
 #include "../common/Vector2D.h"
-#include "../common/dataTransferObjects.h"
 #include "../common/queue.h"
 #include "../common/safeMap.h"
-#include "../common/snapShoot.h"
+#include "../data/dataTransferObjects.h"
 #include "../data/id.h"
+#include "../data/snapshot.h"
 
 #include "serverProtocol.h"
 
@@ -24,6 +24,7 @@
 class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
+    virtual ~MessageSender() = default;
 };
 
 /******************************* MATCH START SETTING MSSG *********************************/
@@ -33,7 +34,7 @@ private:
     const MatchStartDto matchStartDto;
 
 public:
-    MatchStartSender(std::vector<PlayerData> playersData, Vector2D duckSize);
+    MatchStartSender(const std::vector<PlayerData>& playersData, Vector2D duckSize);
 
     void execute(ServerProtocol& protocol) const override;
 };
@@ -45,7 +46,7 @@ private:
     const GameSceneDto gameScene;
 
 public:
-    explicit GameSceneSender(GameSceneDto gameScene);
+    explicit GameSceneSender(const GameSceneDto& gameScene);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -56,7 +57,7 @@ private:
     const Snapshot snapshot;
 
 public:
-    explicit GameUpdateSender(Snapshot snapshot);
+    explicit GameUpdateSender(const Snapshot& snapshot);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -67,7 +68,8 @@ private:
     const GamesRecountDto gamesRecount;
 
 public:
-    explicit GamesRecountSender(std::unordered_map<PlayerID_t, int> results, bool matchEnded);
+    explicit GamesRecountSender(const std::unordered_map<PlayerID_t, int>& results,
+                                bool matchEnded);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -84,11 +86,10 @@ public:
 
 struct PlayerInfo {
     std::string nickName;
+    // cppcheck-suppress unusedStructMember
     Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    // cppcheck-suppress passedByValue
-    PlayerInfo(std::string nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
-            nickName(nickName), senderQueue(senderQueue) {}
+    // PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
+    //         nickName(nickName), senderQueue(senderQueue) {}
 };
-
 
 #endif

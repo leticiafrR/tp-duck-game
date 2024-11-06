@@ -33,32 +33,31 @@ void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) 
     // probably latter this mssg will contain the size of other items
 }
 
-
 V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(
         const std::set<GroundDto::VISIBLE_EDGES>& edges) {
     if (edges.find(GroundDto::VISIBLE_EDGES::TOP) == edges.end()) {
         if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
-            return V_BTTM_TOP::NONE;
+            return V_BTTM_TOP::NONE_TB;
         }
         return V_BTTM_TOP::BTTM;
     }
     if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
         return V_BTTM_TOP::TOP;
     }
-    return V_BTTM_TOP::BOTH;
+    return V_BTTM_TOP::BOTH_TB;
 }
 V_RG_LF ServerProtocol::encodeVisibleRightLeftEdges(
         const std::set<GroundDto::VISIBLE_EDGES>& edges) {
     if (edges.find(GroundDto::VISIBLE_EDGES::LEFT) == edges.end()) {
         if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
-            return V_RG_LF::NONE;
+            return V_RG_LF::NONE_RL;
         }
         return V_RG_LF::RG;
     }
     if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
         return V_RG_LF::LF;
     }
-    return V_RG_LF::BOTH;
+    return V_RG_LF::BOTH_RL;
 }
 
 void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
@@ -96,24 +95,25 @@ Command ServerProtocol::receiveCommand() {
     throw BrokenProtocol();
 }
 
-// void ServerProtocol::sendGameUpdate(const Snapshot& update) {
-//     assistant.sendNumber(SNAPSHOT);
+void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
+    assistant.sendNumber(SNAPSHOT);
 
-//     uint8_t gameEnded = update.gameEnded ? (uint8_t)1 : (uint8_t)0;
-//     assistant.sendNumber(gameEnded);
+    uint8_t gameOver = snapshot.gameOver ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(gameOver);
 
-//     // sending the cont of the map player ID and position vector
-//     uint8_t numberElements = (uint8_t)update.ducksUpdate.size();
-//     assistant.sendNumber(numberElements);
-//     for (auto it = update.ducksUpdate.begin(); it != update.ducksUpdate.end(); ++it) {
-//         // playerID
-//         assistant.sendNumber(it->first);
-//         // duckupdate
-//         assistant.sendVector2D(it->second.position);
-//         assistant.sendNumber(it->second.status);
-//         assistant.sendNumber(it->second.flip);
-//     }
-// }
+    // sending the cont of the map player ID and position vector
+    uint8_t numberElements = (uint8_t)snapshot.updates.size();
+    assistant.sendNumber(numberElements);
+
+    for (auto it = snapshot.updates.begin(); it != snapshot.updates.end(); ++it) {
+        // playerID
+        assistant.sendNumber(it->first);
+        // PlayerEvent
+        assistant.sendVector2D(it->second.motion);
+        assistant.sendNumber((uint8_t)it->second.stateTransition);
+        assistant.sendNumber((uint8_t)it->second.flipping);
+    }
+}
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
     assistant.sendNumber(GAMES_RECOUNT);

@@ -52,7 +52,7 @@ void HandlerGames::playOneGame() {
     auto level = getRandomLevel();
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
-    currentGame = std::make_unique<GameWorld>(level, playerIDs);
+    currentGame = std::make_unique<GameWorld>(std::move(level), playerIDs);
 
     /*sending the initial setting of the game*/
     // Si es que ya se cerraron las queues seguro que salta excepciòn
@@ -62,7 +62,7 @@ void HandlerGames::playOneGame() {
 
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         // this means that we went out of the gameLoop because there is a game winner
-        PlayerID_t gameWinner = currentGame->whoWon();
+        PlayerID_t gameWinner = currentGame->WhoWon();
         int playerRecord = gameResults[gameWinner] += 1;
         if (playerRecord > recordGamesWon) {
             recordGamesWon = playerRecord;
@@ -74,22 +74,24 @@ void HandlerGames::playOneGame() {
 void HandlerGames::gameLoop() {
     TimeManager timeManager(FPS);
 
-    while (!currentGame->hasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-
-        if (timeManager.synchronizeTick() < std::chrono::duration<double, std::milli>(0)) {
-            PRINT_TEST_OVERFLOW_TICK();
-        }
-
+    while (!currentGame->HasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         int countCommands = 0;
-        Command cmmd(0, 0);
+        // OJO COMO SE INSTANCIA UN COMMD
+        Command cmmd;
         while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
-            currentGame->handleCommand(cmmd);
+            currentGame->HandleCommand(cmmd);
             countCommands++;
         }
 
-        currentGame->update();
+        auto delta = timeManager.synchronizeTick();
+        if (delta < std::chrono::duration<double, std::milli>(0)) {
+            PRINT_TEST_OVERFLOW_TICK();
+        }
 
-        broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->getSnapshot()));
+        // currentGame->Update(static_cast<float>(delta.count()));
+        currentGame->Update();
+
+        broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
     }
 }
 
@@ -97,9 +99,8 @@ void HandlerGames::gameLoop() {
 // so it should stop all the current game.
 void HandlerGames::broadcastGameMssg(const std::shared_ptr<MessageSender>& message) {
     checkNumberPlayers();
-    players.applyToItems([&message](PlayerID_t _, PlayerInfo& player) {
-        player.senderQueue->try_push(message);
-    });
+    players.applyToValues(
+            [&message](PlayerInfo& player) { player.senderQueue->try_push(message); });
     checkNumberPlayers();
 }
 

@@ -30,8 +30,7 @@ void AcceptorThread::run() {
     // be already over.
 
     /* cleaning the resources of the  threads*/
-    match.join();
-    cleanUpClientsResources();
+    cleanUpThreads();
 }
 
 /* Method that will fail (throw an execption) when the main thread ask the acceptor to forceClosure
@@ -63,7 +62,8 @@ void AcceptorThread::reapDead() {
 }
 
 
-void AcceptorThread::cleanUpClientsResources() {
+void AcceptorThread::cleanUpThreads() {
+    match.join();
     for (auto& client: clients) {
         client->join();
         delete client;

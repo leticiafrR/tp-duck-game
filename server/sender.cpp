@@ -2,14 +2,16 @@
 
 
 SenderThread::SenderThread(Socket&& sktPeer, Match& match, PlayerID_t idClient):
-        senderQueue(MAX_MESSAGES), protocol(std::move(sktPeer)), match(match), idClient(idClient) {}
+        match(match), senderQueue(MAX_MESSAGES), protocol(std::move(sktPeer)), idClient(idClient) {}
 
 bool SenderThread::joinedAMatch() { return _joinedAMatch; }
 
 void SenderThread::run() {
     try {
         std::string nickname = protocol.receiveNickName();
-        PlayerInfo info(nickname, &senderQueue);
+        PlayerInfo info;
+        info.nickName = nickname;
+        info.senderQueue = &senderQueue;
         if (!match.logInPlayer(idClient, info)) {
             protocol.sendResultOfJoining(false);
         } else {
@@ -54,5 +56,16 @@ void SenderThread::sendLoop() {
 void SenderThread::kill() {
     if (!_joinedAMatch) {
         protocol.endConnection();
+    }
+}
+
+SenderThread::~SenderThread() {
+    try {
+        if (_is_alive) {
+            kill();
+            join();
+        }
+    } catch (...) {
+        // notjing by the moment
     }
 }

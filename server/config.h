@@ -43,11 +43,12 @@ public:
 
     const std::vector<std::string> getAvailableLevels() const { return availableLevels; }
     int getAvailableSkins() const { return maxPlayers; }
-    unsigned int getMaxPlayers() const { return maxPlayers; }
-    Vector2D getDuckSize() {
-        Vector2D duckSize(1.0, 1.0);
-        return duckSize;
-    }
+    int getMaxPlayers() const { return maxPlayers; }
+
+    // Vector2D getDuckSize() {
+    //     Vector2D duckSize(1.0, 1.0);
+    //     return duckSize;
+    // }
 };
 
 #endif

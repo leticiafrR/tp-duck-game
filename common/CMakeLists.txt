@@ -2,19 +2,21 @@ target_sources(taller_common
     PRIVATE
     # .cpp files
     liberror.cpp
+    protocolAssistant.cpp
     resolver.cpp
     resolvererror.cpp
     socket.cpp
     PUBLIC
     # .h files
     liberror.h
+    protocolAssistant.h
+    queue.h
     resolver.h
     resolvererror.h
+    safeMap.h
     socket.h
-    queue.h
     thread.h
-    Vector2D.h
-    Collision.h
+    timeManager.h
     Transform.h
-    RigidBody.h
+    Vector2D.h
     )

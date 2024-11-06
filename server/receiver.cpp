@@ -1,7 +1,7 @@
 #include "receiver.h"
 
 ReceiverThread::ReceiverThread(PlayerID_t idClient, Match& match, ServerProtocol& protocol):
-        match(match), protocol(protocol), idClient(idClient) {}
+        match(match), idClient(idClient), protocol(protocol) {}
 
 void ReceiverThread::run() {
     try {
@@ -18,8 +18,8 @@ void ReceiverThread::receiveLoop() {
     try {
         while (_keep_running) {
             Command cmmd = protocol.receiveCommand();
-            cmmd.playerID = idClient;
-            match.pushCommand(idClient, cmmd);
+            cmmd.playerId = idClient;
+            match.pushCommand(cmmd);
         }
     } catch (const ConnectionFailed& c) {
         // the conexion is failing becasuse the client is dead (and the sender will notice that too)
