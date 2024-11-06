@@ -32,7 +32,7 @@ public:
         platform.push_back(t);
 
         std::vector<GroundDto> groundBlocks;
-        std::set<GroundDto::VISIBLE_EDGES> edges;
+        std::set<VISIBLE_EDGES> edges;
         GroundDto g(t, edges);
         groundBlocks.push_back(g);
 

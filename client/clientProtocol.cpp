@@ -58,7 +58,7 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
             // receiving the visible edges
             std::set<VISIBLE_EDGES> edges;
             auto bttm_tp = assistant.receiveNumberOneByte();
-            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TOP)
+            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TP)
                 edges.insert(VISIBLE_EDGES::TOP);
 
             if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::BTTM)
