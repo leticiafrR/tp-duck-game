@@ -52,7 +52,7 @@ public:
 
         CalculateCorners(minCorner, maxCorner);
 
-        if (minCorner == maxCorner)
+        if (!minCorner.IsFarFrom(maxCorner, 0.001f))
             return;
 
         float offset = 2.5;

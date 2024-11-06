@@ -56,10 +56,6 @@ public:
         return *this;
     }
 
-    bool operator==(const Vector2D& other) const {
-        return (this->x == other.x && this->y == other.y);
-    }
-
     Vector2D operator*(const float& other) const {
         return Vector2D(this->x * other, this->y * other);
     }

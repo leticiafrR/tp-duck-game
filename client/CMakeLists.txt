@@ -10,7 +10,6 @@ target_sources(taller_client
     CameraController.h
     Animator.h
     TextureCache.h
-    SpriteSheet.h
     MapBlock2D.h
     SheetDataCache.h
     )
