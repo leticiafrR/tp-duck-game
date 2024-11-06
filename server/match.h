@@ -27,7 +27,7 @@
 class Match: public Thread {
 private:
     // when this quantity is reached the match is started
-    const unsigned int numberPlayers;
+    const int numberPlayers;
 
     Queue<Command> commandQueue;
 
@@ -40,7 +40,7 @@ private:
 public:
     /* has to be instanced making sure the numberPlayers is smaller than MAX_PLAYERS defined in
      * Config*/
-    explicit Match(Config& config, unsigned int numberPlayers);
+    explicit Match(Config& config, int numberPlayers);
 
     /* returns a boolean indicating if the client was succesfully added. If the Match has
      * already started the method will return false, else (success) the method will include in the
@@ -52,7 +52,7 @@ public:
     /* Executes a blocking push over the command queue (the validation over if the client is alive
      * in the current round must be done inside the  Game)*/
     /* Method called by multiple recieverThreads so it uses a queue thread safe*/
-    void pushCommand(PlayerID_t idClient, const Command& cmmd);
+    void pushCommand(const Command& cmmd);
 
     /* This method takes out of the container with the players to broadcast the queue of the client
      * with the ID received. It means that it is called when the client in the middle of the match

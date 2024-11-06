@@ -24,6 +24,7 @@
 class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
+    virtual ~MessageSender() = default;
 };
 
 /******************************* MATCH START SETTING MSSG *********************************/
@@ -85,9 +86,10 @@ public:
 
 struct PlayerInfo {
     std::string nickName;
+    // cppcheck-suppress unusedStructMember
     Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
-            nickName(nickName), senderQueue(senderQueue) {}
+    // PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
+    //         nickName(nickName), senderQueue(senderQueue) {}
 };
 
 #endif

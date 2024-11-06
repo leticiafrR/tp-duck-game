@@ -14,8 +14,8 @@ struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
-    PlayerEvent(Vector2D motion, DuckState stateTransition, Flip flipping):
-            motion(motion), stateTransition(stateTransition), flipping(flipping) {}
+    // PlayerEvent(Vector2D _motion, DuckState _stateTransition, Flip _flipping):
+    //         motion(_motion), stateTransition(_stateTransition), flipping(_flipping) {}
 };
 
 struct Snapshot {

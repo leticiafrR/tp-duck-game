@@ -36,7 +36,7 @@ void GamesRecountSender::execute(ServerProtocol& protocol) const {
 }
 
 /************************ IMPLEMENTATION OF MATCH RESULT MSSG *****************************/
-explicit MatchExitSender::MatchExitSender(PlayerID_t finalWinner): finalWinner(finalWinner) {}
+MatchExitSender::MatchExitSender(PlayerID_t finalWinner): finalWinner(finalWinner) {}
 
 void MatchExitSender::execute(ServerProtocol& protocol) const {
     if (finalWinner != 0) {

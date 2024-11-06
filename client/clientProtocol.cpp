@@ -28,11 +28,11 @@ MatchStartDto ClientProtocol::receiveMachStartDto() {
             auto ID = assistant.receiveNumberFourBytes();
             auto nickname = assistant.receiveString();
             auto numberSkin = assistant.receiveNumberOneByte();
-            playersData[i] = PlayerData(ID, numberSkin, std::move(nickname));
+            playersData[i] = PlayerData{ID, numberSkin, std::move(nickname)};
         }
         Vector2D duckSize = assistant.receiveVector2D();
 
-        return MatchStartDto(std::move(playersData), std::move(duckSize));
+        return MatchStartDto{std::move(playersData), std::move(duckSize)};
     }
     throw BrokenProtocol();
 }
@@ -58,17 +58,17 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
             // receiving the visible edges
             std::set<GroundDto::VISIBLE_EDGES> edges;
             auto bttm_tp = assistant.receiveNumberOneByte();
-            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::TOP)
+            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TOP)
                 edges.insert(GroundDto::VISIBLE_EDGES::TOP);
 
-            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::BTTM)
+            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::BTTM)
                 edges.insert(GroundDto::VISIBLE_EDGES::BOTTOM);
 
             auto rg_lf = assistant.receiveNumberOneByte();
-            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::RG)
+            if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::RG)
                 edges.insert(GroundDto::VISIBLE_EDGES::RIGHT);
 
-            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::LF)
+            if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::LF)
                 edges.insert(GroundDto::VISIBLE_EDGES::LEFT);
 
             // receiving the data of their transforms
@@ -77,9 +77,9 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
             Transform transform(pos, size);
 
             // building the GroundDto
-            groundBlocks[i] = GroundDto(std::move(transform), std::move(edges));
+            groundBlocks[i] = GroundDto{std::move(transform), std::move(edges)};
         }
-        return GameSceneDto(theme, platforms, groundBlocks);
+        return GameSceneDto{theme, platforms, groundBlocks};
     }
     throw BrokenProtocol();
 }
@@ -103,7 +103,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
             auto evState = (DuckState)assistant.receiveNumberOneByte();
             auto evFlip = (Flip)assistant.receiveNumberOneByte();
             // building PlayerEvent
-            updates[ID] = PlayerEvent(evMotion, evState, evFlip);
+            updates[ID] = PlayerEvent{evMotion, evState, evFlip};
         }
         return Snapshot(gameOver, updates);
     }

@@ -5,7 +5,7 @@
 
 #define QUIT "q"
 
-void startDummyMatch(const char* port);
+void startDummyMatch(const char* port, Config& config);
 
 int main(int argc, char* argv[]) {
     try {

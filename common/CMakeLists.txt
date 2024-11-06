@@ -9,14 +9,14 @@ target_sources(taller_common
     PUBLIC
     # .h files
     liberror.h
+    protocolAssistant.h
+    queue.h
     resolver.h
     resolvererror.h
-    socket.h
-    queue.h
-    thread.h
-    Vector2D.h
-    Transform.h
-    protocolAssistant.h
     safeMap.h
+    socket.h
+    thread.h
     timeManager.h
+    Transform.h
+    Vector2D.h
     )

@@ -9,38 +9,65 @@
 
 #include "../../data/command.h"
 #include "../../data/dataTransferObjects.h"
+#include "../../data/id.h"
 #include "../../data/snapshot.h"
 
 #include "types.h"
-// #include "event/EventsManager.h"
-
-// #include "Duck.h"
-// #include "staticMap.h"
 
 class GameWorld {
-private:
-    // size_t livePlayers;
-    // StaticMap map;
-    // std::unordered_map<PlayerID_t, Duck*> players;
-    // std::set<ObjectID_t> uniquesIds;
-    // EventsManager eventsManager;
-    // void ReapDead();
+    std::vector<PlayerID_t> players;
+    const std::string level;
+    int procesedCmmds = 0;
+    std::unordered_map<PlayerID_t, PlayerEvent> updates;
+    Vector2D posicionInicial;
 
 public:
-    explicit GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName);
-    GameSceneDto getSceneDto();
+    GameWorld(const std::string& scene, const std::vector<PlayerID_t>& playersIds):
+            players(playersIds), level(scene) {}
 
-    void HandleCommand(const Command& cmd);
+    GameSceneDto getSceneDto() {
+        std::vector<Transform> platform;
+        Transform t;
+        platform.push_back(t);
 
-    void Update(float deltaTime);
+        std::vector<GroundDto> groundBlocks;
+        std::set<GroundDto::VISIBLE_EDGES> edges;
+        GroundDto g(t, edges);
+        groundBlocks.push_back(g);
 
-    bool HasWinner();
-    bool IsOver();
-    PlayerID_t WhoWon();
+        GameSceneDto scene(level, platform, groundBlocks);
+        return scene;
+    }
 
-    Snapshot GetSnapshot();
+    void HandleCommand(const Command& cmd) {
+        std::cout << "Recibimos un comando del jugador: " << cmd.playerId << "\n";
+        procesedCmmds++;
+        posicionInicial.x += 1;
+        // simulamos hacer que la posicion inicial se aumenta a la derecha
+        PlayerEvent playerEvent;
+        playerEvent.motion = posicionInicial;
+        playerEvent.stateTransition = DuckState::RUNNING;
+        playerEvent.flipping = Flip::Right;
+
+        updates[cmd.playerId] = playerEvent;
+    }
+
+    void Update() { std::cout << "Tick del mundo del juego\n"; }
+
+    bool HasWinner() {
+        // paramos a los 5 comandos
+        return procesedCmmds == 5;
+    }
+
+    PlayerID_t WhoWon() { return players[0]; }
+
+    Snapshot GetSnapshot() {
+        Snapshot snp(HasWinner(), updates);
+        return snp;
+    }
+
     // void quitPlayer(PlayerID_t);
-    ~GameWorld();
+    ~GameWorld() = default;
 };
 
 

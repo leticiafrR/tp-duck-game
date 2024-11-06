@@ -2,11 +2,11 @@
 #define NO_WINNER_FORCED_END 0
 // si se tiene menos de esta cantidad o igual se pararà de jugar màs partidas
 
-Match::Match(Config& config, unsigned int numberPlayers):
-        config(config),
+Match::Match(Config& config, int numberPlayers):
         numberPlayers(numberPlayers),
         commandQueue(MAX_COMMANDS),
-        players(numberPlayers) {
+        players(numberPlayers),
+        config(config) {
     if (numberPlayers > config.getMaxPlayers()) {
         throw std::runtime_error(
                 "ERROR: Too many players, can't manage a match with so many players.");
@@ -19,7 +19,7 @@ bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
     if (!players.tryInsert(idClient, playerInfo)) {
         return false;
     }
-    if (players.size() == numberPlayers && !_is_alive) {
+    if ((int)players.size() == numberPlayers && !_is_alive) {
         this->start();
     }
     return true;
@@ -27,7 +27,7 @@ bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
 
 // will be closed when the match is over. If someone tries to push a commd it will throw an
 // exception (CosedQueue)
-void Match::pushCommand(PlayerID_t idClient, const Command& cmmd) { commandQueue.push(cmmd); }
+void Match::pushCommand(const Command& cmmd) { commandQueue.push(cmmd); }
 
 /*Method that would be called concurrently (by the senderThreads) when the sender thread of the
  * client notices the disconection */
@@ -98,7 +98,7 @@ void Match::setEndOfMatch(PlayerID_t winner) {
     std::unique_lock<std::mutex> lock(m);
     if (players.size() != 0) {
         auto messageSender = std::make_shared<MatchExitSender>(winner);
-        players.applyToItems([&messageSender](PlayerID_t _, PlayerInfo& playerInfo) {
+        players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
             // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
             playerInfo.senderQueue->push(messageSender);
             playerInfo.senderQueue->close();
@@ -115,8 +115,7 @@ void Match::checkNumberPlayers() {
 void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {
     // want to interrumpt the game if there are no players and ia notice that
     checkNumberPlayers();
-    players.applyToItems([&message](PlayerID_t _, PlayerInfo& player) {
-        player.senderQueue->try_push(message);
-    });
+    players.applyToValues(
+            [&message](PlayerInfo& player) { player.senderQueue->try_push(message); });
     checkNumberPlayers();
 }

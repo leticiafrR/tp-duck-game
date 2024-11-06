@@ -82,14 +82,21 @@ public:
     }
 
     void clear() {
-        std::unique_lock<std::mutex> lck(rw_mtx);
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
         map.clear();
     }
 
-    void applyToItems(const std::function<void(K&, V&)>& func) {
+    void applyToItems(const std::function<void(const K&, V&)>& func) {
         std::unique_lock<std::shared_mutex> lck(rw_mtx);
         for (auto& [key, value]: map) {
             func(key, value);
+        }
+    }
+
+    void applyToValues(const std::function<void(V&)>& func) {
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
+        for (auto& par: map) {
+            func(par.second);
         }
     }
 

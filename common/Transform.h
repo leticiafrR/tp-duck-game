@@ -17,12 +17,11 @@ public:
         SetAngle(angle);
     }
 
-    void SetPos(Vector2D pos);
-    void SetSize(Vector2D size);
-    void SetAngle(float angle);
-
-    void Move(Vector2D add);
-    void Rotate(float add);
+    void SetPos(Vector2D pos) { this->position = pos; }
+    void SetSize(Vector2D size) { this->size = size; }
+    void SetAngle(float angle) { this->angle = angle; }
+    void Move(Vector2D add) { this->position += add; }
+    void Rotate(float add) { this->angle += add; }
 
     Vector2D GetPos() const { return this->position; }
     Vector2D GetSize() const { return this->size; }
@@ -33,12 +32,5 @@ public:
 
     ~Transform() = default;
 };
-
-void Transform::SetPos(Vector2D pos) { this->position = pos; }
-void Transform::SetAngle(float angle) { this->angle = angle; }
-void Transform::SetSize(Vector2D size) { this->size = size; }
-
-void Transform::Move(Vector2D add) { this->position += add; }
-void Transform::Rotate(float add) { this->angle += add; }
 
 #endif
