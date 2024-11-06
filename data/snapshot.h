@@ -14,11 +14,14 @@ struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
+    PlayerEvent(Vector2D motion, DuckState stateTransition, Flip flipping):
+            motion(motion), stateTransition(stateTransition), flipping(flipping) {}
 };
 
 struct Snapshot {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
+
     Snapshot(bool _gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& _updates):
             gameOver(_gameOver), updates(_updates) {}
 };

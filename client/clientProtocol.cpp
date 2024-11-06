@@ -84,10 +84,31 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
     throw BrokenProtocol();
 }
 
-// // FALTA CORROBORAR COMO QUEDA EL STRUCT DEL SNAPSHOT PARA ENVIARLO
-// Snapshot ClientProtocol::receiveGameUpdateDto() {
+Snapshot ClientProtocol::receiveGameUpdateDto() {
+    if (assistant.receiveNumberOneByte() == SNAPSHOT) {
+        // game is over?
+        auto gameOverCode = assistant.receiveNumberOneByte();
+        if (gameOverCode != 1 && gameOverCode != 0)
+            throw BrokenProtocol();
+        bool gameOver = gameOverCode == 1 ? true : false;
 
-// }
+        // receiving the cont of the map player ID and position vector
+        std::unordered_map<PlayerID_t, PlayerEvent> updates;
+        uint8_t numberUpdates = assistant.receiveNumberOneByte();
+        for (uint8_t i = 0; i < numberUpdates; i++) {
+            // playerID
+            auto ID = assistant.receiveNumberFourBytes();
+            // PlayerEvent
+            auto evMotion = assistant.receiveVector2D();
+            auto evState = (DuckState)assistant.receiveNumberOneByte();
+            auto evFlip = (Flip)assistant.receiveNumberOneByte();
+            // building PlayerEvent
+            updates[ID] = PlayerEvent(evMotion, evState, evFlip);
+        }
+        return Snapshot(gameOver, updates);
+    }
+    throw BrokenProtocol();
+}
 
 GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
     if (assistant.receiveNumberOneByte() == GAMES_RECOUNT) {

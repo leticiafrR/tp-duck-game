@@ -33,7 +33,7 @@ private:
     const MatchStartDto matchStartDto;
 
 public:
-    MatchStartSender(std::vector<PlayerData> playersData, Vector2D duckSize);
+    MatchStartSender(const std::vector<PlayerData>& playersData, Vector2D duckSize);
 
     void execute(ServerProtocol& protocol) const override;
 };
@@ -45,7 +45,7 @@ private:
     const GameSceneDto gameScene;
 
 public:
-    explicit GameSceneSender(GameSceneDto gameScene);
+    explicit GameSceneSender(const GameSceneDto& gameScene);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -56,7 +56,7 @@ private:
     const Snapshot snapshot;
 
 public:
-    explicit GameUpdateSender(Snapshot snapshot);
+    explicit GameUpdateSender(const Snapshot& snapshot);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -67,7 +67,8 @@ private:
     const GamesRecountDto gamesRecount;
 
 public:
-    explicit GamesRecountSender(std::unordered_map<PlayerID_t, int> results, bool matchEnded);
+    explicit GamesRecountSender(const std::unordered_map<PlayerID_t, int>& results,
+                                bool matchEnded);
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -85,8 +86,7 @@ public:
 struct PlayerInfo {
     std::string nickName;
     Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    // cppcheck-suppress passedByValue
-    PlayerInfo(std::string nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
+    PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
             nickName(nickName), senderQueue(senderQueue) {}
 };
 
