@@ -56,20 +56,20 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
         std::vector<GroundDto> groundBlocks(numberGroundB);
         for (uint8_t i = 0; i < numberGroundB; i++) {
             // receiving the visible edges
-            std::set<GroundDto::VISIBLE_EDGES> edges;
+            std::set<VISIBLE_EDGES> edges;
             auto bttm_tp = assistant.receiveNumberOneByte();
             if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TOP)
-                edges.insert(GroundDto::VISIBLE_EDGES::TOP);
+                edges.insert(VISIBLE_EDGES::TOP);
 
             if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::BTTM)
-                edges.insert(GroundDto::VISIBLE_EDGES::BOTTOM);
+                edges.insert(VISIBLE_EDGES::BOTTOM);
 
             auto rg_lf = assistant.receiveNumberOneByte();
             if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::RG)
-                edges.insert(GroundDto::VISIBLE_EDGES::RIGHT);
+                edges.insert(VISIBLE_EDGES::RIGHT);
 
             if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::LF)
-                edges.insert(GroundDto::VISIBLE_EDGES::LEFT);
+                edges.insert(VISIBLE_EDGES::LEFT);
 
             // receiving the data of their transforms
             auto size = assistant.receiveVector2D();

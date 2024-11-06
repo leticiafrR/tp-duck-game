@@ -21,8 +21,8 @@ class ServerProtocol {
 private:
     Socket skt;
     ProtocolAssistant assistant;
-    V_BTTM_TOP encodeVisibleBottomTopEdges(const std::set<GroundDto::VISIBLE_EDGES>&);
-    V_RG_LF encodeVisibleRightLeftEdges(const std::set<GroundDto::VISIBLE_EDGES>&);
+    V_BTTM_TOP encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>&);
+    V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
 
 public:
     // Constructor
