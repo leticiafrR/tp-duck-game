@@ -38,7 +38,7 @@ public:
 
     GameSceneDto receiveGameSceneDto();
 
-    // Snapshot receiveGameUpdateDto();
+    Snapshot receiveGameUpdateDto();
 
     GamesRecountDto receiveGamesRecountDto();
 
