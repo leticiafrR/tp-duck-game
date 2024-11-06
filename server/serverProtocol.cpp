@@ -41,7 +41,7 @@ V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(const std::set<VISIBLE_ED
         return V_BTTM_TOP::BTTM;
     }
     if (edges.find(VISIBLE_EDGES::BOTTOM) == edges.end()) {
-        return V_BTTM_TOP::TOP;
+        return V_BTTM_TOP::TP;
     }
     return V_BTTM_TOP::BOTH_TB;
 }

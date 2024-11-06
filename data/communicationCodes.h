@@ -15,7 +15,7 @@ typedef enum: uint8_t {
 } MSSG_HEADER;
 
 // Codification of the edges of the  groundBlocks
-typedef enum: uint8_t { NONE_TB = 1, TOP, BTTM, BOTH_TB } V_BTTM_TOP;
+typedef enum: uint8_t { NONE_TB = 1, TP, BTTM, BOTH_TB } V_BTTM_TOP;
 typedef enum: uint8_t { NONE_RL = 1, RG, LF, BOTH_RL } V_RG_LF;
 
 
