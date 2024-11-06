@@ -3,7 +3,7 @@
 Camera::Camera(Renderer render, float size):
         render(std::move(render)), textureCache(this->render), size(size) {}
 
-void Camera::DrawTexture(string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
+void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                          const Transform& transform, int flip) {
     Vector2D sprSize = transform.GetSize();
     float angle = transform.GetAngle();
@@ -34,10 +34,17 @@ void Camera::DrawTexture(string& filename, SDL2pp::Optional<Rect> sourceRect, Co
 
 
 void Camera::DrawGUI(Rect rect, Color color) {
-    Color c = render.GetDrawColor();
+    Color tmpColor = render.GetDrawColor();
     render.SetDrawColor(color);
     render.FillRect(rect);
-    render.SetDrawColor(c);  // Restore color
+    render.SetDrawColor(tmpColor);  // Restore color
+}
+
+void Camera::DrawText(const string& text, SDL2pp::Font& font, SDL2pp::Point point, Color color) {
+    Texture text_sprite(render, font.RenderText_Blended(text, color));
+
+    render.Copy(text_sprite, SDL2pp::NullOpt,
+                Rect(point.x, point.y, text_sprite.GetWidth(), text_sprite.GetHeight()));
 }
 
 

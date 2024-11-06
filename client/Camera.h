@@ -38,10 +38,12 @@ public:
     float GetSize() { return this->size; }
     ~Camera();
 
-    void DrawTexture(string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
+    void DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                      const Transform& transform, int flip);
 
     void DrawGUI(Rect rect, Color color);
+
+    void DrawText(const string& text, SDL2pp::Font& font, SDL2pp::Point point, Color color);
 };
 
 #endif
