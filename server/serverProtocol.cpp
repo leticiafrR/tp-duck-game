@@ -33,28 +33,26 @@ void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) 
     // probably latter this mssg will contain the size of other items
 }
 
-V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(
-        const std::set<GroundDto::VISIBLE_EDGES>& edges) {
-    if (edges.find(GroundDto::VISIBLE_EDGES::TOP) == edges.end()) {
-        if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
+V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>& edges) {
+    if (edges.find(VISIBLE_EDGES::TOP) == edges.end()) {
+        if (edges.find(VISIBLE_EDGES::BOTTOM) == edges.end()) {
             return V_BTTM_TOP::NONE_TB;
         }
         return V_BTTM_TOP::BTTM;
     }
-    if (edges.find(GroundDto::VISIBLE_EDGES::BOTTOM) == edges.end()) {
-        return V_BTTM_TOP::TOP;
+    if (edges.find(VISIBLE_EDGES::BOTTOM) == edges.end()) {
+        return V_BTTM_TOP::TP;
     }
     return V_BTTM_TOP::BOTH_TB;
 }
-V_RG_LF ServerProtocol::encodeVisibleRightLeftEdges(
-        const std::set<GroundDto::VISIBLE_EDGES>& edges) {
-    if (edges.find(GroundDto::VISIBLE_EDGES::LEFT) == edges.end()) {
-        if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
+V_RG_LF ServerProtocol::encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>& edges) {
+    if (edges.find(VISIBLE_EDGES::LEFT) == edges.end()) {
+        if (edges.find(VISIBLE_EDGES::RIGHT) == edges.end()) {
             return V_RG_LF::NONE_RL;
         }
         return V_RG_LF::RG;
     }
-    if (edges.find(GroundDto::VISIBLE_EDGES::RIGHT) == edges.end()) {
+    if (edges.find(VISIBLE_EDGES::RIGHT) == edges.end()) {
         return V_RG_LF::LF;
     }
     return V_RG_LF::BOTH_RL;
