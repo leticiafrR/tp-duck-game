@@ -58,17 +58,17 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
             // receiving the visible edges
             std::set<GroundDto::VISIBLE_EDGES> edges;
             auto bttm_tp = assistant.receiveNumberOneByte();
-            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::TOP)
+            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TOP)
                 edges.insert(GroundDto::VISIBLE_EDGES::TOP);
 
-            if (bttm_tp == V_BTTM_TOP::BOTH || bttm_tp == V_BTTM_TOP::BTTM)
+            if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::BTTM)
                 edges.insert(GroundDto::VISIBLE_EDGES::BOTTOM);
 
             auto rg_lf = assistant.receiveNumberOneByte();
-            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::RG)
+            if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::RG)
                 edges.insert(GroundDto::VISIBLE_EDGES::RIGHT);
 
-            if (rg_lf == V_RG_LF::BOTH || rg_lf == V_RG_LF::LF)
+            if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::LF)
                 edges.insert(GroundDto::VISIBLE_EDGES::LEFT);
 
             // receiving the data of their transforms
