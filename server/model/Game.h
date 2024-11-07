@@ -107,7 +107,7 @@ void GameWorld::Update(float deltaTime) {
 
 
 GameWorld::~GameWorld() {
-    for (auto& pair: players) {
+    for (const auto& pair: players) {
         delete pair.second;
     }
     players.clear();

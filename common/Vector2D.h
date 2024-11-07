@@ -1,5 +1,6 @@
 #ifndef VECTOR_2D_H
 #define VECTOR_2D_H
+#include <algorithm>
 #include <cmath>
 
 class Vector2D {

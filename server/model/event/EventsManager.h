@@ -28,7 +28,7 @@ Snapshot EventsManager::GetSnapshot(bool gameOver) {
 }
 
 void EventsManager::SendListeners(const std::unordered_map<PlayerID_t, Duck*>& players) {
-    for (auto& pair: players) {
+    for (const auto& pair: players) {
         Duck* player = pair.second;
         PlayerID_t id = pair.first;
 

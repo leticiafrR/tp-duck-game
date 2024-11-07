@@ -29,7 +29,7 @@ void MostrarSnapshot(GameWorld& game) {
     game.Update(deltaTime);
     Snapshot s = game.GetSnapshot();
     std::unordered_map<PlayerID_t, PlayerEvent> events = s.updates;
-    for (auto& pair: events) {
+    for (const auto& pair: events) {
         std::cout << "se registrò 1 evento proveniente de [" << pair.first
                   << "]. Los datos fueron:\n";
         MostrarEvento(pair.second);
@@ -120,6 +120,7 @@ void TestMoveRightAndFall() {
 
 int main() {
     TestMoveRightAndFall();
-    // TestMoveRightCollidingWithWall();
+    TestMoveRightCollidingWithWall();
+
     return 0;
 }

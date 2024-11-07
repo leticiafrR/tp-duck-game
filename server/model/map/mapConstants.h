@@ -26,7 +26,7 @@ std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 namespace PlataformTwo {
 const float xPosition = 19;
 const float yPosition = 14;
-const float xLength = 26;
+const float xLength = 25;
 const float yLength = 9;
 std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 }  // namespace PlataformTwo
@@ -41,7 +41,7 @@ std::set<VISIBLE_EDGES> edges = {TOP};
 
 namespace PlataformFour {
 const float xPosition = 47.5;
-const float yPosition = -28.5;
+const float yPosition = -28;
 const float xLength = 5;
 const float yLength = 6;
 }  // namespace PlataformFour
@@ -87,10 +87,10 @@ std::set<VISIBLE_EDGES> edges = {LEFT, TOP};
 }  // namespace PlataformNine
 
 namespace PlataformTen {
-const float xPosition = 5;
-const float yPosition = 16;
-const float xLength = 13.5;
-const float yLength = 23;
+const float xPosition = 13.5;
+const float yPosition = -23;
+const float xLength = 5;
+const float yLength = 16;
 std::set<VISIBLE_EDGES> edges = {RIGHT, TOP, BOTTOM};
 }  // namespace PlataformTen
 
@@ -104,7 +104,7 @@ std::set<VISIBLE_EDGES> edges = {TOP};
 
 namespace PlataformTwelve {
 const float xPosition = 8.5;
-const float yPosition = -34;
+const float yPosition = -34.5;
 const float xLength = 5;
 const float yLength = 7;
 std::set<VISIBLE_EDGES> edges = {RIGHT, BOTTOM};
@@ -121,7 +121,7 @@ std::set<VISIBLE_EDGES> edges = {TOP};
 namespace PlataformFourteen {
 const float xPosition = 3;
 const float yPosition = -41;
-const float xLength = 5;
+const float xLength = 6;
 const float yLength = 6;
 std::set<VISIBLE_EDGES> edges = {RIGHT, BOTTOM};
 }  // namespace PlataformFourteen
@@ -136,9 +136,9 @@ std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP};
 
 namespace PlataformSixteen {
 const float xPosition = -4.5;
-const float yPosition = -29.5;
+const float yPosition = -29;
 const float xLength = 9;
-const float yLength = 29;
+const float yLength = 30;
 }  // namespace PlataformSixteen
 
 namespace PlataformSeventeen {
@@ -162,7 +162,7 @@ const float xPosition = -14;
 const float yPosition = -47.5;
 const float xLength = 10;
 const float yLength = 5;
-std::set<VISIBLE_EDGES> edges = {LEFT, TOP};
+std::set<VISIBLE_EDGES> edges = {LEFT, BOTTOM};
 }  // namespace PlataformNineteen
 
 namespace PlataformTwenty {
@@ -224,7 +224,7 @@ namespace PlataformTwentySeven {
 const float xPosition = -22;
 const float yPosition = -38;
 const float xLength = 6;
-const float yLength = 18;
+const float yLength = 14;
 std::set<VISIBLE_EDGES> edges = {LEFT, TOP};
 }  // namespace PlataformTwentySeven
 

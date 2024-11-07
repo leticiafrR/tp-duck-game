@@ -238,10 +238,16 @@ public:
     bool IsOnTheFloor(const Transform& dynamicT) {
         Vector2D dir = Vector2D::Down();
         float len = (dynamicT.GetSize().y) / 2;
-        return std::any_of(
-                grounds.begin(), grounds.end(), [&dynamicT, &dir, len](const auto& ground) {
-                    return Collision::Raycast(dynamicT.GetPos(), dir, len, ground.transform);
-                });
+        float width = (dynamicT.GetSize().x) / 2;
+        Vector2D posLeft(dynamicT.GetPos().x - width, dynamicT.GetPos().y);
+        Vector2D posRight(dynamicT.GetPos().x + width, dynamicT.GetPos().y);
+        return std::any_of(grounds.begin(), grounds.end(),
+                           [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                               bool left = Collision::Raycast(posLeft, dir, len, ground.transform);
+                               bool right =
+                                       Collision::Raycast(posRight, dir, len, ground.transform);
+                               return left || right;
+                           });
     }
 
     std::optional<Transform> CheckCollision(const Transform& dynamicT) {
