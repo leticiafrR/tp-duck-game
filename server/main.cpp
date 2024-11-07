@@ -79,7 +79,7 @@ void TestMoveRightCollidingWithWall() {
 
 void TestMoveRightAndFall() {
     GameWorld game = GameWorld(Vector2D(16, -13));
-    std::cout << "\n1: INICIAL\n";
+    std::cout << "\n1: INICIAL (por default, todos nacen mirando a derecha con state IDLE)\n";
     MostrarSnapshot(game);
 
     std::cout << "\n2: Sin evento\n";
@@ -98,8 +98,7 @@ void TestMoveRightAndFall() {
     std::cout << "\n6: quizàs cae\n";
     MostrarSnapshot(game);
 
-    std::cout << "\n7: deja de moverse a derecha\n";
-    game.HandleCommand(Right(false));
+    std::cout << "\n7:\n";
     MostrarSnapshot(game);
 
     std::cout << "\n8:\n";
@@ -107,10 +106,20 @@ void TestMoveRightAndFall() {
 
     std::cout << "\n9:\n";
     MostrarSnapshot(game);
+
+    std::cout << "\n10: deja de moverse a derecha\n";
+    game.HandleCommand(Right(false));
+    MostrarSnapshot(game);
+
+    std::cout << "\n11:\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n12:\n";
+    MostrarSnapshot(game);
 }
 
 int main() {
     TestMoveRightAndFall();
-
+    // TestMoveRightCollidingWithWall();
     return 0;
 }
