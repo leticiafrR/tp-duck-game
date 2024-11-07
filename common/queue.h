@@ -251,7 +251,7 @@ public:
 
     bool try_push(T* const& val) { return Queue<void*>::try_push(val); }
 
-    bool try_pop(T*& val) { return Queue<void*>::try_pop((void*&)val); }
+    bool try_pop(T*& val) { return Queue<void*>::try_pop(static_cast<void*&>(val)); }
 
     void push(T* const& val) { return Queue<void*>::push(val); }
 
