@@ -7,7 +7,7 @@
 
 #include <arpa/inet.h>
 
-#include "../common/liberror.h"
+#include "common/liberror.h"
 
 #include "Vector2D.h"
 #include "socket.h"

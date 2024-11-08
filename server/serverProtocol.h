@@ -1,6 +1,7 @@
 #ifndef SERVERPROTOCOL_H
 #define SERVERPROTOCOL_H
 
+#include <iostream>
 #include <set>
 #include <string>
 #include <utility>
@@ -25,6 +26,7 @@ private:
     V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
 
 public:
+    void saludar() { std::cout << "saludo\n"; }
     // Constructor
     explicit ServerProtocol(Socket&& skt);
 
