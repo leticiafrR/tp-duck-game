@@ -78,8 +78,8 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
         assistant.sendNumber(encodeVisibleBottomTopEdges(groundDto.visibleEdges));
         assistant.sendNumber(encodeVisibleRightLeftEdges(groundDto.visibleEdges));
         // sending data of the  transform
-        assistant.sendVector2D(groundDto.transform.GetSize());
-        assistant.sendVector2D(groundDto.transform.GetPos());
+        assistant.sendVector2D(groundDto.mySpace.GetSize());
+        assistant.sendVector2D(groundDto.mySpace.GetPos());
     }
 }
 

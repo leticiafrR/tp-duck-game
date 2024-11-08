@@ -43,15 +43,6 @@ struct MatchStartDto {
 //     GroundDto() = default;
 // };
 
-struct GameSceneDto {
-    std::string theme;
-    std::vector<Transform> platforms;
-    std::vector<GroundDto> groundBlocks;
-
-    GameSceneDto(const std::string& theme, const std::vector<Transform>& platforms,
-                 const std::vector<GroundDto>& groundBlocks):
-            theme(theme), platforms(platforms), groundBlocks(groundBlocks) {}
-};
 
 /******************************GROUP GAMES RECOUNT DATA******************************/
 
