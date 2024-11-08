@@ -3,12 +3,13 @@
 #include <string>
 #include <utility>
 
+#include "../data/command.h"
 #include "../data/snapshot.h"
 #include "common/Vector2D.h"
 #include "model/Game.h"
 
-#include "config.h"
-#include "messageSender.h"
+// #include "config.h"
+// #include "messageSender.h"
 
 void MostrarEvento(const PlayerEvent& e) {
     std::string flipping = (e.flipping == Flip::Left) ? "Left" : "Right";
@@ -124,16 +125,16 @@ void TestMoveRightAndFall() {
 
 
 int main() {
-    // TestMoveRightAndFall();
-    // TestMoveRightCollidingWithBoundsMap();
+    TestMoveRightAndFall();
+    TestMoveRightCollidingWithBoundsMap();
 
     // Socket s = Socket("8080");
     // ServerProtocol serv(std::move(s));
     // serv.saludar();
-    MatchExitSender exit(1);
-    exit.Saludar();
-    Config c;
-    c.Saludar();
+    // MatchExitSender exit(1);
+    // exit.Saludar();
+    // Config c;
+    // c.Saludar();
 
     return 0;
 }
