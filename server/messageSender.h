@@ -82,12 +82,5 @@ public:
     void execute(ServerProtocol& protocol) const override;
 };
 
-struct PlayerInfo {
-    std::string nickName;
-    // cppcheck-suppress unusedStructMember
-    Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    // PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
-    //         nickName(nickName), senderQueue(senderQueue) {}
-};
 
 #endif

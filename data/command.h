@@ -14,6 +14,7 @@ struct Command {
     CommandCode cmd;
     PlayerID_t playerId;
     explicit Command(CommandCode _cmd, PlayerID_t _playerId = 0): cmd(_cmd), playerId(_playerId) {}
+    Command() = default;
 };
 
 #endif

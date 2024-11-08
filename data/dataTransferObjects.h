@@ -8,9 +8,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../common/Transform.h"
-#include "../common/Vector2D.h"
 #include "../data/id.h"
+#include "common/Transform.h"
+#include "common/Vector2D.h"
 
 /******************************MATCH STARTING DATA***********************************/
 struct PlayerData {

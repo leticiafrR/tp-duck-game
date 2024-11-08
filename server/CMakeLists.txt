@@ -3,6 +3,8 @@ target_sources(taller_server
     # .cpp files
     serverProtocol.cpp
     messageSender.cpp
+    # model/Game.cpp
+    # handlerGames.cpp
     main.cpp
     PUBLIC
     # .h files
@@ -23,4 +25,6 @@ target_sources(taller_server
     # model/collectable/Collectable.h
     serverProtocol.h
     messageSender.h
+    config.h
+    handlerGames.h
     )
