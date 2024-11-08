@@ -238,16 +238,17 @@ public:
     bool IsOnTheFloor(const Transform& dynamicT) {
         Vector2D dir = Vector2D::Down();
         float len = (dynamicT.GetSize().y) / 2;
-        float width = (dynamicT.GetSize().x) / 2;
-        Vector2D posLeft(dynamicT.GetPos().x - width, dynamicT.GetPos().y);
-        Vector2D posRight(dynamicT.GetPos().x + width, dynamicT.GetPos().y);
-        return std::any_of(grounds.begin(), grounds.end(),
-                           [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
-                               bool left = Collision::Raycast(posLeft, dir, len, ground.transform);
-                               bool right =
-                                       Collision::Raycast(posRight, dir, len, ground.transform);
-                               return left || right;
-                           });
+        float margen = (80 * len / 100);
+        Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
+        Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
+
+        return std::any_of(
+                grounds.begin(), grounds.end(),
+                [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                    bool left = Collision::Raycast(posLeft, dir, len + 0.2f, ground.transform);
+                    bool right = Collision::Raycast(posRight, dir, len + 0.2f, ground.transform);
+                    return left || right;
+                });
     }
 
     std::optional<Transform> CheckCollision(const Transform& dynamicT) {
@@ -258,7 +259,7 @@ public:
         if (it != grounds.end()) {
             return it->transform;  // Colisión detectada
         }
-        std::cout << "A salvo" << std::endl;
+        // std::cout << "A salvo" << std::endl;
         return std::nullopt;  // Sin colisiones
     }
 

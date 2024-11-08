@@ -4,7 +4,6 @@
 #include "common/Transform.h"
 #include "map/staticMap.h"
 
-// class StaticMap;
 class DynamicObject {
 protected:
     Transform mySpace;
@@ -22,7 +21,7 @@ public:
 
     void CheckInteractionWithMap(StaticMap& map, float deltaTime);
     void CheckOutOfMapBoundaries(StaticMap& map);
-    void CheckCollisionWithMap(StaticMap& map);
+    void CheckCollisionWithMap(StaticMap& map, bool fromGravity = false);
     void UpdatePosition(StaticMap& map, float deltaTime);
 
     void MarkAsDead();
@@ -57,10 +56,25 @@ void DynamicObject::CheckOutOfMapBoundaries(StaticMap& map) {
     }
 }
 
-void DynamicObject::CheckCollisionWithMap(StaticMap& map) {
+void DynamicObject::CheckCollisionWithMap(StaticMap& map, bool fromGravity) {
     std::optional<Transform> maybeCollision = map.CheckCollision(mySpace);
     if (maybeCollision.has_value()) {
+        if (fromGravity) {
+            std::cout << "[CheckCollisionWithMap-fromGravity]: Before correcting:\n";
+            std::cout << "**** My pos: (" << mySpace.GetPos().x << "," << mySpace.GetPos().y
+                      << ")\n";
+        }
         HandleCollisionWithMap(maybeCollision.value());
+
+        if (fromGravity) {
+            std::cout << "[CheckCollisionWithMap-fromGravity]:Collision d\n";
+            std::cout << "**** My pos: (" << mySpace.GetPos().x << "," << mySpace.GetPos().y
+                      << ")\n";
+        }
+    } else {
+        if (fromGravity) {
+            std::cout << "[CheckCollisionWithMap-fromGravity]:NO collision\n";
+        }
     }
 }
 

@@ -48,8 +48,9 @@ Command Right(bool keyDown = true, PlayerID_t playerId = 1) {
 }
 
 
-void TestMoveRightCollidingWithWall() {
-    GameWorld game = GameWorld();
+void TestMoveRightCollidingWithBoundsMap() {
+    GameWorld game = GameWorld(Vector2D(48, -6));
+
     std::cout << "\n1: INICIAL\n";
     MostrarSnapshot(game);
 
@@ -120,7 +121,7 @@ void TestMoveRightAndFall() {
 
 int main() {
     TestMoveRightAndFall();
-    TestMoveRightCollidingWithWall();
+    TestMoveRightCollidingWithBoundsMap();
 
     return 0;
 }

@@ -84,21 +84,14 @@ void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initial
 }
 
 void Duck::UpdateState() {
-    // std::cout << "[updateState]: la velocidad es ("<< velocity.x<<"," << velocity.y<<")\n";
-    myState = (velocity.x) ? DuckState::RUNNING :
-                             DuckState::IDLE;  // solo para componente x (MEJORABLE)
+    myState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
     if (!isGrounded) {
-
-        std::cout << "[rigid body] llego con velociad en y(" << body.GetVelocity().y << ")\n";
         myState = (body.GetVelocity().y > 0) ? DuckState::JUMPING : DuckState::FALLING;
     }
 }
 
 void Duck::TryJump() {
     if (isGrounded) {
-        // std::cout << "saltè! \n";
-        //  si se choca por la parte superior se puede aplicar una leve fuerza para abajo como unr
-        //  rebote ¿còmo parametrizar la capacidad de salto?
         body.ApplyForce(Vector2D::Up() * 40);
     }
 }
@@ -108,6 +101,8 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     isGrounded = map.IsOnTheFloor(mySpace);
     if (isGrounded) {
         body.ResetGravity();
+        // CheckCollisionWithMap(map,true); //<- for adding information about position and collision
+        // detection: use this
         CheckCollisionWithMap(map);
     } else {
         // std::cout << "you're falling :( \n";
