@@ -12,7 +12,7 @@
  * misma. Cada plataforma o pared posee la posicion en su centro y su tamanio.
  */
 namespace Theme {
-std::string Forest = "FOREST";
+const std::string Forest = "FOREST";
 }
 namespace FullMapSize {
 const size_t xMapSize = 100;
