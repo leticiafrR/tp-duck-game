@@ -1,6 +1,9 @@
 #ifndef GROUND_DTO_H
 #define GROUND_DTO_H
+#include <cstdint>
 #include <set>
+#include <string>
+#include <vector>
 
 #include "common/Transform.h"
 
@@ -13,6 +16,16 @@ struct GroundDto {
     GroundDto(const Transform& mySpace, const std::set<VISIBLE_EDGES>& visibleEdges):
             visibleEdges(visibleEdges), mySpace(mySpace) {}
     GroundDto() = default;
+};
+
+struct GameSceneDto {
+    std::string theme;
+    std::vector<Transform> platforms;
+    std::vector<GroundDto> groundBlocks;
+
+    GameSceneDto(const std::string& theme, const std::vector<Transform>& platforms,
+                 const std::vector<GroundDto>& groundBlocks):
+            theme(theme), platforms(platforms), groundBlocks(groundBlocks) {}
 };
 
 #endif
