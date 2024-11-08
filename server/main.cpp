@@ -6,10 +6,14 @@
 #include "../data/command.h"
 #include "../data/snapshot.h"
 #include "common/Vector2D.h"
+#include "common/queue.h"
+#include "common/safeMap.h"
 #include "model/Game.h"
 
-// #include "config.h"
-// #include "messageSender.h"
+#include "config.h"
+#include "handlerGames.h"
+#include "messageSender.h"
+#include "serverProtocol.h"
 
 void MostrarEvento(const PlayerEvent& e) {
     std::string flipping = (e.flipping == Flip::Left) ? "Left" : "Right";
@@ -128,13 +132,18 @@ int main() {
     TestMoveRightAndFall();
     TestMoveRightCollidingWithBoundsMap();
 
-    // Socket s = Socket("8080");
-    // ServerProtocol serv(std::move(s));
-    // serv.saludar();
-    // MatchExitSender exit(1);
-    // exit.Saludar();
-    // Config c;
-    // c.Saludar();
+    Socket s = Socket("8080");
+    ServerProtocol serv(std::move(s));
+    serv.saludar();
+    MatchExitSender exit(1);
+    exit.Saludar();
+    Config c;
+    c.Saludar();
+
+    Queue<Command> q = Queue<Command>();
+    SafeMap<PlayerID_t, PlayerInfo> m(10);
+    HandlerGames handlerGames(c, m, q);
+    handlerGames.saludar();
 
     return 0;
 }
