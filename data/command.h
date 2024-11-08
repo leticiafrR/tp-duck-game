@@ -14,8 +14,7 @@ enum class CommandCode : uint8_t {
 struct Command {
     CommandCode cmd;
     PlayerID_t playerId;
-    explicit Command(CommandCode _cmd = CommandCode::Jump, PlayerID_t _playerId = 0):
-            cmd(_cmd), playerId(_playerId) {}
+    explicit Command(CommandCode _cmd, PlayerID_t _playerId = 0): cmd(_cmd), playerId(_playerId) {}
 };
 
 #endif

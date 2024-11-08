@@ -136,9 +136,9 @@ PlayerID_t ClientProtocol::receiveMatchWinner() {
     throw BrokenProtocol();
 }
 
-void ClientProtocol::sendCommand(Command cmmd) {
+void ClientProtocol::sendCommand(CommandCode cmdCode) {
     assistant.sendNumber(COMMAND);
-    assistant.sendNumber((uint8_t)cmmd.cmd);
+    assistant.sendNumber((uint8_t)cmdCode);
 }
 
 void ClientProtocol::endConnection() {

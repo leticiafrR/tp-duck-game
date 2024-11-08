@@ -45,7 +45,7 @@ public:
 
     PlayerID_t receiveMatchWinner();
 
-    void sendCommand(Command);
+    void sendCommand(CommandCode);
 
     void endConnection();
 };
