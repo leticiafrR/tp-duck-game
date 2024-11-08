@@ -2,6 +2,7 @@ target_sources(taller_server
     PRIVATE
     # .cpp files
     serverProtocol.cpp
+    messageSender.cpp
     main.cpp
     PUBLIC
     # .h files
@@ -21,4 +22,5 @@ target_sources(taller_server
     # model/collectable/Protection.h
     # model/collectable/Collectable.h
     serverProtocol.h
+    messageSender.h
     )

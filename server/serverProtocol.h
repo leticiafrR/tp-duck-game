@@ -26,7 +26,7 @@ private:
     V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
 
 public:
-    void saludar() { std::cout << "saludo\n"; }
+    void saludar() { std::cout << "[servProtocol]: saludo\n"; }
     // Constructor
     explicit ServerProtocol(Socket&& skt);
 

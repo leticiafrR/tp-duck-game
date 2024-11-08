@@ -7,7 +7,23 @@
 #include "common/Vector2D.h"
 #include "model/Game.h"
 
-#include "serverProtocol.h"
+#include "messageSender.h"
+
+// #include "serverProtocol.h"
+
+int main() {
+    // TestMoveRightAndFall();
+    // TestMoveRightCollidingWithBoundsMap();
+
+    Socket s = Socket("8080");
+    ServerProtocol serv(std::move(s));
+    serv.saludar();
+    MatchExitSender exit(1);
+    exit.Saludar();
+    exit.execute(serv);
+
+    return 0;
+}
 
 
 void MostrarEvento(const PlayerEvent& e) {
@@ -120,15 +136,4 @@ void TestMoveRightAndFall() {
 
     std::cout << "\n12:\n";
     MostrarSnapshot(game);
-}
-
-int main() {
-    TestMoveRightAndFall();
-    TestMoveRightCollidingWithBoundsMap();
-
-    Socket s = Socket("8080");
-    ServerProtocol serv(std::move(s));
-    serv.saludar();
-
-    return 0;
 }
