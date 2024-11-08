@@ -9,8 +9,6 @@
 
 #include "messageSender.h"
 
-// #include "serverProtocol.h"
-
 int main() {
     // TestMoveRightAndFall();
     // TestMoveRightCollidingWithBoundsMap();
