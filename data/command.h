@@ -7,7 +7,8 @@ enum class CommandCode : uint8_t {
     MoveRight_KeyDown,
     MoveLeft_KeyUp,
     MoveLeft_KeyDown,
-    Jump
+    Jump,
+    _quit
 };
 
 struct Command {

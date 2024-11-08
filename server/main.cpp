@@ -11,8 +11,7 @@
 #include "model/Game.h"
 
 #include "config.h"
-#include "handlerGames.h"
-#include "messageSender.h"
+#include "match.h"
 #include "serverProtocol.h"
 
 void MostrarEvento(const PlayerEvent& e) {
@@ -129,21 +128,28 @@ void TestMoveRightAndFall() {
 
 
 int main() {
-    TestMoveRightAndFall();
-    TestMoveRightCollidingWithBoundsMap();
+    // TestMoveRightAndFall();
+    // TestMoveRightCollidingWithBoundsMap();
 
     Socket s = Socket("8080");
     ServerProtocol serv(std::move(s));
     serv.saludar();
-    MatchExitSender exit(1);
-    exit.Saludar();
-    Config c;
-    c.Saludar();
 
-    Queue<Command> q = Queue<Command>();
-    SafeMap<PlayerID_t, PlayerInfo> m(10);
-    HandlerGames handlerGames(c, m, q);
-    handlerGames.saludar();
+    Config c;
+
+    Match match(c, 2);
+    match.saludar();
+
+
+    // MatchExitSender exit(1);
+    // exit.Saludar();
+
+    // c.Saludar();
+
+    // Queue<Command> q = Queue<Command>();
+    // SafeMap<PlayerID_t, PlayerInfo> m(10);
+    // HandlerGames handlerGames(c, m, q);
+    // handlerGames.saludar();
 
     return 0;
 }
