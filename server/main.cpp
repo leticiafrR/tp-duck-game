@@ -12,6 +12,7 @@ int main(int argc, char* argv[]) {
         if (argc >= 2) {
             Config config;
             startDummyMatch(argv[1], std::ref(config));
+            std::cout << "Dummy match ended.\n";
             return 0;
 
         } else {

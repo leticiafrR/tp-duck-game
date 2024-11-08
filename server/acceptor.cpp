@@ -1,13 +1,13 @@
 #include "acceptor.h"
 
 #define PRINT_NEW_CONNECTION() std::cout << "New user connected!" << std::endl;
-#define TEST_NUMBER_PLAYERS_IN_MATCH 1
+#define TEST_NUMBER_PLAYERS_IN_MATCH 2
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
 
 void AcceptorThread::forceClosure() {
-    skt.shutdown(1);
+    skt.shutdown(2);
     skt.close();
 }
 void AcceptorThread::killAllClients() {
@@ -20,16 +20,13 @@ void AcceptorThread::run() {
     try {
         acceptLoop();
     } catch (const LibError& e) {
-
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
     }
+
+    std::cout << "ACEPTOR: el hilo saliò de su loop-> ahora estamos matando a la partida\n";
     /* Forcing the end of the match that will kill all of its clients  */
     match.forceEnd();
-    // note if a client couldnt join a match then (the receiver never existed) and the sender will
-    // be already over.
-
-    /* cleaning the resources of the  threads*/
     cleanUpThreads();
 }
 
@@ -37,6 +34,7 @@ void AcceptorThread::run() {
  */
 void AcceptorThread::acceptLoop() {
     PlayerID_t idClient = 1;
+
     while (_keep_running) {
         Socket peer = skt.accept();
 

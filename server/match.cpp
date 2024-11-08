@@ -97,7 +97,8 @@ void Match::setEndOfMatch(PlayerID_t winner) {
 
     std::unique_lock<std::mutex> lock(m);
     if (players.size() != 0) {
-        auto messageSender = std::make_shared<MatchExitSender>(winner);
+        auto messageSender =
+                (std::shared_ptr<MessageSender>)std::make_shared<MatchExitSender>(winner);
         players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
             // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
             playerInfo.senderQueue->push(messageSender);

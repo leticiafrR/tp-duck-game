@@ -1,9 +1,10 @@
 #include "handlerGames.h"
 
-#define MAX_CMMDS_PER_TICK 50
-#define FPS 20
-#define PRINT_TEST_OVERFLOW_TICK()                                                                 \
-    std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per tick" \
+#define MAX_CMMDS_PER_TICK 1
+#define FPS 1
+#define PRINT_TEST_OVERFLOW_TICK()                                                         \
+    std::cout << "TIMERRRR:Too many commds procesed in this tick! It overflowed the time " \
+                 "assigned per tick"                                                       \
               << std::endl;
 #define GAMES_IN_GROUP 5
 
@@ -84,9 +85,11 @@ void HandlerGames::gameLoop() {
         }
 
         auto delta = timeManager.synchronizeTick();
-        if (delta < std::chrono::duration<double, std::milli>(0)) {
-            PRINT_TEST_OVERFLOW_TICK();
-        }
+        // if (delta > std::chrono::duration<double, std::milli>(0)) {
+        //     PRINT_TEST_OVERFLOW_TICK();
+        // } else {
+        //     std::cout<< "TIMERRRR:didnt overflowed the timer!!!\n";
+        // }
 
         // currentGame->Update(static_cast<float>(delta.count()));
         currentGame->Update();

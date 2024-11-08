@@ -18,13 +18,19 @@ class GameWorld {
     // vector de jugadores (solo habrà uno)
     std::vector<PlayerID_t> players;
     const std::string level;
+
     int countTicks = 0;
-    std::unordered_map<PlayerID_t, PlayerEvent> updates;
-    Vector2D posicionInicial;
+
+    std::unordered_map<PlayerID_t, Vector2D> positions;
 
 public:
+    // recibimos dos jugadores
     GameWorld(const std::string& scene, const std::vector<PlayerID_t>& playersIds):
-            players(playersIds), level(scene) {}
+            players(playersIds), level(scene) {
+        for (auto id: players) {
+            positions[id] = Vector2D(0, 0);
+        }
+    }
 
     GameSceneDto getSceneDto() {
         std::vector<Transform> platform;
@@ -32,48 +38,84 @@ public:
         platform.push_back(t);
 
         std::vector<GroundDto> groundBlocks;
-        std::set<VISIBLE_EDGES> edges;
-        GroundDto g(t, edges);
-        groundBlocks.push_back(g);
+        GroundDto groundBlock(t, {VISIBLE_EDGES::BOTTOM, VISIBLE_EDGES::TOP});
+        groundBlocks.push_back(groundBlock);
 
         GameSceneDto scene(level, platform, groundBlocks);
         return scene;
     }
-
-    void HandleCommand(const Command& cmd) {
-
-        std::cout << "MODELO: Recibimos un comando del jugador: " << cmd.playerId << "y còdigo "
-                  << (int)cmd.cmd << "\n";
-        posicionInicial.x += 1;
-        // simulamos hacer que la posicion inicial se aumenta a la derecha
-        PlayerEvent playerEvent;
-        playerEvent.motion = posicionInicial;
-        playerEvent.stateTransition = DuckState::RUNNING;
-        playerEvent.flipping = Flip::Right;
-
-        updates[cmd.playerId] = playerEvent;
+    void showCommand(const Command& command) {
+        std::cout << "      -MODELO Got command: \n         Player:" << command.playerId
+                  << "\n         Command: " << FmtCmmd(command.cmd) << "\n";
+    }
+    void HandleCommand(const Command& command) {
+        std::cout << "\n\n        ...processing command...\n";
+        showCommand(command);
+        if (command.cmd == CommandCode::MoveRight_KeyDown) {
+            positions[command.playerId] =
+                    Vector2D(positions[command.playerId].x + 1, positions[command.playerId].y);
+        } else if (command.cmd == CommandCode::MoveLeft_KeyDown) {
+            positions[command.playerId] =
+                    Vector2D(positions[command.playerId].x - 1, positions[command.playerId].y);
+        }
+        std::cout << "\n      Ended procesing commands\n\n";
     }
 
     void Update() {
-        std::cout << "MODELO: Tick " << countTicks << " en el mundo del juego\n";
+        std::cout << "      MODELO: The tick: " << countTicks << " inthe gameWorld has ended.\n";
         countTicks++;
     }
 
     bool HasWinner() {
-        // paramos solo 200 ticks
-        return countTicks == 200;
+        // paramos solo 10 ticks
+        return countTicks == 20;
     }
 
     PlayerID_t WhoWon() { return players[0]; }
 
     Snapshot GetSnapshot() {
         bool hayGanador = HasWinner();
-        Snapshot snp(HasWinner(), updates);
-        std::cout << "MODELO: Snapshot del tick " << countTicks << " :\n";
-        std::cout << "-GaveOver? " << hayGanador << "; \n -Playermotion: "
-                  << "x:" << snp.updates[players[0]].motion.x
-                  << " y:" << snp.updates[players[0]].motion.y << "\n";
+
+        std::unordered_map<PlayerID_t, PlayerEvent> updates;
+
+        for (auto pair: positions) {
+            PlayerEvent event{positions[pair.first], DuckState::IDLE, Flip::Up};
+            updates[pair.first] = event;
+        }
+
+        Snapshot snp(hayGanador, updates);
+        // std::cout << "\nMODELO: Snapshot del tick " << countTicks << " :\n";
+        // std::cout << "-GaveOver? " << hayGanador << "; \n -Playermotion: "
+        //           << "x:" << snp.updates[players[0]].motion.x
+        //           << " y:" << snp.updates[players[0]].motion.y << "\n";
+        // std::cout << "\n";
+
+        std::cout << "\n[GameUpdate] :\n";
+        // std::cout << "-> tick: "
+        std::cout << "-> gameOver: " << (snp.gameOver ? "true" : "false") << "\n";
+        int i = 1;
+        for (auto it = snp.updates.begin(); it != snp.updates.end(); it++) {
+            std::cout << "->update " << i << " avo: "
+                      << "\n   PlayerID:" << (int)it->first << "\n     POS:" << it->second.motion.x
+                      << "," << it->second.motion.y << "\n";
+            i++;
+        }
         return snp;
+    }
+
+    std::string FmtCmmd(CommandCode cmdCode) {
+        switch (cmdCode) {
+            case CommandCode::MoveRight_KeyDown:
+                return "Move Right";
+                break;
+
+            case CommandCode::MoveLeft_KeyDown:
+                return "Move Left";
+                break;
+
+            default:
+                return "Another cmmd";
+        }
     }
 
     // void quitPlayer(PlayerID_t);

@@ -21,7 +21,7 @@
 #include "serverProtocol.h"
 
 #define MAX_COMMANDS 500
-#define MAX_COMMANDS_PER_LOOP 100
+#define MAX_COMMANDS_PER_LOOP 10
 
 
 class Match: public Thread {
