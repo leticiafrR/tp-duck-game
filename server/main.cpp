@@ -11,7 +11,7 @@
 
 void startDummyMatch(const char* port, Config& config);
 
-int main(int argc, char* argv[]) {
+int main(int argc, const char* argv[]) {
     try {
         if (argc >= 2) {
             Config config;
@@ -32,6 +32,52 @@ int main(int argc, char* argv[]) {
     }
 }
 
+void TestMoveRightAndFall() {
+    GameWorld game = GameWorld(Vector2D(30, 2));
+    std::cout << "\n1: INICIAL (por default, todos nacen mirando a derecha con state IDLE)\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n2: Sin evento\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n3: Sin evento\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n4: Se mueve a derecha (en algun punto debe caer...)\n";
+    game.HandleCommand(Right());
+    MostrarSnapshot(game);
+
+
+    std::cout << "\n5: quizàs cae\n";
+    MostrarSnapshot(game);
+    std::cout << "\n6: quizàs cae\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n7:\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n8:\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n9:\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n10: deja de moverse a derecha\n";
+    game.HandleCommand(Right(false));
+    MostrarSnapshot(game);
+
+    std::cout << "\n11:\n";
+    MostrarSnapshot(game);
+
+    std::cout << "\n12:\n";
+    MostrarSnapshot(game);
+}
+
+int main() {
+    TestMoveRightAndFall();
+    // TestMoveRightCollidingWithBoundsMap();
+    return 0;
+}
 void holdClosure() {
     std::string in;
     do {

@@ -2,6 +2,7 @@
 #define MAPCONSTANTS_H
 #include <cstdint>
 #include <set>
+#include <string>
 
 #include "../../../data/dataTransferObjects.h"
 
@@ -10,11 +11,21 @@
  *   del escenario, el tamanio del mundo, ubicacion y tamanio de las plataformas y paredes en la
  * misma. Cada plataforma o pared posee la posicion en su centro y su tamanio.
  */
+namespace Theme {
+std::string Forest = "FOREST";
+}
 namespace FullMapSize {
 const size_t xMapSize = 100;
 const size_t yMapSize = 100;
 }  // namespace FullMapSize
 
+namespace TestLevel {
+const float xPosition = 0;
+const float yPosition = -1.5;
+const float xLength = 60;
+const float yLength = 3;
+std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
+}  // namespace TestLevel
 namespace PlataformOne {
 const float xPosition = -31;
 const float yPosition = 28;
