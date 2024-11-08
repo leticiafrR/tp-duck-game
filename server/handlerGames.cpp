@@ -52,7 +52,7 @@ void HandlerGames::playOneGame() {
     auto level = getRandomLevel();
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
-    currentGame = std::make_unique<GameWorld>(std::move(level), playerIDs);
+    currentGame = std::make_unique<GameWorld>(playerIDs, std::move(level));
 
     /*sending the initial setting of the game*/
     // Si es que ya se cerraron las queues seguro que salta excepciòn
