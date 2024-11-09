@@ -3,7 +3,7 @@
 #include "ButtonsManager.h"
 #include "ColorExtension.h"
 
-Button::Button(Rect rect, Callback onClick, Color color):
+Button::Button(RectTransform rect, Callback onClick, Color color):
         rect(rect),
         onClick(onClick),
         color(color),
@@ -13,15 +13,16 @@ Button::Button(Rect rect, Callback onClick, Color color):
 }
 Button::~Button() { ButtonsManager::GetInstance().RemoveButton(this); }
 
-bool Button::IsMouseOver(float mouseX, float mouseY) {
-    return mouseX > rect.x && mouseX < rect.x + rect.w && mouseY > rect.y &&
-           mouseY < rect.y + rect.h;
+bool Button::IsMouseOver(float mouseX, float mouseY, Camera& cam) {
+    Rect sdlRect = cam.RectTransformToRenderRect(rect);
+    return mouseX > sdlRect.x && mouseX < sdlRect.x + sdlRect.w && mouseY > sdlRect.y &&
+           mouseY < sdlRect.y + sdlRect.h;
 }
 
 void Button::Draw(Camera& cam) { cam.DrawGUI(rect, targetColor); }
 
-void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY) {
-    bool isMouseOver = IsMouseOver(mouseX, mouseY);
+void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
+    bool isMouseOver = IsMouseOver(mouseX, mouseY, cam);
 
     if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (isMouseOver) {

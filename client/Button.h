@@ -11,7 +11,7 @@ using Callback = std::function<void()>;
 
 class Button {
 private:
-    Rect rect;
+    RectTransform rect;
     std::function<void()> onClick;
     Color color;
     Color targetColor;
@@ -19,24 +19,14 @@ private:
     bool isPressed;
 
 public:
-    Button(Rect rect, Callback onClick, Color color = Color(255, 255, 255));
+    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255));
     ~Button();
 
-    bool IsMouseOver(float mouseX, float mouseY);
-
-    // bool IsPressed() { return isPressed; }
-
-    // void PressDown() { isPressed = true; }
+    bool IsMouseOver(float mouseX, float mouseY, Camera& cam);
 
     void Draw(Camera& cam);
 
-    // void PressUp(bool executeCallback) {
-    //     isPressed = false;
-    //     if (executeCallback)
-    //         onClick();
-    // }
-
-    void HandleEvent(const SDL_Event& e, int mouseX, int mouseY);
+    void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
 };
 
 #endif

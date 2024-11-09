@@ -33,18 +33,53 @@ void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRe
 }
 
 
-void Camera::DrawGUI(Rect rect, Color color) {
+void Camera::DrawGUI(RectTransform rect, Color color) {
     Color tmpColor = render.GetDrawColor();
     render.SetDrawColor(color);
-    render.FillRect(rect);
+    render.FillRect(RectTransformToRenderRect(rect));
     render.SetDrawColor(tmpColor);  // Restore color
 }
 
-void Camera::DrawText(const string& text, SDL2pp::Font& font, SDL2pp::Point point, Color color) {
+void Camera::DrawText(const string& text, Font& font, RectTransform rectTransform, Color color) {
     Texture text_sprite(render, font.RenderText_Blended(text, color));
+    float textAspectRatio = static_cast<float>(text_sprite.GetWidth()) / text_sprite.GetHeight();
+    std::cout << text_sprite.GetHeight() << " (TW)\n";
+    std::cout << rectTransform.GetSize().y << " (W)\n";
 
-    render.Copy(text_sprite, SDL2pp::NullOpt,
-                Rect(point.x, point.y, text_sprite.GetWidth(), text_sprite.GetHeight()));
+    Vector2D targetSize = Vector2D(text_sprite.GetWidth(), text_sprite.GetHeight());
+
+    if (targetSize.x > rectTransform.GetSize().x) {
+        std::cout << "W"
+                  << "\n";
+        targetSize.x = rectTransform.GetSize().x;
+        targetSize.y = static_cast<int>(rectTransform.GetSize().x / textAspectRatio);
+    }
+
+    if (targetSize.y > rectTransform.GetSize().y) {
+        std::cout << "H"
+                  << "\n";
+        targetSize.y = rectTransform.GetSize().y;
+        targetSize.x = static_cast<int>(rectTransform.GetSize().y * textAspectRatio);
+    }
+
+    rectTransform.SetSize(targetSize);
+    Rect rect = RectTransformToRenderRect(rectTransform);
+    render.Copy(text_sprite, SDL2pp::NullOpt, rect);
+}
+
+Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
+    Transform transform = rectT.GetTransform();
+    Vector2D rectPos = transform.GetPos();
+    Vector2D rectSize = transform.GetSize();
+
+    int screenWidth = render.GetOutputWidth();
+    int screenHeight = render.GetOutputHeight();
+
+    int screenX = (screenWidth * rectT.GetAnchor().x) + (transform.GetPos().x);
+    int screenY = (screenHeight - (screenHeight * rectT.GetAnchor().y)) - (transform.GetPos().y);
+
+    return Rect(screenX - (rectSize.x) * rectT.GetPivot().x,
+                screenY - ((rectSize.y) - rectSize.y * rectT.GetPivot().y), rectSize.x, rectSize.y);
 }
 
 

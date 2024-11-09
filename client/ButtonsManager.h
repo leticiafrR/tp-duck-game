@@ -26,12 +26,12 @@ public:
         }
     }
 
-    void HandleEvent(const SDL_Event& e) {
+    void HandleEvent(const SDL_Event& e, Camera& cam) {
         int mouseX, mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
 
         for (auto btn: buttons) {
-            btn->HandleEvent(e, mouseX, mouseY);
+            btn->HandleEvent(e, mouseX, mouseY, cam);
         }
     }
 

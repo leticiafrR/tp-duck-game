@@ -12,12 +12,10 @@
 #include "common/Transform.h"
 #include "common/Vector2D.h"
 
+#include "RectTransform.h"
 #include "TextureCache.h"
 
-using SDL2pp::Color;
-using SDL2pp::Rect;
-using SDL2pp::Renderer;
-using SDL2pp::Texture;
+using namespace SDL2pp;  // NOLINT
 using std::string;
 
 class Camera {
@@ -41,9 +39,11 @@ public:
     void DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                      const Transform& transform, int flip);
 
-    void DrawGUI(Rect rect, Color color);
+    void DrawGUI(RectTransform rect, Color color);
 
-    void DrawText(const string& text, SDL2pp::Font& font, SDL2pp::Point point, Color color);
+    void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
+
+    Rect RectTransformToRenderRect(RectTransform& rectTransform);
 };
 
 #endif
