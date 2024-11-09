@@ -22,7 +22,7 @@ class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
     virtual ~MessageSender() = default;
-    void Saludar() { std::cout << "[Mssg sender]: hola\n"; }
+    s
 };
 
 /******************************* MATCH START SETTING MSSG *********************************/

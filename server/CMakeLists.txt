@@ -10,7 +10,15 @@ target_sources(taller_server
     model/Duck.cpp
     model/Game.cpp
     handlerGames.cpp
+    match.cpp
+
+    #the part of the communications
+    sender.cpp
+    receiver.cpp
+    acceptor.cpp
+
     main.cpp
+
     PUBLIC
     # .h files
     model/types.h
@@ -32,4 +40,10 @@ target_sources(taller_server
     messageSender.h
     config.h
     handlerGames.h
+    match.h
+    
+    sender.h
+    receiver.h
+    acceptor.h
+
     )

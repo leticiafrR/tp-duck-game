@@ -3,153 +3,48 @@
 #include <string>
 #include <utility>
 
-#include "../data/command.h"
-#include "../data/snapshot.h"
-#include "common/Vector2D.h"
-#include "common/queue.h"
-#include "common/safeMap.h"
-#include "model/Game.h"
-
+#include "acceptor.h"
 #include "config.h"
-#include "match.h"
-#include "serverProtocol.h"
 
-void MostrarEvento(const PlayerEvent& e) {
-    std::string flipping = (e.flipping == Flip::Left) ? "Left" : "Right";
-    std::string state = "Idle";
-    if (e.stateTransition == DuckState::JUMPING) {
-        state = "jumping";
-    }
-    if (e.stateTransition == DuckState::FALLING) {
-        state = "falling";
-    }
-    if (e.stateTransition == DuckState::RUNNING) {
-        state = "running";
-    }
-    std::cout << "---> POSITION: (" << e.motion.x << "," << e.motion.y << ")\n";
-    std::cout << "---> FLIPPING: " << flipping << "\n";
-    std::cout << "---> STATE: " << state << "\n";
-}
+#define QUIT "q"
 
-void MostrarSnapshot(GameWorld& game) {
-    float deltaTime = 0.04f;
-    game.Update(deltaTime);
-    Snapshot s = game.GetSnapshot();
-    std::unordered_map<PlayerID_t, PlayerEvent> events = s.updates;
-    for (const auto& pair: events) {
-        std::cout << "se registrò 1 evento proveniente de [" << pair.first
-                  << "]. Los datos fueron:\n";
-        MostrarEvento(pair.second);
+
+void startDummyMatch(const char* port, Config& config);
+
+int main(int argc, char* argv[]) {
+    try {
+        if (argc >= 2) {
+            Config config;
+            startDummyMatch(argv[1], std::ref(config));
+            return 0;
+
+        } else {
+            std::cerr << "Bad program call. Expected " << argv[0] << " <servername>" << std::endl;
+            return 1;
+        }
+    } catch (const std::exception& err) {
+        std::cerr << "Something went wrong and an exception was caught: " << err.what()
+                  << std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr << "Something went wrong and an unknown exception was caught." << std::endl;
+        return 1;
     }
 }
 
-
-Command Left(bool keyDown = true, PlayerID_t playerId = 1) {
-    CommandCode code = (keyDown) ? CommandCode::MoveLeft_KeyDown : CommandCode::MoveLeft_KeyUp;
-    return Command(code, playerId);
+void holdClosure() {
+    std::string in;
+    do {
+        std::cin >> in;
+    } while (in != QUIT);
 }
 
-Command Right(bool keyDown = true, PlayerID_t playerId = 1) {
-    CommandCode code = (keyDown) ? CommandCode::MoveRight_KeyDown : CommandCode::MoveRight_KeyUp;
-    return Command(code, playerId);
-}
-
-
-void TestMoveRightCollidingWithBoundsMap() {
-    GameWorld game = GameWorld(Vector2D(48, -6));
-
-    std::cout << "\n1: INICIAL\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n2: Sin evento\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n3: Sin evento\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n4: Se mueve a derecha (deberìa chocar)\n";
-    game.HandleCommand(Right());
-    MostrarSnapshot(game);
-
-
-    std::cout << "\n5: sigue chocandose\n";
-    MostrarSnapshot(game);
-    std::cout << "\n6: sigue chocandose\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n7: deja de moverse a derecha\n";
-    game.HandleCommand(Right(false));
-    MostrarSnapshot(game);
-
-    std::cout << "\n8: quieto\n";
-    MostrarSnapshot(game);
-}
-
-void TestMoveRightAndFall() {
-    GameWorld game = GameWorld(Vector2D(16, -13));
-    std::cout << "\n1: INICIAL (por default, todos nacen mirando a derecha con state IDLE)\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n2: Sin evento\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n3: Sin evento\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n4: Se mueve a derecha (en algun punto debe caer...)\n";
-    game.HandleCommand(Right());
-    MostrarSnapshot(game);
-
-
-    std::cout << "\n5: quizàs cae\n";
-    MostrarSnapshot(game);
-    std::cout << "\n6: quizàs cae\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n7:\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n8:\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n9:\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n10: deja de moverse a derecha\n";
-    game.HandleCommand(Right(false));
-    MostrarSnapshot(game);
-
-    std::cout << "\n11:\n";
-    MostrarSnapshot(game);
-
-    std::cout << "\n12:\n";
-    MostrarSnapshot(game);
-}
-
-
-int main() {
-    // TestMoveRightAndFall();
-    // TestMoveRightCollidingWithBoundsMap();
-
-    Socket s = Socket("8080");
-    ServerProtocol serv(std::move(s));
-    serv.saludar();
-
-    Config c;
-
-    Match match(c, 2);
-    match.saludar();
-
-
-    // MatchExitSender exit(1);
-    // exit.Saludar();
-
-    // c.Saludar();
-
-    // Queue<Command> q = Queue<Command>();
-    // SafeMap<PlayerID_t, PlayerInfo> m(10);
-    // HandlerGames handlerGames(c, m, q);
-    // handlerGames.saludar();
-
-    return 0;
+void startDummyMatch(const char* port, Config& config) {
+    AcceptorThread* acceptor = new AcceptorThread(port, std::ref(config));
+    acceptor->start();
+    holdClosure();
+    // kill the match and the clients connected
+    acceptor->forceClosure();
+    acceptor->join();
+    delete acceptor;
 }
