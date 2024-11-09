@@ -22,6 +22,7 @@
 #include "MapBlock2D.h"
 #include "Object2D.h"
 #include "SheetDataCache.h"
+#include "Text.h"
 using namespace SDL2pp;  // NOLINT
 using namespace std;     // NOLINT
 
@@ -161,10 +162,16 @@ void TestMain(Camera& cam) {
 
 void Menu(Camera& cam) {
     bool running = true;
-    SDL2pp::Font font("../client/assets/fonts/pixel.ttf", 32);
 
     Button btn(
-            Rect(20, 20, 200, 80), [&running]() { running = false; }, Color(255, 255, 255));
+            RectTransform(Transform(Vector2D(120, -60), Vector2D(200, 80)), Vector2D(0, 1),
+                          Vector2D(0.5, 0.5)),
+            [&running]() { running = false; }, Color(255, 255, 255));
+
+    Text text("START", "pixel.ttf", 30,
+              RectTransform(Transform(Vector2D(120, -60), Vector2D(200, 80)), Vector2D(0, 1),
+                            Vector2D(0.5, 0.5)),
+              ColorExtension::Black());
 
     int fps = 60;
     float sleepMS = 1000.0f / fps;
@@ -181,13 +188,14 @@ void Menu(Camera& cam) {
                     // running = false;
                     break;
             }
-            ButtonsManager::GetInstance().HandleEvent(event);
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
         }
 
         // Rendering
 
         ButtonsManager::GetInstance().Draw(cam);
-        cam.DrawText("START", font, Point(70, 40), ColorExtension::Black());
+        text.Draw(cam);
+        // cam.DrawText("START", font, Rect(70, 40, 200, 80), ColorExtension::Black());
         cam.Render();
         SDL_Delay(sleepMS);
     }
