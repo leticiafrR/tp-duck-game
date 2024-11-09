@@ -17,6 +17,10 @@ jobs:
     
     - name: Install cppcheck
       run: sudo apt-get update && sudo apt-get install -y cppcheck
+    
+    # Instalar SDL2
+    - name: Install SDL2
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
       
     - uses: pre-commit/action@v2.0.3
       with:
