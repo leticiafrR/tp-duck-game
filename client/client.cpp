@@ -5,6 +5,8 @@
 
 #include "common/socket.h"
 
+#include "DataMatch.h"
+
 Client::Client(const std::string& hostname, const std::string& srvname, Queue<DataRecieve>& upd,
                Queue<Command>& com, DataMatch& match, const std::string& nickname):
         protocol(std::move(Socket(hostname.c_str(), srvname.c_str()))),

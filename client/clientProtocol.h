@@ -16,6 +16,7 @@
 #include "../data/communicationCodes.h"
 #include "../data/dataTransferObjects.h"
 #include "../data/snapshot.h"
+#include "data/groundDta.h"
 
 
 struct BrokenProtocol: public std::runtime_error {

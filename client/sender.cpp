@@ -1,7 +1,7 @@
 #include "sender.h"
 
-Sender::Sender(ClientProtocol& prot, Queue<CommandCode>& comm, const std::string& nickname):
-        protocol(prot), commands(comm), /*nickname(nickname)*/ {
+Sender::Sender(ClientProtocol& prot, Queue<Command>& comm, const std::string& nickname):
+        protocol(prot), commands(comm) /*nickname(nickname)*/ {
     protocol.sendNickname(nickname);
 }
 

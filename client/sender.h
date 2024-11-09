@@ -11,12 +11,13 @@
 class Sender: public Thread {
 private:
     ClientProtocol& protocol;
-    Queue<CommandCode>& commands;
+    Queue<Command>& commands;
     // std::string nickname;
 
 public:
-    explicit Sender(ClientProtocol& prot, Queue<CommandCode>& comm, const std::string& nickname);
+    explicit Sender(ClientProtocol& prot, Queue<Command>& comm, const std::string& nickname);
     void run() override;
     ~Sender() = default;
 };
+
 #endif

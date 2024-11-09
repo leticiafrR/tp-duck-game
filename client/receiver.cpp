@@ -1,5 +1,7 @@
 #include "receiver.h"
 
+#include "data/groundDta.h"
+
 Receiver::Receiver(ClientProtocol& prot, Queue<DataRecieve>& upd):
         protocol(prot), updates(upd), inGame(false) {}
 
