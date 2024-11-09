@@ -163,15 +163,20 @@ void TestMain(Camera& cam) {
 void Menu(Camera& cam) {
     bool running = true;
 
-    Button btn(
-            RectTransform(Transform(Vector2D(120, -60), Vector2D(200, 80)), Vector2D(0, 1),
-                          Vector2D(0.5, 0.5)),
-            [&running]() { running = false; }, Color(255, 255, 255));
+    Text titleText("DUCK GAME", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
+                                 Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
 
-    Text text("START", "pixel.ttf", 30,
-              RectTransform(Transform(Vector2D(120, -60), Vector2D(200, 80)), Vector2D(0, 1),
-                            Vector2D(0.5, 0.5)),
-              ColorExtension::Black());
+    Button btn(
+            RectTransform(Transform(Vector2D(0, 0), Vector2D(200, 80)), Vector2D(0.5, 0.5),
+                          Vector2D(0.5, 0.5)),
+            [&running]() { running = false; }, Color(40, 40, 40));
+
+    Text buttonText("START", "pixel.ttf", 30,
+                    RectTransform(Transform(Vector2D(0, 0), Vector2D(200, 80)), Vector2D(0.5, 0.5),
+                                  Vector2D(0.5, 0.5)),
+                    ColorExtension::White());
 
     int fps = 60;
     float sleepMS = 1000.0f / fps;
@@ -194,7 +199,8 @@ void Menu(Camera& cam) {
         // Rendering
 
         ButtonsManager::GetInstance().Draw(cam);
-        text.Draw(cam);
+        titleText.Draw(cam);
+        buttonText.Draw(cam);
         // cam.DrawText("START", font, Rect(70, 40, 200, 80), ColorExtension::Black());
         cam.Render();
         SDL_Delay(sleepMS);
