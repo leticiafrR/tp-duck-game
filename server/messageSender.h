@@ -22,7 +22,6 @@ class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
     virtual ~MessageSender() = default;
-    s
 };
 
 /******************************* MATCH START SETTING MSSG *********************************/
