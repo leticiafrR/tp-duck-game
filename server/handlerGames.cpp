@@ -59,14 +59,13 @@ void HandlerGames::playOneGame() {
     currentGame = std::make_unique<GameWorld>(usseles, playerIDs, level);
 
     /*sending the initial setting of the game*/
-    // Si es que ya se cerraron las queues seguro que salta excepciòn
     // auto gameSceneDto = currentGame->getSceneDto();
-
     // broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(gameSceneDto)));
+
     gameLoop();
 
+    // this means that we went out of the gameLoop because there is a game winner
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-        // this means that we went out of the gameLoop because there is a game winner
         PlayerID_t gameWinner = currentGame->WhoWon();
         int playerRecord = gameResults[gameWinner] += 1;
         if (playerRecord > recordGamesWon) {
@@ -81,7 +80,6 @@ void HandlerGames::gameLoop() {
 
     while (!currentGame->HasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         int countCommands = 0;
-        // OJO COMO SE INSTANCIA UN COMMD
         Command cmmd;
         while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
             currentGame->HandleCommand(cmmd);

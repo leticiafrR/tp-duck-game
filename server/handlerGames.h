@@ -89,8 +89,6 @@ private:
 
     std::string getRandomLevel();
 
-    std::string getThemeName(const std::string& level);
-
     void gameLoop();
 
     void broadcastGameMssg(const std::shared_ptr<MessageSender>& message);
