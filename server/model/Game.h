@@ -31,6 +31,8 @@ public:
                        const std::vector<PlayerID_t>& playersIds = {ID_PLAYER_UNIQUE_TEST},
                        const std::string& sceneName = "");
 
+    GameSceneDto getSceneDto();
+
     void HandleCommand(const Command& cmd);
     void Update(float deltaTime);
     bool HasWinner();
