@@ -25,33 +25,33 @@ jobs:
         extra_args: --all-files
         
     # Instalar SDL2
-    - name: Install SDL2 
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+    #- name: Install SDL2 
+    #  run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
 
      # Instalar SDL2_image
-    - name: Install SDL2_image
-      run: sudo apt-get install -y libsdl2-image-dev
+    #- name: Install SDL2_image
+    #  run: sudo apt-get install -y libsdl2-image-dev
 
     # Instalar SDL2_ttf
-    - name: Install SDL2_ttf
-      run: sudo apt-get install -y libsdl2-ttf-dev
+    #- name: Install SDL2_ttf
+    #  run: sudo apt-get install -y libsdl2-ttf-dev
 
     #Instalar SDL2_mixer
-    - name: Install SDL2_mixer
-      run: sudo apt-get install -y libsdl2-mixer-dev
+    #- name: Install SDL2_mixer
+    #  run: sudo apt-get install -y libsdl2-mixer-dev
       
     # Instalar herramientas necesarias para la compilación
-    - name: Install dependencies
-      run: sudo apt-get install -y cmake unzip
+    #- name: Install dependencies
+    #  run: sudo apt-get install -y cmake unzip
 
     # Actualizar los submódulos (si el proyecto los usa)
-    - name: Update submodules
-      run: git submodule update --init --recursive
+    #- name: Update submodules
+    #  run: git submodule update --init --recursive
 
     # Ejecutar CMake y compilar
-    - name: Build project
-      run: |
-        mkdir -p build/
-        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
-    - name: Build project using make
-      run: make -C build
+    #- name: Build project
+    #  run: |
+    #    mkdir -p build/
+    #    cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
+    #- name: Build project using make
+    #  run: make -C build
