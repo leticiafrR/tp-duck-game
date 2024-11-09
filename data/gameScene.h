@@ -1,5 +1,5 @@
-#ifndef GROUND_DTO_H
-#define GROUND_DTO_H
+#ifndef GAME_SCENE_H
+#define GAME_SCENE_H
 #include <cstdint>
 #include <set>
 #include <string>

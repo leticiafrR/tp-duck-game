@@ -5,11 +5,12 @@ target_sources(taller_client
     Button.cpp
     Camera.cpp
     main.cpp
+    # mainNetwork.cpp
 
-    receiver.cpp
-    sender.cpp
-    clientProtocol.cpp
-    client.cpp
+    # receiver.cpp
+    # sender.cpp
+    # clientProtocol.cpp
+    # client.cpp
     PUBLIC
     # .h files
     Object2D.h
@@ -23,11 +24,11 @@ target_sources(taller_client
     Button.h
     ButtonsManager.h
 
-    DataMatch.h
-    round.h
-    dataReceive.h
-    receiver.h
-    sender.h
-    clientProtocol.h
-    client.h
+    # DataMatch.h
+    # round.h
+    # dataReceive.h
+    # receiver.h
+    # sender.h
+    # clientProtocol.h
+    # client.h
     )
