@@ -1,0 +1,26 @@
+name: pre-commit hooks and build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    
+    - name: Install cppcheck
+      run: sudo apt-get update && sudo apt-get install -y cppcheck
+      
+    - uses: pre-commit/action@v2.0.3
+      with:
+        extra_args: --all-files
+      
+    - name: build the proyect with make
+      run: make

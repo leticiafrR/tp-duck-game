@@ -39,6 +39,7 @@ GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& p
 
 
 /* Game's logic **************************************************************/
+GameSceneDto GameWorld::getSceneDto() { return map.GetScene(); }
 
 Snapshot GameWorld::GetSnapshot() { return eventsManager.GetSnapshot(IsOver()); }
 

@@ -59,8 +59,8 @@ void HandlerGames::playOneGame() {
     currentGame = std::make_unique<GameWorld>(usseles, playerIDs, level);
 
     /*sending the initial setting of the game*/
-    // auto gameSceneDto = currentGame->getSceneDto();
-    // broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(gameSceneDto)));
+    auto gameSceneDto = currentGame->getSceneDto();
+    broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(gameSceneDto)));
 
     gameLoop();
 
@@ -82,8 +82,12 @@ void HandlerGames::gameLoop() {
         int countCommands = 0;
         Command cmmd;
         while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
-            currentGame->HandleCommand(cmmd);
-            countCommands++;
+            if (cmmd.cmd == CommandCode::_quit) {
+                // currentGame->quitPlayer(cmmd.playerId);
+            } else {
+                currentGame->HandleCommand(cmmd);
+                countCommands++;
+            }
         }
 
         auto delta = timeManager.synchronizeTick();
