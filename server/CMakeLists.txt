@@ -5,12 +5,12 @@ target_sources(taller_server
     messageSender.cpp
     model/event/PlayerEventListener.cpp
     model/event/EventsManager.cpp
-    model/map/staticMap.cpp
     model/DynamicObj.cpp
     model/Duck.cpp
     model/Game.cpp
     handlerGames.cpp
     match.cpp
+    model/map/staticMap.cpp
 
     #the part of the communications
     sender.cpp
@@ -22,7 +22,6 @@ target_sources(taller_server
     PUBLIC
     # .h files
     model/types.h
-    model/map/staticObject.h
     model/map/staticMap.h
     model/MotionHandler.h
     model/map/mapConstants.h

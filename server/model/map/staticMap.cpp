@@ -1,20 +1,31 @@
-
-
 #include "staticMap.h"
-// #include "../../../data/dataTransferObjects.h"
-#include "common/Collision.h"
 
 #include "mapConstants.h"
-
-
-enum Limit { L, R, B, T };
+enum : int { L, R, B, T };
 
 
 void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
+/* bool somethingUnderThisPosition(const Vector2D& t) {
+     for (int i = t.GetPos().y; i <= limits[1]; i--) {
+         Transform t(Vector2D(t.GetPos().x, i), Vector2D(1, 1), 0);
+         if (CheckCollision(t)) {
+             return true;
+         }
+     }
+     return false;
+ }
+ void getRandomPosition(float& x, float& y) {
+ std::random_device rd;
+ std::mt19937 gen(rd());
+ std::uniform_int_distribution<> distribX(limits[L], limits[R]);
+ std::uniform_int_distribution<> distribY(limits[B], limits[T]);
+     x = distribX(gen);
+     y = distribY(gen);
+ }
+*/
 
-StaticMap::StaticMap() {
-
+void StaticMap::AddEasyLevel() {
     size.emplace_back(FullMapSize::xMapSize);
     size.emplace_back(FullMapSize::yMapSize);
 
@@ -176,6 +187,25 @@ StaticMap::StaticMap() {
             Vector2D(PlataformTwentyEight::xLength, PlataformTwentyEight::yLength), 0);
     GroundDto GRTwentyEight(PlataformTwentyEight, PlataformTwentyEight::edges);
     AddGround(GRTwentyEight);
+}
+
+void StaticMap::AddTestLevel() {
+    Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
+                   Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
+    AddGround(GroundDto(unic, TestLevel::edges));
+}
+
+StaticMap::StaticMap(): theme(Theme::Forest) {
+    // theme = Theme::Forest;
+    size.emplace_back(FullMapSize::xMapSize);
+    size.emplace_back(FullMapSize::yMapSize);
+
+    limits.emplace_back(-static_cast<int>(FullMapSize::xMapSize) / 2);  // izquierda [0]
+    limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
+    limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
+    limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
+    AddTestLevel();
+    AddEasyLevel();
 }  // recibira el nombre del archivo con el nivel a agregar
 // esta en el mapa
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
@@ -189,15 +219,12 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
         return -1;
     }
     if (xDynamic - radio < limits[L]) {  // caso izquierda
-        std::cout << "IZq" << std::endl;
         return limits[L] - (xDynamic - radio);
     }
     if (yDynamic + radio > limits[T]) {  // caso arriba
-        std::cout << "Arriba" << std::endl;
         return yDynamic + radio - limits[T];
     }
     if (xDynamic + radio > limits[R]) {
-        std::cout << "Der " << std::endl;
         return xDynamic + radio - limits[R];
     }
     return std::nullopt;  // El objeto está dentro de los límites
@@ -227,12 +254,26 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     if (it != grounds.end()) {
         return it->mySpace;  // Colisión detectada
     }
-    // std::cout << "A salvo" << std::endl;
     return std::nullopt;  // Sin colisiones
 }
 
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
     std::vector<Vector2D> safePositions;
+
+    // for (int i = limits[0]; i <= limits[3]; i ++){}
+    // Posiciones seguras hardcodeadas
+    // 41 6
+    // -4 12
+    // -34 43
+    // -42 6
+    /*while (safePositions.size() < 4) {
+        float x, y;
+        getRandomPosition(x, y);
+        Vector2D vec(x, y);
+        if (somethingUnderThisPosition(vec)) {
+            safePositions.emplace_back(vec);
+        }
+    }*/
     safePositions.emplace_back(Vector2D(41, 6));
     safePositions.emplace_back(Vector2D(-4, 12));
     safePositions.emplace_back(Vector2D(-34, 43));
@@ -240,5 +281,5 @@ std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
 
     return safePositions;
 }
-std::vector<Transform> StaticMap::getPlataforms() { return plataforms; }
-std::vector<GroundDto> StaticMap::getGrounds() { return grounds; }
+
+GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
