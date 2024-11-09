@@ -168,6 +168,11 @@ void Menu(Camera& cam) {
                                  Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                    ColorExtension::White());
 
+    Text titleShadow("DUCK GAME", "pixel.ttf", 160,
+                     RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
+                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                     ColorExtension::Black());
+
     Button btn(
             RectTransform(Transform(Vector2D(0, 0), Vector2D(200, 80)), Vector2D(0.5, 0.5),
                           Vector2D(0.5, 0.5)),
@@ -199,6 +204,7 @@ void Menu(Camera& cam) {
         // Rendering
 
         ButtonsManager::GetInstance().Draw(cam);
+        titleShadow.Draw(cam);
         titleText.Draw(cam);
         buttonText.Draw(cam);
         // cam.DrawText("START", font, Rect(70, 40, 200, 80), ColorExtension::Black());
