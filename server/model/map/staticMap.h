@@ -16,15 +16,15 @@
 class StaticMap {
 private:
     // cppcheck-suppress unusedStructMember
-    [[clang::suppress_unused]] std::string theme;
+    std::string theme;
     // cppcheck-suppress unusedStructMember
-    [[clang::suppres_unused]] std::vector<size_t> size;
+    std::vector<size_t> size;
     // cppcheck-suppress unusedStructMember
-    [[clang::suppres_unused]] std::vector<float> limits;
+    std::vector<float> limits;
     // cppcheck-suppress unusedStructMember
-    [[clang::suppres_unused]] std::vector<Transform> plataforms;
+    std::vector<Transform> plataforms;
     // cppcheck-suppress unusedStructMember
-    [[clang::suppres_unused]] std::vector<GroundDto> grounds;
+    std::vector<GroundDto> grounds;
     void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
 
