@@ -36,7 +36,6 @@ public:
     /* has to be instanced making sure the numberPlayers is smaller than MAX_PLAYERS defined in
      * Config*/
     explicit Match(Config& config, int numberPlayers);
-    void saludar() { std::cout << "[Match:] Hola!\n"; }
 
     /* returns a boolean indicating if the client was succesfully added. If the Match has
      * already started the method will return false, else (success) the method will include in the
