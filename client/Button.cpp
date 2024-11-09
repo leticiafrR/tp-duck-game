@@ -24,6 +24,10 @@ void Button::Draw(Camera& cam) { cam.DrawGUI(rect, targetColor); }
 void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
     bool isMouseOver = IsMouseOver(mouseX, mouseY, cam);
 
+    if (e.type == SDL_MOUSEMOTION && !isPressed) {
+        targetColor = isMouseOver ? ColorExtension::AddValue(color, -12) : color;
+    }
+
     if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (isMouseOver) {
             targetColor = pressedColor;
