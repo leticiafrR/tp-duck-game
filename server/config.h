@@ -25,7 +25,6 @@ class Config {
 
 
 public:
-    void Saludar() { std::cout << "[CONFIG]: HOLA\n"; }
     Config(): availableLevels({"level_1.yaml"}), maxPlayers(MAX_PLAYERS) {
 
         /* for example for the correct initialization of the `availableLevels`.
