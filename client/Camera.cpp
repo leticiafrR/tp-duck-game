@@ -43,21 +43,15 @@ void Camera::DrawGUI(RectTransform rect, Color color) {
 void Camera::DrawText(const string& text, Font& font, RectTransform rectTransform, Color color) {
     Texture text_sprite(render, font.RenderText_Blended(text, color));
     float textAspectRatio = static_cast<float>(text_sprite.GetWidth()) / text_sprite.GetHeight();
-    std::cout << text_sprite.GetHeight() << " (TW)\n";
-    std::cout << rectTransform.GetSize().y << " (W)\n";
 
     Vector2D targetSize = Vector2D(text_sprite.GetWidth(), text_sprite.GetHeight());
 
     if (targetSize.x > rectTransform.GetSize().x) {
-        std::cout << "W"
-                  << "\n";
         targetSize.x = rectTransform.GetSize().x;
         targetSize.y = static_cast<int>(rectTransform.GetSize().x / textAspectRatio);
     }
 
     if (targetSize.y > rectTransform.GetSize().y) {
-        std::cout << "H"
-                  << "\n";
         targetSize.y = rectTransform.GetSize().y;
         targetSize.x = static_cast<int>(rectTransform.GetSize().y * textAspectRatio);
     }

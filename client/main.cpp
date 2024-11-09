@@ -290,7 +290,7 @@ void Game(Camera& cam) {
             data->Draw(cam);
         }
 
-        // ButtonsManager::GetInstance().Draw(cam);
+        ButtonsManager::GetInstance().Draw(cam);
 
         camController.Update();
         cam.Render();
@@ -309,8 +309,11 @@ int main() try {
     Camera cam(std::move(render), 100);
 
     Menu(cam);
-    // Game(cam);
-    TestMain(cam);
+    Game(cam);
+    // TestMain(cam);
+
+    FontCache::Clear();
+    SheetDataCache::Clear();
     //  Here all resources are automatically released and library deinitialized
     return 0;
 } catch (std::exception& e) {
