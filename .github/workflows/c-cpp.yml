@@ -40,5 +40,18 @@ jobs:
     - name: Install SDL2_mixer
       run: sudo apt-get install -y libsdl2-mixer-dev
       
-    - name: build the proyect with make
-      run: make
+    # Instalar herramientas necesarias para la compilación
+    - name: Install dependencies
+      run: sudo apt-get install -y cmake unzip
+
+    # Actualizar los submódulos (si el proyecto los usa)
+    - name: Update submodules
+      run: git submodule update --init --recursive
+
+    # Ejecutar CMake y compilar
+    - name: Build project
+      run: |
+        mkdir -p build/
+        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
+    - name: Build project using make
+      run: make -C build
