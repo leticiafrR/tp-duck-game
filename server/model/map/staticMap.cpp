@@ -24,8 +24,7 @@ void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
      y = distribY(gen);
  }
 */
-
-void StaticMap::AddEasyLevel() {
+StaticMap::StaticMap(): theme(Theme::Forest) {
     size.emplace_back(FullMapSize::xMapSize);
     size.emplace_back(FullMapSize::yMapSize);
 
@@ -33,6 +32,24 @@ void StaticMap::AddEasyLevel() {
     limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
+    AddTestLevel();
+    AddEasyLevel();
+}  // recibira el nombre del archivo con el nivel a agregar
+
+void StaticMap::AddTestLevel() {
+    Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
+                   Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
+    AddGround(GroundDto(unic, TestLevel::edges));
+}
+
+void StaticMap::AddEasyLevel() {
+    // size.emplace_back(FullMapSize::xMapSize);
+    // size.emplace_back(FullMapSize::yMapSize);
+
+    // limits.emplace_back(-(FullMapSize::xMapSize) / 2);  // izquierda [0]
+    // limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
+    // limits.emplace_back(-(FullMapSize::yMapSize) / 2);  // inferior [2]
+    // limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
 
     // plataforma 1
     Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
@@ -189,24 +206,7 @@ void StaticMap::AddEasyLevel() {
     AddGround(GRTwentyEight);
 }
 
-void StaticMap::AddTestLevel() {
-    Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
-                   Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
-    AddGround(GroundDto(unic, TestLevel::edges));
-}
 
-StaticMap::StaticMap(): theme(Theme::Forest) {
-    // theme = Theme::Forest;
-    size.emplace_back(FullMapSize::xMapSize);
-    size.emplace_back(FullMapSize::yMapSize);
-
-    limits.emplace_back(-static_cast<int>(FullMapSize::xMapSize) / 2);  // izquierda [0]
-    limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
-    limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
-    limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
-    AddTestLevel();
-    AddEasyLevel();
-}  // recibira el nombre del archivo con el nivel a agregar
 // esta en el mapa
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
     Vector2D posDynamic = dynamicT.GetPos();
