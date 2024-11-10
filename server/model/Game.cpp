@@ -1,6 +1,6 @@
 #include "Game.h"
 
-#include "../../data/command.h"
+#include "data/command.h"
 /* Players generators **************************************************************/
 
 void GameWorld::Testing(const Vector2D& posToTest) {

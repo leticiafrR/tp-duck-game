@@ -24,8 +24,7 @@ void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
      y = distribY(gen);
  }
 */
-
-void StaticMap::AddEasyLevel() {
+StaticMap::StaticMap(): theme(Theme::Forest) {
     size.emplace_back(FullMapSize::xMapSize);
     size.emplace_back(FullMapSize::yMapSize);
 
@@ -33,6 +32,31 @@ void StaticMap::AddEasyLevel() {
     limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
+    // AddTestLevel();
+    AddEasyLevel();
+    InitialMap();
+}  // recibira el nombre del archivo con el nivel a agregar
+
+void StaticMap::InitialMap() {
+    AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(20, 20)), TestLevel::edges));
+    AddGround(GroundDto(Transform(Vector2D(30, 30), Vector2D(5, 5)), TestLevel::edges));
+}
+
+// void StaticMap::AddTestLevel() {
+//     Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
+//                    Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
+//     AddGround(GroundDto(unic, TestLevel::edges));
+// }
+
+
+void StaticMap::AddEasyLevel() {
+    // size.emplace_back(FullMapSize::xMapSize);
+    // size.emplace_back(FullMapSize::yMapSize);
+
+    // limits.emplace_back(-(FullMapSize::xMapSize) / 2);  // izquierda [0]
+    // limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
+    // limits.emplace_back(-(FullMapSize::yMapSize) / 2);  // inferior [2]
+    // limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
 
     // plataforma 1
     Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
@@ -189,24 +213,7 @@ void StaticMap::AddEasyLevel() {
     AddGround(GRTwentyEight);
 }
 
-void StaticMap::AddTestLevel() {
-    Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
-                   Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
-    AddGround(GroundDto(unic, TestLevel::edges));
-}
 
-StaticMap::StaticMap(): theme(Theme::Forest) {
-    // theme = Theme::Forest;
-    size.emplace_back(FullMapSize::xMapSize);
-    size.emplace_back(FullMapSize::yMapSize);
-
-    limits.emplace_back(-static_cast<int>(FullMapSize::xMapSize) / 2);  // izquierda [0]
-    limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
-    limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
-    limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
-    AddTestLevel();
-    AddEasyLevel();
-}  // recibira el nombre del archivo con el nivel a agregar
 // esta en el mapa
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
     Vector2D posDynamic = dynamicT.GetPos();
@@ -266,22 +273,25 @@ std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
     // -4 12
     // -34 43
     // -42 6
-    /*while (safePositions.size() < 4) {
-        float x, y;
-        getRandomPosition(x, y);
-        Vector2D vec(x, y);
-        if (somethingUnderThisPosition(vec)) {
-            safePositions.emplace_back(vec);
-        }
-    }*/
-    /*safePositions.emplace_back(Vector2D(41, 6));
-    safePositions.emplace_back(Vector2D(-4, 12));
-    safePositions.emplace_back(Vector2D(-34, 43));
-    safePositions.emplace_back(Vector2D(-42, 6));*/
-    safePositions.emplace_back(Vector2D(-30, 1));
-    safePositions.emplace_back(Vector2D(0, 1));
-    safePositions.emplace_back(Vector2D(12, 1));
-    safePositions.emplace_back(Vector2D(30, 1));
+    // while (safePositions.size() < 4) {
+    //     float x, y;
+    //     getRandomPosition(x, y);
+    //     Vector2D vec(x, y);
+    //     if (somethingUnderThisPosition(vec)) {
+    //         safePositions.emplace_back(vec);
+    //     }
+    // }
+    safePositions.emplace_back(Vector2D(0, 10));
+
+
+    // safePositions.emplace_back(Vector2D(41, 6));
+    // safePositions.emplace_back(Vector2D(-4, 12));
+    // safePositions.emplace_back(Vector2D(-34, 43));
+    // safePositions.emplace_back(Vector2D(-42, 6));
+    // safePositions.emplace_back(Vector2D(-30, 1));
+    // safePositions.emplace_back(Vector2D(0, 1));
+    // safePositions.emplace_back(Vector2D(12, 1));
+    // safePositions.emplace_back(Vector2D(30, 1));
     return safePositions;
 }
 
