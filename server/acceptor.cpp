@@ -7,7 +7,7 @@ AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
 
 void AcceptorThread::forceClosure() {
-    skt.shutdown(1);
+    skt.shutdown(2);
     skt.close();
 }
 void AcceptorThread::killAllClients() {
@@ -43,8 +43,11 @@ void AcceptorThread::acceptLoop() {
         PRINT_NEW_CONNECTION();
 
         SenderThread* client = new SenderThread(std::move(peer), std::ref(match), idClient);
+        std::cout << "se instanciò el sender\n";
         clients.push_back(client);
         client->start();
+        std::cout << "Sender of the client shooted\n";
+
         reapDead();
         idClient++;
     }

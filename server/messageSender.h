@@ -21,6 +21,7 @@
 class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
+    virtual std::string descriptionCont() const = 0;
     virtual ~MessageSender() = default;
 };
 
@@ -32,7 +33,7 @@ private:
 
 public:
     MatchStartSender(const std::vector<PlayerData>& playersData, Vector2D duckSize);
-
+    virtual std::string descriptionCont() const override;
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -44,6 +45,7 @@ private:
 
 public:
     explicit GameSceneSender(const GameSceneDto& gameScene);
+    virtual std::string descriptionCont() const override;
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -55,6 +57,7 @@ private:
 
 public:
     explicit GameUpdateSender(const Snapshot& snapshot);
+    virtual std::string descriptionCont() const override;
     void execute(ServerProtocol& protocol) const override;
 };
 /******************************* GAME ENDDING SENDER *********************************/
@@ -65,6 +68,7 @@ private:
 
 public:
     explicit GameEndingSender(bool finalGroupGame);
+    virtual std::string descriptionCont() const override;
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -77,6 +81,7 @@ private:
 public:
     explicit GamesRecountSender(const std::unordered_map<PlayerID_t, int>& results,
                                 bool matchEnded);
+    virtual std::string descriptionCont() const override;
     void execute(ServerProtocol& protocol) const override;
 };
 
@@ -87,6 +92,7 @@ private:
 
 public:
     explicit MatchExitSender(PlayerID_t finalWinner);
+    virtual std::string descriptionCont() const override;
     // this method sends the winner of all the match and also closes the munication with the client
     void execute(ServerProtocol& protocol) const override;
 };

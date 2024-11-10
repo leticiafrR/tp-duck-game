@@ -1,5 +1,7 @@
 #include "serverProtocol.h"
 
+#include <iostream>
+
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 void ServerProtocol::sendResultOfJoining(bool success) {

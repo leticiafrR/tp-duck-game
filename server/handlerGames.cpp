@@ -3,9 +3,10 @@
 
 #define MAX_CMMDS_PER_TICK 50
 #define TPS 20
-#define PRINT_TEST_OVERFLOW_TICK()                                                                 \
-    std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per tick" \
-              << std::endl;
+// #define PRINT_TEST_OVERFLOW_TICK()
+//     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per
+//     tick"
+//               << std::endl;
 #define GAMES_IN_GROUP 5
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
@@ -33,6 +34,7 @@ void HandlerGames::playGroupOfGames() {
 void HandlerGames::playOneGame() {
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
+    std::cout << "\n MATCH:Iniciando el game con " << playerIDs.size() << " jugadores\n";
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
@@ -61,12 +63,13 @@ void HandlerGames::gameLoop() {
                 currentGame->HandleCommand(cmmd);
         }
 
-        auto delta = timeManager.synchronizeTick();
-        if (delta < std::chrono::duration<double, std::milli>(0))
-            PRINT_TEST_OVERFLOW_TICK();
 
-        currentGame->Update(static_cast<float>(delta.count()));
+        // if (delta < std::chrono::duration<double, std::milli>(0))
+        // PRINT_TEST_OVERFLOW_TICK();
+
+        currentGame->Update(0.05);
         broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
+        auto delta = timeManager.synchronizeTick();
     }
 }
 
