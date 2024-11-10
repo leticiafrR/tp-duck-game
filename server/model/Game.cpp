@@ -103,6 +103,7 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
 void GameWorld::HandleCommand(const Command& cmmd) {
     if (players.contains(cmmd.playerId)) {
         ExecCommand(players[cmmd.playerId], cmmd.cmd);
+    } else {
+        std::cout << "[GAME WORLD]: tratas de mover un jugador muerto\n";
     }
-    std::cout << "[GAME WORLD]: tratas de mover un jugador muerto\n";
 }
