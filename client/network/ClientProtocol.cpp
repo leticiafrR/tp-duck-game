@@ -12,8 +12,11 @@
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 void ClientProtocol::sendNickname(const std::string& nickname) {
+    std::cout << "[ASSISTANT] se recibe nombre: " << nickname << std::endl;
     assistant.sendNumber(NICKNAME);
+    std::cout << "[ASSISTANT] se envio un numerO : " << std::endl;
     assistant.sendString(nickname);
+    std::cout << "[ASSISTANT] se envio un STR : " << std::endl;
 }
 
 

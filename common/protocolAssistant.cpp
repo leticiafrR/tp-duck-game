@@ -32,7 +32,7 @@ std::string ProtocolAssistant::receiveString() {
 
 void ProtocolAssistant::sendNumber(uint8_t number) {
     try {
-        checkShipping(skt.sendsome(&number, sizeof(number), &wasClosed));
+        checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
     } catch (const LibError& e) {
         throw ConnectionFailed();
     }
@@ -50,7 +50,7 @@ uint8_t ProtocolAssistant::receiveNumberOneByte() {
 
 void ProtocolAssistant::sendNumber(uint32_t number) {
     try {
-        checkShipping(skt.sendsome(&number, sizeof(number), &wasClosed));
+        checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
     } catch (const LibError& e) {
         throw ConnectionFailed();
     }

@@ -4,8 +4,9 @@ target_sources(taller_client
     Object2D.cpp
     Button.cpp
     Camera.cpp
-    main.cpp
-    #mainNetwork.cpp
+    # main.cpp
+    mainNetwork.cpp
+    
 
     # receiver.cpp
     # sender.cpp
@@ -30,5 +31,7 @@ target_sources(taller_client
     # receiver.h
     # sender.h
     network/ClientProtocol.h
-    # client.h
+    network/Client.h
+    network/Receiver.h
+    network/Sender.h
     )
