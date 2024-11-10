@@ -274,11 +274,14 @@ std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
             safePositions.emplace_back(vec);
         }
     }*/
-    safePositions.emplace_back(Vector2D(41, 6));
+    /*safePositions.emplace_back(Vector2D(41, 6));
     safePositions.emplace_back(Vector2D(-4, 12));
     safePositions.emplace_back(Vector2D(-34, 43));
-    safePositions.emplace_back(Vector2D(-42, 6));
-
+    safePositions.emplace_back(Vector2D(-42, 6));*/
+    safePositions.emplace_back(Vector2D(-30, 1));
+    safePositions.emplace_back(Vector2D(0, 1));
+    safePositions.emplace_back(Vector2D(12, 1));
+    safePositions.emplace_back(Vector2D(30, 1));
     return safePositions;
 }
 
