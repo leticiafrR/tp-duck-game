@@ -4,7 +4,7 @@
 #include <set>
 #include <string>
 
-#include "../../../data/gameScene.h"
+#include "data/gameScene.h"
 
 // typedef enum: uint8_t { LEFT, RIGHT, TOP, BOTTOM } VISIBLE_EDGES;
 /*  Esta informacion se encuentrara en un archivo .YAML y contempla los objetos estaticos participes

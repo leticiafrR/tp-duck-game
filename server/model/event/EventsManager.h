@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../../data/id.h"
-#include "../../../data/snapshot.h"
+#include "data/id.h"
+#include "data/snapshot.h"
 
 #include "PlayerEventListener.h"
 

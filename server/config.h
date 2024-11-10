@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "../common/Vector2D.h"
+#include "common/Vector2D.h"
 
 #define MAX_PLAYERS 5
 

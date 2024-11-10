@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../data/command.h"
+#include "data/command.h"
 #include "event/EventsManager.h"
 #include "map/staticMap.h"
 

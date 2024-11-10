@@ -6,13 +6,13 @@
 #include <string>
 #include <utility>
 
-#include "../common/protocolAssistant.h"
-#include "../common/socket.h"
-#include "../data/command.h"
-#include "../data/communicationCodes.h"
-#include "../data/dataTransferObjects.h"
-#include "../data/gameScene.h"
-#include "../data/snapshot.h"
+#include "common/protocolAssistant.h"
+#include "common/socket.h"
+#include "data/command.h"
+#include "data/communicationCodes.h"
+#include "data/dataTransferObjects.h"
+#include "data/gameScene.h"
+#include "data/snapshot.h"
 
 struct BrokenProtocol: public std::runtime_error {
     BrokenProtocol():
