@@ -12,6 +12,8 @@
 #include "common/Transform.h"
 #include "common/Vector2D.h"
 
+#include "networkMsg.h"
+
 /******************************MATCH STARTING DATA***********************************/
 struct PlayerData {
     PlayerID_t playerID;
@@ -23,7 +25,7 @@ struct PlayerData {
             playerID(playerID), playerSkin(playerSkin), nickname(nickname) {}
 };
 
-struct MatchStartDto {
+struct MatchStartDto: public NetworkMsg {
     std::vector<PlayerData> playersData;
     Vector2D duckSize;
 
@@ -33,7 +35,7 @@ struct MatchStartDto {
 
 /******************************GROUP GAMES RECOUNT DATA******************************/
 
-struct GamesRecountDto {
+struct GamesRecountDto: public NetworkMsg {
     bool matchEnded;
     std::unordered_map<PlayerID_t, int> results;
 

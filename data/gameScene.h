@@ -7,6 +7,8 @@
 
 #include "common/Transform.h"
 
+#include "networkMsg.h"
+
 typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
 
 struct GroundDto {
@@ -18,7 +20,7 @@ struct GroundDto {
     GroundDto() = default;
 };
 
-struct GameSceneDto {
+struct GameSceneDto: public NetworkMsg {
     std::string theme;
     std::vector<Transform> platforms;
     std::vector<GroundDto> groundBlocks;

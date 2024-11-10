@@ -5,6 +5,7 @@
 #include "common/Vector2D.h"
 
 #include "id.h"
+#include "networkMsg.h"
 
 enum class Flip : uint8_t { Left = 1, Right, Up };
 enum class TypeBullet : uint8_t { RayoLaser, Banana, GranadaFragment };
@@ -16,7 +17,7 @@ struct PlayerEvent {
     Flip flipping;
 };
 
-struct Snapshot {
+struct Snapshot: public NetworkMsg {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
     Snapshot(bool _gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& _updates):

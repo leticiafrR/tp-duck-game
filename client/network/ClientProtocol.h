@@ -2,6 +2,7 @@
 #define CLIENTPROTOCOL_H
 
 #include <algorithm>
+#include <memory>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -30,13 +31,8 @@ private:
     Socket skt;
     ProtocolAssistant assistant;
 
-public:
-    explicit ClientProtocol(Socket&& skt);
 
-    void sendNickname(const std::string& nickname);
-
-    bool receiveStateOfJoining();
-
+    bool receiveResultJoining();
 
     MatchStartDto receiveMachStartDto();
 
@@ -50,8 +46,17 @@ public:
 
     PlayerID_t receiveMatchWinner();
 
-    void sendCommand(Command);
+
+public:
+    explicit ClientProtocol(Socket&& skt);
+
+    void sendNickname(const std::string& nickname);
+
+    std::shared_ptr<NetworkMsg> receiveMessage();
+
+    void sendCommand(CommandCode cmdCode);
 
     void endConnection();
 };
+
 #endif
