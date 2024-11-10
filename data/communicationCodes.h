@@ -9,6 +9,7 @@ typedef enum: uint8_t {
     MATCH_STARTING,
     GAME_SCENE,
     SNAPSHOT,
+    GAME_ENDING,
     COMMAND,
     GAMES_RECOUNT,
     END_MATCH

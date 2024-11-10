@@ -25,6 +25,11 @@ void GameUpdateSender::execute(ServerProtocol& protocol) const {
     protocol.sendGameUpdate(snapshot);
 }
 
+GameEndingSender::GameEndingSender(bool finalGroupGame): finalGroupGame(finalGroupGame) {}
+
+void GameEndingSender::execute(ServerProtocol& protocol) const {
+    protocol.sendGameEndingStatus(finalGroupGame);
+}
 // /************************ IMPLEMENTATION OF GAMES RECOUNT MSSG *****************************/
 
 GamesRecountSender::GamesRecountSender(const std::unordered_map<PlayerID_t, int>& results,

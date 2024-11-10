@@ -17,14 +17,14 @@
 
 #include "serverProtocol.h"
 
-/**************************** ABSTRACT class: THE  MESSAGES********************************/
+/********************** ABSTRACT class: to send different messages****************************/
 class MessageSender {
 public:
     virtual void execute(ServerProtocol& protocol) const = 0;
     virtual ~MessageSender() = default;
 };
 
-/******************************* MATCH START SETTING MSSG *********************************/
+/******************************* MATCH START SETTING SENDER *********************************/
 
 class MatchStartSender: public MessageSender {
 private:
@@ -57,8 +57,18 @@ public:
     explicit GameUpdateSender(const Snapshot& snapshot);
     void execute(ServerProtocol& protocol) const override;
 };
+/******************************* GAME ENDDING SENDER *********************************/
 
-/********************************* GAMES RECOUNT MSSG ************************************/
+class GameEndingSender: public MessageSender {
+private:
+    const bool finalGroupGame;
+
+public:
+    explicit GameEndingSender(bool finalGroupGame);
+    void execute(ServerProtocol& protocol) const override;
+};
+
+/********************************* GAMES RECOUNT SENDER ************************************/
 
 class GamesRecountSender: public MessageSender {
 private:
@@ -70,7 +80,7 @@ public:
     void execute(ServerProtocol& protocol) const override;
 };
 
-/************************************* MATCH RESULT MSSG ************************************/
+/************************************* MATCH RESULT SENDER ************************************/
 class MatchExitSender: public MessageSender {
 private:
     PlayerID_t finalWinner;

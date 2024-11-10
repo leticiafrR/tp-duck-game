@@ -57,6 +57,9 @@ public:
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
     void sendGameUpdate(const Snapshot& snapshot);
 
+    /* Sends a boolean indicating of this is the final game of the current group of games*/
+    void sendGameEndingStatus(bool finalGroupGame);
+
     // RECOUNT OF GAMES
     void sendGamesRecount(const GamesRecountDto& gamesRecount);
 

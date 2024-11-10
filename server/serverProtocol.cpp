@@ -82,6 +82,11 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
         assistant.sendVector2D(groundDto.mySpace.GetPos());
     }
 }
+void ServerProtocol::sendGameEndingStatus(bool finalGroupGame) {
+    assistant.sendNumber(GAME_ENDING);
+    uint8_t response = finalGroupGame ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(response);
+}
 
 // its up to the server to set the id of the client
 Command ServerProtocol::receiveCommand() {

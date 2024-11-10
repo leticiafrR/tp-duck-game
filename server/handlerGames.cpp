@@ -44,6 +44,7 @@ void HandlerGames::updateMatchWinnerStatus() {
 void HandlerGames::playGroupOfGames() {
     for (int i = 0; i < GAMES_IN_GROUP && players.size() > NOT_ENOUGH_NUMBER_PLAYERS; i++) {
         playOneGame();
+        broadcastGameMssg(std::make_shared<GameEndingSender>(i == (GAMES_IN_GROUP - 1)));
     }
     /* sending the recount of the games won by each player*/
     broadcastGameMssg(std::make_shared<GamesRecountSender>(gameResults, existsMatchWinner));
