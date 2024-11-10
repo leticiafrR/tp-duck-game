@@ -11,12 +11,12 @@
 
 #include <stdint.h>
 
-#include "../../data/command.h"
-#include "../../data/id.h"
-#include "../../data/networkMsg.h"
-#include "../../data/snapshot.h"
 #include "common/protocolAssistant.h"
 #include "common/socket.h"
+#include "data/command.h"
+#include "data/id.h"
+#include "data/networkMsg.h"
+#include "data/snapshot.h"
 
 struct Snapshot;
 struct MatchStartDto;

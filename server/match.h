@@ -10,8 +10,8 @@
 #include <utility>
 #include <vector>
 
-#include "../common/thread.h"
-#include "../data/id.h"
+#include "common/thread.h"
+#include "data/id.h"
 
 #include "handlerGames.h"
 

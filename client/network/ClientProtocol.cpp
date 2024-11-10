@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-#include "../../data/command.h"
-#include "../../data/communicationCodes.h"
-#include "../../data/dataTransferObjects.h"
-#include "../../data/gameScene.h"
-#include "../../data/snapshot.h"
+#include "data/command.h"
+#include "data/communicationCodes.h"
+#include "data/dataTransferObjects.h"
+#include "data/gameScene.h"
+#include "data/snapshot.h"
 
 
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}

@@ -53,7 +53,7 @@ void HandlerGames::playOneGame() {
 void HandlerGames::gameLoop() {
     TimeManager timeManager(TPS);
 
-    while (!currentGame->HasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
+    while (!currentGame->IsOver() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         Command cmmd;
         for (int i = 0; i < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd)); i++) {
             if (cmmd.cmd == CommandCode::_quit)

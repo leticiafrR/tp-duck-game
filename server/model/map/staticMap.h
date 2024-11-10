@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 
-#include "../../../data/gameScene.h"
 #include "common/Collision.h"
 #include "common/Transform.h"
+#include "data/gameScene.h"
 
 class StaticMap {
 private:
@@ -27,7 +27,7 @@ private:
     void AddTestLevel();
 
 public:
-    StaticMap();  // recibira el nombre del archivo con el nivel a agregar
+    StaticMap();
     // esta en el mapa
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
@@ -40,3 +40,6 @@ public:
     ~StaticMap() {}
 };
 #endif
+// StaticMap::StaticMap(){
+//     plataforms.emplace_back(-30,)
+// }
