@@ -1,7 +1,7 @@
 #include "acceptor.h"
 
 #define PRINT_NEW_CONNECTION() std::cout << "New user connected!" << std::endl;
-#define TEST_NUMBER_PLAYERS_IN_MATCH 1
+#define TEST_NUMBER_PLAYERS_IN_MATCH 2
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
