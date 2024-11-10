@@ -30,7 +30,7 @@ public:
 
     void Update(float deltaTime) {
         spr.GetTransform().SetPos(Vector2D::Lerp(fromPos, target.motion, tLerp));
-        tLerp += deltaTime;
+        tLerp += deltaTime * 9;
         anim.Update(deltaTime);
     }
 

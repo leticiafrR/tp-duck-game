@@ -381,6 +381,7 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
 
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
+        // std::cout << groundData.mySpace.ToString() << "\n";
         mapBlocks.emplace_back("tile_set.png", "tile_set.yaml", groundData.mySpace, 5);
 
         bool left =
@@ -515,7 +516,7 @@ int main() try {
     render.SetDrawColor(100, 100, 100, 255);
     SDLTTF ttf;
 
-    Camera cam(std::move(render), 100);
+    Camera cam(std::move(render), 70);
 
     Menu(cam);
     // TestMain(cam);
