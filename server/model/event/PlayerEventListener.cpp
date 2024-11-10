@@ -7,7 +7,8 @@
 
 void PlayerEventListener::Motion() {
     PlayerEvent& e = events[sourceId];
-    std::cout << "SE REGISTRÒ CAMBIO DE POSICIÒN\n";
+    std::cout << "SE REGISTRÒ CAMBIO DE POSICIÒN A: (" << motionEventSrc->GetPos().x << ","
+              << motionEventSrc->GetPos().y << ")\n";
     e.motion = motionEventSrc->GetPos();
     e.stateTransition = *stateEventSrc;
     e.flipping = *flippingEventSrc;

@@ -33,13 +33,14 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
     // AddTestLevel();
-    AddEasyLevel();
+    // AddEasyLevel();
     InitialMap();
 }  // recibira el nombre del archivo con el nivel a agregar
 
 void StaticMap::InitialMap() {
     AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(20, 20)), TestLevel::edges));
-    AddGround(GroundDto(Transform(Vector2D(30, 30), Vector2D(5, 5)), TestLevel::edges));
+    AddGround(GroundDto(Transform(Vector2D(30, 30), Vector2D(10, 10)), TestLevel::edges));
+    AddTransform(Transform(Vector2D(0, -20), Vector2D(80, 20)));
 }
 
 // void StaticMap::AddTestLevel() {

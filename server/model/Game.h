@@ -25,6 +25,7 @@ private:
     void ReapDead();
     void Testing(const Vector2D& posToTest);
     void CreatePlayers(const std::vector<PlayerID_t>& playersIds);
+    void ExecCommand(Duck* player, const CommandCode& code);
 
 public:
     explicit GameWorld(const Vector2D& posToTest = Vector2D(INFINITY, INFINITY),
