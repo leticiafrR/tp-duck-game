@@ -3,10 +3,6 @@
 
 #define MAX_CMMDS_PER_TICK 10
 #define TPS 20
-// #define PRINT_TEST_OVERFLOW_TICK()
-//     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per
-//     tick"
-//               << std::endl;
 #define GAMES_IN_GROUP 5
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
@@ -34,35 +30,24 @@ void HandlerGames::playGroupOfGames() {
 void HandlerGames::playOneGame() {
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
-    // std::cout << "\n MATCH: Instanciando el game con " << playerIDs.size() << " jugadores\n";
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
-    std::cout << "\n                HANDLER_Games: entering into a gameLoop\n";
+
+    std::cout << "\n[1]               HANDLER_Games: entering into a gameLoop\n";
     gameLoop();
-    std::cout << "\n[1]             HANDLER_Games: getting out of the gameLoop\n";
+    std::cout << "\n[2]             HANDLER_Games: getting out of the gameLoop\n";
 
-    if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-        std::cout << "\n    [2] HANDLER_Games: the size of 'players' es greater than "
-                  << NOT_ENOUGH_NUMBER_PLAYERS << "...\n...So we areasking the game who won\n";
-        PlayerID_t gameWinner = currentGame->WhoWon();
-
-        std::cout << "\n    [3] HANDLER_Games: We got who was the winner of the round\n";
-        if (gameResults.find(gameWinner) != gameResults.end()) {
-            int playerRecord = gameResults[gameWinner] += 1;
-            std::cout
-                    << "\n    [4] HANDLER_Games: We just updated the quantity of games won by the "
-                       "player with id"
-                    << gameWinner << "\n";
-            if (playerRecord > recordGamesWon) {
-                recordGamesWon = playerRecord;
-            }
-        } else {
-            std::cout
-                    << "\n    [4] HANDLER_Games: the winner that the game returned when asked was "
-                       "never in the game\n";
-        }
-    }
+    // // NOTE: this is being commented bc we are not having winners of games
+    // if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
+    //     PlayerID_t gameWinner = currentGame->WhoWon();
+    //     if (gameResults.find(gameWinner) != gameResults.end()) {
+    //         int playerRecord = gameResults[gameWinner] += 1;
+    //         if (playerRecord > recordGamesWon) {
+    //             recordGamesWon = playerRecord;
+    //         }
+    //     }
+    // }
 }
 
 void HandlerGames::gameLoop() {
@@ -80,13 +65,9 @@ void HandlerGames::gameLoop() {
                 currentGame->HandleCommand(cmmd);
         }
 
-
-        // if (delta < std::chrono::duration<double, std::milli>(0))
-        // PRINT_TEST_OVERFLOW_TICK();
-
         currentGame->Update(0.05);
         broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
-        auto delta = timeManager.synchronizeTick();
+        timeManager.synchronizeTick();
         std::cout << "\n        [HANDLER_G :In gameLoop] FIN del tick:" << countTick << "\n";
         countTick++;
     }

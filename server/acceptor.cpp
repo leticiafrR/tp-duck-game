@@ -56,18 +56,15 @@ void AcceptorThread::acceptLoop() {
 }
 
 void AcceptorThread::reapDead() {
-    try {
-        clients.remove_if([](SenderThread* client) {
-            if (!client->is_alive()) {
-                client->join();
-                delete client;
-                return true;
-            }
-            return false;
-        });
-    } catch (const std::exception& e) {
-        std::cout << "ACCEPTOR- REAPDEAD: Se atrapò una excepciòn!!\n";
-    }
+
+    clients.remove_if([](SenderThread* client) {
+        if (!client->is_alive()) {
+            client->join();
+            delete client;
+            return true;
+        }
+        return false;
+    });
 }
 
 

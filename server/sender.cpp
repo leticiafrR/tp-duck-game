@@ -29,6 +29,8 @@ void SenderThread::run() {
     } catch (const ConnectionFailed& c) {
         // conexion failed even before the player has joined a match
         protocol.endConnection();
+    } catch (const LibError& e) {
+        protocol.endConnection();
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {
@@ -48,18 +50,48 @@ void SenderThread::sendLoop() {
         std::cout << "\nSENDER[" << idClient << "]: Enviamos: couldJoinMatch = True\n";
 
         while (_keep_running) {
-            auto message = senderQueue.pop();
-            std::cout << "SENDER[" << idClient << "]: Enviamos:" << message->descriptionCont()
-                      << " \n";
-            message->execute(std::ref(protocol));
+
+            auto messageSender = senderQueue.pop();
+            std::cout << "SENDER[id " << idClient
+                      << "]: Queremos Enviar un:" << messageSender->descriptionCont() << " \n";
+
+            messageSender->execute(std::ref(protocol));
+            std::cout << "SENDER[id " << idClient
+                      << "]: SE EJECUTÒ EL SENDING DEL ANTERIOR MENSAJE:\n";
         }
+
     } catch (const ConnectionFailed& c) {
-        match.logOutPlayer(idClient);
-        protocol.endConnection();  // this will make the receiver fail (if it hasnt yet)
+
+        try {
+            match.logOutPlayer(idClient);
+            protocol.endConnection();  // this will make the receiver fail (if it hasnt yet)
+        } catch (const std::exception& e) {
+
+            std::cout << "ATRAPAMOS UN ERROR AL LOGGEAR AFUERA AL JUGADOR DE LA MATCH (O TERMINAR "
+                         "LA CONEXIÒN):\n"
+                      << e.what() << std::endl;
+        } catch (...) {
+            std::cout << "ATRAPAMOS UN ERROR AL LOGGEAR AFUERA AL JUGADOR DE LA MATCH (O TERMINAR "
+                         "LA CONEXIÒN)\n";
+        }
+
+    } catch (const LibError& e) {
+
+        try {
+            match.logOutPlayer(idClient);
+            protocol.endConnection();
+        } catch (...) {
+            std::cout << "ATRAPAMOS UN ERROR AL LOGGEAR AFUERA AL JUGADOR DE LA MATCH (O TERMINAR "
+                         "LA CONEXIÒN)\n";
+        }
+
+
     } catch (const ClosedQueue& q) {
         // siempre que se envia el mensaje de que terminò la partida en la que estàbamos se catchea
         // este error
         // si nos terminò la partida -> ya cerrò nuestro protocolo y todas las queues
+    } catch (...) {
+        std::cout << "HUBO UN ERROR EN EL HILO SENDER!!\n";
     }
 
     receiver.join();

@@ -1,6 +1,5 @@
 #include "serverProtocol.h"
 
-#include <iostream>
 
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
@@ -90,7 +89,6 @@ void ServerProtocol::sendGameEndingStatus(bool finalGroupGame) {
     assistant.sendNumber(response);
 }
 
-// its up to the server to set the id of the client
 Command ServerProtocol::receiveCommand() {
     if (assistant.receiveNumberOneByte() == COMMAND) {
         auto commandCode = (CommandCode)assistant.receiveNumberOneByte();
@@ -139,6 +137,6 @@ void ServerProtocol::sendMatchWinner(PlayerID_t finalWinner) {
 }
 
 void ServerProtocol::endConnection() {
-    skt.shutdown(1);
+    skt.shutdown(2);
     skt.close();
 }

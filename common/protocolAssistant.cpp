@@ -1,87 +1,59 @@
 #include "protocolAssistant.h"
 
+#include <iostream>
+
 ProtocolAssistant::ProtocolAssistant(Socket& skt): skt(skt) {}
 
 void ProtocolAssistant::checkShipping(int cantBytes) {
-    if (cantBytes == 0)
+    if (cantBytes == 0) {
+        std::cout << "[Protocol_assistant]:chequeo de bytes dio 0. El otro punto se desconectò.\n";
         throw ConnectionFailed();
+    }
 }
 void ProtocolAssistant::sendString(const std::string& cont) {
     uint16_t lenMessage = cont.size();
     lenMessage = htons(lenMessage);
-    try {
-        checkShipping(skt.sendall(&lenMessage, sizeof(uint16_t), &wasClosed));
-        checkShipping(skt.sendall(cont.data(), cont.size(), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.sendall(&lenMessage, sizeof(uint16_t), &wasClosed));
+    checkShipping(skt.sendall(cont.data(), cont.size(), &wasClosed));
 }
 
 std::string ProtocolAssistant::receiveString() {
     uint16_t lenMessage;
-    try {
-        checkShipping(skt.recvall(&lenMessage, sizeof(lenMessage), &wasClosed));
-        lenMessage = ntohs(lenMessage);
-        std::string buffer(lenMessage, '\0');
-        checkShipping(skt.recvall(&buffer[0], lenMessage, &wasClosed));
-        return buffer;
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.recvall(&lenMessage, sizeof(lenMessage), &wasClosed));
+    lenMessage = ntohs(lenMessage);
+    std::string buffer(lenMessage, '\0');
+    checkShipping(skt.recvall(&buffer[0], lenMessage, &wasClosed));
+    return buffer;
 }
 
 void ProtocolAssistant::sendNumber(uint8_t number) {
-    try {
-        checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
 }
 
 uint8_t ProtocolAssistant::receiveNumberOneByte() {
     uint8_t number;
-    try {
-        checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
     return number;
 }
 
 void ProtocolAssistant::sendNumber(uint32_t number) {
-    try {
-        checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
 }
 
 uint32_t ProtocolAssistant::receiveNumberFourBytes() {
     uint32_t number;
-    try {
-        checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
     return number;
 }
 
 
 void ProtocolAssistant::sendFloat(const float& fl) {
-    try {
-        checkShipping(skt.sendall(&fl, sizeof(fl), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.sendall(&fl, sizeof(fl), &wasClosed));
 }
 
 float ProtocolAssistant::receiveFloat() {
     float fl;
-    try {
-        checkShipping(skt.recvall(&fl, sizeof(fl), &wasClosed));
-    } catch (const LibError& e) {
-        throw ConnectionFailed();
-    }
+    checkShipping(skt.recvall(&fl, sizeof(fl), &wasClosed));
     return fl;
 }
 

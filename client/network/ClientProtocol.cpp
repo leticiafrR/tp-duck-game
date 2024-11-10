@@ -166,6 +166,6 @@ void ClientProtocol::sendCommand(CommandCode cmdCode) {
 }
 
 void ClientProtocol::endConnection() {
-    skt.shutdown(1);
+    skt.shutdown(2);
     skt.close();
 }
