@@ -32,6 +32,8 @@ public:
      * there it will be managed: killing the matchThread (that will also kill its players)*/
     void forceClosure();
 
+    ~AcceptorThread();
+
     // not copyable
     AcceptorThread(const AcceptorThread&) = delete;
     AcceptorThread& operator=(const AcceptorThread&) = delete;

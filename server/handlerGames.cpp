@@ -1,8 +1,8 @@
 #include "handlerGames.h"
 
 
-#define MAX_CMMDS_PER_TICK 50
-#define TPS 20
+#define MAX_CMMDS_PER_TICK 10
+#define TPS 30
 // #define PRINT_TEST_OVERFLOW_TICK()
 //     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per
 //     tick"
@@ -34,12 +34,13 @@ void HandlerGames::playGroupOfGames() {
 void HandlerGames::playOneGame() {
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
-    std::cout << "\n MATCH:Iniciando el game con " << playerIDs.size() << " jugadores\n";
+    // std::cout << "\n MATCH: Instanciando el game con " << playerIDs.size() << " jugadores\n";
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
-
+    std::cout << "\nMATCH: entering into a gameLoop\n";
     gameLoop();
+    std::cout << "\nMATCH: getting out of the gameLoop\n";
 
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         PlayerID_t gameWinner = currentGame->WhoWon();
