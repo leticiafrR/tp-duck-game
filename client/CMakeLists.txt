@@ -9,7 +9,7 @@ target_sources(taller_client
 
     # receiver.cpp
     # sender.cpp
-    # clientProtocol.cpp
+    network/ClientProtocol.cpp
     # client.cpp
     PUBLIC
     # .h files
@@ -29,6 +29,6 @@ target_sources(taller_client
     # dataReceive.h
     # receiver.h
     # sender.h
-    # clientProtocol.h
+    network/ClientProtocol.h
     # client.h
     )
