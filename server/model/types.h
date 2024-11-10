@@ -58,7 +58,7 @@ constexpr int BULLET = 2;
 }  // namespace Size
 
 namespace Mass {
-constexpr int DUCK = 25;  // en 7 ticks de 0.4s realiza 1 salto
+constexpr int DUCK = 8;  // en 7 ticks de 0.4s realiza 1 salto
 }  // namespace Mass
 
 

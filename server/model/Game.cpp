@@ -81,9 +81,8 @@ void GameWorld::ReapDead() {
     }
 }
 
-void GameWorld::HandleCommand(const Command& cmmd) {
-    Duck* player = players[cmmd.playerId];
-    switch (cmmd.cmd) {
+void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
+    switch (code) {
         case CommandCode::MoveLeft_KeyDown:
             player->TryMoveLeft();
             break;
@@ -96,7 +95,17 @@ void GameWorld::HandleCommand(const Command& cmmd) {
         case CommandCode::MoveRight_KeyUp:
             player->StopMoveRight();
             break;
+        case CommandCode::Jump:
+            player->TryJump();
         default:
             break;
+    }
+}
+
+void GameWorld::HandleCommand(const Command& cmmd) {
+    if (players.contains(cmmd.playerId)) {
+        ExecCommand(players[cmmd.playerId], cmmd.cmd);
+    } else {
+        std::cout << "[GAME WORLD]: tratas de mover un jugador muerto\n";
     }
 }
