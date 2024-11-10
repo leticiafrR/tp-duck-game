@@ -361,6 +361,45 @@ shared_ptr<GameSceneDto> LoadingMap(Camera& cam, Client& client) {
     return nullptr;
 }
 
+bool IsFinalGroupGame(Camera& cam, Client& client) {
+    // bool running = true;
+
+    Text titleText("PROCESSING ROUND...", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (true) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto finalGroupData = dynamic_pointer_cast<FinalGroupGame>(msg);
+            return finalGroupData->finalGroupGame;
+            // running = false;  // Go to game and snapshots
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        titleText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+    return false;
+}
+
 void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto mapData) {
 
     CameraController camController(cam);
@@ -527,6 +566,11 @@ int main() try {
     auto mapData = LoadingMap(cam, client);
 
     Game(cam, client, *playerData, *mapData);
+
+    while (!IsFinalGroupGame(cam, client)) {
+        mapData = LoadingMap(cam, client);
+        Game(cam, client, *playerData, *mapData);
+    }
 
     FontCache::Clear();
     SheetDataCache::Clear();
