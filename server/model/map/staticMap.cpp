@@ -38,8 +38,8 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
 }  // recibira el nombre del archivo con el nivel a agregar
 
 void StaticMap::InitialMap() {
-    AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(20, 20)), TestLevel::edges));
-    AddGround(GroundDto(Transform(Vector2D(30, 30), Vector2D(10, 10)), TestLevel::edges));
+    AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(50, 20)), TestLevel::edges));
+    // AddGround(GroundDto(Transform(Vector2D(15, 10), Vector2D(10, 10)), TestLevel::edges));
     AddTransform(Transform(Vector2D(0, -20), Vector2D(80, 20)));
 }
 
@@ -245,13 +245,13 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
     Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
 
-    return std::any_of(grounds.begin(), grounds.end(),
-                       [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
-                           bool left = Collision::Raycast(posLeft, dir, len + 0.2f, ground.mySpace);
-                           bool right =
-                                   Collision::Raycast(posRight, dir, len + 0.2f, ground.mySpace);
-                           return left || right;
-                       });
+    return std::any_of(
+            grounds.begin(), grounds.end(),
+            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
+                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
+                return left || right;
+            });
 }
 
 std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
@@ -268,31 +268,9 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
     std::vector<Vector2D> safePositions;
 
-    // for (int i = limits[0]; i <= limits[3]; i ++){}
-    // Posiciones seguras hardcodeadas
-    // 41 6
-    // -4 12
-    // -34 43
-    // -42 6
-    // while (safePositions.size() < 4) {
-    //     float x, y;
-    //     getRandomPosition(x, y);
-    //     Vector2D vec(x, y);
-    //     if (somethingUnderThisPosition(vec)) {
-    //         safePositions.emplace_back(vec);
-    //     }
-    // }
     safePositions.emplace_back(Vector2D(0, 10));
+    safePositions.emplace_back(Vector2D(-7, 10));
 
-
-    // safePositions.emplace_back(Vector2D(41, 6));
-    // safePositions.emplace_back(Vector2D(-4, 12));
-    // safePositions.emplace_back(Vector2D(-34, 43));
-    // safePositions.emplace_back(Vector2D(-42, 6));
-    // safePositions.emplace_back(Vector2D(-30, 1));
-    // safePositions.emplace_back(Vector2D(0, 1));
-    // safePositions.emplace_back(Vector2D(12, 1));
-    // safePositions.emplace_back(Vector2D(30, 1));
     return safePositions;
 }
 
