@@ -2,13 +2,11 @@
 
 
 #define MAX_CMMDS_PER_TICK 50
-#define FPS 20
+#define TPS 20
 #define PRINT_TEST_OVERFLOW_TICK()                                                                 \
     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per tick" \
               << std::endl;
 #define GAMES_IN_GROUP 5
-
-void HandlerGames::saludar() { std::cout << "Hola!\n"; }
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
@@ -23,49 +21,24 @@ bool HandlerGames::isThereFinalWinner() { return existsMatchWinner; }
 
 PlayerID_t HandlerGames::whoWon() { return matchWinner; }
 
-void HandlerGames::updateMatchWinnerStatus() {
-    if (recordGamesWon >= GAMES_TO_WIN_MATCH) {
-        for (auto it = gameResults.begin(); it != gameResults.end(); ++it) {
-            /*first player found with that record*/
-            if (!existsMatchWinner && it->second == recordGamesWon) {
-                existsMatchWinner = true;
-                matchWinner = it->first;
-            } else if (existsMatchWinner && it->second == recordGamesWon) {
-                /* second player found with that record-> there is no match winner*/
-                existsMatchWinner = false;
-                matchWinner = 0;
-                break;
-            }
-        }
-    }
-}
-
-// NOTE: we never got here if the gameResults map was initialized empty.
 void HandlerGames::playGroupOfGames() {
     for (int i = 0; i < GAMES_IN_GROUP && players.size() > NOT_ENOUGH_NUMBER_PLAYERS; i++) {
         playOneGame();
         broadcastGameMssg(std::make_shared<GameEndingSender>(i == (GAMES_IN_GROUP - 1)));
     }
-    /* sending the recount of the games won by each player*/
     broadcastGameMssg(std::make_shared<GamesRecountSender>(gameResults, existsMatchWinner));
-    /* loking if there is a final matchWinner*/
     updateMatchWinnerStatus();
 }
 
 void HandlerGames::playOneGame() {
-    auto level = getRandomLevel();
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
-    Vector2D usseles;
-    currentGame = std::make_unique<GameWorld>(usseles, playerIDs, level);
-
-    /*sending the initial setting of the game*/
-    auto gameSceneDto = currentGame->getSceneDto();
-    broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(gameSceneDto)));
+    currentGame =
+            std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
+    broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
 
     gameLoop();
 
-    // this means that we went out of the gameLoop because there is a game winner
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
         PlayerID_t gameWinner = currentGame->WhoWon();
         int playerRecord = gameResults[gameWinner] += 1;
@@ -75,35 +48,28 @@ void HandlerGames::playOneGame() {
     }
 }
 
-
 void HandlerGames::gameLoop() {
-    TimeManager timeManager(FPS);
+    TimeManager timeManager(TPS);
 
     while (!currentGame->HasWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-        int countCommands = 0;
         Command cmmd;
-        while (countCommands < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd))) {
-            if (cmmd.cmd == CommandCode::_quit) {
+        for (int i = 0; i < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd)); i++) {
+            if (cmmd.cmd == CommandCode::_quit)
                 // currentGame->quitPlayer(cmmd.playerId);
-            } else {
+                continue;
+            else
                 currentGame->HandleCommand(cmmd);
-                countCommands++;
-            }
         }
 
         auto delta = timeManager.synchronizeTick();
-        if (delta < std::chrono::duration<double, std::milli>(0)) {
+        if (delta < std::chrono::duration<double, std::milli>(0))
             PRINT_TEST_OVERFLOW_TICK();
-        }
 
         currentGame->Update(static_cast<float>(delta.count()));
-
         broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
     }
 }
 
-// if this throws us a exception it means that the match is who is trying to kill all of its clients
-// so it should stop all the current game.
 void HandlerGames::broadcastGameMssg(const std::shared_ptr<MessageSender>& message) {
     checkNumberPlayers();
     players.applyToValues(
@@ -122,4 +88,21 @@ std::string HandlerGames::getRandomLevel() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, availableLevels.size() - 1);
     return availableLevels[dist(gen)];
+}
+
+void HandlerGames::updateMatchWinnerStatus() {
+    if (recordGamesWon >= GAMES_TO_WIN_MATCH) {
+        for (auto it = gameResults.begin(); it != gameResults.end(); ++it) {
+            /*first player found with that record*/
+            if (!existsMatchWinner && it->second == recordGamesWon) {
+                existsMatchWinner = true;
+                matchWinner = it->first;
+            } else if (existsMatchWinner && it->second == recordGamesWon) {
+                /* second player found with that record-> there is no match winner*/
+                existsMatchWinner = false;
+                matchWinner = 0;
+                break;
+            }
+        }
+    }
 }
