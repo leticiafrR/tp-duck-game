@@ -8,9 +8,9 @@ struct ResultJoining: public NetworkMsg {
     explicit ResultJoining(bool _joined): joined(_joined) {}
 };
 
-struct FinalGameGroup: public NetworkMsg {
+struct FinalGroupGame: public NetworkMsg {
     bool finalGroupGame;
-    explicit FinalGameGroup(bool _finalGroupGame): finalGroupGame(_finalGroupGame) {}
+    explicit FinalGroupGame(bool _finalGroupGame): finalGroupGame(_finalGroupGame) {}
 };
 
 #endif
