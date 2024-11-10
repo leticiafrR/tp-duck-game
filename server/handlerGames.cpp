@@ -2,7 +2,7 @@
 
 
 #define MAX_CMMDS_PER_TICK 10
-#define TPS 30
+#define TPS 20
 // #define PRINT_TEST_OVERFLOW_TICK()
 //     std::cout << "Too many commds procesed in this tick! It overflowed the time assigned per
 //     tick"
@@ -38,15 +38,27 @@ void HandlerGames::playOneGame() {
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
-    std::cout << "\nMATCH: entering into a gameLoop\n";
+    std::cout << "\n                HANDLER_Games: entering into a gameLoop\n";
     gameLoop();
-    std::cout << "\nMATCH: getting out of the gameLoop\n";
+    std::cout << "\n[1]             HANDLER_Games: getting out of the gameLoop\n";
 
     if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
+        std::cout << "\n[2] HANDLER_Games: the size of 'players' es greater than "
+                  << NOT_ENOUGH_NUMBER_PLAYERS << "...\n...So we areasking the game who won\n";
         PlayerID_t gameWinner = currentGame->WhoWon();
-        int playerRecord = gameResults[gameWinner] += 1;
-        if (playerRecord > recordGamesWon) {
-            recordGamesWon = playerRecord;
+
+        std::cout << "\n[3] HANDLER_Games: We got who was the winner of the round\n";
+        if (gameResults.find(gameWinner) != gameResults.end()) {
+            int playerRecord = gameResults[gameWinner] += 1;
+            std::cout << "\n[4] HANDLER_Games: We just updated the quantity of games won by the "
+                         "player with id"
+                      << gameWinner << "\n";
+            if (playerRecord > recordGamesWon) {
+                recordGamesWon = playerRecord;
+            }
+        } else {
+            std::cout << "\n[4] HANDLER_Games: the winner that the game returned when asked was "
+                         "never in the game\n";
         }
     }
 }

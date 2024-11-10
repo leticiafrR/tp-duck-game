@@ -50,7 +50,7 @@ bool GameWorld::HasWinner() {
     // return livePlayes == 1;
 }
 
-PlayerID_t GameWorld::WhoWon() { return players.begin()->first; }
+PlayerID_t GameWorld::WhoWon() { return 0; }
 
 void GameWorld::Update(float deltaTime) {
     for (auto& pair: players) {
