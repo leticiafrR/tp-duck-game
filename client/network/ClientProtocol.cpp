@@ -116,6 +116,17 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     throw BrokenProtocol();
 }
 
+bool ClientProtocol::receiveFinalGroupGame() {
+    if (assistant.receiveNumberOneByte() == GAME_ENDING) {
+        uint8_t response = assistant.receiveNumberOneByte();
+        if (response == (uint8_t)1)
+            return true;
+        else if (response == (uint8_t)0)
+            return false;
+    }
+    throw BrokenProtocol();
+}
+
 GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
     if (assistant.receiveNumberOneByte() == GAMES_RECOUNT) {
         auto matchEndedCode = assistant.receiveNumberOneByte();

@@ -44,6 +44,8 @@ public:
 
     Snapshot receiveGameUpdateDto();
 
+    bool receiveFinalGroupGame();
+
     GamesRecountDto receiveGamesRecountDto();
 
     PlayerID_t receiveMatchWinner();
