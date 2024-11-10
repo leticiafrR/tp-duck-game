@@ -3,7 +3,9 @@
 
 #include "id.h"
 
-struct NetworkMsg {};
+struct NetworkMsg {
+    virtual ~NetworkMsg() = default;
+};
 // wrappers for booleans that  cannot inherit from NetworkMssg
 struct ResultJoining: public NetworkMsg {
     bool joined;
