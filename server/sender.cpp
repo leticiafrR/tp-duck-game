@@ -49,7 +49,7 @@ void SenderThread::sendLoop() {
 
         while (_keep_running) {
             auto message = senderQueue.pop();
-            std::cout << "\nSENDER[" << idClient << "]: Enviamos:" << message->descriptionCont()
+            std::cout << "SENDER[" << idClient << "]: Enviamos:" << message->descriptionCont()
                       << " \n";
             message->execute(std::ref(protocol));
         }
@@ -78,6 +78,6 @@ SenderThread::~SenderThread() {
             join();
         }
     } catch (...) {
-        // notjing by the moment
+        std::cout << "ERROR: se atrapò un error en el destructor  del sender\n";
     }
 }

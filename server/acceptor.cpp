@@ -23,6 +23,8 @@ void AcceptorThread::run() {
 
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "SE DETECTÒ UN PROBLEMA desconocido EN EL HILO ACEPTOR\n";
     }
     /* Forcing the end of the match that will kill all of its clients  */
     match.forceEnd();
@@ -54,14 +56,18 @@ void AcceptorThread::acceptLoop() {
 }
 
 void AcceptorThread::reapDead() {
-    clients.remove_if([](SenderThread* client) {
-        if (!client->is_alive()) {
-            client->join();
-            delete client;
-            return true;
-        }
-        return false;
-    });
+    try {
+        clients.remove_if([](SenderThread* client) {
+            if (!client->is_alive()) {
+                client->join();
+                delete client;
+                return true;
+            }
+            return false;
+        });
+    } catch (const std::exception& e) {
+        std::cout << "ACCEPTOR- REAPDEAD: Se atrapò una excepciòn!!\n";
+    }
 }
 
 
@@ -73,3 +79,5 @@ void AcceptorThread::cleanUpThreads() {
     }
     clients.clear();
 }
+
+AcceptorThread::~AcceptorThread() {}

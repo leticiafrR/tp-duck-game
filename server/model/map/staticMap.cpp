@@ -33,7 +33,7 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
     // AddTestLevel();
-    // AddEasyLevel();
+    AddEasyLevel();
     InitialMap();
 }  // recibira el nombre del archivo con el nivel a agregar
 
@@ -273,20 +273,25 @@ std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
     // -4 12
     // -34 43
     // -42 6
-    /*while (safePositions.size() < 4) {
-        float x, y;
-        getRandomPosition(x, y);
-        Vector2D vec(x, y);
-        if (somethingUnderThisPosition(vec)) {
-            safePositions.emplace_back(vec);
-        }
-    }*/
+    // while (safePositions.size() < 4) {
+    //     float x, y;
+    //     getRandomPosition(x, y);
+    //     Vector2D vec(x, y);
+    //     if (somethingUnderThisPosition(vec)) {
+    //         safePositions.emplace_back(vec);
+    //     }
+    // }
     safePositions.emplace_back(Vector2D(0, 10));
-    safePositions.emplace_back(Vector2D(41, 6));
-    safePositions.emplace_back(Vector2D(-4, 12));
-    safePositions.emplace_back(Vector2D(-34, 43));
-    safePositions.emplace_back(Vector2D(-42, 6));
 
+
+    // safePositions.emplace_back(Vector2D(41, 6));
+    // safePositions.emplace_back(Vector2D(-4, 12));
+    // safePositions.emplace_back(Vector2D(-34, 43));
+    // safePositions.emplace_back(Vector2D(-42, 6));
+    // safePositions.emplace_back(Vector2D(-30, 1));
+    // safePositions.emplace_back(Vector2D(0, 1));
+    // safePositions.emplace_back(Vector2D(12, 1));
+    // safePositions.emplace_back(Vector2D(30, 1));
     return safePositions;
 }
 
