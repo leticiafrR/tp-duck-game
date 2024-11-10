@@ -11,7 +11,7 @@ void GameWorld::Testing(const Vector2D& posToTest) {
 
 void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
-    for (size_t i = 0; i < spawnPoints.size(); i++) {
+    for (size_t i = 0; i < playersIds.size(); i++) {
         PlayerID_t id = playersIds[i];
         Vector2D pos = spawnPoints[i];
         std::cout << "Receiving player [" << id << "]. Spawned in:(" << pos.x << "," << pos.y
@@ -57,6 +57,7 @@ void GameWorld::Update(float deltaTime) {
         pair.second->Update(map, deltaTime);
     }
     ReapDead();
+    std::cout << "end game tick\n";
 }
 
 

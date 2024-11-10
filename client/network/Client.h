@@ -17,9 +17,10 @@
 class Client {
 private:
     ClientProtocol protocol;
-    Queue<std::shared_ptr<NetworkMsg>> msgQueue;  // mensajes polimorficos
-    Queue<CommandCode> cmmdQueue;                 // comandos unicos
-    Receiver* receiver;                           // lanza al sender
+    Queue<std::shared_ptr<NetworkMsg>> msgQueue;
+    Queue<CommandCode> cmmdQueue;
+    Receiver* receiver;
+
 public:
     Client(const char* servname, const char* hostname):
             protocol(std::move(Socket(hostname, servname))),
@@ -31,13 +32,12 @@ public:
 
     bool TrySendRequest(const CommandCode& cmmd) { return cmmdQueue.try_push(cmmd); }
 
-    // retorna true si el puntero si fue actualizado
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsg>& msg) { return msgQueue.try_pop(msg); }
 
-    void Saludar() { std::cout << "HOLA\n"; }
 
     ~Client() {
-        receiver->kill();
+        // receiver->kill();
+        receiver->stop();
         if (receiver->is_alive()) {
             receiver->join();
         }

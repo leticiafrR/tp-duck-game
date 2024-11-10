@@ -21,6 +21,8 @@ public:
                 CommandCode cmmd = cmmdQueue.pop();
                 protocol.sendCommand(cmmd);
             }
+        } catch (const ClosedQueue& q) {
+            std::cout << "got nothing to do, the sender was killed by someone\n";
         } catch (const std::runtime_error& e) {
             std::cerr << e.what() << std::endl;
         } catch (...) {
@@ -28,6 +30,7 @@ public:
                       << std::endl;
         }
     }
+
     void kill() {
         // espera a que se envie el ultimo mensaje
         cmmdQueue.close();
