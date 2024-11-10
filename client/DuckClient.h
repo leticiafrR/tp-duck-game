@@ -17,13 +17,14 @@ public:
 
     PlayerEvent target;
 
-    DuckRenderer():
-            spr("base_duck.png", Transform(Vector2D::Zero(), Vector2D(5, 5))),
+    DuckRenderer(Transform transform, Color color):
+            spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
             fromPos(Vector2D::Zero()),
             tLerp(0),
             target() {
         target.stateTransition = DuckState::IDLE;
+        spr.SetColor(color);
         SetEventTarget(target);
     }
 

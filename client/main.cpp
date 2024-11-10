@@ -10,7 +10,12 @@
 
 #include "common/Collision.h"
 #include "common/RigidBody.h"
+#include "data/command.h"
+#include "data/dataTransferObjects.h"
+#include "data/gameScene.h"
+#include "data/networkMsg.h"
 #include "data/snapshot.h"
+#include "network/Client.h"
 
 #include "Animator.h"
 #include "Button.h"
@@ -27,6 +32,32 @@ using namespace SDL2pp;  // NOLINT
 using namespace std;     // NOLINT
 
 #include <set>
+
+// class NetworkMsgD {
+// public:
+//     virtual ~NetworkMsgD() = default;
+// };
+// class NetworkMsgJoined: public NetworkMsgD {};
+// class NetworkMsgStartMatch: public NetworkMsgD {};
+// class NetworkMsgStartRound: public NetworkMsgD {};
+// class NetworkMsgSnapshot: public NetworkMsgD {};
+
+// class ClientDummy {
+//     string hostname;
+//     string servname;
+
+// public:
+//     ClientDummy(const string& hostname, const string& servname):
+//             hostname(hostname), servname(servname) {}
+
+//     void SendCommand(CommandCode code) { std::cout << int(code) << "\n"; }
+
+//     bool GetMsg(shared_ptr<NetworkMsg>& pointer) {
+//         pointer = make_shared<NetworkMsg>();
+//         return true;
+//     }
+// };
+
 
 void TestMain(Camera& cam) {
     Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
@@ -213,16 +244,160 @@ void Menu(Camera& cam) {
     }
 }
 
-void Game(Camera& cam) {
+void Connecting(Camera& cam, Client& client) {
+    bool running = true;
+
+    Text titleText("CONNECTING TO SEVER...", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (running) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto joined = dynamic_pointer_cast<ResultJoining>(msg);
+            if (joined)
+                running = false;  // Enter to the match
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        titleText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+}
+
+shared_ptr<MatchStartDto> LoadingPlayers(Camera& cam, Client& client) {
+    // bool running = true;
+
+    Text titleText("LOADING PLAYERS DATA...", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (true) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    // running = false;
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto matchData = dynamic_pointer_cast<MatchStartDto>(msg);
+            return matchData;
+            // running = false;  // Go to loading map
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        titleText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+    return nullptr;  // This shouldnot happen
+}
+
+shared_ptr<GameSceneDto> LoadingMap(Camera& cam, Client& client) {
+    // bool running = true;
+
+    Text titleText("LOADING MAP...", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (true) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto roundData = dynamic_pointer_cast<GameSceneDto>(msg);
+            return roundData;
+            // running = false;  // Go to game and snapshots
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        titleText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+    return nullptr;
+}
+
+void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto mapData) {
+
     CameraController camController(cam);
     // camController.AddTransform(&duckT);
 
-    // Connect to server
-    map<int, std::shared_ptr<DuckRenderer>> players;
+    // Set Players
+    map<PlayerID_t, std::shared_ptr<DuckRenderer>> players;
+
+    for (size_t i = 0; i < matchData.playersData.size(); i++) {
+        players.emplace(
+                matchData.playersData[i].playerID,
+                std::make_shared<DuckRenderer>(Transform(Vector2D::Zero(), matchData.duckSize),
+                                               ColorExtension::White()));
+    }
+
+    // Set Map
+    vector<MapBlock2D> mapBlocks;
+
+    for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
+        auto groundData = mapData.groundBlocks[i];
+        mapBlocks.emplace_back("tile_set.png", "tile_set.yaml", groundData.mySpace, 5);
+
+        bool left =
+                groundData.visibleEdges.find(VISIBLE_EDGES::LEFT) != groundData.visibleEdges.end();
+        bool right =
+                groundData.visibleEdges.find(VISIBLE_EDGES::RIGHT) != groundData.visibleEdges.end();
+        bool top =
+                groundData.visibleEdges.find(VISIBLE_EDGES::TOP) != groundData.visibleEdges.end();
+        bool bottom = groundData.visibleEdges.find(VISIBLE_EDGES::BOTTOM) !=
+                      groundData.visibleEdges.end();
+
+        mapBlocks[i].SetBorders(left, right, top, bottom);
+    }
 
     // DuckRenderData duck;
 
-    players.emplace(0, std::make_shared<DuckRenderer>());
+    // players.emplace(0, std::make_shared<DuckRenderer>());
 
     // Gameloop
     int fps = 60;
@@ -235,12 +410,12 @@ void Game(Camera& cam) {
 
     Vector2D next = Vector2D::Zero();
 
-    next += Vector2D(3, 3);
-    PlayerEvent ev;
-    ev.flipping = Flip::Left;
-    ev.motion = Vector2D(5, 5);
-    ev.stateTransition = DuckState::RUNNING;
-    players[0]->SetEventTarget(ev);
+    // next += Vector2D(3, 3);
+    // PlayerEvent ev;
+    // ev.flipping = Flip::Left;
+    // ev.motion = Vector2D(5, 5);
+    // ev.stateTransition = DuckState::RUNNING;
+    // players[0]->SetEventTarget(ev);
 
     bool running = true;
     while (running) {
@@ -261,12 +436,15 @@ void Game(Camera& cam) {
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
                             // Send to server
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyDown);
                             break;
                         case SDLK_d:
                             // Send to server
+                            client.TrySendRequest(CommandCode::MoveRight_KeyDown);
                             break;
                         case SDLK_SPACE:
                             // Send to server
+                            client.TrySendRequest(CommandCode::Jump);
                             break;
                     }
                 } break;
@@ -278,9 +456,11 @@ void Game(Camera& cam) {
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
                             // Send to server
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyUp);
                             break;
                         case SDLK_d:
                             // Send to server
+                            client.TrySendRequest(CommandCode::MoveRight_KeyUp);
                             break;
                     }
                     break;
@@ -292,9 +472,26 @@ void Game(Camera& cam) {
             // ButtonsManager::GetInstance().HandleEvent(event);
         }
 
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            Snapshot snapshot = *dynamic_pointer_cast<Snapshot>(msg);
+
+            for (auto& it: snapshot.updates) {
+                players[it.first]->SetEventTarget(it.second);
+            }
+            // Check if last snapshot...
+            if (snapshot.gameOver) {
+                running = false;
+            }
+        }
+
         // Rendering
 
         bgSpr.Draw(cam);
+
+        for (auto& it: mapBlocks) {
+            it.Draw(cam);
+        }
 
         for (auto& it: players) {
             auto data = it.second;
@@ -321,8 +518,14 @@ int main() try {
     Camera cam(std::move(render), 100);
 
     Menu(cam);
-    Game(cam);
     // TestMain(cam);
+
+    Client client("8080", "localhost");
+    Connecting(cam, client);
+    auto playerData = LoadingPlayers(cam, client);
+    auto mapData = LoadingMap(cam, client);
+
+    Game(cam, client, *playerData, *mapData);
 
     FontCache::Clear();
     SheetDataCache::Clear();
