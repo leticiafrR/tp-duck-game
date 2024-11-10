@@ -30,15 +30,10 @@ void Duck::RegistListener(PlayerEventListener* listener) {
 void Duck::Update(StaticMap& map, float deltaTime) {
     DuckState initialState = myState;
     Vector2D initialPos = mySpace.GetPos();
-    // std::cout << "[DUCK]: initial pos: "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
-
 
     UpdatePosition(map, deltaTime);
-    // std::cout << "[DUCK]: update pos: "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
     UpdateState();
     UpdateListener(initialState, initialPos);
-
-    // std::cout << "[DUCK]: updated pos: "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
 }
 
 
@@ -63,7 +58,7 @@ void Duck::UpdateState() {
 
 void Duck::TryJump() {
     if (isGrounded) {
-        motionHandler.StartJump(body);
+        body.ApplyForce(Vector2D::Up() * 40);
     }
 }
 
@@ -71,7 +66,7 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     body.Update(deltaTime);
     isGrounded = map.IsOnTheFloor(mySpace);
     if (isGrounded) {
-        motionHandler.CanJump(body);
+        body.ResetGravity();
         // CheckCollisionWithMap(map,true); //<- for adding information about position and collision
         // detection: use this
         CheckCollisionWithMap(map);

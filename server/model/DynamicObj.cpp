@@ -11,23 +11,13 @@ DynamicObject::DynamicObject(int speedX, const Transform& mySpace):
 
 void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {
     mySpace.Move(velocity * deltaTime);
-    // std::cout << "  [Dynamic]: after literraly moving:
-    // "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
     CheckInteractionWithMap(map, deltaTime);
-    // std::cout << "  [Dynamic]: after interacting with map:
-    // "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
 }
 
 void DynamicObject::CheckInteractionWithMap(StaticMap& map, float deltaTime) {
     ApplyGravity(map, deltaTime);
-    // std::cout << "      [Dynamic]: after gravity:
-    // "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
     CheckOutOfMapBoundaries(map);
-    // std::cout << "  [Dynamic]: after boundaries:
-    // "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
     CheckCollisionWithMap(map);
-    // std::cout << "  [Dynamic]: after collision:
-    // "<<mySpace.GetPos().x<<","<<mySpace.GetPos().y<<")\n";
 }
 
 void DynamicObject::CheckOutOfMapBoundaries(StaticMap& map) {

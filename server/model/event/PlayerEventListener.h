@@ -2,11 +2,10 @@
 #define PLAYER_EVENT_LISTENER_H
 
 #include <iostream>
-#include <string>
 #include <unordered_map>
 
+#include "../../../data/snapshot.h"
 #include "common/Transform.h"
-#include "data/snapshot.h"
 
 class PlayerEventListener {
 private:

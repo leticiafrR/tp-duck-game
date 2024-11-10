@@ -15,8 +15,8 @@ namespace Theme {
 const std::string Forest = "FOREST";
 }
 namespace FullMapSize {
-const size_t xMapSize = 250;
-const size_t yMapSize = 250;
+const size_t xMapSize = 100;
+const size_t yMapSize = 100;
 }  // namespace FullMapSize
 
 namespace TestLevel {
