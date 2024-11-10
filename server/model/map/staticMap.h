@@ -25,6 +25,7 @@ private:
 
     void AddEasyLevel();
     void AddTestLevel();
+    void InitialMap();
 
 public:
     StaticMap();

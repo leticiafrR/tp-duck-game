@@ -32,15 +32,22 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
-    AddTestLevel();
-    AddEasyLevel();
+    // AddTestLevel();
+    // AddEasyLevel();
+    InitialMap();
 }  // recibira el nombre del archivo con el nivel a agregar
 
-void StaticMap::AddTestLevel() {
-    Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
-                   Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
-    AddGround(GroundDto(unic, TestLevel::edges));
+void StaticMap::InitialMap() {
+    AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(20, 20)), TestLevel::edges));
+    AddGround(GroundDto(Transform(Vector2D(30, 30), Vector2D(5, 5)), TestLevel::edges));
 }
+
+// void StaticMap::AddTestLevel() {
+//     Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
+//                    Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
+//     AddGround(GroundDto(unic, TestLevel::edges));
+// }
+
 
 void StaticMap::AddEasyLevel() {
     // size.emplace_back(FullMapSize::xMapSize);
@@ -274,6 +281,7 @@ std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
             safePositions.emplace_back(vec);
         }
     }*/
+    safePositions.emplace_back(Vector2D(0, 10));
     safePositions.emplace_back(Vector2D(41, 6));
     safePositions.emplace_back(Vector2D(-4, 12));
     safePositions.emplace_back(Vector2D(-34, 43));
