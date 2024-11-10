@@ -95,6 +95,8 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
         case CommandCode::MoveRight_KeyUp:
             player->StopMoveRight();
             break;
+        case CommandCode::Jump:
+            player->TryJump();
         default:
             break;
     }
