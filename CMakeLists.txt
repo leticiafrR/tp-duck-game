@@ -45,6 +45,15 @@ set_project_warnings(taller_common ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 # location (so our dependants will not have to explicitly request this)
 target_include_directories(taller_common PUBLIC .)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    yaml-cpp
+    URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.zip
+)
+
+FetchContent_MakeAvailable(yaml-cpp)
+
 # Install libSDL2pp (for client or editor)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
 if(TALLER_CLIENT OR TALLER_EDITOR)
@@ -52,20 +61,13 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     set(SDL2PP_WITH_TTF ON)
     set(SDL2PP_WITH_MIXER ON)
     
-    include(FetchContent)
+    #include(FetchContent)
     FetchContent_Declare(
         libSDL2pp
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
-
-    FetchContent_Declare(
-        yaml-cpp
-        URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.zip
-    )
-
-    FetchContent_MakeAvailable(yaml-cpp)
 endif()
 
 # Program section
@@ -95,7 +97,7 @@ if(TALLER_SERVER)
     add_executable(taller_server)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_server taller_common)
+    add_dependencies(taller_server taller_common yaml-cpp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -104,7 +106,7 @@ if(TALLER_SERVER)
     set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     # Link the taller_common lib target
-    target_link_libraries(taller_server taller_common)
+    target_link_libraries(taller_server taller_common yaml-cpp)
 endif()
 
 if(TALLER_EDITOR)
