@@ -15,10 +15,6 @@
 
 #include "handlerGames.h"
 
-#define MAX_COMMANDS 500
-#define MAX_COMMANDS_PER_LOOP 100
-
-
 class Match: public Thread {
 private:
     // when this quantity is reached the match is started

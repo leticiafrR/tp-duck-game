@@ -3,7 +3,6 @@
 
 #define MAX_CMMDS_PER_TICK 10
 #define TPS 20
-#define GAMES_IN_GROUP 5
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
