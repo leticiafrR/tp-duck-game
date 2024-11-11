@@ -29,6 +29,8 @@ void HandlerGames::playGroupOfGames() {
 
 void HandlerGames::playOneGame() {
     auto playerIDs = players.getKeys();
+    // aqui podrìa vaciar la queue de comandos
+
     checkNumberPlayers();
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());

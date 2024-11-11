@@ -37,6 +37,7 @@ void SenderThread::run() {
         std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
                   << idClient << "\n";
     }
+    std::cout << "[Sender:" << idClient << "]: terminamos la la ejecuciòn del sender\n";
 }
 
 // got here once the client is really loged in into a match
@@ -64,7 +65,10 @@ void SenderThread::sendLoop() {
 
         try {
             match.logOutPlayer(idClient);
+            std::cout << "Se sacò al jugador " << idClient << " de la match\n";
             protocol.endConnection();  // this will make the receiver fail (if it hasnt yet)
+            std::cout << "Se cerrò la conexiòn con el jugador " << idClient << "\n";
+
         } catch (const std::exception& e) {
 
             std::cout << "ATRAPAMOS UN ERROR AL LOGGEAR AFUERA AL JUGADOR DE LA MATCH (O TERMINAR "

@@ -87,6 +87,7 @@ void Match::run() {
     } catch (const RunOutOfPlayers& r) {
         // forceEnd of the match may generate to try to do a broadcast over no players
     }
+    std::cout << "El hilo de la match terminò!\n";
 }
 
 void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
