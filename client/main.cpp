@@ -413,8 +413,85 @@ bool IsFinalGroupGame(Camera& cam, Client& client) {
     return false;
 }
 
+bool IsMatchEnded(Camera& cam, Client& client) {
+    // bool running = true;
+
+    Text titleText("GETGING RESULTS...", "pixel.ttf", 160,
+                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5)),
+                   ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (true) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto matchEnded = dynamic_pointer_cast<GamesRecountDto>(msg);
+            return matchEnded->matchEnded;
+            // running = false;  // Go to game and snapshots
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        titleText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+    return false;
+}
+
+void ShowWinner(Camera& cam, Client& client) {
+    // bool running = true;
+
+    Text winnerText("GETTING WINNER...", "pixel.ttf", 160,
+                    RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)),
+                                  Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                    ColorExtension::White());
+    int fps = 60;
+    float sleepMS = 1000.0f / fps;
+    // float deltaTime = 1.0f / fps;
+
+    while (true) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+            }
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            auto matchEnded = dynamic_pointer_cast<FinalWinner>(msg);
+            winnerText.SetText("Winner ID: " + std::to_string(matchEnded->winner));
+            // running = false;  // Go to game and snapshots
+        }
+
+        ButtonsManager::GetInstance().Draw(cam);
+        winnerText.Draw(cam);
+        cam.Render();
+        SDL_Delay(sleepMS);
+    }
+}
+
 void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto mapData,
-          Snapshot fisrtSnapshot) {
+          Snapshot firstSnapshot) {
 
     CameraController camController(cam);
     // camController.AddTransform(&duckT);
@@ -423,7 +500,9 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
 
     for (auto& playerData: matchData.playersData) {
-        Vector2D spawnPos = fisrtSnapshot.updates[playerData.playerID].motion;
+        if (firstSnapshot.updates.find(playerData.playerID) == firstSnapshot.updates.end())
+            continue;
+        Vector2D spawnPos = firstSnapshot.updates[playerData.playerID].motion;
         players.emplace(playerData.playerID,
                         std::make_shared<DuckClientRenderer>(
                                 Transform(spawnPos, matchData.duckSize), playerData.playerSkin));
@@ -501,7 +580,8 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
                     break;
                 }
                 case SDL_QUIT:
-                    running = false;
+                    exit(0);
+                    // running = false;
                     break;
             }
             // ButtonsManager::GetInstance().HandleEvent(event);
@@ -559,16 +639,28 @@ int main() try {
     Connecting(cam, client);
     auto playerData = LoadingPlayers(cam, client);
 
-    auto mapData = LoadingMap(cam, client);
-    auto firstSnapshot = LoadingFirstSnapshot(cam, client);
+    bool matchEnded = false;
 
-    Game(cam, client, *playerData, *mapData, *firstSnapshot);
+    while (!matchEnded) {
+        auto mapData = LoadingMap(cam, client);
+        auto firstSnapshot = LoadingFirstSnapshot(cam, client);
 
-    while (!IsFinalGroupGame(cam, client)) {
-        mapData = LoadingMap(cam, client);
-        firstSnapshot = LoadingFirstSnapshot(cam, client);
         Game(cam, client, *playerData, *mapData, *firstSnapshot);
+
+        while (!IsFinalGroupGame(cam, client)) {
+            mapData = LoadingMap(cam, client);
+            firstSnapshot = LoadingFirstSnapshot(cam, client);
+            Game(cam, client, *playerData, *mapData, *firstSnapshot);
+            std::cout << "Round ended\n";
+        }
+        std::cout << "Rounds group ended\n";
+
+        matchEnded = IsMatchEnded(cam, client);
+        if (!matchEnded)
+            std::cout << "Match is not endend, continue with game\n";
     }
+    std::cout << "Match ended \n";
+    ShowWinner(cam, client);
 
     FontCache::Clear();
     SheetDataCache::Clear();
