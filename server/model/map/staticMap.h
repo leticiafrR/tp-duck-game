@@ -29,7 +29,6 @@ private:
 
 public:
     StaticMap();
-    // esta en el mapa
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);
@@ -41,6 +40,3 @@ public:
     ~StaticMap() {}
 };
 #endif
-// StaticMap::StaticMap(){
-//     plataforms.emplace_back(-30,)
-// }

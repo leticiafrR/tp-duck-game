@@ -7,8 +7,6 @@
 
 void PlayerEventListener::Motion() {
     PlayerEvent& e = events[sourceId];
-    std::cout << "SE REGISTRÒ CAMBIO DE POSICIÒN A: (" << motionEventSrc->GetPos().x << ","
-              << motionEventSrc->GetPos().y << ")\n";
     e.motion = motionEventSrc->GetPos();
     e.stateTransition = *stateEventSrc;
     e.flipping = *flippingEventSrc;
@@ -17,7 +15,6 @@ void PlayerEventListener::Motion() {
 // la facing face cambia con la intenciòn del usuario(con donde te movès en realidad )
 void PlayerEventListener::Flipping() {
     PlayerEvent& e = events[sourceId];
-    std::cout << "SE REGISTRA FLIPPING\n";
     e.flipping = *flippingEventSrc;
     e.motion = motionEventSrc->GetPos();
     e.stateTransition = *stateEventSrc;
@@ -26,7 +23,6 @@ void PlayerEventListener::Flipping() {
 // por el momento solo se muere al caerse
 void PlayerEventListener::StateTransition() {
     PlayerEvent& e = events[sourceId];
-    std::cout << "SE REGISTRA CAMBIO DE ESTADO\n";
     e.stateTransition = *stateEventSrc;
     e.flipping = *flippingEventSrc;
     e.motion = motionEventSrc->GetPos();

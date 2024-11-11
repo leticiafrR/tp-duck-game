@@ -16,13 +16,11 @@ public:
     bool IsMovingLeft() { return activeMoves[left]; }
 
     void StartMoveRight(Vector2D& velocity, int speedX) {
-        // std::cout << "[motion]: se agrega velocidad a la derecha\n";
         activeMoves[right] = true;
         velocity += (Vector2D::Right() * speedX);
     }
 
     void StartMoveLeft(Vector2D& velocity, int speedX) {
-        // std::cout << "[motion]: se agrega velocidad a la izquierda\n";
         activeMoves[left] = true;
         velocity += (Vector2D::Left() * speedX);
     }
@@ -34,9 +32,7 @@ public:
         }
     }
     void StopMoveRight(Vector2D& velocity, int speedX) {
-        // std::cout << "se llama a dejar de mover derecha\n";
         if (IsMovingRight()) {
-
             activeMoves[right] = false;
             velocity += (Vector2D::Right() * speedX * (-1));
         }

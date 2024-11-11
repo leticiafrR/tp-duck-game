@@ -30,6 +30,8 @@ public:
             rectTransform(rectTransform),
             color(color) {}
 
+    void SetText(const string& newText) { text = newText; }
+
     RectTransform& GetRectTransform() { return rectTransform; }
     Font& GetFont() { return FontCache::GetData(filename, fontSize); }
 
