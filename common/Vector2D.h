@@ -2,6 +2,9 @@
 #define VECTOR_2D_H
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 class Vector2D {
 private:
@@ -43,6 +46,12 @@ public:
     Vector2D Normalized() {
         float magnitude = GetMagnitude();
         return Vector2D(x / magnitude, y / magnitude);
+    }
+
+    std::string ToString() {
+        std::string xStr = (std::ostringstream() << std::fixed << std::setprecision(2) << x).str();
+        std::string yStr = (std::ostringstream() << std::fixed << std::setprecision(2) << y).str();
+        return "(" + xStr + ", " + yStr + ")";
     }
 
     Vector2D& operator+=(const Vector2D& other) {
