@@ -27,13 +27,20 @@ void HandlerGames::playGroupOfGames() {
     updateMatchWinnerStatus();
 }
 
+void HandlerGames::clearQueue() {
+    Command cmmd;
+    while (commandQueue.try_pop(std::ref(cmmd))) {}
+}
+
 void HandlerGames::playOneGame() {
     auto playerIDs = players.getKeys();
-    // aqui podrìa vaciar la queue de comandos
+
+    clearQueue();
 
     checkNumberPlayers();
     currentGame =
             std::make_unique<GameWorld>(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
+
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
 
     std::cout << "\n[1]               HANDLER_Games: entering into a gameLoop\n";

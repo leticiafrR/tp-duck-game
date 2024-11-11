@@ -71,6 +71,8 @@ private:
 
     void broadcastGameMssg(const std::shared_ptr<MessageSender>& message);
 
+    void clearQueue();
+
 public:
     HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                  Queue<Command>& commandQueue);
