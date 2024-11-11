@@ -29,17 +29,20 @@ public:
     DuckClientRenderer(Transform transform, uint8_t colorId):
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
-            fromPos(Vector2D::Zero()),
+            fromPos(transform.GetPos()),
             tLerp(0),
             target() {
         target.stateTransition = DuckState::IDLE;
+        target.motion = transform.GetPos();
         spr.SetColor(SkinColors.at(colorId));
         SetEventTarget(target);
     }
 
     void Update(float deltaTime) {
-        spr.GetTransform().SetPos(Vector2D::Lerp(fromPos, target.motion, tLerp));
-        tLerp += deltaTime * 9;
+        tLerp += deltaTime * 13;
+
+        Vector2D pos = Vector2D::Lerp(fromPos, target.motion, tLerp);
+        spr.GetTransform().SetPos(pos);
         anim.Update(deltaTime);
     }
 
