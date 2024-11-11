@@ -13,7 +13,11 @@ public:
     static Color Red() { return Color(255, 0, 0); }
     static Color Green() { return Color(0, 255, 0); }
     static Color Blue() { return Color(0, 0, 255); }
-    static Color Yellow() { return Color(255, 0, 255); }
+    static Color SkyBlue() { return Color(135, 206, 250); }
+    static Color Purple() { return Color(128, 0, 128); }
+    static Color Orange() { return Color(255, 165, 128); }
+    static Color Cyan() { return Color(0, 255, 255); }
+    static Color Yellow() { return Color(255, 255, 0); }
 
     static Color AddValue(Color color, int value) {
         return Color(std::clamp(color.r + value, 0, 255), std::clamp(color.g + value, 0, 255),
