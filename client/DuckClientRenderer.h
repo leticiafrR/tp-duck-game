@@ -1,13 +1,22 @@
-#ifndef DUCK_CLIENT_H
-#define DUCK_CLIENT_H
+#ifndef DUCK_CLIENT_RENDERER_H
+#define DUCK_CLIENT_RENDERER_H
+
+#include <map>
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
 
 #include "Animator.h"
+#include "ColorExtension.h"
 #include "Object2D.h"
 
-class DuckRenderer {
+class DuckClientRenderer {
+private:
+    const std::map<uint8_t, Color> SkinColors = {
+            {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
+            {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
+            {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
+
 public:
     Object2D spr;
     Animator anim;
@@ -17,14 +26,14 @@ public:
 
     PlayerEvent target;
 
-    DuckRenderer(Transform transform, Color color):
+    DuckClientRenderer(Transform transform, uint8_t colorId):
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
             fromPos(Vector2D::Zero()),
             tLerp(0),
             target() {
         target.stateTransition = DuckState::IDLE;
-        spr.SetColor(color);
+        spr.SetColor(SkinColors.at(colorId));
         SetEventTarget(target);
     }
 
@@ -54,7 +63,7 @@ public:
         spr.SetFlip(target.flipping == Flip::Left);
     }
 
-    ~DuckRenderer() {}
+    ~DuckClientRenderer() {}
 };
 
 #endif

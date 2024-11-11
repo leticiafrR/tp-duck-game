@@ -1,6 +1,7 @@
 #include <exception>
 #include <iostream>
 #include <map>
+#include <set>
 #include <thread>
 #include <vector>
 
@@ -23,40 +24,13 @@
 #include "Camera.h"
 #include "CameraController.h"
 #include "ColorExtension.h"
-#include "DuckClient.h"
+#include "DuckClientRenderer.h"
 #include "MapBlock2D.h"
 #include "Object2D.h"
 #include "SheetDataCache.h"
 #include "Text.h"
 using namespace SDL2pp;  // NOLINT
 using namespace std;     // NOLINT
-
-#include <set>
-
-// class NetworkMsgD {
-// public:
-//     virtual ~NetworkMsgD() = default;
-// };
-// class NetworkMsgJoined: public NetworkMsgD {};
-// class NetworkMsgStartMatch: public NetworkMsgD {};
-// class NetworkMsgStartRound: public NetworkMsgD {};
-// class NetworkMsgSnapshot: public NetworkMsgD {};
-
-// class ClientDummy {
-//     string hostname;
-//     string servname;
-
-// public:
-//     ClientDummy(const string& hostname, const string& servname):
-//             hostname(hostname), servname(servname) {}
-
-//     void SendCommand(CommandCode code) { std::cout << int(code) << "\n"; }
-
-//     bool GetMsg(shared_ptr<NetworkMsg>& pointer) {
-//         pointer = make_shared<NetworkMsg>();
-//         return true;
-//     }
-// };
 
 
 void TestMain(Camera& cam) {
@@ -406,13 +380,13 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
     // camController.AddTransform(&duckT);
 
     // Set Players
-    map<PlayerID_t, std::shared_ptr<DuckRenderer>> players;
+    map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
 
     for (size_t i = 0; i < matchData.playersData.size(); i++) {
-        players.emplace(
-                matchData.playersData[i].playerID,
-                std::make_shared<DuckRenderer>(Transform(Vector2D::Zero(), matchData.duckSize),
-                                               ColorExtension::White()));
+        players.emplace(matchData.playersData[i].playerID,
+                        std::make_shared<DuckClientRenderer>(
+                                Transform(Vector2D::Zero(), matchData.duckSize),
+                                matchData.playersData[i].playerSkin));
     }
 
     // Set Map

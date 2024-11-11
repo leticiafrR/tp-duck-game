@@ -33,16 +33,7 @@ public:
     Vector2D Max() const { return position + size / 2; }
 
     std::string ToString() {
-        std::string fmt = "Position: (";
-        fmt += std::to_string(position.x);
-        fmt += ", ";
-        fmt += std::to_string(position.y);
-        fmt += ") - Size: (";
-        fmt += std::to_string(size.x);
-        fmt += ", ";
-        fmt += std::to_string(size.y);
-        fmt += ")";
-        return fmt;
+        return "Position: " + position.ToString() + " - Size: " + size.ToString();
     }
 
     ~Transform() = default;
