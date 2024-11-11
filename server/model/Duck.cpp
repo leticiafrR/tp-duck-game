@@ -17,11 +17,12 @@ Duck::Duck(const Vector2D& initialPos):
         myFlip(Flip::Right),
         myState(DuckState::IDLE) {}
 
+
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
     l->Suscribe(&mySpace, &myFlip, &myState);
 
-    // en la primera iteraciòn todo es nuevo
+    // on the first iteration, everything is new
     l->Motion();
     l->Flipping();
     l->StateTransition();
@@ -36,14 +37,10 @@ void Duck::Update(StaticMap& map, float deltaTime) {
     UpdateListener(initialState, initialPos);
 }
 
-
 void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initialPos) {
-    // update motion
     if (initialPos.IsFarFrom(mySpace.GetPos())) {
         l->Motion();
-        // update state
     }
-
     if (initialState != myState) {
         l->StateTransition();
     }
@@ -67,14 +64,11 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     isGrounded = map.IsOnTheFloor(mySpace);
     if (isGrounded) {
         body.ResetGravity();
-        // CheckCollisionWithMap(map,true); //<- for adding information about position and collision
-        // detection: use this
         CheckCollisionWithMap(map);
     } else {
         // std::cout << "you're falling :( \n";
     }
 }
-
 
 void Duck::TryMoveLeft() {
     motionHandler.StartMoveLeft(velocity, speedX);
@@ -93,15 +87,16 @@ void Duck::TryMoveRight() {
 }
 
 void Duck::StopMoveRight() { motionHandler.StopMoveRight(velocity, speedX); }
+
 void Duck::StopMoveLeft() { motionHandler.StopMoveLeft(velocity, speedX); }
 
 void Duck::HandleOutOfBounds(float displacement) {
-    if (displacement > 0) {  // laterals: I correct my position
+    if (displacement > 0) {
         Vector2D add = (myFlip == Flip::Left) ? (Vector2D::Right() * displacement) :
                                                 (Vector2D::Left() * displacement);
         mySpace.Move(add);
     } else {
-        std::cout << "[DUCK]: me salì del lìmite posterio, morì.";
+        std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
         MarkAsDead();
     }
 }

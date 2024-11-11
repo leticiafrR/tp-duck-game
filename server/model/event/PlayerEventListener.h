@@ -1,15 +1,14 @@
 #ifndef PLAYER_EVENT_LISTENER_H
 #define PLAYER_EVENT_LISTENER_H
 
-#include <iostream>
 #include <unordered_map>
 
-#include "../../../data/snapshot.h"
 #include "common/Transform.h"
+#include "data/snapshot.h"
 
 class PlayerEventListener {
 private:
-    std::unordered_map<PlayerID_t, PlayerEvent>& events;  // 3 posibles containers
+    std::unordered_map<PlayerID_t, PlayerEvent>& events;
     PlayerID_t sourceId;
 
     Transform* motionEventSrc;

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <set>
 #include <string>
+#include <vector>
 
 #include "data/gameScene.h"
 
@@ -15,9 +16,13 @@ namespace Theme {
 const std::string Forest = "FOREST";
 }
 namespace FullMapSize {
-const size_t xMapSize = 50;
+const size_t xMapSize = 100;
 const size_t yMapSize = 500;
 }  // namespace FullMapSize
+
+namespace DuckSpawnPoints {
+std::vector<Vector2D> points{Vector2D(0, 10), Vector2D(-7, 10)};
+}
 
 namespace TestLevel {
 const float xPosition = 0;

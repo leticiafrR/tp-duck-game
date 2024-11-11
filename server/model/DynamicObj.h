@@ -21,7 +21,7 @@ public:
 
     void CheckInteractionWithMap(StaticMap& map, float deltaTime);
     void CheckOutOfMapBoundaries(StaticMap& map);
-    void CheckCollisionWithMap(StaticMap& map, bool fromGravity = false);
+    void CheckCollisionWithMap(StaticMap& map);
     void UpdatePosition(StaticMap& map, float deltaTime);
 
     void MarkAsDead();

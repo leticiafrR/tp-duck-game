@@ -6,28 +6,10 @@ enum : int { L, R, B, T };
 
 void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
-/* bool somethingUnderThisPosition(const Vector2D& t) {
-     for (int i = t.GetPos().y; i <= limits[1]; i--) {
-         Transform t(Vector2D(t.GetPos().x, i), Vector2D(1, 1), 0);
-         if (CheckCollision(t)) {
-             return true;
-         }
-     }
-     return false;
- }
- void getRandomPosition(float& x, float& y) {
- std::random_device rd;
- std::mt19937 gen(rd());
- std::uniform_int_distribution<> distribX(limits[L], limits[R]);
- std::uniform_int_distribution<> distribY(limits[B], limits[T]);
-     x = distribX(gen);
-     y = distribY(gen);
- }
-*/
+
 StaticMap::StaticMap(): theme(Theme::Forest) {
     size.emplace_back(FullMapSize::xMapSize);
     size.emplace_back(FullMapSize::yMapSize);
-
     limits.emplace_back(-static_cast<int>(FullMapSize::xMapSize) / 2);  // izquierda [0]
     limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
@@ -35,7 +17,9 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     // AddTestLevel();
     // AddEasyLevel();
     InitialMap();
-}  // recibira el nombre del archivo con el nivel a agregar
+}
+
+std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return DuckSpawnPoints::points; }
 
 void StaticMap::InitialMap() {
     AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(50, 20)), TestLevel::edges));
@@ -43,21 +27,59 @@ void StaticMap::InitialMap() {
     AddTransform(Transform(Vector2D(0, -20), Vector2D(80, 20)));
 }
 
-// void StaticMap::AddTestLevel() {
-//     Transform unic(Vector2D(TestLevel::xPosition, TestLevel::yPosition),
-//                    Vector2D(TestLevel::xLength, TestLevel::yLength), 0);
-//     AddGround(GroundDto(unic, TestLevel::edges));
-// }
 
+std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
+    Vector2D posDynamic = dynamicT.GetPos();
+    float xDynamic = posDynamic.x;
+    float yDynamic = posDynamic.y;
+
+    float radio = (dynamicT.GetSize().y) / 2;
+
+    if (yDynamic - radio < limits[B]) {
+        return -1;
+    }
+    if (xDynamic - radio < limits[L]) {  // caso izquierda
+        return limits[L] - (xDynamic - radio);
+    }
+    if (yDynamic + radio > limits[T]) {  // caso arriba
+        return yDynamic + radio - limits[T];
+    }
+    if (xDynamic + radio > limits[R]) {
+        return xDynamic + radio - limits[R];
+    }
+    return std::nullopt;  // El objeto está dentro de los límites
+}
+
+bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
+    Vector2D dir = Vector2D::Down();
+    float len = (dynamicT.GetSize().y) / 2;
+    float margen = (80 * len / 100);
+    Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
+    Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
+
+    return std::any_of(
+            grounds.begin(), grounds.end(),
+            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
+                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
+                return left || right;
+            });
+}
+
+std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
+    auto it = std::find_if(grounds.begin(), grounds.end(), [&dynamicT](const auto& ground) {
+        return Collision::RectCollision(dynamicT, ground.mySpace);
+    });
+    if (it != grounds.end()) {
+        return it->mySpace;
+    }
+    return std::nullopt;
+}
+
+
+GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
 
 void StaticMap::AddEasyLevel() {
-    // size.emplace_back(FullMapSize::xMapSize);
-    // size.emplace_back(FullMapSize::yMapSize);
-
-    // limits.emplace_back(-(FullMapSize::xMapSize) / 2);  // izquierda [0]
-    // limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
-    // limits.emplace_back(-(FullMapSize::yMapSize) / 2);  // inferior [2]
-    // limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
 
     // plataforma 1
     Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
@@ -214,64 +236,21 @@ void StaticMap::AddEasyLevel() {
     AddGround(GRTwentyEight);
 }
 
-
-// esta en el mapa
-std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
-    Vector2D posDynamic = dynamicT.GetPos();
-    float xDynamic = posDynamic.x;
-    float yDynamic = posDynamic.y;
-
-    float radio = (dynamicT.GetSize().y) / 2;
-
-    if (yDynamic - radio < limits[B]) {
-        return -1;
-    }
-    if (xDynamic - radio < limits[L]) {  // caso izquierda
-        return limits[L] - (xDynamic - radio);
-    }
-    if (yDynamic + radio > limits[T]) {  // caso arriba
-        return yDynamic + radio - limits[T];
-    }
-    if (xDynamic + radio > limits[R]) {
-        return xDynamic + radio - limits[R];
-    }
-    return std::nullopt;  // El objeto está dentro de los límites
-}
-
-bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
-    Vector2D dir = Vector2D::Down();
-    float len = (dynamicT.GetSize().y) / 2;
-    float margen = (80 * len / 100);
-    Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
-    Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
-
-    return std::any_of(
-            grounds.begin(), grounds.end(),
-            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
-                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
-                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
-                return left || right;
-            });
-}
-
-std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
-    auto it = std::find_if(grounds.begin(), grounds.end(), [&dynamicT](const auto& ground) {
-        return Collision::RectCollision(dynamicT, ground.mySpace);
-    });
-
-    if (it != grounds.end()) {
-        return it->mySpace;  // Colisión detectada
-    }
-    return std::nullopt;  // Sin colisiones
-}
-
-std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
-    std::vector<Vector2D> safePositions;
-
-    safePositions.emplace_back(Vector2D(0, 10));
-    safePositions.emplace_back(Vector2D(-7, 10));
-
-    return safePositions;
-}
-
-GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
+/* bool somethingUnderThisPosition(const Vector2D& t) {
+     for (int i = t.GetPos().y; i <= limits[1]; i--) {
+         Transform t(Vector2D(t.GetPos().x, i), Vector2D(1, 1), 0);
+         if (CheckCollision(t)) {
+             return true;
+         }
+     }
+     return false;
+ }
+ void getRandomPosition(float& x, float& y) {
+ std::random_device rd;
+ std::mt19937 gen(rd());
+ std::uniform_int_distribution<> distribX(limits[L], limits[R]);
+ std::uniform_int_distribution<> distribY(limits[B], limits[T]);
+     x = distribX(gen);
+     y = distribY(gen);
+ }
+*/

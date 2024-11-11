@@ -27,28 +27,12 @@ void DynamicObject::CheckOutOfMapBoundaries(StaticMap& map) {
     }
 }
 
-void DynamicObject::CheckCollisionWithMap(StaticMap& map, bool fromGravity) {
+void DynamicObject::CheckCollisionWithMap(StaticMap& map) {
     std::optional<Transform> maybeCollision = map.CheckCollision(mySpace);
     if (maybeCollision.has_value()) {
-        if (fromGravity) {
-            std::cout << "[CheckCollisionWithMap-fromGravity]: Before correcting:\n";
-            std::cout << "**** My pos: (" << mySpace.GetPos().x << "," << mySpace.GetPos().y
-                      << ")\n";
-        }
         HandleCollisionWithMap(maybeCollision.value());
-
-        if (fromGravity) {
-            std::cout << "[CheckCollisionWithMap-fromGravity]:Collision d\n";
-            std::cout << "**** My pos: (" << mySpace.GetPos().x << "," << mySpace.GetPos().y
-                      << ")\n";
-        }
-    } else {
-        if (fromGravity) {
-            std::cout << "[CheckCollisionWithMap-fromGravity]:NO collision\n";
-        }
     }
 }
-
 
 void DynamicObject::MarkAsDead() { isDead = true; }
 
