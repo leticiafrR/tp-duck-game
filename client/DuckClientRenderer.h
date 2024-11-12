@@ -48,6 +48,8 @@ public:
 
     void Draw(Camera& cam) { spr.Draw(cam); }
 
+    Transform& GetTransform() { return spr.GetTransform(); }
+
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;

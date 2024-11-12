@@ -452,7 +452,7 @@ bool IsMatchEnded(Camera& cam, Client& client) {
     return false;
 }
 
-void ShowWinner(Camera& cam, Client& client) {
+void ShowWinner(Camera& cam, Client& client, vector<PlayerData> players) {
     // bool running = true;
 
     Text winnerText("GETTING WINNER...", "pixel.ttf", 160,
@@ -479,8 +479,15 @@ void ShowWinner(Camera& cam, Client& client) {
         shared_ptr<NetworkMsg> msg;
         if (client.TryRecvNetworkMsg(msg)) {
             auto matchEnded = dynamic_pointer_cast<FinalWinner>(msg);
-            winnerText.SetText("Winner ID: " + std::to_string(matchEnded->winner));
-            // running = false;  // Go to game and snapshots
+
+            auto it = std::find_if(players.begin(), players.end(), [&matchEnded](PlayerData p) {
+                return p.playerID == matchEnded->winner;
+            });
+
+            if (it != players.end())
+                winnerText.SetText("The winner is: " + it->nickname);
+            else
+                winnerText.SetText("There is no winner");
         }
 
         ButtonsManager::GetInstance().Draw(cam);
@@ -494,8 +501,6 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
           Snapshot firstSnapshot) {
 
     CameraController camController(cam);
-    // camController.AddTransform(&duckT);
-
     // Set Players
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
 
@@ -506,6 +511,8 @@ void Game(Camera& cam, Client& client, MatchStartDto matchData, GameSceneDto map
         players.emplace(playerData.playerID,
                         std::make_shared<DuckClientRenderer>(
                                 Transform(spawnPos, matchData.duckSize), playerData.playerSkin));
+
+        camController.AddTransform(&players.at(playerData.playerID)->GetTransform());
     }
 
     // Set Map
@@ -646,6 +653,7 @@ int main() try {
         auto firstSnapshot = LoadingFirstSnapshot(cam, client);
 
         Game(cam, client, *playerData, *mapData, *firstSnapshot);
+        std::cout << "Round ended\n";
 
         while (!IsFinalGroupGame(cam, client)) {
             mapData = LoadingMap(cam, client);
@@ -660,7 +668,7 @@ int main() try {
             std::cout << "Match is not endend, continue with game\n";
     }
     std::cout << "Match ended \n";
-    ShowWinner(cam, client);
+    ShowWinner(cam, client, playerData->playersData);
 
     FontCache::Clear();
     SheetDataCache::Clear();
