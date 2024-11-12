@@ -62,6 +62,12 @@ public:
             case DuckState::RUNNING:
                 anim.SetTarget("run", false);
                 break;
+            case DuckState::JUMPING:
+                anim.SetTarget("jumping");
+                break;
+            case DuckState::FALLING:
+                anim.SetTarget("falling");
+                break;
             default:
                 break;
         }
