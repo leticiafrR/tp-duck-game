@@ -1,6 +1,9 @@
 #ifndef WEAPON_H
 #define WEAPON_H
+#include <cstdint>
+
 #include "../Duck.h"
+#include "../types.h"
 
 #include "Collectable.h"
 #define RATE 10  //<-CUESTIONABLE
