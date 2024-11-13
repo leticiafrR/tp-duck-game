@@ -25,6 +25,7 @@
 #include "CameraController.h"
 #include "ColorExtension.h"
 #include "DuckClientRenderer.h"
+#include "LoadingScreen.h"
 #include "MapBlock2D.h"
 #include "Object2D.h"
 #include "Rate.h"
@@ -285,71 +286,6 @@ shared_ptr<MatchStartDto> LoadingPlayers(Camera& cam, Client& client, Rate rate)
     return nullptr;
 }
 
-shared_ptr<GameSceneDto> LoadingMap(Camera& cam, Client& client, const Rate& rate) {
-    // bool running = true;
-
-    Text titleText("LOADING MAP...", "pixel.ttf", 160,
-                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
-                                 Vector2D(0.5, 0.5)),
-                   ColorExtension::White());
-
-    while (true) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-        }
-
-        shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
-            auto roundData = dynamic_pointer_cast<GameSceneDto>(msg);
-            return roundData;
-        }
-
-        titleText.Draw(cam);
-        cam.Render();
-        SDL_Delay(rate.GetMiliseconds());
-    }
-    return nullptr;
-}
-
-shared_ptr<Snapshot> LoadingFirstSnapshot(Camera& cam, Client& client, const Rate& rate) {
-
-    Text titleText("Getting Initial Setup...", "pixel.ttf", 160,
-                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
-                                 Vector2D(0.5, 0.5)),
-                   ColorExtension::White());
-
-    while (true) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-        }
-
-        shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
-            auto firstSnapshot = dynamic_pointer_cast<Snapshot>(msg);
-            return firstSnapshot;
-        }
-
-        titleText.Draw(cam);
-        cam.Render();
-        SDL_Delay(rate.GetMiliseconds());
-    }
-    return nullptr;
-}
-
 bool IsFinalGroupGame(Camera& cam, Client& client, const Rate& rate) {
     Text titleText("PROCESSING ROUND...", "pixel.ttf", 160,
                    RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
@@ -374,40 +310,6 @@ bool IsFinalGroupGame(Camera& cam, Client& client, const Rate& rate) {
             auto finalGroupData = dynamic_pointer_cast<FinalGroupGame>(msg);
             return finalGroupData->finalGroupGame;
             // running = false;  // Go to game and snapshots
-        }
-
-        ButtonsManager::GetInstance().Draw(cam);
-        titleText.Draw(cam);
-        cam.Render();
-        SDL_Delay(rate.GetMiliseconds());
-    }
-    return false;
-}
-
-bool IsMatchEnded(Camera& cam, Client& client, const Rate& rate) {
-
-    Text titleText("GETGING RESULTS...", "pixel.ttf", 160,
-                   RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
-                                 Vector2D(0.5, 0.5)),
-                   ColorExtension::White());
-
-    while (true) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
-
-        shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
-            auto matchEnded = dynamic_pointer_cast<GamesRecountDto>(msg);
-            return matchEnded->matchEnded;
         }
 
         ButtonsManager::GetInstance().Draw(cam);
@@ -588,6 +490,16 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
     }
 }
 
+template <typename NetworkMsgDerivedClass>
+bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concretPtr) {
+    shared_ptr<NetworkMsg> msg;
+    if (client.TryRecvNetworkMsg(msg)) {
+        concretPtr = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
+        return true;
+    }
+    return false;
+}
+
 int main() try {
     SDL sdl(SDL_INIT_VIDEO);
     Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 940,
@@ -607,21 +519,41 @@ int main() try {
     bool matchEnded = false;
 
     while (!matchEnded) {
-        auto mapData = LoadingMap(cam, client, rate);
-        auto firstSnapshot = LoadingFirstSnapshot(cam, client, rate);
+        std::shared_ptr<GameSceneDto> mapData = nullptr;
+        std::shared_ptr<Snapshot> firstSnapshot = nullptr;
+
+        LoadingScreen loadingRoundScreen(cam, rate, [&client, &mapData, &firstSnapshot]() {
+            if (!mapData)
+                GetServerMsg(client, mapData);
+            if (mapData && !firstSnapshot)
+                GetServerMsg(client, firstSnapshot);
+            return mapData && firstSnapshot;
+        });
+        loadingRoundScreen.Render("LOADING...");
 
         Game(cam, client, rate, *playerData, *mapData, *firstSnapshot);
         std::cout << "Round ended\n";
 
         while (!IsFinalGroupGame(cam, client, rate)) {
-            mapData = LoadingMap(cam, client, rate);
-            firstSnapshot = LoadingFirstSnapshot(cam, client, rate);
+            mapData = nullptr;
+            firstSnapshot = nullptr;
+            loadingRoundScreen.Render("LOADING...");
+
             Game(cam, client, rate, *playerData, *mapData, *firstSnapshot);
             std::cout << "Round ended\n";
         }
         std::cout << "Rounds group ended\n";
 
-        matchEnded = IsMatchEnded(cam, client, rate);
+        LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded]() {
+            std::shared_ptr<GamesRecountDto> recountData;
+            if (GetServerMsg(client, recountData)) {
+                matchEnded = recountData->matchEnded;
+                return true;
+            }
+            return false;
+        });
+        matchEndedScreen.Render("GETTING RESULTS");
+
         if (!matchEnded)
             std::cout << "Match is not endend, continue with game\n";
     }
