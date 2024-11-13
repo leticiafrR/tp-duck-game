@@ -35,7 +35,12 @@ public:
     RectTransform& GetRectTransform() { return rectTransform; }
     Font& GetFont() { return FontCache::GetData(filename, fontSize); }
 
-    void Draw(Camera& cam) { cam.DrawText(text, GetFont(), rectTransform, color); }
+    void Draw(Camera& cam) {
+        if (text.size() == 0) {
+            return;
+        }
+        cam.DrawText(text, GetFont(), rectTransform, color);
+    }
 
     ~Text() = default;
 };
