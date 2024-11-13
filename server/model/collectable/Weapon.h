@@ -23,7 +23,7 @@ public:
 
     virtual void BeCollected(TypeCollectable& collectorTypeRef) override = 0;
     virtual void Use(Duck* shooter) override = 0;
-    virtual ~Weapon();
+    virtual ~Weapon() = default;
 
     /*de esta derivan:
         -> Guns
@@ -47,8 +47,11 @@ public:
             cooldownTimer(0) {}
 
     virtual void BeCollected(TypeCollectable& collectorTypeRef) override = 0;
-    virtual void Use(Duck* shooter) override { shooter->Shoot(); }
+    virtual void Use(Duck* shooter) override {
+        shooter->SayHello();
+    }  // de juguete, solo para poder ocmpilar
     virtual void Update() { cooldownTimer += RATE; }
+    virtual ~Gun() = default;
 
     /* de esta derivan (todas las que tienen disparos prolongados):
         -> LaserRifle
@@ -56,6 +59,7 @@ public:
         -> etc
     */
 };
+
 
 class LaserRifle: public Gun {
 public:

@@ -1,13 +1,15 @@
 #include "Duck.h"
 
+#include "collectable/Weapon.h"
 #include "common/Collision.h"
 #include "map/staticMap.h"
+#include "projectile/ProjectilesController.h"
 
 #include "types.h"
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
-Duck::Duck(const Vector2D& initialPos):
+Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesController):
         DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK))),
         isShooting(false),
         isCrouched(false),
@@ -15,9 +17,10 @@ Duck::Duck(const Vector2D& initialPos):
         body(mySpace, Mass::DUCK),
         l(nullptr),
         myFlip(Flip::Right),
-        myState(DuckState::IDLE) {}
+        myState(DuckState::IDLE),
+        itemInHand(new LaserRifle(projectilesController, mySpace)) {}
 
-
+void Duck::SayHello() { std::cout << "Hello!\n"; }
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
     l->Suscribe(&mySpace, &myFlip, &myState);

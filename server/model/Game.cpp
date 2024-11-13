@@ -32,7 +32,7 @@ GameWorld::~GameWorld() {
 void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
-        players[playersIds[i]] = new Duck(spawnPoints[i]);
+        players[playersIds[i]] = new Duck(spawnPoints[i], p);
     }
 }
 
@@ -99,5 +99,5 @@ bool GameWorld::IsOver() { return (HasWinner() || livePlayers == 0); }
 void GameWorld::Testing(const Vector2D& posToTest) {
     std::cout << "[TESTING]: Receiving unique player [" << ID_PLAYER_UNIQUE_TEST
               << "]. Spawned in:(" << posToTest.x << "," << posToTest.y << ")\n";
-    players[ID_PLAYER_UNIQUE_TEST] = new Duck(posToTest);
+    players[ID_PLAYER_UNIQUE_TEST] = new Duck(posToTest, p);
 }

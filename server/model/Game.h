@@ -11,9 +11,9 @@
 #include "data/command.h"
 #include "event/EventsManager.h"
 #include "map/staticMap.h"
+#include "projectile/ProjectilesController.h"
 
 #include "Duck.h"
-
 #define ID_PLAYER_UNIQUE_TEST 1
 class GameWorld {
 private:
@@ -22,6 +22,7 @@ private:
     std::unordered_map<PlayerID_t, Duck*> players;
     std::set<ObjectID_t> uniquesIds;
     EventsManager eventsManager;
+    ProjectilesController p;
     void ReapDead();
     void Testing(const Vector2D& posToTest);
     void CreatePlayers(const std::vector<PlayerID_t>& playersIds);

@@ -2,8 +2,9 @@
 #define COLLECTABLE_H
 #include "common/Transform.h"
 
-// class Duck;
+class Duck;
 enum class TypeCollectable;
+
 class Collectable {
 protected:
     Transform mySpace;
@@ -17,8 +18,7 @@ public:
 
 
     virtual void BeCollected(TypeCollectable& collectorTyperRef) = 0;
-    // virtual void Use(Duck* user)=0;
-    virtual void Use() = 0;
+    virtual void Use(Duck* user) = 0;
 };
 
 
