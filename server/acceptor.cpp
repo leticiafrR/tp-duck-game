@@ -28,22 +28,14 @@ void AcceptorThread::run() {
     }
     /* Forcing the end of the match that will kill all of its clients  */
     match.forceEnd();
-    // note if a client couldnt join a match then (the receiver never existed) and the sender will
-    // be already over.
-
-    /* cleaning the resources of the  threads*/
     cleanUpThreads();
 }
 
-/* Method that will fail (throw an execption) when the main thread ask the acceptor to forceClosure
- */
 void AcceptorThread::acceptLoop() {
     PlayerID_t idClient = 1;
     while (_keep_running) {
         Socket peer = skt.accept();
-
         PRINT_NEW_CONNECTION();
-
         SenderThread* client = new SenderThread(std::move(peer), std::ref(match), idClient);
         std::cout << "se instanciò el sender\n";
         clients.push_back(client);

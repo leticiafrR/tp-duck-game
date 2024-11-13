@@ -48,6 +48,8 @@ public:
 
     void Draw(Camera& cam) { spr.Draw(cam); }
 
+    Transform& GetTransform() { return spr.GetTransform(); }
+
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;
@@ -59,6 +61,12 @@ public:
                 break;
             case DuckState::RUNNING:
                 anim.SetTarget("run", false);
+                break;
+            case DuckState::JUMPING:
+                anim.SetTarget("jumping");
+                break;
+            case DuckState::FALLING:
+                anim.SetTarget("falling");
                 break;
             default:
                 break;

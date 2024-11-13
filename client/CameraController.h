@@ -8,7 +8,7 @@
 class CameraController {
 private:
     Camera& camera;
-
+    float minSize;
     std::list<Transform*> transforms;
 
     Vector2D minLimit = Vector2D(-1000, -1000);
@@ -36,8 +36,9 @@ private:
     }
 
 public:
-    explicit CameraController(Camera& camera);
-    ~CameraController();
+    explicit CameraController(Camera& camera, float minSize = 35):
+            camera(camera), minSize(minSize) {}
+    ~CameraController() = default;
 
     void AddTransform(Transform* transform) { transforms.push_back(transform); }
 
@@ -55,19 +56,17 @@ public:
         if (!minCorner.IsFarFrom(maxCorner, 0.001f))
             return;
 
-        float offset = 2.5;
+        float offset = 4.5;
 
         camera.SetPos((minCorner + maxCorner) / 2);
-        camera.SetSize(Vector2D::Distance(minCorner, maxCorner) + offset);
+        float size = Vector2D::Distance(minCorner, maxCorner) + offset;
+        if (size < minSize)
+            size = minSize;
+        camera.SetSize(size);
 
         // Vector2D total = maxPos - minPos;
         // camera.SetSize(std::max(total.x, total.y) + offset);
     }
 };
-
-CameraController::CameraController(Camera& camera): camera(camera) {}
-
-CameraController::~CameraController() {}
-
 
 #endif

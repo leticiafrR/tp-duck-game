@@ -11,18 +11,14 @@
 #include <utility>
 #include <vector>
 
-// #include "common/safeMap.h"      //ttiene uno como atributo
-#include "common/timeManager.h"  //utiliza e instancia
-#include "model/Game.h"          ///tiene un atributo de este tipo
+#include "common/timeManager.h"
+#include "model/Game.h"
 
 #include "config.h"
-#include "messageSender.h"  //los utiliza y los va instanciando
-/**
- * meessageSender
- * PlayerInfo
- */
+#include "messageSender.h"
 
-#define GAMES_TO_WIN_MATCH 10
+#define GAMES_TO_WIN_MATCH 5
+#define GAMES_IN_GROUP 3
 #define NOT_ENOUGH_NUMBER_PLAYERS 0
 
 

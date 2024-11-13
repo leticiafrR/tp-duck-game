@@ -1,7 +1,10 @@
 #include "match.h"
 
+#include <iostream>
+
 #include "model/types.h"
 
+#define MAX_COMMANDS 500
 #define NO_WINNER_FORCED_END 0
 // si se tiene menos de esta cantidad o igual se pararà de jugar màs partidas
 
@@ -79,8 +82,12 @@ void Match::run() {
         while (!handlerGames.isThereFinalWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
             handlerGames.playGroupOfGames();
         }
+        auto winner = handlerGames.whoWon();
+        std::cout << "\n\n   [Final -1] [MATCH THR: out of the loop of gruoup of games]: The match "
+                     "has ended. The winner is player: "
+                  << winner << "\n";
 
-        setEndOfMatch(handlerGames.whoWon());
+        setEndOfMatch(winner);
 
     } catch (const ClosedQueue& q) {
         // forceEnd of the match may generate this exception.
@@ -97,17 +104,25 @@ void Match::setEndOfMatch(PlayerID_t winner) {
     // and also in this way i know that im not doing this twice.
     try {
         commandQueue.close();
-    } catch (const ClosedQueue& q) {}
-
-    std::unique_lock<std::mutex> lock(m);
-    if (players.size() != 0) {
-        auto messageSender = std::make_shared<MatchExitSender>(winner);
-        players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
-            // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
-            playerInfo.senderQueue->push(messageSender);
-            playerInfo.senderQueue->close();
-        });
-        players.clear();
+        std::unique_lock<std::mutex> lock(m);
+        if (players.size() != 0) {
+            std::cout << "\n   [Final -2] [MATCH THR]: sending the last broadcast ofwith the "
+                         "EndMatchSender\n";
+            auto messageSender = std::make_shared<MatchExitSender>(winner);
+            players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
+                // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
+                playerInfo.senderQueue->push(messageSender);
+                playerInfo.senderQueue->close();
+            });
+            players.clear();
+        }
+    } catch (const ClosedQueue& q) {
+        std::cout << "[Match: wen trying to end the match]:  youre trying to close a queue that is "
+                     "already closed\n";
+    } catch (const std::runtime_error& e) {
+        std::cerr << "[Match: wen trying to end the match]:" << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "[Match: wen trying to end the match]: The is an uknow exception!!\n";
     }
 }
 

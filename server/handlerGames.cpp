@@ -3,7 +3,6 @@
 
 #define MAX_CMMDS_PER_TICK 10
 #define TPS 20
-#define GAMES_IN_GROUP 5
 
 HandlerGames::HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            Queue<Command>& commandQueue):
@@ -47,16 +46,16 @@ void HandlerGames::playOneGame() {
     gameLoop();
     std::cout << "\n[2]             HANDLER_Games: getting out of the gameLoop\n";
 
-    // // NOTE: this is being commented bc we are not having winners of games
-    // if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-    //     PlayerID_t gameWinner = currentGame->WhoWon();
-    //     if (gameResults.find(gameWinner) != gameResults.end()) {
-    //         int playerRecord = gameResults[gameWinner] += 1;
-    //         if (playerRecord > recordGamesWon) {
-    //             recordGamesWon = playerRecord;
-    //         }
-    //     }
-    // }
+    // NOTE: this is being commented bc we are not having winners of games
+    if (players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
+        PlayerID_t gameWinner = currentGame->WhoWon();
+        if (gameResults.find(gameWinner) != gameResults.end()) {
+            int playerRecord = gameResults[gameWinner] += 1;
+            if (playerRecord > recordGamesWon) {
+                recordGamesWon = playerRecord;
+            }
+        }
+    }
 }
 
 void HandlerGames::gameLoop() {

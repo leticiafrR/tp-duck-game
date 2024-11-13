@@ -37,7 +37,7 @@ void GameUpdateSender::execute(ServerProtocol& protocol) const {
 GameEndingSender::GameEndingSender(bool finalGroupGame): finalGroupGame(finalGroupGame) {}
 
 std::string GameEndingSender::descriptionCont() const {
-    return "Ending of the game (sending of its the last game of the group)\n";
+    return "Bolean about if the last game was the last game of the group\n";
 }
 
 void GameEndingSender::execute(ServerProtocol& protocol) const {
