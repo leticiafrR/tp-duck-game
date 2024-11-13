@@ -27,6 +27,7 @@
 #include "DuckClientRenderer.h"
 #include "LoadingScreen.h"
 #include "MapBlock2D.h"
+#include "MenuScreen.h"
 #include "Object2D.h"
 #include "Rate.h"
 #include "SheetDataCache.h"
@@ -162,59 +163,6 @@ void TestMain(Camera& cam) {
         // ButtonsManager::GetInstance().Draw(cam);
 
         camController.Update();
-        cam.Render();
-        SDL_Delay(sleepMS);
-    }
-}
-
-void Menu(Camera& cam) {
-    bool running = true;
-
-    Text titleText("DUCK GAME", "pixel.ttf", 160,
-                   RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
-                                 Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                   ColorExtension::White());
-
-    Text titleShadow("DUCK GAME", "pixel.ttf", 160,
-                     RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
-                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                     ColorExtension::Black());
-
-    Button btn(
-            RectTransform(Transform(Vector2D(0, 0), Vector2D(200, 80)), Vector2D(0.5, 0.5),
-                          Vector2D(0.5, 0.5)),
-            [&running]() { running = false; }, Color(40, 40, 40));
-
-    Text buttonText("START", "pixel.ttf", 30,
-                    RectTransform(Transform(Vector2D(0, 0), Vector2D(200, 80)), Vector2D(0.5, 0.5),
-                                  Vector2D(0.5, 0.5)),
-                    ColorExtension::White());
-
-    int fps = 60;
-    float sleepMS = 1000.0f / fps;
-    // float deltaTime = 1.0f / fps;
-
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    // running = false;
-                    break;
-            }
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
-
-        // Rendering
-
-        ButtonsManager::GetInstance().Draw(cam);
-        titleShadow.Draw(cam);
-        titleText.Draw(cam);
-        buttonText.Draw(cam);
-        // cam.DrawText("START", font, Rect(70, 40, 200, 80), ColorExtension::Black());
         cam.Render();
         SDL_Delay(sleepMS);
     }
@@ -510,7 +458,8 @@ int main() try {
 
     Camera cam(std::move(render), 70);
     Rate rate(60);
-    Menu(cam);
+
+    MenuScreen(cam, rate).Render();
 
     Client client("8080", "localhost");
     Connecting(cam, client, rate);
