@@ -27,6 +27,7 @@
 #include "DuckClientRenderer.h"
 #include "LoadingScreen.h"
 #include "MapBlock2D.h"
+#include "MatchListScreen.h"
 #include "MenuScreen.h"
 #include "Object2D.h"
 #include "Rate.h"
@@ -460,6 +461,7 @@ int main() try {
     Rate rate(60);
 
     MenuScreen(cam, rate).Render();
+    MatchListScreen(cam, rate).Render();
 
     Client client("8080", "localhost");
     Connecting(cam, client, rate);
