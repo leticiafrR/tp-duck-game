@@ -31,6 +31,26 @@ void Duck::RegistListener(PlayerEventListener* listener) {
     l->StateTransition();
 }
 
+void Duck::TryUseItem() {
+    if (itemInHand) {
+        itemInHand->Use(this);
+    }
+}
+
+void Duck::ApplyRetroces() {
+    switch (myFlip) {
+        case Flip::Right:
+            motionHandler.StartMoveRight(velocity, speedX);
+            motionHandler.StopMoveRight(velocity, speedX);
+            break;
+        case Flip::Left:
+            motionHandler.StartMoveLeft(velocity, speedX);
+            motionHandler.StopMoveLeft(velocity, speedX);
+            break;
+        default:
+            break;
+    }
+}
 void Duck::Update(StaticMap& map, float deltaTime) {
     DuckState initialState = myState;
     Vector2D initialPos = mySpace.GetPos();

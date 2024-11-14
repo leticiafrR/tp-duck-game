@@ -20,6 +20,13 @@ void PlayerEventListener::Flipping() {
     e.stateTransition = *stateEventSrc;
 }
 
+void PlayerEventListener::Wounded() {
+    PlayerEvent& e = events[sourceId];
+    e.flipping = *flippingEventSrc;
+    e.motion = motionEventSrc->GetPos();
+    e.stateTransition = *stateEventSrc;
+}
+
 // por el momento solo se muere al caerse
 void PlayerEventListener::StateTransition() {
     PlayerEvent& e = events[sourceId];

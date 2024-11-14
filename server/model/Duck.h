@@ -10,17 +10,25 @@ class ProjectilesController;
 
 class Duck: public DynamicObject {
 private:
-    bool isShooting;
-    bool isCrouched;
-    bool isGrounded;
-    MotionHandler motionHandler;
-    RigidBody body;  // could be soported by te collectables
-    PlayerEventListener* l;
-    Flip myFlip;
-    DuckState myState;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] bool isShooting;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] bool isCrouched;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] bool isGrounded;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] MotionHandler motionHandler;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] RigidBody body;  // could be soported by te collectables
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] PlayerEventListener* l;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] Flip myFlip;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] DuckState myState;
     // TypeInHand type;
-
-    Collectable* itemInHand;
+    // cppcheck-suppress unusedStructMember
+    [[clang::supress_unused]] Collectable* itemInHand;
 
 public:
     explicit Duck(const Vector2D& initialPos, ProjectilesController& projectilesController);
@@ -32,8 +40,8 @@ public:
     void StopMoveRight();
     void StopMoveLeft();
     void TryJump();
-    // pendientes:
     void TryUseItem();
+    // pendientes:
     void StopUseItem();
 
     // void TryCollect();
@@ -48,7 +56,7 @@ public:
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     void UpdateState();
     void Update(StaticMap& map, float deltaTime);
-
+    void ApplyRetroces();
 
     ~Duck() override = default;
     // not copyable

@@ -1,6 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 #include <cstdint>
+#include <iostream>
 
 #include "../Duck.h"
 #include "../types.h"
