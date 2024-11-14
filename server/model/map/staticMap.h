@@ -7,6 +7,7 @@
 #include <optional>
 #include <random>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "common/Collision.h"
@@ -32,6 +33,9 @@ public:
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);
+    // returns the nearest
+    std::optional<float> CheckWallCollisionWithPath(const Vector2D& director,
+                                                    const Vector2D& origin);
     std::optional<Transform> CheckCollision(const Transform& dynamicT);
 
     std::vector<Vector2D> GetPlayersSpawnPoints();
@@ -39,4 +43,5 @@ public:
     GameSceneDto GetScene();
     ~StaticMap() {}
 };
+
 #endif
