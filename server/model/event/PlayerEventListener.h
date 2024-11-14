@@ -12,11 +12,11 @@ private:
     std::unordered_map<PlayerID_t, PlayerEvent>& events;
     PlayerID_t sourceId;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] Transform* motionEventSrc;
+    Transform* motionEventSrc;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] Flip* flippingEventSrc;
+    Flip* flippingEventSrc;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] DuckState* stateEventSrc;
+    DuckState* stateEventSrc;
 
 public:
     explicit PlayerEventListener(std::unordered_map<PlayerID_t, PlayerEvent>& events,

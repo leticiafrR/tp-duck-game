@@ -14,9 +14,9 @@ enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, D
 struct PlayerEvent {
     Vector2D motion;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] DuckState stateTransition;
+    DuckState stateTransition;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] Flip flipping;
+    Flip flipping;
 };
 
 struct Snapshot: public NetworkMsg {

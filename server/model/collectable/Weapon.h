@@ -78,7 +78,8 @@ public:
 
     void Use(Duck* shooter) override {
         Gun::Use(shooter);
-        // shooter->ApplyRetrocces();
+        // std::cout << "Duck use laser " << std::endl;
+        //  shooter->ApplyRetrocces();
         /*logic to shoot, aqui es donde se usa el ProjectilesController*/
     }
 };

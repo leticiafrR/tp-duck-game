@@ -11,24 +11,24 @@ class ProjectilesController;
 class Duck: public DynamicObject {
 private:
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] bool isShooting;
+    bool isShooting;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] bool isCrouched;
+    bool isCrouched;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] bool isGrounded;
+    bool isGrounded;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] MotionHandler motionHandler;
+    MotionHandler motionHandler;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] RigidBody body;  // could be soported by te collectables
+    RigidBody body;  // could be soported by te collectables
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] PlayerEventListener* l;
+    PlayerEventListener* l;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] Flip myFlip;
+    Flip myFlip;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] DuckState myState;
+    DuckState myState;
     // TypeInHand type;
     // cppcheck-suppress unusedStructMember
-    [[clang::supress_unused]] Collectable* itemInHand;
+    Collectable* itemInHand;
 
 public:
     explicit Duck(const Vector2D& initialPos, ProjectilesController& projectilesController);
