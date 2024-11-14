@@ -15,10 +15,15 @@
 
 class StaticMap {
 private:
+    // cppcheck-suppress unusedStructMember
     std::string theme;
+    // cppcheck-suppress unusedStructMember
     std::vector<size_t> size;
+    // cppcheck-suppress unusedStructMember
     std::vector<float> limits;
+    // cppcheck-suppress unusedStructMember
     std::vector<Transform> plataforms;
+    // cppcheck-suppress unusedStructMember
     std::vector<GroundDto> grounds;
     void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -31,6 +36,8 @@ public:
     StaticMap();
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
+    std::optional<float> CheckWallCollisionWithPath(const Vector2D& direction,
+                                                    const Vector2D& origin, const float& large);
     bool IsOnTheFloor(const Transform& dynamicT);
     std::optional<Transform> CheckCollision(const Transform& dynamicT);
 
