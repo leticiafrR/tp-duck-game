@@ -17,8 +17,8 @@ target_sources(taller_server
     receiver.cpp
     acceptor.cpp
 
-    # main.cpp
-    mainWeapon.cpp
+    main.cpp
+    # mainWeapon.cpp
 
     PUBLIC
     # .h files
