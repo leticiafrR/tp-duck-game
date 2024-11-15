@@ -21,7 +21,7 @@ private:
 public:
     MenuScreen(Camera& cam, const Rate& rate): cam(cam), rate(rate) {}
 
-    void Render() {
+    string Render() {
         bool running = true;
 
         Text titleShadow("DUCK GAME", "pixel.ttf", 160,
@@ -48,7 +48,15 @@ public:
         Button btn(
                 RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
                               Vector2D(0.5, 0.5)),
-                [&running]() { running = false; }, Color(40, 40, 40));
+                [&running, &nicknameInput]() {
+                    if (nicknameInput.size() == 0) {
+                        // Avoid stop running in this case
+                        nicknameInput = "Guest";
+                    }
+
+                    running = false;
+                },
+                Color(40, 40, 40));
         Text buttonText("START", "pixel.ttf", 30,
                         RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
                                       Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
@@ -108,6 +116,8 @@ public:
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
         }
+
+        return nicknameInput;
     }
 
     ~MenuScreen() = default;
