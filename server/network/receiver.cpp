@@ -1,25 +1,15 @@
 #include "receiver.h"
 
-ReceiverThread::ReceiverThread(PlayerID_t idClient, Match& match, ServerProtocol& protocol):
-        match(match), idClient(idClient), protocol(protocol) {}
+ReceiverThread::ReceiverThread(PlayerID_t idClient, std::shared_ptr<Queue<Command>> matchQueue,
+                               ServerProtocol& protocol):
+        matchQueue(matchQueue), idClient(idClient), protocol(protocol) {}
 
 void ReceiverThread::run() {
-    try {
-        receiveLoop();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    } catch (...) {
-        std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
-                  << idClient << "\n";
-    }
-}
-
-void ReceiverThread::receiveLoop() {
     try {
         while (_keep_running) {
             Command cmmd = protocol.receiveCommand();
             cmmd.playerId = idClient;
-            match.pushCommand(cmmd);
+            matchQueue->push(cmmd);
         }
     } catch (const ConnectionFailed& c) {
 
@@ -33,6 +23,12 @@ void ReceiverThread::receiveLoop() {
     } catch (const ClosedQueue& q) {
         // got here because the queue has been closed by the match.
         //  nothing to do.
+    } catch (const std::exception& e) {
+
+        std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
+                  << idClient << "\n";
     }
 }
 
@@ -44,7 +40,3 @@ void ReceiverThread::kill() {
      * the sender is ending) */
     stop();
 }
-
-/* if the match has naturally ended it will close the connection of all its clients, this would
- * cause the sender to get blocked trying to make a pop in its response queue .*/
-/* The sender needs the receiver to fail so it kills the sender properly (closing its queue)*/

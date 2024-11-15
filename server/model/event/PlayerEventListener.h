@@ -8,14 +8,10 @@
 
 class PlayerEventListener {
 private:
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<PlayerID_t, PlayerEvent>& events;
     PlayerID_t sourceId;
-    // cppcheck-suppress unusedStructMember
     Transform* motionEventSrc;
-    // cppcheck-suppress unusedStructMember
     Flip* flippingEventSrc;
-    // cppcheck-suppress unusedStructMember
     DuckState* stateEventSrc;
 
 public:

@@ -1,22 +1,22 @@
 #ifndef RECEIVER_H
 #define RECEIVER_H
 
+#include <memory>
 #include <utility>
-
-#include "match.h"
+// ya se no se utiliza a la match directamente
+#include "../matchesMonitor.h"
 
 class ReceiverThread: public Thread {
 private:
-    Match& match;
+    std::shared_ptr<Queue<Command>> matchQueue;
 
     PlayerID_t idClient;
 
     ServerProtocol& protocol;
 
-    void receiveLoop();
-
 public:
-    explicit ReceiverThread(PlayerID_t idClient, Match& match, ServerProtocol& protocol);
+    explicit ReceiverThread(PlayerID_t idClient, std::shared_ptr<Queue<Command>> matchQueue,
+                            ServerProtocol& protocol);
 
     void run() override;
 

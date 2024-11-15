@@ -10,24 +10,23 @@ class ProjectilesController;
 
 class Duck: public DynamicObject {
 private:
-    // cppcheck-suppress unusedStructMember
     bool isShooting;
-    // cppcheck-suppress unusedStructMember
+
     bool isCrouched;
-    // cppcheck-suppress unusedStructMember
+
     bool isGrounded;
-    // cppcheck-suppress unusedStructMember
+
     MotionHandler motionHandler;
-    // cppcheck-suppress unusedStructMember
+
     RigidBody body;  // could be soported by te collectables
-    // cppcheck-suppress unusedStructMember
+
     PlayerEventListener* l;
-    // cppcheck-suppress unusedStructMember
+
     Flip myFlip;
-    // cppcheck-suppress unusedStructMember
+
     DuckState myState;
     // TypeInHand type;
-    // cppcheck-suppress unusedStructMember
+
     Collectable* itemInHand;
 
 public:

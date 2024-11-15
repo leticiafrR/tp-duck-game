@@ -13,9 +13,7 @@ enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, D
 
 struct PlayerEvent {
     Vector2D motion;
-    // cppcheck-suppress unusedStructMember
     DuckState stateTransition;
-    // cppcheck-suppress unusedStructMember
     Flip flipping;
 };
 

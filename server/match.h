@@ -13,10 +13,13 @@
 #include "common/thread.h"
 #include "data/id.h"
 
-#include "handlerGames.h"
+#include "gamesHandler.h"
+
 
 class Match: public Thread {
 private:
+    // used as the id of the match
+    PlayerID_t playerCreator;
     // when this quantity is reached the match is started
     const int numberPlayers;
 
@@ -26,32 +29,34 @@ private:
 
     Config& config;
 
-    std::mutex m;
+    MATCH_STATUS status;
+
+    // std::mutex m;
 
 public:
-    /* has to be instanced making sure the numberPlayers is smaller than MAX_PLAYERS defined in
-     * Config*/
-    explicit Match(Config& config, int numberPlayers);
+    /* Recieves the number of players that the match is going to have, this number must be smaller
+     * than MAX_PLAYERS defined in Config, if it isnt this will throw an exception */
+    explicit Match(Config& config, int numberPlayers, PlayerID_t playerCreator);
 
-    /* returns a boolean indicating if the client was succesfully added. If the Match has
-     * already started the method will return false, else (success) the method will include in the
-     * list of Queues where the match does the broadcast the queueMesg recieved, also it will start
-     * the Match thread when the `currentPlayers`reachs the quatity `cantPlayers`
-     */
-    bool logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
+    /* Returns the number of players missing to start the game, so the monitor can start this when
+     * logging the player that fulls the match */
+    int openSpots();
 
-    /* Executes a blocking push over the command queue (the validation over if the client is alive
-     * in the current round must be done inside the  Game)*/
-    /* Method called by multiple recieverThreads so it uses a queue thread safe*/
-    void pushCommand(const Command& cmmd);
+    /* Method that must be called when the missing players != 0. If the Match has
+     * already started the method will throw an exception, else it will include the playerInfo into
+     * the container with wich players are going to receive the broadcasts and will return the queue
+     * of commands that the match is going to process */
+    /* Method called by the Lobby of each player-> CONCURRENT ACCES that must be handled by the
+     * monitor*/
+    std::shared_ptr<Queue<Command>> logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
 
     /* This method takes out of the container with the players to broadcast the queue of the client
      * with the ID received. It means that it is called when the client in the middle of the match
      * has disconected (the sender thread reconizes that the client has disconnected and
-     * calles this method-> CONCURRENT ACCESS) */
+     * calles this method-> CONCURRENT ACCESS that must be handled by the monitor) */
 
     /* SnapShoots to the disconnected client and also it should take off the player of the WorldMap
-     * (if hasnt end) (write)*/
+     * (if hasnt end)*/
     void logOutPlayer(PlayerID_t idClient);
 
     void run() override;

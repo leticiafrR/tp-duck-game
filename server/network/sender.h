@@ -11,16 +11,16 @@
 
 class SenderThread: public Thread {
 private:
-    Match& match;
+    MatchesMonitor& matches;
     Queue<std::shared_ptr<MessageSender>> senderQueue;
     ServerProtocol protocol;
     PlayerID_t idClient;
     std::atomic<bool> _joinedAMatch = false;
 
-    void sendLoop();
+    void sendLoop(uint32_t matchID);
 
 public:
-    explicit SenderThread(Socket&& sktPeer, Match& match, PlayerID_t idClient);
+    explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, PlayerID_t idClient);
     bool joinedAMatch();
 
     void run() override;

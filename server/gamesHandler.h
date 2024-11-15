@@ -4,6 +4,7 @@
 #include <atomic>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <random>
 #include <string>
 #include <tuple>
@@ -13,9 +14,10 @@
 
 #include "common/timeManager.h"
 #include "model/Game.h"
+#include "network/messageSender.h"
 
 #include "config.h"
-#include "messageSender.h"
+#include "matchStatus.h"
 
 #define GAMES_TO_WIN_MATCH 5
 #define GAMES_IN_GROUP 3
@@ -26,8 +28,6 @@ struct PlayerInfo {
     std::string nickName;
     // cppcheck-suppress unusedStructMember
     Queue<std::shared_ptr<MessageSender>>* senderQueue;
-    // PlayerInfo(const std::string& nickName, Queue<std::shared_ptr<MessageSender>>* senderQueue):
-    //         nickName(nickName), senderQueue(senderQueue) {}
 };
 
 
@@ -37,7 +37,7 @@ struct RunOutOfPlayers: public std::runtime_error {
 
 class MessageSender;
 
-class HandlerGames {
+class GamesHandler {
 private:
     const std::vector<std::string> availableLevels;
 
@@ -45,13 +45,18 @@ private:
 
     Queue<Command>& commandQueue;
 
-    int recordGamesWon = 0;
+    int currentRecord = 0;
     PlayerID_t matchWinner = 0;
+
     bool existsMatchWinner = false;
+    // o tal vez lo siguiente:
+    MATCH_STATUS& matchStatus;
 
-    std::unordered_map<PlayerID_t, int> gameResults;
 
-    std::unique_ptr<GameWorld> currentGame;
+    // every time a player wins a game it gains a point
+    std::unordered_map<PlayerID_t, int> playerPointsRecord;
+
+    std::optional<GameWorld> currentGame;
 
     // private methods
 
@@ -67,11 +72,13 @@ private:
 
     void broadcastGameMssg(const std::shared_ptr<MessageSender>& message);
 
+    void registerGameWinnerPoint();
+
     void clearQueue();
 
 public:
-    HandlerGames(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                 Queue<Command>& commandQueue);
+    GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
+                 Queue<Command>& commandQueue, MATCH_STATUS& matchStatus);
     void playGroupOfGames();
 
     bool isThereFinalWinner();
