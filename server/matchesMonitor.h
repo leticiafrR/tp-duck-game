@@ -13,6 +13,7 @@ private:
     std::unordered_map<PlayerID_t, Match*> matchesOncourse;
 
 public:
+    explicit MatchesMonitor(Config);
     bool tryJoinMatch();
 };
 

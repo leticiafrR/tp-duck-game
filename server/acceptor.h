@@ -10,7 +10,7 @@ class AcceptorThread: public Thread {
 private:
     Socket skt;
     std::list<SenderThread*> clients;
-    Match match;
+    MatchesMonitor matchesMonitor;
 
     void acceptLoop();
     void reapDead();

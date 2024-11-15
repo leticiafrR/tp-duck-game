@@ -50,7 +50,7 @@ private:
 
     bool existsMatchWinner = false;
     // o tal vez lo siguiente:
-    MATCH_STATUS& matchStatus;
+    std::atomic<MATCH_STATUS>& matchStatus;
 
 
     // every time a player wins a game it gains a point

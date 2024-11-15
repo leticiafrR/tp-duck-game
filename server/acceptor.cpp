@@ -4,7 +4,7 @@
 #define TEST_NUMBER_PLAYERS_IN_MATCH 2
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
-        skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
+        skt(servname), MatchesMonitor(config) {}
 
 void AcceptorThread::forceClosure() {
     skt.shutdown(2);

@@ -10,22 +10,17 @@
 // si se tiene menos de esta cantidad o igual se pararà de jugar màs partidas
 
 // The monitor must be sure that the number Players is smaller than the MAX
-Match::Match(Config& config, int numberPlayers, PlayerID_t playerCreator):
+Match::Match(Config& config, PlayerID_t playerCreator):
+        matchStatus(WAITING_PLAYERS),
         playerCreator(playerCreator),
-        numberPlayers(numberPlayers),
-        commandQueue(MAX_COMMANDS),
-        players(numberPlayers),
-        config(config),
-        status(WAITING_PLAYERS) {
-    if (numberPlayers > config.getMaxPlayers()) {
-        throw std::runtime_error(
-                "ERROR: Too many players, can't manage a match with so many players.");
-    }
-}
+        commandQueue(std::make_shared<Queue<Command>>(MAX_COMMANDS)),
+        players(config.getMaxPlayers()),
+        config(config) {}
 
-int Match::missingPlayers() { return numberPlayers - players.size(); }
+int Match::openSpots() { return config.getMaxPlayers() - players.size(); }
 
-Queue<Command>& Match::logInPlayer(PlayerID_t idPlayer, const PlayerInfo& playerInfo) {
+std::shared_ptr<Queue<Command>> Match::logInPlayer(PlayerID_t idPlayer,
+                                                   const PlayerInfo& playerInfo) {
     if (!players.tryInsert(idPlayer, playerInfo)) {
         std::stringstream mssg_error;
         mssg_error << "Error: Trying to include player [ID]: " << idPlayer
@@ -35,6 +30,24 @@ Queue<Command>& Match::logInPlayer(PlayerID_t idPlayer, const PlayerInfo& player
     }
     return commandQueue;
 }
+// bloqueante para aquellos no sean los creadores de la partida (conditional variable)
+// en caso de ser el cliente quien ejecute esto se debe pushear antes a la cola de la match el
+// comando para iniciar, se popea de aqui, se inicia la partida y se notifcan a los atentos a la
+// conditional variable
+void Match::waitForMatchStarting(PlayerID_t idClient) {
+    std::unique_lock<std::mutex> lck(m);
+    if (idClient == playerCreator) {
+        while (matchStatus == WAITING_PLAYERS) {
+            waitingPlayers.wait(lck);
+        }
+    } else {
+        if (commandQueue->pop().cmd == CommandCode::_startMatch) {
+            matchStatus = MATCH_ON_COURSE;
+            this->start();
+            waitingPlayers.notify_all();
+        }
+    }
+}
 
 /* Method that would be called concurrently (by the senderThreads) when the sender thread of the
  * client notices the disconection. Wont be called if the match is the one who killed all its
@@ -42,16 +55,14 @@ Queue<Command>& Match::logInPlayer(PlayerID_t idPlayer, const PlayerInfo& player
 void Match::logOutPlayer(PlayerID_t idClient) {
     players.tryErase(idClient);
     if (_is_alive) {
-        // if the match is alive the player could be part of a game world. If not yet
         Command quit(CommandCode::_quit);
         quit.playerId = idClient;
-        commandQueue.push(quit);
+        commandQueue->push(quit);
     }
 }
 
 
 void Match::run() {
-    status = MATCH_ON_COURSE;
     try {
 
         auto playersData = assignSkins(config.getAvailableSkins());
@@ -81,14 +92,14 @@ void Match::setEndOfMatch(PlayerID_t winner) {
     // only makes sence to do this operation if there are more than 0 players.
     // and also in this way i know that im not doing this twice.
     try {
-        commandQueue.close();
-        std::unique_lock<std::mutex> lock(m);  // creo que este metodo al ser usado tanto por codigo
-                                               // ajeno (cuando el acceptor) como por
+        commandQueue->close();
+        std::unique_lock<std::mutex> lock(endMatch);
+
         if (players.size() != 0) {
             auto messageSender = std::make_shared<MatchExitSender>(winner);
             players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
-                // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
-                playerInfo.senderQueue->push(messageSender);
+                // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE, què pasarìa si no?
+                playerInfo.senderQueue->try_push(messageSender);
                 playerInfo.senderQueue->close();
             });
             players.clear();

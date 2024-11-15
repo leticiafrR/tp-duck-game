@@ -18,25 +18,25 @@
 
 class Match: public Thread {
 private:
+    std::atomic<MATCH_STATUS> matchStatus;
+    std::condition_variable waitingPlayers;
+    std::mutex m;
+    // aqui deberìa de haber un mutex
+
     // used as the id of the match
     PlayerID_t playerCreator;
-    // when this quantity is reached the match is started
-    const int numberPlayers;
 
-    Queue<Command> commandQueue;
+    std::shared_ptr<Queue<Command>> commandQueue;
 
     SafeMap<PlayerID_t, PlayerInfo> players;
 
     Config& config;
 
-    MATCH_STATUS status;
-
-    // std::mutex m;
+    std::mutex endMatch;
 
 public:
-    /* Recieves the number of players that the match is going to have, this number must be smaller
-     * than MAX_PLAYERS defined in Config, if it isnt this will throw an exception */
-    explicit Match(Config& config, int numberPlayers, PlayerID_t playerCreator);
+    /* Builds the match with a tolerance of players as the object config indicates. */
+    explicit Match(Config& config, PlayerID_t playerCreator);
 
     /* Returns the number of players missing to start the game, so the monitor can start this when
      * logging the player that fulls the match */
@@ -49,6 +49,8 @@ public:
     /* Method called by the Lobby of each player-> CONCURRENT ACCES that must be handled by the
      * monitor*/
     std::shared_ptr<Queue<Command>> logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo);
+
+    void waitForMatchStarting(PlayerID_t idClient);
 
     /* This method takes out of the container with the players to broadcast the queue of the client
      * with the ID received. It means that it is called when the client in the middle of the match
