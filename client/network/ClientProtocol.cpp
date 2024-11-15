@@ -43,6 +43,9 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
         case END_MATCH:
             return std::make_shared<FinalWinner>(receiveMatchWinner());
 
+        case ACTIVE_MATCHES:
+            return std::make_shared<ListActiveMatches>(receiveActiveMatches());
+
         default:
             std::cout << "ERR: the client recieved a unknown message  header!\n";
             throw BrokenProtocol();
@@ -130,7 +133,18 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         // building PlayerEvent
         updates[ID] = PlayerEvent{evMotion, evState, evFlip};
     }
-    return Snapshot(gameOver, updates);
+    std::vector<InstantProjectileEventDto> projectiles;
+    uint8_t numberProjectile = assistant.receiveNumberOneByte();
+    for (uint8_t i = 0; i < numberProjectile; i++) {
+
+        auto speed = assistant.receiveFloat();
+        auto type = (TypeProjectile)assistant.receiveNumberOneByte();
+        auto origin = assistant.receiveVector2D();
+        auto end = assistant.receiveVector2D();
+        projectiles.emplace_back(InstantProjectileEventDto(type, origin, end, speed));
+    }
+
+    return Snapshot(gameOver, updates, projectiles);
 }
 
 bool ClientProtocol::receiveFinalGroupGame() {
@@ -160,6 +174,11 @@ GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
 
 PlayerID_t ClientProtocol::receiveMatchWinner() { return assistant.receiveNumberFourBytes(); }
 
+void ClientProtocol::sendRequestJoinMatch(const PlayerID_t& matchID) {
+    assistant.sendNumber(LOG_MATCH);
+    assistant.sendNumber(matchID);
+}
+
 void ClientProtocol::sendCommand(CommandCode cmdCode) {
     assistant.sendNumber(COMMAND);
     assistant.sendNumber((uint8_t)cmdCode);
@@ -168,4 +187,18 @@ void ClientProtocol::sendCommand(CommandCode cmdCode) {
 void ClientProtocol::endConnection() {
     skt.shutdown(2);
     skt.close();
+}
+
+ListActiveMatches ClientProtocol::receiveActiveMatches() {
+    auto numberMatches = assistant.receiveNumberOneByte();
+    std::unordered_map<PlayerID_t, ActiveMatch> matches;
+    for (uint8_t i = 0; i < numberMatches; i++) {
+        ActiveMatch match;
+        auto id = assistant.receiveNumberFourBytes();
+        match.name = assistant.receiveString();
+        match.actualPlayers = assistant.receiveNumberOneByte();
+        match.maxPlayers = assistant.receiveNumberOneByte();
+        matches[id] = match;
+    }
+    return ListActiveMatches(matches);
 }
