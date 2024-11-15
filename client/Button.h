@@ -20,16 +20,21 @@ private:
     bool isPressed;
 
 public:
-    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255), int layer = 0);
+    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255),
+           int layerOrder = 0);
     ~Button();
 
-    bool IsMouseOver(float mouseX, float mouseY, Camera& cam);
+    static bool IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam);
 
     void Draw(Camera& cam);
 
     RectTransform& GetRectTransform() { return image.GetRectTransform(); }
 
+    bool IsTarget(int mouseX, int mouseY, Camera& cam);
+
     void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
+
+    int GetLayerOrder() { return image.GetLayerOrder(); }
 };
 
 #endif
