@@ -3,8 +3,8 @@
 #include "ButtonsManager.h"
 #include "ColorExtension.h"
 
-Button::Button(RectTransform rect, Callback onClick, Color color):
-        image(rect, color),
+Button::Button(RectTransform rect, Callback onClick, Color color, int layer):
+        image(rect, color, layer),
         onClick(onClick),
         color(color),
         pressedColor(ColorExtension::AddValue(color, -50)) {

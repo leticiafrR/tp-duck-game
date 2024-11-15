@@ -18,6 +18,10 @@ public:
                            Vector2D pivot = Vector2D(0.5f, 0.5f)):
             t(t), anchor(anchor), pivot(pivot) {}
 
+    explicit RectTransform(Vector2D pos, Vector2D size, Vector2D anchor = Vector2D(0.5f, 0.5f),
+                           Vector2D pivot = Vector2D(0.5f, 0.5f)):
+            t(Transform(pos, size)), anchor(anchor), pivot(pivot) {}
+
     Transform& GetTransform() { return t; }
     void SetSize(Vector2D size) { t.SetSize(size); }
     Vector2D GetSize() { return t.GetSize(); }

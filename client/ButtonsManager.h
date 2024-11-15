@@ -35,11 +35,11 @@ public:
         }
     }
 
-    void Draw(Camera& cam) {
-        for (auto btn: buttons) {
-            btn->Draw(cam);
-        }
-    }
+    // void Draw(Camera& cam) {
+    //     for (auto btn: buttons) {
+    //         btn->Draw(cam);
+    //     }
+    // }
 
     // Remove copy
     ButtonsManager(const ButtonsManager&) = delete;

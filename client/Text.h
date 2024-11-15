@@ -8,12 +8,13 @@
 
 #include "Camera.h"
 #include "FontCache.h"
+#include "GraphicUI.h"
 #include "RectTransform.h"
 
 using std::string;
 using namespace SDL2pp;  // NOLINT
 
-class Text {
+class Text: public GraphicUI {
 private:
     string text;
     string filename;
@@ -23,7 +24,8 @@ private:
 
 public:
     Text(const string& text, int fontSize, RectTransform rectTransform, Color color,
-         const string& filename = "pixel.ttf"):
+         int layerOrder = 0, const string& filename = "pixel.ttf"):
+            GraphicUI(layerOrder),
             text(text),
             filename(filename),
             fontSize(fontSize),
@@ -35,7 +37,7 @@ public:
     RectTransform& GetRectTransform() { return rectTransform; }
     Font& GetFont() { return FontCache::GetData(filename, fontSize); }
 
-    void Draw(Camera& cam) {
+    void Draw(Camera& cam) override {
         if (text.size() == 0) {
             return;
         }

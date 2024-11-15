@@ -19,6 +19,7 @@
 #include "network/Client.h"
 
 #include "Animator.h"
+#include "BulletRenderer.h"
 #include "Button.h"
 #include "ButtonsManager.h"
 #include "Camera.h"
@@ -261,8 +262,7 @@ bool IsFinalGroupGame(Camera& cam, Client& client, const Rate& rate) {
             // running = false;  // Go to game and snapshots
         }
 
-        ButtonsManager::GetInstance().Draw(cam);
-        titleText.Draw(cam);
+        GUIManager::GetInstance().Draw(cam);
         cam.Render();
         SDL_Delay(rate.GetMiliseconds());
     }
@@ -304,8 +304,7 @@ void ShowWinner(Camera& cam, Client& client, const Rate& rate, vector<PlayerData
                 winnerText.SetText("There is no winner");
         }
 
-        ButtonsManager::GetInstance().Draw(cam);
-        winnerText.Draw(cam);
+        GUIManager::GetInstance().Draw(cam);
         cam.Render();
         SDL_Delay(rate.GetMiliseconds());
     }
@@ -431,7 +430,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             data->Draw(cam);
         }
 
-        ButtonsManager::GetInstance().Draw(cam);
+        GUIManager::GetInstance().Draw(cam);
 
         camController.Update();
         cam.Render();
@@ -459,7 +458,7 @@ int main() try {
 
     Camera cam(std::move(render), 70);
     Rate rate(60);
-
+    // TestMain(cam);
     string nickname = MenuScreen(cam, rate).Render();
     MatchListScreen(cam, rate).Render();
 

@@ -7,6 +7,7 @@
 #include "ButtonsManager.h"
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "GUIManager.h"
 #include "Rate.h"
 #include "SDLExtension.h"
 #include "Text.h"
@@ -101,17 +102,11 @@ public:
                 ButtonsManager::GetInstance().HandleEvent(event, cam);
             }
 
-            ButtonsManager::GetInstance().Draw(cam);
-
             nicknameText.SetText(nicknameInput);
 
-            if (nicknameInput.size() == 0)
-                nicknamePlaceHolderText.Draw(cam);
+            nicknamePlaceHolderText.SetVisible(nicknameInput.size() == 0);
 
-            nicknameText.Draw(cam);
-            titleShadow.Draw(cam);
-            titleText.Draw(cam);
-            buttonText.Draw(cam);
+            GUIManager::GetInstance().Draw(cam);
 
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());

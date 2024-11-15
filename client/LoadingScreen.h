@@ -42,7 +42,6 @@ public:
                 break;
             }
 
-            titleText.Draw(cam);
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
         }

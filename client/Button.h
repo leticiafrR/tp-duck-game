@@ -20,7 +20,7 @@ private:
     bool isPressed;
 
 public:
-    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255));
+    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255), int layer = 0);
     ~Button();
 
     bool IsMouseOver(float mouseX, float mouseY, Camera& cam);

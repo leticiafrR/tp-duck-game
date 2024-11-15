@@ -9,6 +9,7 @@
 #include "ButtonsManager.h"
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "GUIManager.h"
 #include "Image.h"
 #include "LobbyItemWidget.h"
 #include "Rate.h"
@@ -58,24 +59,36 @@ public:
     void Render() {
         bool running = true;
 
+        Image header(RectTransform(Vector2D(0, 0), Vector2D(2200, 200), Vector2D(0.5, 1),
+                                   Vector2D(0.5, 1)),
+                     ColorExtension::Black(), 3);
+
         Text titleText("SELECT OR CREATE A LOBBY", 160,
-                       RectTransform(Transform(Vector2D(3, -50), Vector2D(500, 160)),
-                                     Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
-                       ColorExtension::White());
+                       RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1),
+                                     Vector2D(0.5, 0.5)),
+                       ColorExtension::White(), 4);
 
         Button createButton(
-                RectTransform(Transform(Vector2D(0, -150), Vector2D(320, 80)), Vector2D(0.5, 1),
+                RectTransform(Vector2D(0, -150), Vector2D(320, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
-                [&running]() { running = false; }, Color(40, 40, 40));
+                [&running]() { running = false; }, Color(40, 40, 40), 4);
+
         Text createButtonText("CREATE MATCH", 30,
-                              RectTransform(Transform(Vector2D(0, -150), Vector2D(320, 80)),
-                                            Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
-                              ColorExtension::White());
+                              RectTransform(Vector2D(0, -150), Vector2D(320, 80), Vector2D(0.5, 1),
+                                            Vector2D(0.5, 0.5)),
+                              ColorExtension::White(), 5);
+
         LoadWidgetList(vector<LobbyDataDummy>{
                 LobbyDataDummy{"josValentin", 2, 5},
                 LobbyDataDummy{"metalica", 4, 5},
                 LobbyDataDummy{"andrew garfield", 3, 5},
                 LobbyDataDummy{"antuaned garfield", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
+                LobbyDataDummy{"random", 4, 5},
         });
 
         while (running) {
@@ -89,22 +102,14 @@ public:
                         break;
                     case SDL_MOUSEWHEEL:
                         Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                        UpdateWidgetListPosition(wheelDir * rate.GetDeltaTime() * 1000);
+                        UpdateWidgetListPosition(wheelDir * rate.GetDeltaTime() * 2500);
                         break;
                 }
 
                 ButtonsManager::GetInstance().HandleEvent(event, cam);
             }
 
-            for (auto& widget: widgets) {
-                widget.Draw(cam);
-            }
-
-
-            ButtonsManager::GetInstance().Draw(cam);
-
-            titleText.Draw(cam);
-            createButtonText.Draw(cam);
+            GUIManager::GetInstance().Draw(cam);
 
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
