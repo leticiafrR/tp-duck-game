@@ -22,8 +22,8 @@ private:
     Color color;
 
 public:
-    Text(const string& text, const string& filename, int fontSize, RectTransform rectTransform,
-         Color color):
+    Text(const string& text, int fontSize, RectTransform rectTransform, Color color,
+         const string& filename = "pixel.ttf"):
             text(text),
             filename(filename),
             fontSize(fontSize),

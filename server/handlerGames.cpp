@@ -22,8 +22,8 @@ void HandlerGames::playGroupOfGames() {
         playOneGame();
         broadcastGameMssg(std::make_shared<GameEndingSender>(i == (GAMES_IN_GROUP - 1)));
     }
-    broadcastGameMssg(std::make_shared<GamesRecountSender>(gameResults, existsMatchWinner));
     updateMatchWinnerStatus();
+    broadcastGameMssg(std::make_shared<GamesRecountSender>(gameResults, existsMatchWinner));
 }
 
 void HandlerGames::clearQueue() {

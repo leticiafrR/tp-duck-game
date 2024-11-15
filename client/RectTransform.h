@@ -24,6 +24,8 @@ public:
     Vector2D GetPivot() { return pivot; }
     Vector2D GetAnchor() { return anchor; }
 
+    void Move(Vector2D add) { t.Move(add); }
+
     ~RectTransform() = default;
 };
 

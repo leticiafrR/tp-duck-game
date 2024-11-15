@@ -9,7 +9,7 @@
 
 enum class Flip : uint8_t { Left = 1, Right, Up };
 enum class TypeBullet : uint8_t { RayoLaser, Banana, GranadaFragment };
-enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD };
+enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, DEAD };
 
 struct PlayerEvent {
     Vector2D motion;

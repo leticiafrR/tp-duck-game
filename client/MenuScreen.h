@@ -24,23 +24,23 @@ public:
     string Render() {
         bool running = true;
 
-        Text titleShadow("DUCK GAME", "pixel.ttf", 160,
+        Text titleShadow("DUCK GAME", 160,
                          RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
                                        Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                          ColorExtension::Black());
-        Text titleText("DUCK GAME", "pixel.ttf", 160,
+        Text titleText("DUCK GAME", 160,
                        RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                        ColorExtension::White());
 
 
-        Text nicknamePlaceHolderText("Write your nickname", "pixel.ttf", 50,
+        Text nicknamePlaceHolderText("Write your nickname", 50,
                                      RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
                                                    Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                                      ColorExtension::White().SetAlpha(120));
 
         string nicknameInput = "";
-        Text nicknameText(nicknameInput, "pixel.ttf", 50,
+        Text nicknameText(nicknameInput, 50,
                           RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
                                         Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                           ColorExtension::White());
@@ -57,7 +57,7 @@ public:
                     running = false;
                 },
                 Color(40, 40, 40));
-        Text buttonText("START", "pixel.ttf", 30,
+        Text buttonText("START", 30,
                         RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
                                       Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                         ColorExtension::White());

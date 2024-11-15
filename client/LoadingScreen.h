@@ -21,7 +21,7 @@ public:
             cam(cam), rate(rate), endFunction(endFunction) {}
 
     void Render(const string& text) {
-        Text titleText(text, "pixel.ttf", 160,
+        Text titleText(text, 160,
                        RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)),
                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                        ColorExtension::White());

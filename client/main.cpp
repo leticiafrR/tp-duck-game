@@ -172,7 +172,7 @@ void TestMain(Camera& cam) {
 void Connecting(Camera& cam, Client& client, const Rate& rate) {
     bool running = true;
 
-    Text titleText("CONNECTING TO SEVER...", "pixel.ttf", 160,
+    Text titleText("CONNECTING TO SEVER...", 160,
                    RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
                                  Vector2D(0.5, 0.5)),
                    ColorExtension::White());
@@ -204,7 +204,7 @@ void Connecting(Camera& cam, Client& client, const Rate& rate) {
 
 shared_ptr<MatchStartDto> LoadingPlayers(Camera& cam, Client& client, Rate rate) {
 
-    Text titleText("LOADING PLAYERS DATA...", "pixel.ttf", 160,
+    Text titleText("LOADING PLAYERS DATA...", 160,
                    RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
                                  Vector2D(0.5, 0.5)),
                    ColorExtension::White());
@@ -236,7 +236,7 @@ shared_ptr<MatchStartDto> LoadingPlayers(Camera& cam, Client& client, Rate rate)
 }
 
 bool IsFinalGroupGame(Camera& cam, Client& client, const Rate& rate) {
-    Text titleText("PROCESSING ROUND...", "pixel.ttf", 160,
+    Text titleText("PROCESSING ROUND...", 160,
                    RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)), Vector2D(0.5, 0.5),
                                  Vector2D(0.5, 0.5)),
                    ColorExtension::White());
@@ -272,7 +272,7 @@ bool IsFinalGroupGame(Camera& cam, Client& client, const Rate& rate) {
 void ShowWinner(Camera& cam, Client& client, const Rate& rate, vector<PlayerData> players) {
     // bool running = true;
 
-    Text winnerText("GETTING WINNER...", "pixel.ttf", 160,
+    Text winnerText("GETTING WINNER...", 160,
                     RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)),
                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                     ColorExtension::White());

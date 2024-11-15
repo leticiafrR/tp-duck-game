@@ -1,62 +1,82 @@
 #ifndef MATCH_LIST_SCREEN_H
 #define MATCH_LIST_SCREEN_H
 
+#include <list>
 #include <string>
+#include <vector>
 
 #include "Button.h"
 #include "ButtonsManager.h"
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "Image.h"
+#include "LobbyItemWidget.h"
 #include "Rate.h"
 #include "SDLExtension.h"
 #include "Text.h"
 
+using std::list;
 using std::string;
+using std::vector;
+
+// Testing data
+struct LobbyDataDummy {
+    string owner;
+    int playerCount;
+    int maxPlayers;
+};
 
 class MatchListScreen {
 private:
     Camera& cam;
     Rate rate;
+    list<LobbyItemWidget> widgets;
 
 public:
     MatchListScreen(Camera& cam, const Rate& rate): cam(cam), rate(rate) {}
 
+    void LoadWidgetList(vector<LobbyDataDummy> data) {
+        widgets.clear();
+
+        int moveDelta = 130;
+
+        for (size_t i = 0; i < data.size(); i++) {
+            auto lobbyData = data[i];
+            widgets.emplace_back(lobbyData.owner, lobbyData.playerCount, lobbyData.maxPlayers,
+                                 []() {});
+
+            widgets.back().MoveContent(Vector2D::Down() * i * moveDelta);
+        }
+    }
+
+    void UpdateWidgetListPosition(Vector2D movement) {
+        for (auto& widget: widgets) {
+            widget.MoveContent(movement);
+        }
+    }
+
     void Render() {
         bool running = true;
 
-        Text titleText("SELECT OR CREATE A MATCH", "pixel.ttf", 160,
-                       RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
-                                     Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+        Text titleText("SELECT OR CREATE A LOBBY", 160,
+                       RectTransform(Transform(Vector2D(3, -50), Vector2D(500, 160)),
+                                     Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
                        ColorExtension::White());
 
         Button createButton(
-                RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
+                RectTransform(Transform(Vector2D(0, -150), Vector2D(320, 80)), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [&running]() { running = false; }, Color(40, 40, 40));
-        Text createButtonText("CREATE", "pixel.ttf", 30,
-                              RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
-                                            Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+        Text createButtonText("CREATE MATCH", 30,
+                              RectTransform(Transform(Vector2D(0, -150), Vector2D(320, 80)),
+                                            Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
                               ColorExtension::White());
-
-        Button matchButton(
-                RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120))),
-                [&running]() { running = false; }, Color(160, 160, 160));
-
-        Text matchOwnerText("josValentin lobby", "pixel.ttf", 30,
-                            RectTransform(Transform(Vector2D(-280, 0), Vector2D(300, 120))),
-                            ColorExtension::White());
-
-        Text matchPlayersText("Players 2/5", "pixel.ttf", 30,
-                              RectTransform(Transform(Vector2D(0, 0), Vector2D(180, 120))),
-                              ColorExtension::White());
-
-        Button matchJoinButton(
-                RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80))),
-                [&running]() { running = false; }, Color(40, 40, 40));
-
-        Text matchJoinText("Join", "pixel.ttf", 30,
-                           RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80))),
-                           ColorExtension::White());
+        LoadWidgetList(vector<LobbyDataDummy>{
+                LobbyDataDummy{"josValentin", 2, 5},
+                LobbyDataDummy{"metalica", 4, 5},
+                LobbyDataDummy{"andrew garfield", 3, 5},
+                LobbyDataDummy{"antuaned garfield", 4, 5},
+        });
 
         while (running) {
             cam.Clean();
@@ -67,19 +87,24 @@ public:
                     case SDL_QUIT:
                         exit(0);
                         break;
+                    case SDL_MOUSEWHEEL:
+                        Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+                        UpdateWidgetListPosition(wheelDir * rate.GetDeltaTime() * 1000);
+                        break;
                 }
 
                 ButtonsManager::GetInstance().HandleEvent(event, cam);
             }
 
+            for (auto& widget: widgets) {
+                widget.Draw(cam);
+            }
+
+
             ButtonsManager::GetInstance().Draw(cam);
 
             titleText.Draw(cam);
             createButtonText.Draw(cam);
-
-            matchOwnerText.Draw(cam);
-            matchPlayersText.Draw(cam);
-            matchJoinText.Draw(cam);
 
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());

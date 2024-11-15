@@ -28,7 +28,7 @@ void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRe
                      screenY - ((sprSize.y) * screenScale) / 2,
                      ((sprSize.x) * screenScale) + 1,  // +1 to avoid lost of pixels
                      ((sprSize.y) * screenScale) + 1),
-                angle, SDL2pp::NullOpt, flip);
+                -angle, SDL2pp::NullOpt, flip);
     tex.SetColorAndAlphaMod(Color(255, 255, 255, 255));  // Return texture color to normal
 }
 

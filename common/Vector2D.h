@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -22,6 +23,21 @@ public:
     static Vector2D Lerp(const Vector2D& start, const Vector2D& end, float t) {
         t = std::clamp(t, 0.0f, 1.0f);
         return start + (end - start) * t;
+    }
+
+    static float DotProduct(Vector2D a, Vector2D b) { return a.x * b.x + a.y * b.y; }
+
+    static float AngleBetween(Vector2D a, Vector2D b) {
+        float magnitudeA = a.GetMagnitude();
+        float magnitudeB = b.GetMagnitude();
+
+        if (magnitudeA == 0 || magnitudeB == 0)
+            return 0;
+
+        float cos = DotProduct(a, b) / (magnitudeA * magnitudeB);
+        cos = std::clamp(cos, -1.0f, 1.0f);
+
+        return std::acos(cos) * 180.0f / M_PI;
     }
 
     float x;

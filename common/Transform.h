@@ -32,6 +32,12 @@ public:
     Vector2D Min() const { return position - size / 2; }
     Vector2D Max() const { return position + size / 2; }
 
+    void LookAt(Vector2D target, Vector2D worldUp = Vector2D::Right()) {
+        angle = Vector2D::AngleBetween((target - position), worldUp);
+        if (target.y - position.y < 0)
+            angle = 360.0 - angle;
+    }
+
     std::string ToString() {
         return "Position: " + position.ToString() + " - Size: " + size.ToString();
     }
