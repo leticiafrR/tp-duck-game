@@ -141,7 +141,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto type = (TypeProjectile)assistant.receiveNumberOneByte();
         auto origin = assistant.receiveVector2D();
         auto end = assistant.receiveVector2D();
-        projectiles.emplace_back(InstantProjectileEventDto(type, origin, end, speed));
+        projectiles.emplace_back(InstantProjectileEventDto(type, origin, end));
     }
 
     return Snapshot(gameOver, updates, projectiles);
