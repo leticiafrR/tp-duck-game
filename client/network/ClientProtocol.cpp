@@ -137,7 +137,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     uint8_t numberProjectile = assistant.receiveNumberOneByte();
     for (uint8_t i = 0; i < numberProjectile; i++) {
 
-        auto speed = assistant.receiveFloat();
+        // auto speed = assistant.receiveFloat();
         auto type = (TypeProjectile)assistant.receiveNumberOneByte();
         auto origin = assistant.receiveVector2D();
         auto end = assistant.receiveVector2D();

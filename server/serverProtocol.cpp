@@ -121,7 +121,7 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(numberProjectiles);
 
     for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
-        assistant.sendFloat(it->speed);
+        // assistant.sendFloat(it->speed);
         assistant.sendNumber((uint8_t)it->type);
         assistant.sendVector2D(it->origin);
         assistant.sendVector2D(it->end);
