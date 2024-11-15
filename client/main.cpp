@@ -27,6 +27,7 @@
 #include "DuckClientRenderer.h"
 #include "LoadingScreen.h"
 #include "MapBlock2D.h"
+#include "MatchListScreen.h"
 #include "MenuScreen.h"
 #include "Object2D.h"
 #include "Rate.h"
@@ -407,7 +408,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         if (client.TryRecvNetworkMsg(msg)) {
             Snapshot snapshot = *dynamic_pointer_cast<Snapshot>(msg);
 
-            for (auto& it: snapshot.updates) {
+            for (const auto& it: snapshot.updates) {
                 players[it.first]->SetEventTarget(it.second);
             }
             // Check if last snapshot...
@@ -424,7 +425,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             it.Draw(cam);
         }
 
-        for (auto& it: players) {
+        for (const auto& it: players) {
             auto data = it.second;
             data->Update(rate.GetDeltaTime());
             data->Draw(cam);
@@ -459,9 +460,10 @@ int main() try {
     Camera cam(std::move(render), 70);
     Rate rate(60);
 
-    MenuScreen(cam, rate).Render();
+    string nickname = MenuScreen(cam, rate).Render();
+    MatchListScreen(cam, rate).Render();
 
-    Client client("8080", "localhost");
+    Client client("8080", "localhost", nickname);
     Connecting(cam, client, rate);
     auto playerData = LoadingPlayers(cam, client, rate);
 
@@ -487,7 +489,6 @@ int main() try {
             mapData = nullptr;
             firstSnapshot = nullptr;
             loadingRoundScreen.Render("LOADING...");
-
             Game(cam, client, rate, *playerData, *mapData, *firstSnapshot);
             std::cout << "Round ended\n";
         }

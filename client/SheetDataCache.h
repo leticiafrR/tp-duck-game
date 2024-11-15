@@ -24,7 +24,7 @@ public:
     SheetDataCache() = delete;
     ~SheetDataCache() = delete;
 
-    static map<string, vector<Rect>> GetData(string filename) {
+    static map<string, vector<Rect>> GetData(const string& filename) {
         auto it = cache.find(filename);
         if (it != cache.end()) {
             return it->second;

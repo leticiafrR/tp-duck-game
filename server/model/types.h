@@ -3,15 +3,15 @@
 #include <cstdint>
 
 enum class TypeCollectable {
-    Empty,
+    EMPTY,
+    PISTOLA_COWBOY,
+    LASER_RIFLE,
     Helmet,
     Armor,
     Granada,
     Banana,
-    Laser,
     Ak47,
     PistolaDuelo,
-    PistolaCowboy,
     Magnum,
     Escopeta,
     Sniper
@@ -19,12 +19,14 @@ enum class TypeCollectable {
 // enum class TypeHelmet { NoHelmet, KnightsHelmet, Helmet};
 // enum class TypeArmor { NoArmor,Chestplate};
 
-namespace Time {
-constexpr uint8_t COOLDOWN_SHORT = 3;
-constexpr uint8_t COOLDOWN_MEDIUM = 6;
-constexpr uint8_t COOLDOWN_LONG = 9;
+namespace Cooldown {
+constexpr uint8_t NONE = 0;
+constexpr uint8_t SHORT = 3;
+constexpr uint8_t MEDIUM = 6;
+constexpr uint8_t LONG = 9;
 constexpr uint8_t TO_EXPLOTE_GRANADA = 4;
-}  // namespace Time
+
+}  // namespace Cooldown
 
 namespace Damage {
 constexpr uint8_t MINIMUN = 1;
@@ -35,9 +37,10 @@ constexpr uint8_t LONG = 8;
 }  // namespace Damage
 
 namespace Scope {
-constexpr uint8_t GRANADA = 20;
-constexpr uint8_t BANANA = 10;
-constexpr uint8_t LASER = 30;
+constexpr float GRANADA = 20;
+constexpr float BANANA = 10;
+constexpr float LASER = 30;
+constexpr float PISTOLA_COWBOY = 20;  // Por consigna pero cuestionable)?
 //...
 }  // namespace Scope
 
@@ -45,6 +48,7 @@ namespace Ammo {
 constexpr uint8_t GRANADA = 1;
 constexpr uint16_t BANANA = 1;
 constexpr uint16_t LASER = 10;
+constexpr uint16_t PISTOLA_COWBOY = 6;
 //...
 }  // namespace Ammo
 
@@ -61,7 +65,9 @@ namespace Mass {
 constexpr int DUCK = 8;  // en 7 ticks de 0.4s realiza 1 salto
 }  // namespace Mass
 
-
+namespace Life {
+constexpr int DUCK = 100;
+}  // namespace Life
 /*si un pato se colisiona por arriba asumo que solo puede ser saltando*/
 
 #endif

@@ -22,11 +22,11 @@ private:
     Receiver* receiver;
 
 public:
-    Client(const char* servname, const char* hostname):
+    Client(const char* servname, const char* hostname, const std::string& name):
             protocol(std::move(Socket(hostname, servname))),
             msgQueue(),
             cmmdQueue(),
-            receiver(new Receiver(protocol, msgQueue, cmmdQueue)) {
+            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name)) {
         receiver->start();
     }
 

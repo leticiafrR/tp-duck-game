@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "common/queue.h"
 #include "common/thread.h"
@@ -16,15 +17,16 @@ private:
     ClientProtocol& protocol;
     Queue<std::shared_ptr<NetworkMsg>>& msgQueue;
     Sender sender;
+    std::string name;
 
 public:
     Receiver(ClientProtocol& protocol, Queue<std::shared_ptr<NetworkMsg>>& msgQueue,
-             Queue<CommandCode>& cmmdQueue):
-            protocol(protocol), msgQueue(msgQueue), sender(protocol, cmmdQueue) {}
+             Queue<CommandCode>& cmmdQueue, const std::string& name):
+            protocol(protocol), msgQueue(msgQueue), sender(protocol, cmmdQueue), name(name) {}
 
     void run() override {
         try {
-            protocol.sendNickname("Messi");
+            protocol.sendNickname(name);
             sender.start();
             while (_keep_running) {
                 std::shared_ptr<NetworkMsg> msg = protocol.receiveMessage();
