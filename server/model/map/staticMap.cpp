@@ -1,5 +1,8 @@
 #include "staticMap.h"
 
+#include <algorithm>
+#include <cmath>
+
 #include "mapConstants.h"
 enum : int { L, R, B, T };
 
@@ -19,7 +22,44 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     InitialMap();
 }
 
+
+std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrigin,
+                                                         const Vector2D& rayDirection,
+                                                         float rayLenght) const {
+    auto min_it = std::min_element(
+            grounds.begin(), grounds.end(),
+            [&rayDirection, &rayOrigin, rayLenght](const GroundDto& a, const GroundDto& b) {
+                return Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, a.mySpace) <
+                       Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, b.mySpace);
+            });
+
+    if (min_it != grounds.end()) {
+        float min_distance =
+                Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, min_it->mySpace);
+        return (std::isinf(min_distance)) ? std::nullopt : std::optional<float>(min_distance);
+    }
+    return std::nullopt;
+}
+
+
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return DuckSpawnPoints::points; }
+
+bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
+    Vector2D dir = Vector2D::Down();
+    float len = (dynamicT.GetSize().y) / 2;
+    float margen = (80 * len / 100);
+    Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
+    Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
+
+    return std::any_of(
+            grounds.begin(), grounds.end(),
+            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
+                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
+                return left || right;
+            });
+}
+
 
 void StaticMap::InitialMap() {
     AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(50, 20)), TestLevel::edges));
@@ -50,21 +90,6 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
     return std::nullopt;  // El objeto está dentro de los límites
 }
 
-bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
-    Vector2D dir = Vector2D::Down();
-    float len = (dynamicT.GetSize().y) / 2;
-    float margen = (80 * len / 100);
-    Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
-    Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
-
-    return std::any_of(
-            grounds.begin(), grounds.end(),
-            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
-                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
-                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
-                return left || right;
-            });
-}
 
 std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     auto it = std::find_if(grounds.begin(), grounds.end(), [&dynamicT](const auto& ground) {

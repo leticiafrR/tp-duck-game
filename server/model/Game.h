@@ -3,7 +3,6 @@
 
 #include <cmath>
 #include <iostream>
-#include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -20,7 +19,6 @@ private:
     size_t livePlayers;
     StaticMap map;
     std::unordered_map<PlayerID_t, Duck*> players;
-    std::set<ObjectID_t> uniquesIds;
     EventsManager eventsManager;
     ProjectilesController p;
     void ReapDead();
@@ -36,7 +34,6 @@ public:
 
     void HandleCommand(const Command& cmd);
     void Update(float deltaTime);
-    bool HasWinner();
     bool IsOver();
     PlayerID_t WhoWon();
     Snapshot GetSnapshot();

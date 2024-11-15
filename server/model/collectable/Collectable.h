@@ -17,8 +17,9 @@ public:
     void BeDropped(const Vector2D& position) { mySpace.SetPos(position); }
 
 
-    virtual void BeCollected(TypeCollectable& collectorTyperRef) = 0;
+    virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual void Use(Duck* user) = 0;
+    virtual void StopUse(Duck* user) = 0;
 };
 
 

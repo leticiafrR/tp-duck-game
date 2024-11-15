@@ -3,6 +3,7 @@ target_sources(taller_server
     # .cpp files
     serverProtocol.cpp
     messageSender.cpp
+    model/event/InstantProjectileEventListener.cpp
     model/event/PlayerEventListener.cpp
     model/event/EventsManager.cpp
     model/DynamicObj.cpp
@@ -16,7 +17,8 @@ target_sources(taller_server
     receiver.cpp
     acceptor.cpp
 
-    main.cpp
+    # main.cpp
+    mainWeapon.cpp
 
     PUBLIC
     # .h files
@@ -29,11 +31,17 @@ target_sources(taller_server
     model/Game.h
     model/event/EventsManager.h
     model/event/PlayerEventListener.h
+    model/event/InstantProjectileEventListener.h
     # model/Equipment.h
     # model/collectable/CollectablesController.h
-    # model/collectable/Weapon.h
     # model/collectable/Protection.h
     # model/collectable/Collectable.h
+    model/weapon/Weapon.h
+    model/weapon/InstantWeapon.h
+    model/weapon/instant/PistolaCowboy.h
+    model/projectile/InstantProjectile.h
+    model/projectile/Projectile.h
+    model/projectile/ProjectilesController.h
     serverProtocol.h
     messageSender.h
     config.h

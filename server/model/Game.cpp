@@ -4,7 +4,7 @@
 
 GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& playersIds,
                      const std::string& sceneName):
-        livePlayers(playersIds.size()), uniquesIds(playersIds.begin(), playersIds.end()) {
+        livePlayers(playersIds.size()) {
 
     std::cout << "welcom to " << sceneName << std::endl;
 
@@ -19,7 +19,8 @@ GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& p
 
         Testing(posToTest);
     }
-    eventsManager.SendListeners(players);
+    eventsManager.SendPlayersListeners(players);
+    eventsManager.SendInstantProjectileListener(p);
 }
 
 GameWorld::~GameWorld() {
@@ -37,6 +38,7 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds) {
 }
 
 void GameWorld::Update(float deltaTime) {
+    p.Update(map, players);
     for (auto& pair: players) {
         pair.second->Update(map, deltaTime);
     }
@@ -80,6 +82,14 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
             break;
         case CommandCode::Jump:
             player->TryJump();
+            break;
+        case CommandCode::UseItem_KeyDown:
+            player->TryUseItem();
+            std::cout << "[game:execCommand] try useItem\n";
+            break;
+        case CommandCode::UseItem_KeyUp:
+            player->StopUseItem();
+            break;
         default:
             break;
     }
@@ -89,12 +99,9 @@ GameSceneDto GameWorld::getSceneDto() { return map.GetScene(); }
 
 Snapshot GameWorld::GetSnapshot() { return eventsManager.GetSnapshot(IsOver()); }
 
-
-bool GameWorld::HasWinner() { return livePlayers == 1; }
-
 PlayerID_t GameWorld::WhoWon() { return players.begin()->first; }
 
-bool GameWorld::IsOver() { return (HasWinner() || livePlayers == 0); }
+bool GameWorld::IsOver() { return livePlayers <= 1; }
 
 void GameWorld::Testing(const Vector2D& posToTest) {
     std::cout << "[TESTING]: Receiving unique player [" << ID_PLAYER_UNIQUE_TEST

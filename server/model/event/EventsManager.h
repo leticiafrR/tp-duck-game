@@ -2,23 +2,35 @@
 #define EVENTS_MANAGER_H
 #include <iostream>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "data/id.h"
 #include "data/snapshot.h"
 
+#include "InstantProjectileEventListener.h"
 #include "PlayerEventListener.h"
 
 class Duck;
+class ProjectilesController;
+
 class EventsManager {
 private:
-    std::unordered_map<PlayerID_t, PlayerEvent> events;
-    std::vector<PlayerEventListener*> listeners;
+    std::unordered_map<PlayerID_t, PlayerEvent> playerEvents;
+    std::vector<PlayerEventListener*> playersListeners;
+
+    std::vector<InstantProjectileEventDto> instantProjectileEvents;
+    InstantProjectileEventListener* instantProjectileListener;
 
 public:
-    void SendListeners(const std::unordered_map<PlayerID_t, Duck*>& players);
+    EventsManager();
+    void SendPlayersListeners(const std::unordered_map<PlayerID_t, Duck*>& players);
+    void SendInstantProjectileListener(ProjectilesController& projectilesController);
     Snapshot GetSnapshot(bool gameOver);
+
     ~EventsManager();
+    EventsManager(const EventsManager&) = delete;
+    EventsManager& operator=(const EventsManager&) = delete;
 };
 
 #endif

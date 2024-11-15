@@ -1,16 +1,17 @@
 #include "Duck.h"
 
-#include "collectable/Weapon.h"
 #include "common/Collision.h"
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
+#include "weapon/instant/PistolaCowboy.h"
 
 #include "types.h"
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
 Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesController):
-        DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK))),
+        DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK)),
+                      Life::DUCK),
         isShooting(false),
         isCrouched(false),
         isGrounded(true),
@@ -18,9 +19,31 @@ Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesControl
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        itemInHand(new LaserRifle(projectilesController, mySpace)) {}
+        itemInHand(new PistolaCowboy(projectilesController, mySpace)),
+        typeInHand(TypeCollectable::PISTOLA_COWBOY) {}
 
-void Duck::SayHello() { std::cout << "Hello!\n"; }
+const Flip& Duck::GetFlip() const { return myFlip; }
+
+void Duck::SayImShooting() {
+    if (isShooting) {
+        std::cout << "Hello, IM SHOTING\n";
+    } else {
+        std::cout << "NO SHOTING\n";
+    }
+}
+
+void Duck::TryUseItem() {
+    if (itemInHand) {
+        itemInHand->Use(this);
+    }
+}
+
+void Duck::StopUseItem() {
+    if (itemInHand) {
+        itemInHand->StopUse(this);
+    }
+}
+
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
     l->Suscribe(&mySpace, &myFlip, &myState);

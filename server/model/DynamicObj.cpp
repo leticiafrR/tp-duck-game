@@ -5,8 +5,11 @@
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
 
-DynamicObject::DynamicObject(int speedX, const Transform& mySpace):
-        mySpace(mySpace), isDead(false), speedX(speedX) {}
+DynamicObject::DynamicObject(int speedX, const Transform& mySpace, uint8_t life):
+        mySpace(mySpace), isDead(false), speedX(speedX), life(life) {}
+
+
+void DynamicObject::ReceiveDamage(uint8_t damage) { life -= damage; }
 
 
 void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {

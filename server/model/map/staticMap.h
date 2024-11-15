@@ -33,9 +33,12 @@ public:
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);
-    // returns the nearest
-    std::optional<float> CheckWallCollisionWithPath(const Vector2D& director,
-                                                    const Vector2D& origin);
+
+    // retorna el nuevo largo para que colisione correctamente
+    std::optional<float> CheckCollisionLateralRay(const Vector2D& rayOrigin,
+                                                  const Vector2D& rayDirection,
+                                                  float rayLenght) const;
+
     std::optional<Transform> CheckCollision(const Transform& dynamicT);
 
     std::vector<Vector2D> GetPlayersSpawnPoints();
