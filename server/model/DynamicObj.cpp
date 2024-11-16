@@ -9,7 +9,10 @@ DynamicObject::DynamicObject(int speedX, const Transform& mySpace, uint8_t life)
         mySpace(mySpace), isDead(false), speedX(speedX), life(life) {}
 
 
-void DynamicObject::ReceiveDamage(uint8_t damage) { life -= damage; }
+void DynamicObject::ReceiveDamage(uint8_t damage) {
+    std::cout << "se infringiò daño a un dynamic obejct de: " << (int)damage << std::endl;
+    life -= damage;
+}
 
 
 void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {

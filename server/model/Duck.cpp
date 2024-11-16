@@ -34,7 +34,10 @@ void Duck::SayImShooting() {
 
 void Duck::TryUseItem() {
     if (itemInHand) {
+        std::cout << "[duck]: using item\n";
         itemInHand->Use(this);
+    } else {
+        std::cout << "[duck]: not item on hand: no using item\n";
     }
 }
 
@@ -55,6 +58,7 @@ void Duck::RegistListener(PlayerEventListener* listener) {
 }
 
 void Duck::Update(StaticMap& map, float deltaTime) {
+    std::cout << "you call update\n";
     DuckState initialState = myState;
     Vector2D initialPos = mySpace.GetPos();
 

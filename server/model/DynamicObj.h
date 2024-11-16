@@ -1,6 +1,8 @@
 #ifndef DYNAMIC_OBJECT_H
 #define DYNAMIC_OBJECT_H
 
+#include <cstdint>
+
 #include "common/Transform.h"
 
 class StaticMap;

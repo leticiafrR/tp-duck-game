@@ -13,7 +13,7 @@ private:
 public:
     explicit InstantProjectileEventListener(std::vector<InstantProjectileEventDto>& events);
 
-    void NewInstantProjectile(const InstantProjectileEventDto& event);
+    void NewInstantProjectile(TypeProjectile type, const Vector2D& origin, const Vector2D& end);
 };
 
 #endif

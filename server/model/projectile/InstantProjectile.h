@@ -36,10 +36,12 @@ public:
             damage(damage),
             l(l) {}
 
-    void RegistListener(InstantProjectileEventListener* listener) { this->l = listener; }
+    void RegistListener(InstantProjectileEventListener* listener) { l = listener; }
 
     void CheckCollisionWithDuck(Duck* duck) {
+        std::cout << "[instantProjectile] CheckCollisionWithDuck\n";
         if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
+
             duck->ReceiveDamage(damage);  // PENDIENTE: MUERTE
         }
     }
@@ -53,12 +55,14 @@ public:
     }
 
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override {
+        std::cout << "[instantProjectile] updating\n";
         UpdateLenght(map);
         for (auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
-        l->NewInstantProjectile(
-                InstantProjectileEventDto(type, rayOrigin, rayOrigin + rayDirection * rayLenght));
+        std::cout << "[instantProjectile] notifying listener\n";
+        l->NewInstantProjectile(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
+        std::cout << "[instantProjectile] marking as dead\n";
         MarkAsDead();  // al finalizar un tick, se elimina
     }
 

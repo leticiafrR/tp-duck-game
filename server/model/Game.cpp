@@ -5,7 +5,7 @@
 GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& playersIds,
                      const std::string& sceneName):
         livePlayers(playersIds.size()) {
-
+    eventsManager.SendInstantProjectileListener(p);
     std::cout << "welcom to " << sceneName << std::endl;
 
     if (std::isinf(posToTest.x)) {
@@ -20,7 +20,6 @@ GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& p
         Testing(posToTest);
     }
     eventsManager.SendPlayersListeners(players);
-    eventsManager.SendInstantProjectileListener(p);
 }
 
 GameWorld::~GameWorld() {
@@ -84,8 +83,9 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
             player->TryJump();
             break;
         case CommandCode::UseItem_KeyDown:
-            player->TryUseItem();
             std::cout << "[game:execCommand] try useItem\n";
+            player->TryUseItem();
+
             break;
         case CommandCode::UseItem_KeyUp:
             player->StopUseItem();
