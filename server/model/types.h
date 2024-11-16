@@ -29,10 +29,10 @@ constexpr uint8_t TO_EXPLOTE_GRANADA = 4;
 }  // namespace Cooldown
 
 namespace Damage {
-constexpr uint8_t MINIMUN = 1;
-constexpr uint8_t SHORT = 2;
-constexpr uint8_t MEDIUM = 6;
-constexpr uint8_t LONG = 8;
+constexpr uint8_t MINIMUN = 10;
+constexpr uint8_t SHORT = 12;
+constexpr uint8_t MEDIUM = 17;
+constexpr uint8_t LONG = 2;
 //...
 }  // namespace Damage
 

@@ -31,6 +31,15 @@ void Duck::SayImShooting() {
         std::cout << "NO SHOTING\n";
     }
 }
+void Duck::HandleDead() {
+    myState = DuckState::DEAD;
+    DynamicObject::HandleDead();
+}
+
+void Duck::HandleReceiveDamage(uint8_t damage) {
+    myState = DuckState::WOUNDED;
+    DynamicObject::HandleReceiveDamage(damage);
+}
 
 void Duck::TryUseItem() {
     if (itemInHand) {

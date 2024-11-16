@@ -5,15 +5,19 @@
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
 
-DynamicObject::DynamicObject(int speedX, const Transform& mySpace, uint8_t life):
+DynamicObject::DynamicObject(int speedX, const Transform& mySpace, int life):
         mySpace(mySpace), isDead(false), speedX(speedX), life(life) {}
 
 
-void DynamicObject::ReceiveDamage(uint8_t damage) {
+void DynamicObject::HandleReceiveDamage(uint8_t damage) {
     std::cout << "se infringiò daño a un dynamic obejct de: " << (int)damage << std::endl;
     life -= damage;
+    if (life <= 0) {
+        HandleDead();
+    }
 }
 
+void DynamicObject::HandleDead() { MarkAsDead(); }
 
 void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {
     mySpace.Move(velocity * deltaTime);

@@ -42,6 +42,9 @@ public:
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
+    void HandleDead() override;
+    void HandleReceiveDamage(uint8_t damage) override;
+
     void ApplyGravity(StaticMap& map, float deltaTime) override;
 
     void RegistListener(PlayerEventListener* listener);

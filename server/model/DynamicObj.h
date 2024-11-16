@@ -12,17 +12,18 @@ protected:
     Vector2D velocity;
     bool isDead;
     const int speedX;
-    uint8_t life;
+    int life;
 
 public:
-    virtual void ReceiveDamage(uint8_t damage);
     virtual void ApplyGravity(StaticMap& map, float deltaTime) = 0;
     virtual void HandleCollisionWithMap(const Transform& mapT) = 0;
     virtual void HandleOutOfBounds(float displacement) = 0;
+    virtual void HandleDead();
+    virtual void HandleReceiveDamage(uint8_t damage);
 
     virtual ~DynamicObject() = default;
 
-    DynamicObject(int speedX, const Transform& mySpace, uint8_t life);
+    DynamicObject(int speedX, const Transform& mySpace, int life);
 
     void CheckInteractionWithMap(StaticMap& map, float deltaTime);
     void CheckOutOfMapBoundaries(StaticMap& map);

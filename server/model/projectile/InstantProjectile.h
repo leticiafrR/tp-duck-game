@@ -41,8 +41,7 @@ public:
     void CheckCollisionWithDuck(Duck* duck) {
         std::cout << "[instantProjectile] CheckCollisionWithDuck\n";
         if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
-
-            duck->ReceiveDamage(damage);  // PENDIENTE: MUERTE
+            duck->HandleReceiveDamage(damage);
         }
     }
 
