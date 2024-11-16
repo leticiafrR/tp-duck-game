@@ -1,5 +1,6 @@
 #ifndef SNAPSHOT_DTA_H
 #define SNAPSHOT_DTA_H
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -14,7 +15,9 @@ enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, D
 
 struct PlayerEvent {
     Vector2D motion;
+    // cppcheck-suppress unusedStructMember
     DuckState stateTransition;
+    // cppcheck-suppress unusedStructMember
     Flip flipping;
 };
 
@@ -40,4 +43,20 @@ struct Snapshot: public NetworkMsg {
             gameOver(gameOver), updates(updates) {}
 };
 
+struct ActiveMatch {  // si o si manejarlo en un map para considerar el ID
+    // cppcheck-suppress unusedStructMember
+    std::string name;  // considero necesario para que el usuario pueda ver el nombre de la match
+    // cppcheck-suppress unusedStructMember
+    uint8_t actualPlayers;
+    // cppcheck-suppress unusedStructMember
+    uint8_t maxPlayers;
+    // ActiveMatch(const std::string& name, uint8_t actualPlayers, uint8_t maxPlayers)
+    //     : name(name), actualPlayers(actualPlayers), maxPlayers(maxPlayers) {}
+};
+
+struct ListActiveMatches: public NetworkMsg {
+    std::unordered_map<PlayerID_t, ActiveMatch> matches;
+    explicit ListActiveMatches(const std::unordered_map<PlayerID_t, ActiveMatch>& _matches):
+            matches(_matches) {}
+};
 #endif

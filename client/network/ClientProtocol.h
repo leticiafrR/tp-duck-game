@@ -23,6 +23,7 @@ struct MatchStartDto;
 struct GameSceneDto;
 struct GamesRecountDto;
 struct Command;
+struct ActiveMatch;
 
 struct BrokenProtocol: public std::runtime_error {
     BrokenProtocol():
@@ -49,6 +50,8 @@ private:
 
     PlayerID_t receiveMatchWinner();
 
+    ListActiveMatches receiveActiveMatches();
+
 
 public:
     explicit ClientProtocol(Socket&& skt);
@@ -56,6 +59,8 @@ public:
     void sendNickname(const std::string& nickname);
 
     std::shared_ptr<NetworkMsg> receiveMessage();
+
+    void sendRequestJoinMatch(const PlayerID_t& matchID);
 
     void sendCommand(CommandCode cmdCode);
 

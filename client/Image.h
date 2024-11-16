@@ -12,15 +12,13 @@ using namespace SDL2pp;  // NOLINT
 
 class Image: public GraphicUI {
 private:
-    RectTransform rect;
     Color color;
 
 public:
     explicit Image(RectTransform rect, Color color = Color(255, 255, 255), int layerOrder = 0):
-            GraphicUI(layerOrder), rect(rect), color(color) {}
+            GraphicUI(rect, layerOrder), color(color) {}
     ~Image() = default;
 
-    RectTransform& GetRectTransform() { return rect; }
 
     void SetColor(Color color) { this->color = color; }
 

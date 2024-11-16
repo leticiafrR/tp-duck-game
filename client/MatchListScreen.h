@@ -33,12 +33,16 @@ private:
     Rate rate;
     list<LobbyItemWidget> widgets;
 
+    float currentY = 0;
+    float scrollSize = 0;
+
 public:
     MatchListScreen(Camera& cam, const Rate& rate): cam(cam), rate(rate) {}
 
     void LoadWidgetList(vector<LobbyDataDummy> data) {
         widgets.clear();
 
+        Vector2D initialPos(0, -300);
         int moveDelta = 130;
 
         for (size_t i = 0; i < data.size(); i++) {
@@ -46,11 +50,18 @@ public:
             widgets.emplace_back(lobbyData.owner, lobbyData.playerCount, lobbyData.maxPlayers,
                                  []() {});
 
-            widgets.back().MoveContent(Vector2D::Down() * i * moveDelta);
+            widgets.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
         }
+
+        scrollSize = (data.size() + 1) * 130;
     }
 
     void UpdateWidgetListPosition(Vector2D movement) {
+
+        if (currentY + movement.y > scrollSize - 800 || currentY + movement.y < -20) {
+            return;
+        }
+        currentY += movement.y;
         for (auto& widget: widgets) {
             widget.MoveContent(movement);
         }

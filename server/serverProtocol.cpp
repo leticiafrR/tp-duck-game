@@ -116,6 +116,16 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendNumber((uint8_t)it->second.stateTransition);
         assistant.sendNumber((uint8_t)it->second.flipping);
     }
+
+    uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
+    assistant.sendNumber(numberProjectiles);
+
+    for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
+        // assistant.sendFloat(it->speed);
+        assistant.sendNumber((uint8_t)it->type);
+        assistant.sendVector2D(it->origin);
+        assistant.sendVector2D(it->end);
+    }
 }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
@@ -139,4 +149,18 @@ void ServerProtocol::sendMatchWinner(PlayerID_t finalWinner) {
 void ServerProtocol::endConnection() {
     skt.shutdown(2);
     skt.close();
+}
+
+void ServerProtocol::sendActivesMatches(
+        const std::unordered_map<PlayerID_t, ActiveMatch>& matches) {
+    assistant.sendNumber(ACTIVE_MATCHES);
+    uint8_t numberElements = (uint8_t)matches.size();
+
+    assistant.sendNumber(numberElements);
+    for (const auto& pair: matches) {
+        assistant.sendNumber(pair.first);  // o pair.first
+        assistant.sendString(pair.second.name);
+        assistant.sendNumber(pair.second.actualPlayers);
+        assistant.sendNumber(pair.second.maxPlayers);
+    }
 }

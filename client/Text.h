@@ -19,29 +19,28 @@ private:
     string text;
     string filename;
     int fontSize;
-    RectTransform rectTransform;
     Color color;
 
 public:
-    Text(const string& text, int fontSize, RectTransform rectTransform, Color color,
-         int layerOrder = 0, const string& filename = "pixel.ttf"):
-            GraphicUI(layerOrder),
+    Text(const string& text, int fontSize, RectTransform rect, Color color, int layerOrder = 0,
+         const string& filename = "pixel.ttf"):
+            GraphicUI(rect, layerOrder),
             text(text),
             filename(filename),
             fontSize(fontSize),
-            rectTransform(rectTransform),
-            color(color) {}
+            color(color) {
+        SetCanTarget(false);
+    }
 
     void SetText(const string& newText) { text = newText; }
 
-    RectTransform& GetRectTransform() { return rectTransform; }
     Font& GetFont() { return FontCache::GetData(filename, fontSize); }
 
     void Draw(Camera& cam) override {
         if (text.size() == 0) {
             return;
         }
-        cam.DrawText(text, GetFont(), rectTransform, color);
+        cam.DrawText(text, GetFont(), rect, color);
     }
 
     ~Text() = default;

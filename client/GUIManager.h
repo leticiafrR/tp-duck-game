@@ -53,6 +53,8 @@ public:
     //     }
     // }
 
+    const std::vector<GraphicUI*>& GetGraphics() { return graphics; }
+
     void Draw(Camera& cam) {
         for (auto gui: graphics) {
             if (!gui->GetVisible())

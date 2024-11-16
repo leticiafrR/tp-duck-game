@@ -2,14 +2,17 @@
 #define GRAPHIC_UI_H
 
 #include "Camera.h"
+#include "RectTransform.h"
 
 class GraphicUI {
-private:
+protected:
+    RectTransform rect;
     int layerOrder = 0;
+    bool canTarget = true;
     bool visible = true;
 
 public:
-    explicit GraphicUI(int layerOrder = 0);
+    explicit GraphicUI(RectTransform rect, int layerOrder = 0);
 
     virtual ~GraphicUI();
 
@@ -20,6 +23,11 @@ public:
 
     void SetVisible(bool visible);
     bool GetVisible();
+
+    void SetCanTarget(bool target);
+    bool GetCanTarget();
+
+    RectTransform& GetRectTransform();
 };
 
 #endif

@@ -20,19 +20,25 @@ public:
 
     LobbyItemWidget(const string& ownerName, int playerCount, int maxPlayersCount,
                     Callback onJoinClicked):
-            matchConentImage(RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120))),
-                             Color(160, 160, 160), 0),
+            matchConentImage(
+                    RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120)), Vector2D(0.5, 1)),
+                    Color(160, 160, 160), 0),
             matchOwnerText(ownerName + " lobby", 30,
-                           RectTransform(Transform(Vector2D(-280, 0), Vector2D(300, 120))),
+                           RectTransform(Transform(Vector2D(-280, 0), Vector2D(300, 120)),
+                                         Vector2D(0.5, 1)),
                            ColorExtension::White(), 1),
             matchPlayersText(
                     "Players" + std::to_string(playerCount) + "/" + std::to_string(maxPlayersCount),
-                    30, RectTransform(Transform(Vector2D(0, 0), Vector2D(180, 120))),
+                    30,
+                    RectTransform(Transform(Vector2D(0, 0), Vector2D(180, 120)), Vector2D(0.5, 1)),
                     ColorExtension::White(), 1),
-            matchJoinButton(RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80))),
-                            onJoinClicked, Color(40, 40, 40), 1),
-            matchJoinText("Join", 30, RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80))),
-                          ColorExtension::White(), 2) {}
+            matchJoinButton(
+                    RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80)), Vector2D(0.5, 1)),
+                    onJoinClicked, Color(40, 40, 40), 1),
+            matchJoinText(
+                    "Join", 30,
+                    RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80)), Vector2D(0.5, 1)),
+                    ColorExtension::White(), 2) {}
 
     ~LobbyItemWidget() = default;
 
