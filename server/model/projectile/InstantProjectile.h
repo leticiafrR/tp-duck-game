@@ -9,14 +9,6 @@
 
 #include "Projectile.h"
 
-// void ShowMyDto(){
-//     std::cout << "[InstantProjectile] my Origin: ("<<rayOrigin.x<<","<<rayOrigin.y<<")\n";
-//     std::cout << "[InstantProjectile] my direction:
-//     ("<<rayDirection.x<<","<<rayDirection.y<<")\n"; std::cout << "[InstantProjectile] my lengh:
-//     "<< rayLenght<<std::endl; std::cout << "[InstantProjectile] my damage: "<<(int) damage
-//     <<std::endl;
-// }
-
 enum TypeProjectile;
 class InstantProjectile: public Projectile {
 private:
@@ -39,7 +31,6 @@ public:
     void RegistListener(InstantProjectileEventListener* listener) { l = listener; }
 
     void CheckCollisionWithDuck(Duck* duck) {
-        std::cout << "[instantProjectile] CheckCollisionWithDuck\n";
         if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
             duck->HandleReceiveDamage(damage);
         }
@@ -54,14 +45,11 @@ public:
     }
 
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override {
-        std::cout << "[instantProjectile] updating\n";
         UpdateLenght(map);
         for (auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
-        std::cout << "[instantProjectile] notifying listener\n";
         l->NewInstantProjectile(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
-        std::cout << "[instantProjectile] marking as dead\n";
         MarkAsDead();  // al finalizar un tick, se elimina
     }
 

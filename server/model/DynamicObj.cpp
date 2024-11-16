@@ -10,14 +10,11 @@ DynamicObject::DynamicObject(int speedX, const Transform& mySpace, int life):
 
 
 void DynamicObject::HandleReceiveDamage(uint8_t damage) {
-    std::cout << "se infringiò daño a un dynamic obejct de: " << (int)damage << std::endl;
     life -= damage;
     if (life <= 0) {
         HandleDead();
     }
 }
-
-void DynamicObject::HandleDead() { MarkAsDead(); }
 
 void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {
     mySpace.Move(velocity * deltaTime);

@@ -14,6 +14,8 @@ private:
                       // momment)
     bool isCrouched;
     bool isGrounded;
+    bool isWounded;
+
     MotionHandler motionHandler;
     RigidBody body;
     PlayerEventListener* l;
@@ -49,6 +51,7 @@ public:
 
     void RegistListener(PlayerEventListener* listener);
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
+    DuckState GetLowerPriorityState();
     void UpdateState();
     void Update(StaticMap& map, float deltaTime);
 

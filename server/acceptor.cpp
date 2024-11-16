@@ -37,10 +37,10 @@ void AcceptorThread::acceptLoop() {
         Socket peer = skt.accept();
         PRINT_NEW_CONNECTION();
         SenderThread* client = new SenderThread(std::move(peer), std::ref(match), idClient);
-        std::cout << "se instanciò el sender\n";
+        // std::cout << "se instanciò el sender\n";
         clients.push_back(client);
         client->start();
-        std::cout << "Sender of the client shooted\n";
+        // std::cout << "Sender of the client shooted\n";
 
         reapDead();
         idClient++;

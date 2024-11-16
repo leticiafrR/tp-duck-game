@@ -15,6 +15,7 @@ Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesControl
         isShooting(false),
         isCrouched(false),
         isGrounded(true),
+        isWounded(false),
         body(mySpace, Mass::DUCK),
         l(nullptr),
         myFlip(Flip::Right),
@@ -33,20 +34,18 @@ void Duck::SayImShooting() {
 }
 void Duck::HandleDead() {
     myState = DuckState::DEAD;
-    DynamicObject::HandleDead();
+    l->NewPlayerEvent();
+    MarkAsDead();
 }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
-    myState = DuckState::WOUNDED;
+    isWounded = true;
     DynamicObject::HandleReceiveDamage(damage);
 }
 
 void Duck::TryUseItem() {
     if (itemInHand) {
-        std::cout << "[duck]: using item\n";
         itemInHand->Use(this);
-    } else {
-        std::cout << "[duck]: not item on hand: no using item\n";
     }
 }
 
@@ -61,13 +60,10 @@ void Duck::RegistListener(PlayerEventListener* listener) {
     l->Suscribe(&mySpace, &myFlip, &myState);
 
     // on the first iteration, everything is new
-    l->Motion();
-    l->Flipping();
-    l->StateTransition();
+    l->NewPlayerEvent();
 }
 
 void Duck::Update(StaticMap& map, float deltaTime) {
-    std::cout << "you call update\n";
     DuckState initialState = myState;
     Vector2D initialPos = mySpace.GetPos();
 
@@ -78,21 +74,24 @@ void Duck::Update(StaticMap& map, float deltaTime) {
 
 void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initialPos) {
     if (initialPos.IsFarFrom(mySpace.GetPos())) {
-        l->Motion();
+        l->NewPlayerEvent();
     }
     if (initialState != myState) {
-        l->StateTransition();
+        l->NewPlayerEvent();
     }
+}
+DuckState Duck::GetLowerPriorityState() {
+    DuckState lowerPriorityState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
+    if (!isGrounded) {
+        lowerPriorityState = (body.GetVelocity().y > 0) ? DuckState::JUMPING : DuckState::FALLING;
+    }
+    return lowerPriorityState;
 }
 
 void Duck::UpdateState() {
-    if (life > 0) {
-        myState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
-        if (!isGrounded) {
-            myState = (body.GetVelocity().y > 0) ? DuckState::JUMPING : DuckState::FALLING;
-        }
-    } else {
-        HandleDead();
+    if (!(IsDead())) {
+        myState = (isWounded) ? DuckState::WOUNDED : GetLowerPriorityState();
+        isWounded = false;
     }
 }
 
@@ -117,7 +116,7 @@ void Duck::TryMoveLeft() {
     motionHandler.StartMoveLeft(velocity, speedX);
     if (myFlip != Flip::Left) {
         myFlip = Flip::Left;
-        l->Flipping();
+        l->NewPlayerEvent();
     }
 }
 
@@ -125,7 +124,7 @@ void Duck::TryMoveRight() {
     motionHandler.StartMoveRight(velocity, speedX);
     if (myFlip != Flip::Right) {
         myFlip = Flip::Right;
-        l->Flipping();
+        l->NewPlayerEvent();
     }
 }
 

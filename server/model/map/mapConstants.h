@@ -21,7 +21,7 @@ const size_t yMapSize = 500;
 }  // namespace FullMapSize
 
 namespace DuckSpawnPoints {
-std::vector<Vector2D> points{Vector2D(0, 10), Vector2D(-7, 10)};
+std::vector<Vector2D> points{Vector2D(7, 10), Vector2D(-7, 10)};
 }
 
 namespace TestLevel {

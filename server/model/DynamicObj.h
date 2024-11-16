@@ -18,7 +18,7 @@ public:
     virtual void ApplyGravity(StaticMap& map, float deltaTime) = 0;
     virtual void HandleCollisionWithMap(const Transform& mapT) = 0;
     virtual void HandleOutOfBounds(float displacement) = 0;
-    virtual void HandleDead();
+    virtual void HandleDead() = 0;
     virtual void HandleReceiveDamage(uint8_t damage);
 
     virtual ~DynamicObject() = default;

@@ -21,9 +21,7 @@ public:
 
     void Suscribe(Transform* motionEventSrc, Flip* flippingEventSrc, DuckState* stateEventSrc);
 
-    void Motion();
-    void Flipping();
-    void StateTransition();
+    void NewPlayerEvent();
 };
 
 #endif

@@ -42,7 +42,7 @@ void HandlerGames::playOneGame() {
 
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
 
-    std::cout << "\n[1]               HANDLER_Games: entering into a gameLoop\n";
+    // std::cout << "\n[1]               HANDLER_Games: entering into a gameLoop\n";
     gameLoop();
     std::cout << "\n[2]             HANDLER_Games: getting out of the gameLoop\n";
 
@@ -62,7 +62,7 @@ void HandlerGames::gameLoop() {
     TimeManager timeManager(TPS);
     int countTick = 0;
     while (!currentGame->IsOver() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-        std::cout << "\n        [HANDLER_G :In gameLoop] INICIO del tick:" << countTick << "\n";
+        // std::cout << "\n        [HANDLER_G :In gameLoop] INICIO del tick:" << countTick << "\n";
 
         Command cmmd;
         for (int i = 0; i < MAX_CMMDS_PER_TICK && commandQueue.try_pop(std::ref(cmmd)); i++) {
@@ -76,7 +76,7 @@ void HandlerGames::gameLoop() {
         currentGame->Update(0.05);
         broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
         timeManager.synchronizeTick();
-        std::cout << "\n        [HANDLER_G :In gameLoop] FIN del tick:" << countTick << "\n";
+        // std::cout << "\n        [HANDLER_G :In gameLoop] FIN del tick:" << countTick << "\n";
         countTick++;
     }
 }
