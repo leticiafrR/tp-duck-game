@@ -354,7 +354,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
 
     bool running = true;
 
-    std::vector<shared_ptr<BulletRenderer>> bullets;
+    std::list<BulletRenderer> bullets;
 
     while (running) {
         cam.Clean();
@@ -414,7 +414,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             Snapshot snapshot = *dynamic_pointer_cast<Snapshot>(msg);
             for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
                 auto ray = snapshot.raycastsEvents[i];
-                bullets.emplace_back(std::make_shared<BulletRenderer>(ray.origin, ray.end, 70));
+                bullets.emplace_back(ray.origin, ray.end, 70);
             }
 
             for (const auto& it: snapshot.updates) {
@@ -435,9 +435,10 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         }
 
         for (auto& it: bullets) {
-            it->Update(rate.GetDeltaTime());
-            it->Draw(cam);
+            it.Update(rate.GetDeltaTime());
+            it.Draw(cam);
         }
+        bullets.remove_if([](BulletRenderer c) { return !c.IsAlive(); });
 
         for (const auto& it: players) {
             auto data = it.second;

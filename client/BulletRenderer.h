@@ -41,6 +41,8 @@ public:
         spr.Draw(cam);
     }
 
+    bool IsAlive() { return alive; }
+
     ~BulletRenderer() = default;
 };
 
