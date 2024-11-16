@@ -86,9 +86,13 @@ void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initial
 }
 
 void Duck::UpdateState() {
-    myState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
-    if (!isGrounded) {
-        myState = (body.GetVelocity().y > 0) ? DuckState::JUMPING : DuckState::FALLING;
+    if (life > 0) {
+        myState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
+        if (!isGrounded) {
+            myState = (body.GetVelocity().y > 0) ? DuckState::JUMPING : DuckState::FALLING;
+        }
+    } else {
+        HandleDead();
     }
 }
 
