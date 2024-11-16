@@ -63,6 +63,7 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
 
 void StaticMap::InitialMap() {
     AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(50, 20)), TestLevel::edges));
+    AddGround(GroundDto(Transform(Vector2D(0, 15), Vector2D(8, 16)), TestLevel::edges));
     // AddGround(GroundDto(Transform(Vector2D(15, 10), Vector2D(10, 10)), TestLevel::edges));
     AddTransform(Transform(Vector2D(0, -20), Vector2D(80, 20)));
 }

@@ -69,9 +69,13 @@ public:
                 anim.SetTarget("falling");
                 break;
             case DuckState::WOUNDED:
+                std::cout << "Damaged"
+                          << "\n";
                 anim.SetTarget("take_damage");
                 break;
             case DuckState::DEAD:
+                std::cout << "Dead"
+                          << "\n";
                 anim.SetTarget("dead");
                 break;
             default:

@@ -333,7 +333,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
 
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
-        mapBlocks.emplace_back("tile_set.png", "tile_set.yaml", groundData.mySpace, 5);
+        mapBlocks.emplace_back("tile_set.png", "tile_set.yaml", groundData.mySpace, 4);
 
         bool left =
                 groundData.visibleEdges.find(VISIBLE_EDGES::LEFT) != groundData.visibleEdges.end();
