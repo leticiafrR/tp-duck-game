@@ -4,6 +4,8 @@ InstantProjectileEventListener::InstantProjectileEventListener(
         std::vector<InstantProjectileEventDto>& events):
         events(events) {}
 
-void InstantProjectileEventListener::NewInstantProjectile(const InstantProjectileEventDto& event) {
-    events.push_back(event);
+void InstantProjectileEventListener::NewInstantProjectile(TypeProjectile type,
+                                                          const Vector2D& origin,
+                                                          const Vector2D& end) {
+    events.emplace_back(type, origin, end);
 }

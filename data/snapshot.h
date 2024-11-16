@@ -15,9 +15,7 @@ enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, D
 
 struct PlayerEvent {
     Vector2D motion;
-    // cppcheck-suppress unusedStructMember
     DuckState stateTransition;
-    // cppcheck-suppress unusedStructMember
     Flip flipping;
 };
 
@@ -43,8 +41,7 @@ struct Snapshot: public NetworkMsg {
             gameOver(gameOver), updates(updates) {}
 };
 
-struct ActiveMatch {  // si o si manejarlo en un map para considerar el ID
-    // cppcheck-suppress unusedStructMember
+struct ActiveMatch {   // si o si manejarlo en un map para considerar el ID
     std::string name;  // considero necesario para que el usuario pueda ver el nombre de la match
     // cppcheck-suppress unusedStructMember
     uint8_t actualPlayers;
