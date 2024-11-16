@@ -64,7 +64,7 @@ public:
         return Vector2D(x / magnitude, y / magnitude);
     }
 
-    std::string ToString() {
+    std::string ToString() const {
         std::string xStr = (std::ostringstream() << std::fixed << std::setprecision(2) << x).str();
         std::string yStr = (std::ostringstream() << std::fixed << std::setprecision(2) << y).str();
         return "(" + xStr + ", " + yStr + ")";

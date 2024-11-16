@@ -17,7 +17,11 @@ private:
 
 public:
     BulletRenderer(Vector2D origin, Vector2D end, float speed = 10, Vector2D size = Vector2D(1, 1)):
-            spr("machine_guns.png", Transform(origin, size)), end(end), speed(speed), alive(true) {
+            spr("machine_guns.png", Transform(origin, size)),
+            origin(origin),
+            end(end),
+            speed(speed),
+            alive(true) {
         spr.GetTransform().LookAt(end);
         spr.SetSourceRect(SheetDataCache::GetData("machine_guns.yaml")["machine_bullet"][0]);
     }

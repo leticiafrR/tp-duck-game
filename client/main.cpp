@@ -353,6 +353,9 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
     Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
     bool running = true;
+
+    std::vector<shared_ptr<BulletRenderer>> bullets;
+
     while (running) {
         cam.Clean();
         SDL_Event event;
@@ -377,6 +380,9 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
                             break;
                         case SDLK_SPACE:
                             client.TrySendRequest(CommandCode::Jump);
+                            break;
+                        case SDLK_r:
+                            client.TrySendRequest(CommandCode::UseItem_KeyDown);
                             break;
                     }
                 } break;
@@ -406,6 +412,10 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         shared_ptr<NetworkMsg> msg;
         if (client.TryRecvNetworkMsg(msg)) {
             Snapshot snapshot = *dynamic_pointer_cast<Snapshot>(msg);
+            for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
+                auto ray = snapshot.raycastsEvents[i];
+                bullets.emplace_back(std::make_shared<BulletRenderer>(ray.origin, ray.end, 70));
+            }
 
             for (const auto& it: snapshot.updates) {
                 players[it.first]->SetEventTarget(it.second);
@@ -422,6 +432,11 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
 
         for (auto& it: mapBlocks) {
             it.Draw(cam);
+        }
+
+        for (auto& it: bullets) {
+            it->Update(rate.GetDeltaTime());
+            it->Draw(cam);
         }
 
         for (const auto& it: players) {
