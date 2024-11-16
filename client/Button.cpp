@@ -24,20 +24,26 @@ void Button::Draw(Camera& cam) { image.Draw(cam); }
 bool Button::IsTarget(int mouseX, int mouseY, Camera& cam) {
     auto graphics = GUIManager::GetInstance().GetGraphics();
 
+    // Search for the first same layer in th sorted vector
     auto it = std::lower_bound(
-            graphics.begin(), graphics.end(), &image, [](GraphicUI* a, GraphicUI* b) {
-                return a->GetLayerOrder() < b->GetLayerOrder();  // Comparamos por edad
-            });
+            graphics.begin(), graphics.end(), &image,
+            [](GraphicUI* a, GraphicUI* b) { return a->GetLayerOrder() < b->GetLayerOrder(); });
+
     if (it != graphics.end() && (*it)->GetLayerOrder() >= image.GetLayerOrder()) {
+        bool startCheckingFront = false;
         for (auto iter = it;
              iter != graphics.end() && (*iter)->GetLayerOrder() >= image.GetLayerOrder(); ++iter) {
 
             if ((*iter) == &image) {
+                startCheckingFront = true;
                 continue;
             }
+            if (!startCheckingFront)
+                continue;
             if (!(*iter)->GetCanTarget()) {
                 continue;
             }
+            // If there is another target graphic in front, our button is not the target
             if (IsMouseOver((*iter)->GetRectTransform(), mouseX, mouseY, cam)) {
                 return false;
             }
