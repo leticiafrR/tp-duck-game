@@ -2,6 +2,7 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     GraphicUI.cpp
+    tweening/Tween.cpp
     Object2D.cpp
     Button.cpp
     Camera.cpp

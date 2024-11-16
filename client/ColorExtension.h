@@ -24,6 +24,12 @@ public:
                      std::clamp(color.b + value, 0, 255));
     }
 
+    static Color Lerp(const Color& start, const Color& end, float t) {
+        t = std::clamp(t, 0.0f, 1.0f);
+        return Color(start.r + (end.r - start.r) * t, start.g + (end.g - start.g) * t,
+                     start.b + (end.b - start.b) * t, start.a + (end.a - start.a) * t);
+    }
+
     ColorExtension() = delete;
     ~ColorExtension() = delete;
 };

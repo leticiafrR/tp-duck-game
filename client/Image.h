@@ -21,6 +21,7 @@ public:
 
 
     void SetColor(Color color) { this->color = color; }
+    Color GetColor() { return color; }
 
     void Draw(Camera& cam) override { cam.DrawGUI(rect, color); }
 };

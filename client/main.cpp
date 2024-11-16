@@ -17,6 +17,8 @@
 #include "data/networkMsg.h"
 #include "data/snapshot.h"
 #include "network/Client.h"
+#include "tweening/ImageTween.h"
+#include "tweening/TweenManager.h"
 
 #include "Animator.h"
 #include "BulletRenderer.h"
@@ -26,6 +28,8 @@
 #include "CameraController.h"
 #include "ColorExtension.h"
 #include "DuckClientRenderer.h"
+#include "GUIManager.h"
+#include "Image.h"
 #include "LoadingScreen.h"
 #include "MapBlock2D.h"
 #include "MatchListScreen.h"
@@ -352,9 +356,15 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
 
     Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
 
+    bool finishing = false;
     bool running = true;
 
     std::list<BulletRenderer> bullets;
+
+    Image fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
+                    ColorExtension::Black().SetAlpha(0), 10);
+    ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 2,
+                              [&running]() { running = false; });
 
     while (running) {
         cam.Clean();
@@ -363,6 +373,8 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_KEYDOWN: {
+                    if (finishing)
+                        continue;
                     SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
 
                     int key = keyEvent.keysym.sym;
@@ -387,6 +399,8 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
                     }
                 } break;
                 case SDL_KEYUP: {
+                    if (finishing)
+                        continue;
                     SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                     int key = keyEvent.keysym.sym;
                     pressedKeysSet.erase(key);
@@ -410,11 +424,11 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         }
 
         shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
+        while (!finishing && client.TryRecvNetworkMsg(msg)) {
             Snapshot snapshot = *dynamic_pointer_cast<Snapshot>(msg);
             for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
                 auto ray = snapshot.raycastsEvents[i];
-                bullets.emplace_back(ray.origin, ray.end, 70);
+                bullets.emplace_back(ray.origin, ray.end, 100);
             }
 
             for (const auto& it: snapshot.updates) {
@@ -422,7 +436,9 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             }
             // Check if last snapshot...
             if (snapshot.gameOver) {
-                running = false;
+                fadePanelTween.Play();
+                finishing = true;
+                // running = false;
             }
         }
 
@@ -445,9 +461,9 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             data->Update(rate.GetDeltaTime());
             data->Draw(cam);
         }
+        TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
         GUIManager::GetInstance().Draw(cam);
-
         camController.Update();
         cam.Render();
         SDL_Delay(rate.GetMiliseconds());
@@ -469,6 +485,7 @@ int main() try {
     Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 940,
                   SDL_WINDOW_RESIZABLE);
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
+    render.SetDrawBlendMode(SDL_BlendMode::SDL_BLENDMODE_BLEND);  // Allows transparency
     render.SetDrawColor(100, 100, 100, 255);
     SDLTTF ttf;
 

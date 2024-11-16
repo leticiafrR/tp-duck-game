@@ -9,6 +9,7 @@
 #include "Animator.h"
 #include "ColorExtension.h"
 #include "Object2D.h"
+#include "Timer.h"
 
 class DuckClientRenderer {
 private:
@@ -16,6 +17,10 @@ private:
             {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
             {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
             {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
+
+    Timer damagedTimer;
+    Color skinColor;
+    bool damaged = false;
 
 public:
     Object2D spr;
@@ -26,6 +31,7 @@ public:
 
     PlayerEvent target;
 
+
     DuckClientRenderer(Transform transform, uint8_t colorId):
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
@@ -35,6 +41,7 @@ public:
         target.stateTransition = DuckState::IDLE;
         target.motion = transform.GetPos();
         spr.SetColor(SkinColors.at(colorId));
+        skinColor = spr.GetColor();
         SetEventTarget(target);
     }
 
@@ -43,6 +50,11 @@ public:
 
         Vector2D pos = Vector2D::Lerp(fromPos, target.motion, tLerp);
         spr.GetTransform().SetPos(pos);
+
+        if (damaged) {
+            anim.SetTarget("take_damage");
+            damagedTimer.Update(deltaTime);
+        }
         anim.Update(deltaTime);
     }
 
@@ -69,14 +81,20 @@ public:
                 anim.SetTarget("falling");
                 break;
             case DuckState::WOUNDED:
-                std::cout << "Damaged"
-                          << "\n";
-                anim.SetTarget("take_damage");
+                damaged = true;
+                spr.SetColor(Color(230, 40, 40));
+                damagedTimer = Timer(0.15f, [this]() {
+                    damaged = false;
+                    anim.SetTarget("idle");
+                    spr.SetColor(skinColor);
+                });
+                damagedTimer.Start();
                 break;
             case DuckState::DEAD:
-                std::cout << "Dead"
-                          << "\n";
+                damaged = false;
                 anim.SetTarget("dead");
+                damagedTimer.Stop();
+                spr.SetColor(skinColor);
                 break;
             default:
                 break;

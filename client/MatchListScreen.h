@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "tweening/ImageTween.h"
+#include "tweening/TweenManager.h"
+
 #include "Button.h"
 #include "ButtonsManager.h"
 #include "Camera.h"
@@ -121,6 +124,7 @@ public:
             }
 
             GUIManager::GetInstance().Draw(cam);
+            TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
