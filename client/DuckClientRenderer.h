@@ -68,6 +68,9 @@ public:
             case DuckState::FALLING:
                 anim.SetTarget("falling");
                 break;
+            case DuckState::DEAD:
+                anim.SetTarget("dead");
+                break;
             default:
                 break;
         }
