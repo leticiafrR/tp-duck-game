@@ -17,7 +17,7 @@ private:
     PlayerID_t idClient;
     std::atomic<bool> _joinedAMatch = false;
 
-    void sendLoop(uint32_t matchID);
+    void sendLoop();
 
 public:
     explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, PlayerID_t idClient);

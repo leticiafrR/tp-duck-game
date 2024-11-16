@@ -25,6 +25,7 @@
 
 
 struct PlayerInfo {
+    // cppcheck-suppress unusedStructMember
     std::string nickName;
     // cppcheck-suppress unusedStructMember
     Queue<std::shared_ptr<MessageSender>>* senderQueue;
@@ -39,6 +40,7 @@ class MessageSender;
 
 class GamesHandler {
 private:
+    // cppcheck-suppress unusedStructMember
     const std::vector<std::string> availableLevels;
 
     SafeMap<PlayerID_t, PlayerInfo>& players;
@@ -54,8 +56,9 @@ private:
 
 
     // every time a player wins a game it gains a point
+    // cppcheck-suppress unusedStructMember
     std::unordered_map<PlayerID_t, int> playerPointsRecord;
-
+    // cppcheck-suppress unusedStructMember
     std::optional<GameWorld> currentGame;
 
     // private methods
@@ -78,7 +81,7 @@ private:
 
 public:
     GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                 Queue<Command>& commandQueue, MATCH_STATUS& matchStatus);
+                 Queue<Command>& commandQueue, std::atomic<MATCH_STATUS>& matchStatus);
     void playGroupOfGames();
 
     bool isThereFinalWinner();

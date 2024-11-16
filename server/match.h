@@ -29,7 +29,7 @@ private:
     std::shared_ptr<Queue<Command>> commandQueue;
 
     SafeMap<PlayerID_t, PlayerInfo> players;
-
+    // cppcheck-suppress unusedStructMember
     Config& config;
 
     std::mutex endMatch;
@@ -63,6 +63,8 @@ public:
 
     void run() override;
     void forceEnd();
+
+    ActiveMatch getDataMatch();
 
 private:
     std::vector<PlayerData> assignSkins(int numberSkins);

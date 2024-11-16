@@ -27,7 +27,7 @@ void SenderThread::run() {
     // receiver.join();
 }
 
-void SenderThread::sendLoop(uint32_t matchID) {
+void SenderThread::sendLoop() {
     try {
         while (_keep_running) {
             auto messageSender = senderQueue.pop();

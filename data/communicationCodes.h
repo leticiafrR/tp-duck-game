@@ -5,6 +5,8 @@
 
 typedef enum: uint8_t {
     NICKNAME = 1,
+    ACTIVE_MATCHES,
+    LOG_MATCH,
     RESULT_JOINING,
     MATCH_STARTING,
     GAME_SCENE,

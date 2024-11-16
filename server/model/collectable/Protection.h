@@ -3,7 +3,7 @@
 #include "../types.h"
 
 #include "Collectable.h"
-//#include "../Duck.h" //incluye equipment que inlcuye tipos
+// #include "../Duck.h" //incluye equipment que inlcuye tipos
 #include <iostream>
 
 class Armor: public Collectable {

@@ -9,6 +9,8 @@ enum class CommandCode : uint8_t {
     MoveLeft_KeyDown,
     Jump,
     _quit,
+    UseItem_KeyDown,
+    UseItem_KeyUp,
     _startMatch
 };
 

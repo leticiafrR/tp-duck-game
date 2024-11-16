@@ -1,5 +1,11 @@
 #include "lobby.h"
 
+#include <memory>
+
+const bool FAIL_JOINING = false;
+const bool SUCCESS_JOINING = true;
+const PlayerID_t REFRESH = 0;
+
 // estructura principal del lobby (run)
 
 // -El ciclo para recibir comandos de lobby y los respuestas-> se sale porque creo una match o
@@ -20,10 +26,34 @@
 //      - se ejecuta de frente waitForMatchStarting
 
 
-// (getAvailableMatches() metodo protegido del monitor -> acceso de lectura a los status de las
-// matches
-// -> debe ser mutuamente excluyente con waitingForMatchStarting-> acceso de escritura al status de
-// la match (si es el player creador)
+Lobby::Lobby(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch, const PlayerID_t _id,
+             Queue<std::shared_ptr<MessageSender>> _senderQueue, ServerProtocol& _protocol,
+             std::shared_ptr<Queue<Command>>& _matchQueue):
+        monitor(_monitor),
+        playerID(_id),
+        senderQueue(_senderQueue),
+        protocol(_protocol),
+        _joinedAMatch(_joinedAMatch),
+        matchQueue(_matchQueue) {}
 
-// crear una partida nueva -> acceso de escritura al container con
-// cambio de available a on course -> acceso de escritur
+void Lobby::run() {
+    try {
+        PlayerID_t matchID;
+        while (_keep_running) {
+            protocol.sendActiveMarches(monitor.getAvailableMatches());
+            matchID = protocol.receiveTryJoinMatch();
+            if (matchID != REFRESH) {
+                std::shared_ptr<Queue<Command>> commandQueue = monitor.tryJoinMatch();
+                if (commandQueue != std::nullopt) {
+                    protocol.sendResultOfJoining(FAIL_JOINING);
+                    monitor.waitForMatchStarting(playerID, matchID);
+                } else {
+                    protocol.sendResultOfJoining(SUCCESS_JOINING);
+                }
+            }
+        }
+
+    } catch (const ClosedQueue& cqe) {
+
+    } catch (const BrokenProtocol& bpe) {}
+}

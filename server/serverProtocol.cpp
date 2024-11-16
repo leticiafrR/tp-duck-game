@@ -121,7 +121,6 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(numberProjectiles);
 
     for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
-        // assistant.sendFloat(it->speed);
         assistant.sendNumber((uint8_t)it->type);
         assistant.sendVector2D(it->origin);
         assistant.sendVector2D(it->end);
@@ -157,13 +156,12 @@ void ServerProtocol::sendActivesMatches(const std::vector<ActiveMatch>& matches)
 
     assistant.sendNumber(numberElements);
     for (const auto& pair: matches) {
-        assistant.sendNumber(pair.id);  // o pair.first
-        assistant.sendString(pair.name);
-        assistant.sendNumber(pair.actualPlayers);
-        assistant.sendNumber(pair.maxPlayers);
+        assistant.sendNumber(pair.first);  // o pair.first
+        assistant.sendString(pair.second.name);
+        assistant.sendNumber(pair.second.actualPlayers);
+        assistant.sendNumber(pair.second.maxPlayers);
     }
 }
-
 PlayerID_t ServerProtocol::receiveTryJoinMatch() {
     return (PlayerID_t)assistant.receiveNumberFourBytes();
 }

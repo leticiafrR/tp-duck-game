@@ -35,12 +35,10 @@ public:
      * detected lost it throws an exeption*/
     void sendResultOfJoining(bool success);
 
-    // Recibe la partida que el cliente desea joinear (si crea una el mismo monitor deberia chequear
-    // que no existe y crearla) dataMatch receiveRequestJoin();
-    // envia las partidas activas , probablemente reciba el monitor de partidas
+    PlayerID_t receiveTryJoinMatch();
+
     void sendActivesMatches(const std::vector<ActiveMatch>& activeMatches);
 
-    PlayerID_t receiveTryJoinMatch();
     /* Receives through the socket  the player's name. If the connection with the client has been
      * detected lost it throws an exeption*/
     std::string receiveNickName();
@@ -59,7 +57,7 @@ public:
     /* Receives through the socket the command (to apply to its player in the current game) and sets
      * the boolean received*/
     Command receiveCommand();
-
+    // agregar lasers
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
     void sendGameUpdate(const Snapshot& snapshot);
 

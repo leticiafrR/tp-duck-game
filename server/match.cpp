@@ -69,7 +69,7 @@ void Match::run() {
         broadcastMatchMssg(std::make_shared<MatchStartSender>(std::move(playersData),
                                                               Vector2D(Size::DUCK, Size::DUCK)));
 
-        GamesHandler gamesHandler(config, players, commandQueue, std::ref(status));
+        GamesHandler gamesHandler(config, players, *commandQueue, std::ref(matchStatus));
 
         while (!gamesHandler.isThereFinalWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
             gamesHandler.playGroupOfGames();
@@ -87,6 +87,15 @@ void Match::run() {
 }
 
 void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
+
+ActiveMatch Match::getDataMatch() {
+    PlayerInfo dataPlayerCreator;
+    players.get(playerCreator,
+                dataPlayerCreator);  // quizas deberia chequear el error y lanzar una excepcion
+    // pero siempre el dueno va a estar registrado
+    return ActiveMatch(playerCreator, dataPlayerCreator.nickName, players.size(),
+                       config.getMaxPlayers());
+}
 
 void Match::setEndOfMatch(PlayerID_t winner) {
     // only makes sence to do this operation if there are more than 0 players.

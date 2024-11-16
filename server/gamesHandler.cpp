@@ -11,13 +11,13 @@
 //  -> mientras el estatus sea matchOncourse -> se sigue jugando, en cuanto se cammbia a ganado por
 //  default o simplemente ganado -> se deja de jugar grupos de juegos)
 GamesHandler::GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                           Queue<Command>& commandQueue, MATCH_STATUS& matchStatus):
+                           Queue<Command>& commandQueue, std::atomic<MATCH_STATUS>& matchStatus):
         availableLevels(config.getAvailableLevels()),
         players(players),
         commandQueue(commandQueue),
         matchStatus(matchStatus) {
     auto playerIDs = players.getKeys();
-    for (auto& id: playerIDs) {
+    for (const auto& id: playerIDs) {
         playerPointsRecord[id] = 0;
     }
 }

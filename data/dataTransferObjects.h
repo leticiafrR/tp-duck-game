@@ -14,6 +14,8 @@
 
 #include "networkMsg.h"
 
+/******************************LOBBY STARTING DATA************************************/
+
 /******************************MATCH STARTING DATA***********************************/
 struct PlayerData {
     PlayerID_t playerID;
