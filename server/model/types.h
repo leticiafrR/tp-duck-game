@@ -57,8 +57,8 @@ constexpr int DUCK = 10;  // to make the duck moves fastly per tick, add here
 }  // namespace Speed
 
 namespace Size {
-constexpr int DUCK = 4;
-constexpr int BULLET = 2;
+constexpr int DUCK = 3;
+// constexpr int BULLET = 2;
 }  // namespace Size
 
 namespace Mass {

@@ -7,13 +7,8 @@ target_sources(taller_client
     Button.cpp
     Camera.cpp
     main.cpp
-    #mainNetwork.cpp
-    
-
-    # receiver.cpp
-    # sender.cpp
     network/ClientProtocol.cpp
-    # client.cpp
+
     PUBLIC
     # .h files
     GraphicUI.h
@@ -30,11 +25,6 @@ target_sources(taller_client
     Button.h
     ButtonsManager.h
 
-    # DataMatch.h
-    # round.h
-    # dataReceive.h
-    # receiver.h
-    # sender.h
     network/ClientProtocol.h
     network/Client.h
     network/Receiver.h
