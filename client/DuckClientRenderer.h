@@ -39,7 +39,7 @@ public:
             fromPos(transform.GetPos()),
             tLerp(0),
             target(),
-            akSpr("machine_guns.png", Transform(Vector2D::Zero(), Vector2D(5, 5))) {
+            akSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(3.6, 1.8))) {
         target.stateTransition = DuckState::IDLE;
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
         spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
@@ -47,7 +47,7 @@ public:
         spr.SetColor(SkinColors.at(colorId));
         skinColor = spr.GetColor();
         SetEventTarget(target);
-        akSpr.SetSourceRect(SheetDataCache::GetData("machine_guns.yaml")["ak_47"][0]);
+        akSpr.SetSourceRect(SheetDataCache::GetData("pistols.yaml")["cowboy_pistol"][0]);
     }
 
     void Update(float deltaTime) {
