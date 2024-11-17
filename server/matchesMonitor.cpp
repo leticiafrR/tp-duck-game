@@ -49,16 +49,6 @@ void MatchesMonitor::stopAllMatches() {
     }
 }
 
-void MatchesMonitor::waitForMatchStarting(const ID_player& playerID, const ID_Match& matchID) {
-    if (playerID != matchID) {
-        std::unique_lock<std::mutex> lock(
-                available);  //-> mutex para el acceso a las available matches
-        availableMatches[playerID].waitForMatchStarting(playerID);
-        transferStaredMatch(matchID);
-    } else {
-    }
-}
-
 void MatchesMonitor::transferStaredMatch(PlayerID_t id) {
     std::unique_lock<std::mutex> lock(available);
     std::unique_lock<std::mutex> lock(onCourse);
@@ -69,6 +59,10 @@ void MatchesMonitor::transferStaredMatch(PlayerID_t id) {
     }
 }
 
+void MatchesMonitor::StartAMatch(const PlayerID_t& id) {
+    availableMatches[id]->start();
+    transferStaredMatch(id);
+}
 
 std::vector<ActiveMatch> MatchesMonitor::getAvailableMatches() {
     std::unique_lock<std::mutex> lock(available);
@@ -77,6 +71,19 @@ std::vector<ActiveMatch> MatchesMonitor::getAvailableMatches() {
                    [](const auto& match) { return match.second->getDataMatch(); });
     return data;
 }  // creo que convendria enviar ya la informacion que recibe el protocolo
+
+void LogOutPlayer(const PlayerID_t& playerID, const PlayerID_t& matchID) {
+    std::unique_lock<std::mutex> lck1(onCourse);
+    if (matchesOncourse.find(matchID) != matchesOncourse.end()) {
+        matchesOncourse[matchID].log;
+        return;
+    }
+    lck1.unlock();
+    std::unique_lock<std::mutex> lck2(available);
+    if (availableMatches.find(matchID) != availableMatches.end()) {
+        availableMatches[matchID]->forceEnd();
+    }
+}
 
 ~MatchesMonitor() {
     // Destruir todos los objetos 'Match' en availableMatches

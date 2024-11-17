@@ -21,6 +21,7 @@ public:
                    Queue<std::shared_ptr<MessageSender>> _senderQueue, ServerProtocol& _protocol,
                    std::shared_ptr<Queue<Command>>& _matchQueue);
     void run() override;
+    void waitingStartMatch();
     // not copyable
     Lobby(const Lobby&) = delete;
     Lobby& operator=(const Lobby&) = delete;

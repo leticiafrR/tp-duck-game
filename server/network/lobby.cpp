@@ -36,6 +36,14 @@ Lobby::Lobby(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch, const P
         _joinedAMatch(_joinedAMatch),
         matchQueue(_matchQueue) {}
 
+void Lobby::waitingStartMatch() {
+    bool start = false;
+    while (!start) {
+        start = protocol.receiveStartTheMatch();
+    }
+    monitor.StartAMatch(playerID);
+}
+
 void Lobby::run() {
     try {
         PlayerID_t matchID;
@@ -45,10 +53,13 @@ void Lobby::run() {
             if (matchID != REFRESH) {
                 std::shared_ptr<Queue<Command>> commandQueue = monitor.tryJoinMatch();
                 if (commandQueue != std::nullopt) {
-                    protocol.sendResultOfJoining(FAIL_JOINING);
-                    monitor.waitForMatchStarting(playerID, matchID);
-                } else {
                     protocol.sendResultOfJoining(SUCCESS_JOINING);
+                    if (matchID == playerID) {
+                        waitingStartMatch();
+                    }
+
+                } else {
+                    protocol.sendResultOfJoining(FAIL_JOINING);
                 }
             }
         }

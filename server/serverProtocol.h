@@ -37,6 +37,8 @@ public:
 
     PlayerID_t receiveTryJoinMatch();
 
+    bool receiveStartTheMatch();
+
     void sendActivesMatches(const std::vector<ActiveMatch>& activeMatches);
 
     /* Receives through the socket  the player's name. If the connection with the client has been

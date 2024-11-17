@@ -29,10 +29,11 @@ private:
 public:
     explicit MatchesMonitor(const Config& _configuration);
     std::shared_ptr<Queue<Command>> tryJoinMatch(const PlayerID_t& id);  // si no existe la creo
-    void waitForMatchStarting(const PlayerID_t playerID, const PlayerID_t matchID);
     void transferStaredMatch(PlayerID_t ID);
     void stopAllMatches();
-    void stopAMatch();
+    void stopAMatch(const PlayerID_t& id);
+    void StartAMatch(const PlayerID_t& id);
+    void LogOutPlayer(const PlayerID_t& playerID, const PlayerID_t& matchID);
     std::vector<ActiveMatch> getAvailableMatches();  // creo que convendria enviar ya la informacion
                                                      // que recibe el protocolo
     ~MatchesMonitor();

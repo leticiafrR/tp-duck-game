@@ -167,3 +167,14 @@ void ServerProtocol::sendActivesMatches(const std::vector<ActiveMatch>& matches)
 PlayerID_t ServerProtocol::receiveTryJoinMatch() {
     return (PlayerID_t)assistant.receiveNumberFourBytes();
 }
+
+bool ServerProtocol::receiveStartTheMatch() {
+
+    if (assistant.receiveNumberOneByte() == START_MATCH) {
+        uint8_t startMatch = assistant.receiveNumberOneByte();
+        if (!startMatch) {
+            return true;
+        }
+    }
+    return false
+}
