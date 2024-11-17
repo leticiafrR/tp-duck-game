@@ -1,4 +1,4 @@
-#include "lobby.h"
+#include "matchBinder.h"
 
 #include <memory>
 
@@ -6,9 +6,9 @@ const bool FAIL_JOINING = false;
 const bool SUCCESS_JOINING = true;
 const PlayerID_t REFRESH = 0;
 
-// estructura principal del lobby (run)
+// estructura principal del MatchBinder (run)
 
-// -El ciclo para recibir comandos de lobby y los respuestas-> se sale porque creo una match o
+// -El ciclo para recibir comandos de MatchBinder y los respuestas-> se sale porque creo una match o
 // porque se uniò a una -saliendo del bucle se usa el monitor de partidas para loggIn al client a la
 // partida
 //- si es que decidiò crear una partida:
@@ -26,9 +26,9 @@ const PlayerID_t REFRESH = 0;
 //      - se ejecuta de frente waitForMatchStarting
 
 
-Lobby::Lobby(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch, const PlayerID_t _id,
-             Queue<std::shared_ptr<MessageSender>> _senderQueue, ServerProtocol& _protocol,
-             std::shared_ptr<Queue<Command>>& _matchQueue):
+MatchBinder::MatchBinder(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch,
+                         const PlayerID_t _id, Queue<std::shared_ptr<MessageSender>> _senderQueue,
+                         ServerProtocol& _protocol, std::shared_ptr<Queue<Command>>& _matchQueue):
         monitor(_monitor),
         playerID(_id),
         senderQueue(_senderQueue),
@@ -36,7 +36,7 @@ Lobby::Lobby(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch, const P
         _joinedAMatch(_joinedAMatch),
         matchQueue(_matchQueue) {}
 
-void Lobby::waitingStartMatch() {
+void MatchBinder::waitingStartMatch() {
     bool start = false;
     while (!start) {
         start = protocol.receiveStartTheMatch();
@@ -44,10 +44,10 @@ void Lobby::waitingStartMatch() {
     monitor.StartAMatch(playerID);
 }
 
-void Lobby::run() {
+void MatchBinder::bind() {
     try {
         PlayerID_t matchID;
-        while (_keep_running) {
+        while (!_joinedAMatch) {
             protocol.sendActiveMarches(monitor.getAvailableMatches());
             matchID = protocol.receiveTryJoinMatch();
             if (matchID != REFRESH) {
@@ -57,6 +57,7 @@ void Lobby::run() {
                     if (matchID == playerID) {
                         waitingStartMatch();
                     }
+                    _joinedAMatch = true;
 
                 } else {
                     protocol.sendResultOfJoining(FAIL_JOINING);
