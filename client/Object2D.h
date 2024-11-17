@@ -26,6 +26,7 @@ private:
     Color color;
 
     bool flipH = false;
+    bool visible = true;
 
 public:
     Object2D(const std::string& filename, const Transform& transform,
@@ -47,8 +48,12 @@ public:
     int GetFlipSDL() { return flipH ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE; }
 
     void Draw(Camera& cam) {
+        if (!visible)
+            return;
         cam.DrawTexture(filename, sourceRect, color, transform, GetFlipSDL());
     }
+
+    void SetVisible(bool visible) { this->visible = visible; }
 
     ~Object2D();
 

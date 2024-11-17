@@ -21,6 +21,7 @@
 #include "tweening/TweenManager.h"
 
 #include "Animator.h"
+#include "AudioManager.h"
 #include "BulletRenderer.h"
 #include "Button.h"
 #include "ButtonsManager.h"
@@ -429,6 +430,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
                 auto ray = snapshot.raycastsEvents[i];
                 bullets.emplace_back(ray.origin, ray.end, 100);
+                AudioManager::GetInstance().PlayShoot();
             }
 
             for (const auto& it: snapshot.updates) {
@@ -481,13 +483,17 @@ bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concr
 }
 
 int main() try {
-    SDL sdl(SDL_INIT_VIDEO);
+    // Initialization
+    SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    SDLMixer sdlMixer(MIX_INIT_MP3 | MIX_INIT_OGG);
+    AudioManager::GetInstance();
+    SDLTTF ttf;
+
     Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 940,
                   SDL_WINDOW_RESIZABLE);
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
     render.SetDrawBlendMode(SDL_BlendMode::SDL_BLENDMODE_BLEND);  // Allows transparency
     render.SetDrawColor(100, 100, 100, 255);
-    SDLTTF ttf;
 
     Camera cam(std::move(render), 70);
     Rate rate(60);

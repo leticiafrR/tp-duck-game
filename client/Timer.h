@@ -13,7 +13,7 @@ private:
     bool running;
 
 public:
-    Timer(): running(false), duration(0), timer(0) {}
+    Timer(): duration(0), timer(0), running(false) {}
     Timer(float duration, OnTimerCallback onTime):
             duration(duration), onTime(onTime), timer(duration), running(false) {}
     ~Timer() = default;
