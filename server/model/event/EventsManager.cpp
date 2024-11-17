@@ -6,8 +6,7 @@
  *                              DEFINITIONS
  ***********************************************************************************/
 EventsManager::EventsManager():
-        instantProjectileEvents(),
-        instantProjectileListener(new InstantProjectileEventListener(instantProjectileEvents)) {}
+        instantProjectileEvents(), instantProjectileListener(instantProjectileEvents) {}
 
 Snapshot EventsManager::GetSnapshot(bool gameOver) {
     Snapshot s(gameOver, playerEvents, instantProjectileEvents);
@@ -17,7 +16,7 @@ Snapshot EventsManager::GetSnapshot(bool gameOver) {
 }
 
 void EventsManager::SendInstantProjectileListener(ProjectilesController& projectilesController) {
-    projectilesController.RegisterListener(instantProjectileListener);
+    projectilesController.RegisterListener(&instantProjectileListener);
 }
 
 void EventsManager::SendPlayersListeners(const std::unordered_map<PlayerID_t, Duck*>& players) {
@@ -25,16 +24,16 @@ void EventsManager::SendPlayersListeners(const std::unordered_map<PlayerID_t, Du
         Duck* player = pair.second;
         PlayerID_t id = pair.first;
 
-        PlayerEventListener* l = new PlayerEventListener(playerEvents, id);
-        playersListeners.push_back(l);
-        player->RegistListener(l);
+        // PlayerEventListener l ;
+        playersListeners.emplace_back(playerEvents, id);
+        player->RegistListener(&playersListeners.back());
     }
 }
 
-EventsManager::~EventsManager() {
-    for (PlayerEventListener* listener: playersListeners) {
-        delete listener;
-    }
-    playersListeners.clear();
-    delete instantProjectileListener;
-}
+// EventsManager::~EventsManager() {
+//     for (PlayerEventListener* listener: playersListeners) {
+//         delete listener;
+//     }
+//     playersListeners.clear();
+//     delete instantProjectileListener;
+// }
