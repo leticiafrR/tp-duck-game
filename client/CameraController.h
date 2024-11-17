@@ -56,7 +56,7 @@ public:
         if (!minCorner.IsFarFrom(maxCorner, 0.001f))
             return;
 
-        float offset = 4.5;
+        float offset = 5.5;
 
         camera.SetPos((minCorner + maxCorner) / 2);
         float size = Vector2D::Distance(minCorner, maxCorner) + offset;

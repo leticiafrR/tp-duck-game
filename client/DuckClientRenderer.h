@@ -31,18 +31,23 @@ public:
 
     PlayerEvent target;
 
+    Object2D akSpr;
 
     DuckClientRenderer(Transform transform, uint8_t colorId):
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
             fromPos(transform.GetPos()),
             tLerp(0),
-            target() {
+            target(),
+            akSpr("machine_guns.png", Transform(Vector2D::Zero(), Vector2D(5, 5))) {
         target.stateTransition = DuckState::IDLE;
-        target.motion = transform.GetPos();
+        spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
+        spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
+        target.motion = transform.GetPos() + Vector2D::Up() * 0.4f;
         spr.SetColor(SkinColors.at(colorId));
         skinColor = spr.GetColor();
         SetEventTarget(target);
+        akSpr.SetSourceRect(SheetDataCache::GetData("machine_guns.yaml")["ak_47"][0]);
     }
 
     void Update(float deltaTime) {
@@ -56,15 +61,22 @@ public:
             damagedTimer.Update(deltaTime);
         }
         anim.Update(deltaTime);
+
+        akSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.7f);
+        akSpr.SetFlip(spr.GetFlip());
     }
 
-    void Draw(Camera& cam) { spr.Draw(cam); }
+    void Draw(Camera& cam) {
+        spr.Draw(cam);
+        akSpr.Draw(cam);
+    }
 
     Transform& GetTransform() { return spr.GetTransform(); }
 
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;
+        newTarget.motion += Vector2D::Up() * 0.4f;
         target = newTarget;
 
         switch (target.stateTransition) {
@@ -95,6 +107,7 @@ public:
                 anim.SetTarget("dead");
                 damagedTimer.Stop();
                 spr.SetColor(skinColor);
+                akSpr.SetVisible(false);
                 break;
             default:
                 break;
