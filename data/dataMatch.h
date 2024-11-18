@@ -5,6 +5,7 @@
 #include <string>
 
 #include "id.h"
+#define REFRESHED_ID_CODE 0
 
 struct DataMatch {
     uint8_t currentPlayers;
