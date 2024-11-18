@@ -128,11 +128,12 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
         if (firstSnapshot.updates.find(playerData.playerID) == firstSnapshot.updates.end())
             continue;
         Vector2D spawnPos = firstSnapshot.updates[playerData.playerID].motion;
-        players.emplace(playerData.playerID,
-                        std::make_shared<DuckClientRenderer>(
-                                Transform(spawnPos, matchData.duckSize), playerData.playerSkin));
+        // std::cout << spawnPos.ToString() << "\n";
+        players.emplace(playerData.playerID, std::make_shared<DuckClientRenderer>(
+                                                     Transform(spawnPos, matchData.duckSize),
+                                                     playerData.playerSkin, camController));
 
-        camController.AddTransform(&players.at(playerData.playerID)->GetTransform());
+        // camController.AddTransform(&players.at(playerData.playerID)->GetTransform());
     }
 
     // Set Map
