@@ -5,6 +5,7 @@
 
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "GUIManager.h"
 #include "Rate.h"
 #include "Text.h"
 
@@ -20,11 +21,16 @@ public:
     LoadingScreen(Camera& cam, const Rate& rate, BoolFunction endFunction):
             cam(cam), rate(rate), endFunction(endFunction) {}
 
-    void Render(const string& text) {
+    void Render(const string& text = "", bool lockerOnly = false) {
+        Image bg(RectTransform(Transform(Vector2D::Zero(), Vector2D(2000, 2000))),
+                 ColorExtension::Black(), 10);
         Text titleText(text, 160,
                        RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)),
                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                       ColorExtension::White());
+                       ColorExtension::White(), 11);
+
+        bg.SetVisible(!lockerOnly);
+        bg.SetVisible(!lockerOnly);
 
         while (true) {
             cam.Clean();
@@ -42,6 +48,7 @@ public:
                 break;
             }
 
+            GUIManager::GetInstance().Draw(cam);
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
         }
