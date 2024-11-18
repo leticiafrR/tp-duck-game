@@ -17,7 +17,8 @@ GamesHandler::GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>
         availableLevels(config.getAvailableLevels()),
         players(players),
         commandQueue(commandQueue),
-        matchStatus(matchStatus) {
+        matchStatus(matchStatus),
+        config(config) {
     auto playerIDs = players.getKeys();
     for (auto& id: playerIDs) {
         playerPointsRecord[id] = 0;
@@ -27,9 +28,9 @@ GamesHandler::GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>
 PlayerID_t GamesHandler::whoWon() { return matchWinner; }
 
 void GamesHandler::playGroupOfGames() {
-    for (int i = 0; i < GAMES_IN_GROUP && matchStatus == MATCH_ON_COURSE; i++) {
+    for (int i = 0; i < config.gamesInGroup() && matchStatus == MATCH_ON_COURSE; i++) {
         playOneGame();
-        broadcastGameMssg(std::make_shared<GameEndingSender>(i == (GAMES_IN_GROUP - 1) ||
+        broadcastGameMssg(std::make_shared<GameEndingSender>(i == (config.gamesInGroup() - 1) ||
                                                              matchStatus != MATCH_ON_COURSE));
     }
     updateMatchWinnerStatus();
@@ -43,7 +44,7 @@ void GamesHandler::updateMatchWinnerStatus() {
         matchWinner = currentGame->WhoWon();
         return;
     }
-    if (currentRecord >= GAMES_TO_WIN_MATCH) {
+    if (currentRecord >= config.gamesToWinMatch()) {
         bool existsMatchWinner = false;
 
         for (auto it = playerPointsRecord.begin(); it != playerPointsRecord.end(); ++it) {
