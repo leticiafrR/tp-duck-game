@@ -29,12 +29,12 @@ private:
 
     SafeMap<PlayerID_t, PlayerInfo> players;
 
-    Config& config;
+    const Config& config;
 
     std::mutex endMatch;
 
 public:
-    explicit Match(Config& config, PlayerID_t playerCreator);
+    explicit Match(const Config& config, PlayerID_t playerCreator);
 
     void loadDataIfAvailble(std::vector<DataMatch>& availableMatches);
 

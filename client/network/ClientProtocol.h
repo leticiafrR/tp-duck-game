@@ -49,6 +49,10 @@ public:
 
     void sendCommand(CommandCode cmdCode);
     void endConnection();
+
+    // not copyable
+    ClientProtocol(const ClientProtocol&) = delete;
+    ClientProtocol& operator=(const ClientProtocol&) = delete;
 };
 
 #endif

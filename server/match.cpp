@@ -15,7 +15,7 @@
 #define MAX_COMMANDS 100
 #define NO_WINNER_FORCED_END 0
 
-Match::Match(Config& config, PlayerID_t playerCreator):
+Match::Match(const Config& config, PlayerID_t playerCreator):
         matchStatus(WAITING_PLAYERS),
         playerCreator(playerCreator),
         commandQueue(std::make_shared<Queue<Command>>(MAX_COMMANDS)),

@@ -36,5 +36,9 @@ public:
     void forceEndAllMatches();
 
     void forceEndMatch(PlayerID_t matchID);
+
+    // not copyable
+    MatchesMonitor(const MatchesMonitor&) = delete;
+    MatchesMonitor& operator=(const MatchesMonitor&) = delete;
 };
 #endif
