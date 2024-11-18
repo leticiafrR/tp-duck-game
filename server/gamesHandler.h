@@ -15,8 +15,7 @@
 #include "matchStatus.h"
 #include "playerInfo.h"
 
-#define GAMES_TO_WIN_MATCH 5
-#define GAMES_IN_GROUP 3
+
 #define NOT_ENOUGH_NUMBER_PLAYERS 0
 
 
@@ -42,6 +41,8 @@ private:
     std::unordered_map<PlayerID_t, int> playerPointsRecord;
 
     std::optional<GameWorld> currentGame;
+
+    const Config& config;
 
 public:
     GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,

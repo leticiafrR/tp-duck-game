@@ -56,22 +56,24 @@ void Match::logOutPlayer(PlayerID_t idClient) {
     }
 }
 
-void Match::run() try {
-    auto playersData = assignSkins(config.getAvailableSkins());
-    auto matchStartSender = std::make_shared<MatchStartSender>(std::move(playersData),
-                                                               Vector2D(Size::DUCK, Size::DUCK));
-    broadcastMatchMssg(matchStartSender);
-    GamesHandler gamesHandler(config, players, commandQueue, matchStatus);
+void Match::run() {
+    try {
+        auto playersData = assignSkins(config.getAvailableSkins());
+        auto matchStartSender = std::make_shared<MatchStartSender>(
+                std::move(playersData), Vector2D(Size::DUCK, Size::DUCK));
+        broadcastMatchMssg(matchStartSender);
+        GamesHandler gamesHandler(config, players, commandQueue, matchStatus);
 
-    while (matchStatus == MATCH_ON_COURSE) {
-        gamesHandler.playGroupOfGames();
-    }
+        while (matchStatus == MATCH_ON_COURSE) {
+            gamesHandler.playGroupOfGames();
+        }
 
-    auto winner = gamesHandler.whoWon();
-    setEndOfMatch(winner);
+        auto winner = gamesHandler.whoWon();
+        setEndOfMatch(winner);
 
-} catch (const ClosedQueue& q) {
-} catch (const RunOutOfPlayers& r) {}
+    } catch (const ClosedQueue& q) {
+    } catch (const RunOutOfPlayers& r) {}
+}
 
 bool Match::isOver() { return matchStatus == ENDED; }
 
@@ -79,20 +81,23 @@ void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
 
 void Match::setEndOfMatch(PlayerID_t winner) {
     std::unique_lock<std::mutex> lock(endMatch);
-    matchStatus = ENDED;
-    try {
-        commandQueue->close();
-        if (players.size() != 0) {
-            auto messageSender = std::make_shared<MatchExitSender>(winner);
-            players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
-                playerInfo.senderQueue->try_push(messageSender);
-                playerInfo.senderQueue->close();
-            });
-            players.clear();
-        }
-    } catch (const ClosedQueue& q) {
-    } catch (const std::runtime_error& e) {
-    } catch (...) {}
+    if (matchStatus != ENDED) {
+        matchStatus = ENDED;
+        try {
+            commandQueue->close();
+            if (players.size() != 0) {
+                auto messageSender = std::make_shared<MatchExitSender>(winner);
+                players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
+                    playerInfo.senderQueue->try_push(messageSender);
+                    playerInfo.senderQueue->close();
+                });
+                players.clear();
+            }
+        } catch (const ClosedQueue& q) {
+        } catch (const std::exception& e) {
+
+        } catch (...) {}
+    }
 }
 
 void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {

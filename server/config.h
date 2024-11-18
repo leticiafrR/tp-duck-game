@@ -7,8 +7,12 @@
 
 #include "common/Vector2D.h"
 
+// would be readed form a file .yaml
 #define MAX_PLAYERS 5
 #define MIN_PLAYERS 2
+#define GAMES_TO_WIN_MATCH 10
+#define GAMES_IN_GROUP 5
+
 
 class Config {
 
@@ -18,36 +22,30 @@ class Config {
      * where are the platafforms in the world of 100x100 */
 
     /* For the dummy Match we are going to hardcode some fake names*/
-    const std::vector<std::string> availableLevels;
+    const std::vector<std::string> _availableLevels;
 
     /* its a number with the quantity of different skins availables (for the clients), probably must
      * be read from a file .yaml with the settings*/
-    const int maxPlayers;
-    const int minPlayers;
+    const int _maxPlayers;
+    const int _minPlayers;
+    const int _gamesToWinMatch;
+    const int _gamesInGroup;
 
 
 public:
-    Config(): availableLevels({"level_1.yaml"}), maxPlayers(MAX_PLAYERS), minPlayers(MIN_PLAYERS) {
+    Config():
+            _availableLevels({"level_1.yaml"}),
+            _maxPlayers(MAX_PLAYERS),
+            _minPlayers(MIN_PLAYERS),
+            _gamesToWinMatch(GAMES_TO_WIN_MATCH),
+            _gamesInGroup(GAMES_IN_GROUP) {}
 
-        /* for example for the correct initialization of the `availableLevels`.
-
-        std::string mapsDir = "./maps";
-        if (fs::exists(mapsDir) && fs::is_directory(mapsDir)) {
-            for (const auto& entry : fs::directory_iterator(mapsDir)) {
-                if (fs::is_regular_file(entry.path())) {
-                    availableLevels.push_back(entry.path().filename().string());
-                }
-            }
-        } else {
-            std::cerr << "El directorio 'maps' no existe en el directorio actual." << std::endl;
-        }
-        */
-    }
-
-    const std::vector<std::string> getAvailableLevels() const { return availableLevels; }
-    int getAvailableSkins() const { return maxPlayers; }
-    int getMaxPlayers() const { return maxPlayers; }
-    int getMinPlayers() const { return minPlayers; }
+    const std::vector<std::string> getAvailableLevels() const { return _availableLevels; }
+    int getAvailableSkins() const { return _maxPlayers; }
+    int getMaxPlayers() const { return _maxPlayers; }
+    int getMinPlayers() const { return _minPlayers; }
+    int gamesToWinMatch() const { return _gamesToWinMatch; }
+    int gamesInGroup() const { return _gamesInGroup; }
 };
 
 #endif
