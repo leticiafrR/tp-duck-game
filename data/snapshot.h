@@ -11,13 +11,22 @@
 
 enum class Flip : uint8_t { Left = 1, Right, Up };
 enum class TypeProjectile : uint8_t { RayoLaser, Bullet, Banana, GranadaFragment };
-enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, WOUNDED, DEAD };
+enum class DuckState : uint8_t {
+    IDLE = 1,
+    JUMPING,
+    FALLING,
+    RUNNING,
+    WOUNDED,
+    DEAD,
+    DEAD_BY_FALLING
+};
 
 struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
 };
+
 // enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};
 // enum class DamageState : uint8_t {NO_DAMAGE,BULLET};
 
