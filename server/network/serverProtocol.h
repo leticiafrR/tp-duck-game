@@ -16,11 +16,6 @@
 #include "data/gameScene.h"
 #include "data/snapshot.h"
 
-struct BrokenProtocol: public std::runtime_error {
-    BrokenProtocol():
-            std::runtime_error("Error: server perceived that the client broke the protocol!") {}
-};
-
 class ServerProtocol {
 private:
     Socket skt;

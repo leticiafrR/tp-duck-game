@@ -1,5 +1,11 @@
 #include "serverProtocol.h"
 
+
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error("Error: server perceived that the client broke the protocol!") {}
+};
+
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 std::string ServerProtocol::receiveNickName() {

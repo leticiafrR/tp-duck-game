@@ -4,6 +4,7 @@
 #include <exception>
 #include <memory>
 
+#include "client/network/ClientProtocol.h"
 #include "data/dataMatch.h"
 #include "data/id.h"
 #include "server/matchesMonitor.h"
@@ -18,6 +19,20 @@ class MessageSender;  // not used
 
 class MatchBinder {
 public:
+    static void BindClient(std::atomic<MatchID_t>& matchSelection, ClientProtocol& protocol,
+                           Queue<std::shared_ptr<NetworkMsg>>& msgQueue) {
+
+        while (matchSelection == REFRESHED_ID_CODE) {
+            msgQueue.push(protocol.receiveAvailableMatches());
+        }
+
+        std::shared_ptr<NetworkMsg> msg = protocol.receiveResultJoining();
+        msgQueue.push(msg);
+        if (!dynamic_pointer_cast<ResultJoining>(msg)->joined) {
+            BindClient(matchSelection, protocol, msgQueue);
+        }
+    }
+
     // returns an ID = 0 if the client didnt join a match
     static PlayerID_t bind(MatchesMonitor& matches,
                            Queue<std::shared_ptr<MessageSender>>* senderQueue, PlayerID_t playerID,
@@ -68,5 +83,8 @@ public:
         }
         return REFRESH;
     }
+
+    MatchBinder() = delete;
+    ~MatchBinder() = delete;
 };
 #endif

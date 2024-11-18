@@ -8,6 +8,11 @@
 #include "data/gameScene.h"
 #include "data/snapshot.h"
 
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error("Error: client perceived that the server broke the protocol!") {}
+};
+
 
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
@@ -21,12 +26,7 @@ void ClientProtocol::sendMatchSelection(PlayerID_t matchID) {
     assistant.sendNumber(matchID);
 }
 
-bool ClientProtocol::receiveResultJoining() {
-    auto response = assistant.receiveNumberOneByte();
-    if (response != 1 && response != 0)
-        throw BrokenProtocol();
-    return response;
-}
+
 void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATCH_INTENTION); }
 // receive result start match (bool)
 
@@ -34,9 +34,6 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
     auto typeMessage = assistant.receiveNumberOneByte();
 
     switch (typeMessage) {
-
-        case RESULT_JOINING:
-            return std::make_shared<ResultJoining>(receiveResultJoining());
 
         case MATCH_STARTING:
             return std::make_shared<MatchStartDto>(receiveMachStartDto());
@@ -55,9 +52,6 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
 
         case END_MATCH:
             return std::make_shared<FinalWinner>(receiveMatchWinner());
-
-            // case ACTIVE_MATCHES:
-            //     return std::make_shared<ListActiveMatches>(receiveActiveMatches());
 
         default:
             std::cout << "ERR: the client recieved a unknown message  header!\n";
@@ -190,16 +184,24 @@ void ClientProtocol::endConnection() {
     skt.close();
 }
 
-// ListActiveMatches ClientProtocol::receiveActiveMatches() {
-//     auto numberMatches = assistant.receiveNumberOneByte();
-//     std::unordered_map<PlayerID_t, ActiveMatch> matches;
-//     for (uint8_t i = 0; i < numberMatches; i++) {
-//         ActiveMatch match;
-//         auto id = assistant.receiveNumberFourBytes();
-//         match.name = assistant.receiveString();
-//         match.actualPlayers = assistant.receiveNumberOneByte();
-//         match.maxPlayers = assistant.receiveNumberOneByte();
-//         matches[id] = match;
-//     }
-//     return ListActiveMatches(matches);
-// }
+
+std::shared_ptr<ResultJoining> ClientProtocol::receiveResultJoining() {
+    auto response = assistant.receiveNumberOneByte();
+    if (response != 1 && response != 0)
+        throw BrokenProtocol();
+    return std::make_shared<ResultJoining>(ResultJoining(response));
+}
+
+std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
+    auto numberMatches = assistant.receiveNumberOneByte();
+    std::vector<DataMatch> matches;
+    DataMatch match;
+    for (uint8_t i = 0; i < numberMatches; i++) {
+        match.matchID = assistant.receiveNumberFourBytes();
+        match.creatorNickname = assistant.receiveString();
+        match.currentPlayers = assistant.receiveNumberOneByte();
+        match.maxPlayers = assistant.receiveNumberOneByte();
+        matches.push_back(match);
+    }
+    return std::make_shared<AvailableMatches>(AvailableMatches(matches));
+}
