@@ -201,3 +201,5 @@ std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
     }
     return std::make_shared<AvailableMatches>(AvailableMatches(matches));
 }
+
+PlayerID_t ClientProtocol::receiveMyID() { return assistant.receiveNumberFourBytes(); }
