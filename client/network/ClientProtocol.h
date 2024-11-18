@@ -25,47 +25,28 @@ struct GamesRecountDto;
 struct Command;
 struct ActiveMatch;
 
-struct BrokenProtocol: public std::runtime_error {
-    BrokenProtocol():
-            std::runtime_error("Error: client perceived that the server broke the protocol!") {}
-};
-
 class ClientProtocol {
 private:
     Socket skt;
     ProtocolAssistant assistant;
 
-
-    bool receiveResultJoining();
-
     MatchStartDto receiveMachStartDto();
-
     GameSceneDto receiveGameSceneDto();
-
     Snapshot receiveGameUpdateDto();
-
     bool receiveFinalGroupGame();
-
     GamesRecountDto receiveGamesRecountDto();
-
     PlayerID_t receiveMatchWinner();
-
-    // ListActiveMatches receiveActiveMatches();
-
 
 public:
     explicit ClientProtocol(Socket&& skt);
-
     void sendNickname(const std::string& nickname);
-
     void sendMatchSelection(PlayerID_t matchID);
-
     void sendStartMatchIntention();
-
     std::shared_ptr<NetworkMsg> receiveMessage();
+    std::shared_ptr<AvailableMatches> receiveAvailableMatches();
+    std::shared_ptr<ResultJoining> receiveResultJoining();
 
     void sendCommand(CommandCode cmdCode);
-
     void endConnection();
 
     // not copyable
