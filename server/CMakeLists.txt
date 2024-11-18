@@ -14,6 +14,8 @@ target_sources(taller_server
     network/receiver.cpp
     network/serverProtocol.cpp
     network/messageSender.cpp
+    network/matchBinder.cpp
+    matchesMonitor.cpp
     acceptor.cpp
     main.cpp
 
@@ -38,6 +40,8 @@ target_sources(taller_server
     network/messageSender.h
     network/sender.h
     network/receiver.h
+    network/matchBinder.h 
+    matchesMonitor.h
     config.h
     gamesHandler.h
     match.h

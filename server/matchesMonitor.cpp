@@ -14,14 +14,14 @@ std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(const PlayerID_t& i
 
     if (availableMatches.find(id) == availableMatches.end() &&
         matchesOncourse.find(id) != matchesOncourse.end()) {
-        return std::nullopt;
+        return nullptr;
     } else if (availableMatches.find(id) != availableMatches.end()) {
 
-        return availableMatches[id]->logInPlayer(id);
+        return availableMatches[id]->logInPlayer(id, PlayerInfo());
     }
-
-    availableMatches[id] = Match(configuration, id);
-    return true;
+    Match* match = new Match(configuration, id);
+    availableMatches[id] = match;
+    return availableMatches[id]->logInPlayer(id, PlayerInfo());
 }
 void MatchesMonitor::stopAMatch(const PlayerID_t& id) {
     std::unique_lock<std::mutex> lck1(onCourse);
@@ -50,8 +50,8 @@ void MatchesMonitor::stopAllMatches() {
 }
 
 void MatchesMonitor::transferStaredMatch(PlayerID_t id) {
-    std::unique_lock<std::mutex> lock(available);
-    std::unique_lock<std::mutex> lock(onCourse);
+    std::unique_lock<std::mutex> lock1(available);
+    std::unique_lock<std::mutex> lock2(onCourse);
     if (availableMatches.find(id) != availableMatches.end()) {
         Match* match = availableMatches[id];
         availableMatches.erase(id);
@@ -67,15 +67,15 @@ void MatchesMonitor::StartAMatch(const PlayerID_t& id) {
 std::vector<ActiveMatch> MatchesMonitor::getAvailableMatches() {
     std::unique_lock<std::mutex> lock(available);
     std::vector<ActiveMatch> data;
-    std::transform(matches.begin(), matches.end(), std::back_inserter(data),
+    std::transform(availableMatches.begin(), availableMatches.end(), std::back_inserter(data),
                    [](const auto& match) { return match.second->getDataMatch(); });
     return data;
 }  // creo que convendria enviar ya la informacion que recibe el protocolo
 
-void LogOutPlayer(const PlayerID_t& playerID, const PlayerID_t& matchID) {
+void MatchesMonitor::LogOutPlayer(const PlayerID_t& playerID, const PlayerID_t& matchID) {
     std::unique_lock<std::mutex> lck1(onCourse);
     if (matchesOncourse.find(matchID) != matchesOncourse.end()) {
-        matchesOncourse[matchID].log;
+        matchesOncourse[matchID]->logOutPlayer(playerID);
         return;
     }
     lck1.unlock();
@@ -85,7 +85,7 @@ void LogOutPlayer(const PlayerID_t& playerID, const PlayerID_t& matchID) {
     }
 }
 
-~MatchesMonitor() {
+MatchesMonitor::~MatchesMonitor() {
     // Destruir todos los objetos 'Match' en availableMatches
     for (const auto& pair: availableMatches) {
         delete pair.second;  // Liberar la memoria

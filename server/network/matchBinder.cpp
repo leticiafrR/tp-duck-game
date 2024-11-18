@@ -26,8 +26,8 @@ const PlayerID_t REFRESH = 0;
 //      - se ejecuta de frente waitForMatchStarting
 
 
-MatchBinder::MatchBinder(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMatch,
-                         const PlayerID_t _id, Queue<std::shared_ptr<MessageSender>> _senderQueue,
+MatchBinder::MatchBinder(MatchesMonitor& _monitor, bool _joinedAMatch, const PlayerID_t& _id,
+                         Queue<std::shared_ptr<MessageSender>> _senderQueue,
                          ServerProtocol& _protocol, std::shared_ptr<Queue<Command>>& _matchQueue):
         monitor(_monitor),
         playerID(_id),
@@ -39,7 +39,7 @@ MatchBinder::MatchBinder(MatchesMonitor& _monitor, std::atomic<bool>& _joinedAMa
 void MatchBinder::waitingStartMatch() {
     bool start = false;
     while (!start) {
-        start = protocol.receiveStartTheMatch();
+        start = protocol.receiveStartMatch();
     }
     monitor.StartAMatch(playerID);
 }
@@ -48,17 +48,16 @@ void MatchBinder::bind() {
     try {
         PlayerID_t matchID;
         while (!_joinedAMatch) {
-            protocol.sendActiveMarches(monitor.getAvailableMatches());
+            protocol.sendActivesMatches(monitor.getAvailableMatches());
             matchID = protocol.receiveTryJoinMatch();
             if (matchID != REFRESH) {
-                std::shared_ptr<Queue<Command>> commandQueue = monitor.tryJoinMatch();
-                if (commandQueue != std::nullopt) {
+                std::shared_ptr<Queue<Command>> commandQueue = monitor.tryJoinMatch(matchID);
+                if (commandQueue != nullptr) {
                     protocol.sendResultOfJoining(SUCCESS_JOINING);
                     if (matchID == playerID) {
                         waitingStartMatch();
                     }
                     _joinedAMatch = true;
-
                 } else {
                     protocol.sendResultOfJoining(FAIL_JOINING);
                 }
