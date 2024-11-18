@@ -32,6 +32,7 @@
 #include "GUIManager.h"
 #include "Image.h"
 #include "LoadingScreen.h"
+#include "LobbyScreen.h"
 #include "MapBlock2D.h"
 #include "MatchListScreen.h"
 #include "MenuScreen.h"
@@ -355,7 +356,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
     // Gameloop
     std::set<int> pressedKeysSet;
 
-    Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(200, 200)));
+    Object2D bgSpr("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300)));
 
     bool finishing = false;
     bool running = true;
@@ -364,7 +365,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
 
     Image fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
                     ColorExtension::Black().SetAlpha(0), 10);
-    ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 2,
+    ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 1.25f,
                               [&running]() { running = false; });
 
     while (running) {
@@ -499,11 +500,13 @@ int main() try {
     Rate rate(60);
     // TestMain(cam);
     string nickname = MenuScreen(cam, rate).Render();
-    MatchListScreen(cam, rate).Render();
 
     Client client("8080", "localhost", nickname);
-    Connecting(cam, client, rate);
-    auto playerData = LoadingPlayers(cam, client, rate);
+    bool isOwner = MatchListScreen(cam, rate, client).Render();
+    // Connecting(cam, client, rate);
+    // std::shared_ptr<MatchStartDto> playerData = LoadingPlayers(cam, client, rate);
+    LobbyScreen lobby(cam, rate, client, isOwner);
+    std::shared_ptr<MatchStartDto> playerData = lobby.Render();
 
     bool matchEnded = false;
 

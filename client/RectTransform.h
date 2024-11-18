@@ -14,7 +14,7 @@ private:
     Vector2D pivot;
 
 public:
-    explicit RectTransform(Transform t, Vector2D anchor = Vector2D(0.5f, 0.5f),
+    explicit RectTransform(const Transform& t, Vector2D anchor = Vector2D(0.5f, 0.5f),
                            Vector2D pivot = Vector2D(0.5f, 0.5f)):
             t(t), anchor(anchor), pivot(pivot) {}
 

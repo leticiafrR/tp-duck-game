@@ -15,10 +15,10 @@ private:
     Color color;
 
 public:
-    explicit Image(RectTransform rect, Color color = Color(255, 255, 255), int layerOrder = 0):
+    explicit Image(const RectTransform& rect, Color color = Color(255, 255, 255),
+                   int layerOrder = 0):
             GraphicUI(rect, layerOrder), color(color) {}
     ~Image() = default;
-
 
     void SetColor(Color color) { this->color = color; }
     Color GetColor() { return color; }

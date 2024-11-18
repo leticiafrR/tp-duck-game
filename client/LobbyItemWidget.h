@@ -9,17 +9,22 @@
 
 using std::string;
 
+using OnSelectLobbyCallback = std::function<void(int)>;
+
 class LobbyItemWidget {
 private:
 public:
+    int lobbyId;
     Image matchConentImage;
     Text matchOwnerText;
     Text matchPlayersText;
     Button matchJoinButton;
     Text matchJoinText;
+    OnSelectLobbyCallback onJoinClicked;
 
-    LobbyItemWidget(const string& ownerName, int playerCount, int maxPlayersCount,
-                    Callback onJoinClicked):
+    LobbyItemWidget(int id, const string& ownerName, int playerCount, int maxPlayersCount,
+                    OnSelectLobbyCallback onJoin):
+            lobbyId(id),
             matchConentImage(
                     RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120)), Vector2D(0.5, 1)),
                     Color(160, 160, 160), 0),
@@ -34,11 +39,12 @@ public:
                     ColorExtension::White(), 1),
             matchJoinButton(
                     RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80)), Vector2D(0.5, 1)),
-                    onJoinClicked, Color(40, 40, 40), 1),
+                    [this]() { this->onJoinClicked(this->lobbyId); }, Color(40, 40, 40), 1),
             matchJoinText(
                     "Join", 30,
                     RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80)), Vector2D(0.5, 1)),
-                    ColorExtension::White(), 2) {}
+                    ColorExtension::White(), 2),
+            onJoinClicked(onJoin) {}
 
     ~LobbyItemWidget() = default;
 

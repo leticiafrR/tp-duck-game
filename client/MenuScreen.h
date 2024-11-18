@@ -3,6 +3,9 @@
 
 #include <string>
 
+#include "tweening/TransformTween.h"
+#include "tweening/TweenManager.h"
+
 #include "Button.h"
 #include "ButtonsManager.h"
 #include "Camera.h"
@@ -46,7 +49,7 @@ public:
                                         Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                           ColorExtension::White());
 
-        Button btn(
+        Button startButton(
                 RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
                               Vector2D(0.5, 0.5)),
                 [&running, &nicknameInput]() {
@@ -58,10 +61,21 @@ public:
                     running = false;
                 },
                 Color(40, 40, 40));
-        Text buttonText("START", 30,
-                        RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
+
+        Text buttonText("START", 200,
+                        RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
                                       Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                         ColorExtension::White());
+
+        Transform& btnTransform = startButton.GetRectTransform().GetTransform();
+        Transform& textTransform = buttonText.GetRectTransform().GetTransform();
+
+        TransformTween btnTween(btnTransform, btnTransform.GetSize() * 1.1f, 0.6f);
+        TransformTween textTween(textTransform, textTransform.GetSize() * 1.1f, 0.6f);
+        btnTween.SetLoops(-1, LoopType::Yoyo);
+        textTween.SetLoops(-1, LoopType::Yoyo);
+        btnTween.Play();
+        textTween.Play();
 
         while (running) {
             cam.Clean();
@@ -105,8 +119,11 @@ public:
             nicknameText.SetText(nicknameInput);
 
             nicknamePlaceHolderText.SetVisible(nicknameInput.size() == 0);
+            startButton.SetVisible(nicknameInput.size() != 0);
+            buttonText.SetVisible(nicknameInput.size() != 0);
 
             GUIManager::GetInstance().Draw(cam);
+            TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());

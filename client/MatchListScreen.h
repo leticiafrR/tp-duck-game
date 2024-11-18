@@ -2,9 +2,11 @@
 #define MATCH_LIST_SCREEN_H
 
 #include <list>
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "data/networkMsg.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
@@ -14,54 +16,73 @@
 #include "ColorExtension.h"
 #include "GUIManager.h"
 #include "Image.h"
+#include "LoadingScreen.h"
 #include "LobbyItemWidget.h"
 #include "Rate.h"
 #include "SDLExtension.h"
 #include "Text.h"
 
 using std::list;
+using std::shared_ptr;
 using std::string;
 using std::vector;
-
-// Testing data
-struct LobbyDataDummy {
-    string owner;
-    int playerCount;
-    int maxPlayers;
-};
 
 class MatchListScreen {
 private:
     Camera& cam;
     Rate rate;
+    Client& client;
     list<LobbyItemWidget> widgets;
 
     float currentY = 0;
     float scrollSize = 0;
 
-public:
-    MatchListScreen(Camera& cam, const Rate& rate): cam(cam), rate(rate) {}
+    bool running = false;
+    bool isOwner = false;
 
-    void LoadWidgetList(vector<LobbyDataDummy> data) {
+public:
+    MatchListScreen(Camera& cam, const Rate& rate, Client& client):
+            cam(cam), rate(rate), client(client) {}
+
+    void LoadWidgetList(std::vector<DataMatch> data) {
         widgets.clear();
 
-        Vector2D initialPos(0, -300);
+        Vector2D initialPos(0, -400);
         int moveDelta = 130;
 
         for (size_t i = 0; i < data.size(); i++) {
             auto lobbyData = data[i];
-            widgets.emplace_back(lobbyData.owner, lobbyData.playerCount, lobbyData.maxPlayers,
-                                 []() {});
+            widgets.emplace_back(lobbyData.matchID, lobbyData.creatorNickname,
+                                 lobbyData.currentPlayers, lobbyData.maxPlayers, [this](int id) {
+                                     std::cout << id << "_match clicked!\n";
+
+                                     bool joinSuccess;
+                                     client.SelectMatch(id);
+                                     LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
+                                         std::shared_ptr<ResultJoining> joinResult = nullptr;
+                                         if (GetServerMsg(client, joinResult)) {
+                                             joinSuccess = joinResult->joined;
+                                             return true;
+                                         }
+                                         return false;
+                                     });
+                                     loading.Render("Creating match");
+
+                                     if (joinSuccess) {
+                                         isOwner = false;
+                                         running = false;
+                                     }
+                                 });
 
             widgets.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
         }
 
-        scrollSize = (data.size() + 1) * 130;
+        scrollSize = 400 + data.size() * 130;
     }
 
     void UpdateWidgetListPosition(Vector2D movement) {
 
-        if (currentY + movement.y > scrollSize - 800 || currentY + movement.y < -20) {
+        if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
             return;
         }
         currentY += movement.y;
@@ -70,40 +91,111 @@ public:
         }
     }
 
-    void Render() {
-        bool running = true;
+    template <typename NetworkMsgDerivedClass>
+    bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concretPtr) {
+        shared_ptr<NetworkMsg> msg;
+        if (client.TryRecvNetworkMsg(msg)) {
+            concretPtr = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
+            return true;
+        }
+        return false;
+    }
 
-        Image header(RectTransform(Vector2D(0, 0), Vector2D(2200, 200), Vector2D(0.5, 1),
+    bool Render() {
+        running = true;
+        Image header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
                                    Vector2D(0.5, 1)),
                      ColorExtension::Black(), 3);
 
-        Text titleText("SELECT OR CREATE A LOBBY", 160,
+        Text titleText("CREATE A LOBBY", 30,
                        RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1),
                                      Vector2D(0.5, 0.5)),
                        ColorExtension::White(), 4);
 
         Button createButton(
-                RectTransform(Vector2D(0, -150), Vector2D(320, 80), Vector2D(0.5, 1),
+                RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
-                [&running]() { running = false; }, Color(40, 40, 40), 4);
+                [this]() {
+                    bool joinSuccess;
+                    client.CreateMatch();
+                    std::cout << "Create match!\n";
+                    LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
+                        std::shared_ptr<ResultJoining> joinResult = nullptr;
+                        if (GetServerMsg(client, joinResult)) {
+                            joinSuccess = joinResult->joined;
+                            return true;
+                        }
+                        return false;
+                    });
+                    loading.Render("Creating match");
 
-        Text createButtonText("CREATE MATCH", 30,
-                              RectTransform(Vector2D(0, -150), Vector2D(320, 80), Vector2D(0.5, 1),
+                    if (joinSuccess) {
+                        isOwner = true;
+                        running = false;
+                    }
+                },
+                Color(40, 40, 40), 4);
+
+        Text createButtonText("CREATE", 20,
+                              RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                                             Vector2D(0.5, 0.5)),
                               ColorExtension::White(), 5);
 
-        LoadWidgetList(vector<LobbyDataDummy>{
-                LobbyDataDummy{"josValentin", 2, 5},
-                LobbyDataDummy{"metalica", 4, 5},
-                LobbyDataDummy{"andrew garfield", 3, 5},
-                LobbyDataDummy{"antuaned garfield", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
-                LobbyDataDummy{"random", 4, 5},
+        Text joinLobbyText("OR JOIN A LOBBY", 30,
+                           RectTransform(Vector2D(-180, -240), Vector2D(500, 160), Vector2D(0.5, 1),
+                                         Vector2D(0.5, 0.5)),
+                           ColorExtension::White(), 4);
+
+        Button refreshButton(
+                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+                              Vector2D(0.5, 0.5)),
+                [this, &refreshButton]() {
+                    // Refresh...
+                    refreshButton.SetInteractable(false);
+                    client.Refresh();
+                    // Wait for refresh complete
+                    std::cout << "Refreshing lobbies!\n";
+                    LoadingScreen loading(cam, rate, [this]() {
+                        std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
+                        if (GetServerMsg(client, lobbyListResult)) {
+                            LoadWidgetList(lobbyListResult->matches);
+                            return true;
+                        }
+                        return false;
+                    });
+                    loading.Render("Getting available lobbies");
+                    refreshButton.SetInteractable(true);
+                },
+                Color(40, 40, 40), 4);
+
+        Text refreshButtonText("REFRESH", 20,
+                               RectTransform(Vector2D(180, -240), Vector2D(250, 80),
+                                             Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
+                               ColorExtension::White(), 5);
+
+        // LoadWidgetList(vector<LobbyDataDummy>{
+        //         LobbyDataDummy{0, "josValentin", 2, 5},
+        //         LobbyDataDummy{1, "metalica", 4, 5},
+        //         LobbyDataDummy{2, "andrew garfield", 3, 5},
+        //         LobbyDataDummy{3, "antuaned garfield", 4, 5},
+        //         LobbyDataDummy{4, "random", 4, 5},
+        //         LobbyDataDummy{5, "random", 4, 5},
+        //         LobbyDataDummy{6, "random", 4, 5},
+        //         LobbyDataDummy{7, "random", 4, 5},
+        //         LobbyDataDummy{8, "random", 4, 5},
+        //         LobbyDataDummy{9, "random", 4, 5},
+        // });
+
+        // Load the first available lobbies
+        LoadingScreen loading(cam, rate, [this]() {
+            std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
+            if (GetServerMsg(client, lobbyListResult)) {
+                LoadWidgetList(lobbyListResult->matches);
+                return true;
+            }
+            return false;
         });
+        loading.Render("Getting available lobbies");
 
         while (running) {
             cam.Clean();
@@ -129,6 +221,8 @@ public:
             cam.Render();
             SDL_Delay(rate.GetMiliseconds());
         }
+
+        return isOwner;
     }
 
     ~MatchListScreen() = default;

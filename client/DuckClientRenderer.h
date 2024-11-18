@@ -33,7 +33,7 @@ public:
 
     Object2D akSpr;
 
-    DuckClientRenderer(Transform transform, uint8_t colorId):
+    DuckClientRenderer(const Transform& transform, uint8_t colorId):
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
             fromPos(transform.GetPos()),

@@ -22,8 +22,8 @@ private:
     Color color;
 
 public:
-    Text(const string& text, int fontSize, RectTransform rect, Color color, int layerOrder = 0,
-         const string& filename = "pixel.ttf"):
+    Text(const string& text, int fontSize, const RectTransform& rect, Color color,
+         int layerOrder = 0, const string& filename = "pixel.ttf"):
             GraphicUI(rect, layerOrder),
             text(text),
             filename(filename),
