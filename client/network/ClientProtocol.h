@@ -40,11 +40,12 @@ private:
 public:
     explicit ClientProtocol(Socket&& skt);
     void sendNickname(const std::string& nickname);
-    void sendMatchSelection(PlayerID_t matchID);
+    void sendMatchSelection(MatchID_t id);
     void sendStartMatchIntention();
     std::shared_ptr<NetworkMsg> receiveMessage();
     std::shared_ptr<AvailableMatches> receiveAvailableMatches();
     std::shared_ptr<ResultJoining> receiveResultJoining();
+    PlayerID_t receiveMyID();
 
     void sendCommand(CommandCode cmdCode);
     void endConnection();

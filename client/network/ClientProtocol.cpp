@@ -10,25 +10,11 @@
 
 struct BrokenProtocol: public std::runtime_error {
     BrokenProtocol():
-            std::runtime_error("Error: client perceived that the server broke the protocol!") {}
+            std::runtime_error("ERROR: client perceived that the server broke the protocol!") {}
 };
 
 
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
-
-void ClientProtocol::sendNickname(const std::string& nickname) {
-    assistant.sendNumber(NICKNAME);
-    assistant.sendString(nickname);
-}
-// receive identification(palyerid)
-void ClientProtocol::sendMatchSelection(PlayerID_t matchID) {
-    assistant.sendNumber(MATCH_SELECTION);
-    assistant.sendNumber(matchID);
-}
-
-
-void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATCH_INTENTION); }
-// receive result start match (bool)
 
 std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
     auto typeMessage = assistant.receiveNumberOneByte();
@@ -54,10 +40,23 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
             return std::make_shared<FinalWinner>(receiveMatchWinner());
 
         default:
-            std::cout << "ERR: the client recieved a unknown message  header!\n";
+            std::cout << "ERROR: the client recieved a unknown message  header!\n";
             throw BrokenProtocol();
     }
 }
+
+void ClientProtocol::sendNickname(const std::string& nickname) {
+    assistant.sendNumber(NICKNAME);
+    assistant.sendString(nickname);
+}
+
+void ClientProtocol::sendMatchSelection(MatchID_t id) {
+    assistant.sendNumber(MATCH_SELECTION);
+    assistant.sendNumber(id);
+}
+
+void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATCH_INTENTION); }
+
 
 MatchStartDto ClientProtocol::receiveMachStartDto() {
     auto numberPlayers = assistant.receiveNumberOneByte();
@@ -155,13 +154,10 @@ bool ClientProtocol::receiveFinalGroupGame() {
 }
 
 GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
-
     auto matchEndedCode = assistant.receiveNumberOneByte();
     if (matchEndedCode != 1 && matchEndedCode != 0)
         throw BrokenProtocol();
     bool matchEnded = matchEndedCode;
-
-    // receiving the map of games won by each player
     std::unordered_map<PlayerID_t, int> results;
     auto numberElements = assistant.receiveNumberOneByte();
     for (uint8_t i = 0; i < numberElements; i++) {
