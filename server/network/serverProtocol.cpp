@@ -55,7 +55,7 @@ void ServerProtocol::receiveStartMatchIntention() {
 }
 
 void ServerProtocol::sendStartMatchResult(bool success) {
-    assistant.sendNumber(RESULT_START_MATCH);
+    assistant.sendNumber(RESULT_JOINING);
     uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
     assistant.sendNumber(response);
 }

@@ -182,24 +182,35 @@ void ClientProtocol::endConnection() {
 
 
 std::shared_ptr<ResultJoining> ClientProtocol::receiveResultJoining() {
-    auto response = assistant.receiveNumberOneByte();
-    if (response != 1 && response != 0)
-        throw BrokenProtocol();
-    return std::make_shared<ResultJoining>(ResultJoining(response));
+    if (assistant.receiveNumberOneByte() == RESULT_JOINING) {
+        auto response = assistant.receiveNumberOneByte();
+        if (response != 1 && response != 0)
+            throw BrokenProtocol();
+        return std::make_shared<ResultJoining>(ResultJoining(response));
+    }
+    throw BrokenProtocol();
 }
 
 std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
-    auto numberMatches = assistant.receiveNumberOneByte();
-    std::vector<DataMatch> matches;
-    DataMatch match;
-    for (uint8_t i = 0; i < numberMatches; i++) {
-        match.matchID = assistant.receiveNumberFourBytes();
-        match.creatorNickname = assistant.receiveString();
-        match.currentPlayers = assistant.receiveNumberOneByte();
-        match.maxPlayers = assistant.receiveNumberOneByte();
-        matches.push_back(match);
+    if (assistant.receiveNumberOneByte() == AVAILABLE_MATCHES) {
+        auto numberMatches = assistant.receiveNumberOneByte();
+        std::vector<DataMatch> matches;
+        DataMatch match;
+        for (uint8_t i = 0; i < numberMatches; i++) {
+            match.matchID = assistant.receiveNumberFourBytes();
+            match.creatorNickname = assistant.receiveString();
+            match.currentPlayers = assistant.receiveNumberOneByte();
+            match.maxPlayers = assistant.receiveNumberOneByte();
+            matches.push_back(match);
+        }
+        return std::make_shared<AvailableMatches>(AvailableMatches(matches));
     }
-    return std::make_shared<AvailableMatches>(AvailableMatches(matches));
+    throw BrokenProtocol();
 }
 
-PlayerID_t ClientProtocol::receiveMyID() { return assistant.receiveNumberFourBytes(); }
+PlayerID_t ClientProtocol::receiveMyID() {
+    if (assistant.receiveNumberOneByte() == IDENTIFICATION) {
+        return assistant.receiveNumberFourBytes();
+    }
+    throw BrokenProtocol();
+}
