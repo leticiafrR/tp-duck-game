@@ -41,23 +41,4 @@ struct Snapshot: public NetworkMsg {
             gameOver(gameOver), updates(updates) {}
 };
 
-struct MatchDto {
-    PlayerID_t id;
-    std::string creatorName;
-    uint8_t currentPlayers;
-    uint8_t maxPlayers;
-
-    MatchDto(PlayerID_t creatorID, const std::string& _creatorName, uint8_t _currentPlayers,
-             uint8_t _maxPlayers):
-            id(creatorID),
-            creatorName(_creatorName),
-            currentPlayers(_currentPlayers),
-            maxPlayers(_maxPlayers) {}
-};
-
-struct AvailableMatches: public NetworkMsg {
-    std::vector<MatchDto> matches;
-    explicit AvailableMatches(const std::vector<ActiveMatch>& _matches): matches(_matches) {}
-};
-
 #endif
