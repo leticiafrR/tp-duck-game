@@ -17,7 +17,9 @@ private:
     std::function<void()> onClick;
     Color color;
     Color pressedColor;
+    Color disabledColor;
     bool isPressed;
+    bool interactable;
 
 public:
     Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255),
@@ -33,6 +35,10 @@ public:
     bool IsTarget(int mouseX, int mouseY, Camera& cam);
 
     void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
+
+    void SetInteractable(bool interactable);
+
+    void SetVisible(bool visible);
 
     int GetLayerOrder() { return image.GetLayerOrder(); }
 };

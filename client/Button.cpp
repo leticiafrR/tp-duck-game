@@ -8,7 +8,9 @@ Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder
         image(rect, color, layerOrder),
         onClick(onClick),
         color(color),
-        pressedColor(ColorExtension::AddValue(color, -50)) {
+        pressedColor(ColorExtension::AddValue(color, -50)),
+        disabledColor(color.SetAlpha(120)),
+        interactable(true) {
     ButtonsManager::GetInstance().AddButton(this);
 }
 Button::~Button() { ButtonsManager::GetInstance().RemoveButton(this); }
@@ -52,7 +54,16 @@ bool Button::IsTarget(int mouseX, int mouseY, Camera& cam) {
     return true;
 }
 
+void Button::SetInteractable(bool interactable) {
+    image.SetColor(interactable ? color : disabledColor);
+    this->interactable = interactable;
+}
+void Button::SetVisible(bool visible) { image.SetVisible(visible); }
+
 void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
+    if (!interactable || !image.GetVisible())
+        return;
+
     bool isMouseOver = IsMouseOver(image.GetRectTransform(), mouseX, mouseY, cam);
 
     if (isMouseOver)
@@ -69,10 +80,10 @@ void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam
         }
 
     } else if (e.type == SDL_MOUSEBUTTONUP) {
+        image.SetColor(color);
         if (isMouseOver && isPressed) {
             onClick();
         }
-        image.SetColor(color);
         isPressed = false;
     }
 }
