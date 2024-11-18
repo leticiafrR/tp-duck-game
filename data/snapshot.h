@@ -41,19 +41,23 @@ struct Snapshot: public NetworkMsg {
             gameOver(gameOver), updates(updates) {}
 };
 
-struct ActiveMatch {   // si o si manejarlo en un map para considerar el ID
-    std::string name;  // considero necesario para que el usuario pueda ver el nombre de la match
-    // cppcheck-suppress unusedStructMember
-    uint8_t actualPlayers;
-    // cppcheck-suppress unusedStructMember
+struct MatchDto {
+    PlayerID_t id;
+    std::string creatorName;
+    uint8_t currentPlayers;
     uint8_t maxPlayers;
-    // ActiveMatch(const std::string& name, uint8_t actualPlayers, uint8_t maxPlayers)
-    //     : name(name), actualPlayers(actualPlayers), maxPlayers(maxPlayers) {}
+
+    MatchDto(PlayerID_t creatorID, const std::string& _creatorName, uint8_t _currentPlayers,
+             uint8_t _maxPlayers):
+            id(creatorID),
+            creatorName(_creatorName),
+            currentPlayers(_currentPlayers),
+            maxPlayers(_maxPlayers) {}
 };
 
-struct ListActiveMatches: public NetworkMsg {
-    std::unordered_map<PlayerID_t, ActiveMatch> matches;
-    explicit ListActiveMatches(const std::unordered_map<PlayerID_t, ActiveMatch>& _matches):
-            matches(_matches) {}
+struct AvailableMatches: public NetworkMsg {
+    std::vector<MatchDto> matches;
+    explicit AvailableMatches(const std::vector<ActiveMatch>& _matches): matches(_matches) {}
 };
+
 #endif
