@@ -49,7 +49,6 @@ target_sources(taller_server
     network/messageSender.h
     network/sender.h
     network/receiver.h
-    network/matchBinder.h
     config.h
     gamesHandler.h
     match.h

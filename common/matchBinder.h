@@ -4,12 +4,12 @@
 #include <exception>
 #include <memory>
 
-#include "../matchesMonitor.h"
-#include "common/queue.h"
 #include "data/dataMatch.h"
 #include "data/id.h"
+#include "server/matchesMonitor.h"
+#include "server/network/serverProtocol.h"
 
-#include "serverProtocol.h"
+#include "queue.h"
 
 #define REFRESH 0
 
