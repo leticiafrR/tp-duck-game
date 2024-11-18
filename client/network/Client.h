@@ -13,22 +13,26 @@
 
 #include "Receiver.h"
 
-
 class Client {
 private:
     ClientProtocol protocol;
     Queue<std::shared_ptr<NetworkMsg>> msgQueue;
     Queue<CommandCode> cmmdQueue;
     Receiver* receiver;
+    std::atomic<MatchID_t> matchSelection;
 
 public:
     Client(const char* servname, const char* hostname, const std::string& name):
             protocol(std::move(Socket(hostname, servname))),
             msgQueue(),
             cmmdQueue(),
-            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name)) {
+            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, matchSelection)) {
         receiver->start();
     }
+
+    void Refresh() { SelectMatch(REFRESHED_ID_CODE); }
+
+    void SelectMatch(MatchID_t selection) { matchSelection = selection; }
 
     bool TrySendRequest(const CommandCode& cmmd) { return cmmdQueue.try_push(cmmd); }
 
