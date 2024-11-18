@@ -31,11 +31,10 @@ public:
     }
 
     void Refresh() { SelectMatch(REFRESHED_ID_CODE); }
-
     void SelectMatch(MatchID_t selection) { matchSelection = selection; }
+    void CreateMatch();
 
     bool TrySendRequest(const CommandCode& cmmd) { return cmmdQueue.try_push(cmmd); }
-
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsg>& msg) { return msgQueue.try_pop(msg); }
 
 
@@ -47,6 +46,7 @@ public:
         }
         delete receiver;
     }
+
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
 
