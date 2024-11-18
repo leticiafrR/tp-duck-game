@@ -18,7 +18,6 @@ class ProjectilesController;
 class EventsManager {
 private:
     std::unordered_map<PlayerID_t, PlayerEvent> playerEvents;
-    // std::vector<PlayerEventListener> playersListeners;
     std::list<PlayerEventListener> playersListeners;
 
     std::vector<InstantProjectileEventDto> instantProjectileEvents;
@@ -30,7 +29,6 @@ public:
     void SendInstantProjectileListener(ProjectilesController& projectilesController);
     Snapshot GetSnapshot(bool gameOver);
 
-    // ~EventsManager();
     EventsManager(const EventsManager&) = delete;
     EventsManager& operator=(const EventsManager&) = delete;
 };

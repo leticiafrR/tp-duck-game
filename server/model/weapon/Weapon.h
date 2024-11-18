@@ -27,6 +27,7 @@ public:
     virtual void StopUse(Duck* shooter) override { shooter->SayImShooting(); }
     virtual ~Weapon() = default;
 };
+
 /*de esta derivan:
     -> hitscanWeapon
     -> physicalWeapon

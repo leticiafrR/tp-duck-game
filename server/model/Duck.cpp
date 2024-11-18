@@ -139,6 +139,8 @@ void Duck::HandleOutOfBounds(float displacement) {
         mySpace.Move(add);
     } else {
         std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
+        myState = DuckState::DEAD_BY_FALLING;
+        l->NewPlayerEvent();
         MarkAsDead();
     }
 }
