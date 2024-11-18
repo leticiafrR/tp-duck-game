@@ -37,7 +37,7 @@ public:
     Font& GetFont() { return FontCache::GetData(filename, fontSize); }
 
     void Draw(Camera& cam) override {
-        if (text.size() == 0) {
+        if (text.size() == 0 || !visible) {
             return;
         }
         cam.DrawText(text, GetFont(), rect, color);

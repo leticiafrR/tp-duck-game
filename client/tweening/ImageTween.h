@@ -25,6 +25,8 @@ public:
             startColor(img.GetColor()),
             targetColor(targetColor) {}
 
+    void OnInitLoop() override {}
+
     void DoTween(float t) override {
         img.SetColor(ColorExtension::Lerp(startColor, targetColor, t));
     }
