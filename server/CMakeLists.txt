@@ -1,24 +1,26 @@
 target_sources(taller_server
     PRIVATE
     # .cpp files
-    serverProtocol.cpp
-    messageSender.cpp
     model/event/InstantProjectileEventListener.cpp
     model/event/PlayerEventListener.cpp
     model/event/EventsManager.cpp
     model/DynamicObj.cpp
     model/Duck.cpp
     model/Game.cpp
-    handlerGames.cpp
-    match.cpp
     model/map/staticMap.cpp
-    #the part of the communications
-    sender.cpp
-    receiver.cpp
-    acceptor.cpp
 
+    #network
+    network/sender.cpp
+    network/receiver.cpp
+    network/serverProtocol.cpp
+    network/messageSender.cpp
+
+    acceptor.cpp
+    gamesHandler.cpp
+    match.cpp
+    matchesMonitor.cpp
+    
     main.cpp
-    # mainWeapon.cpp
 
     PUBLIC
     # .h files
@@ -42,13 +44,18 @@ target_sources(taller_server
     model/projectile/InstantProjectile.h
     model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
-    serverProtocol.h
-    messageSender.h
+
+    network/serverProtocol.h
+    network/messageSender.h
+    network/sender.h
+    network/receiver.h
+    network/matchBinder.h
     config.h
-    handlerGames.h
+    gamesHandler.h
     match.h
-    sender.h
-    receiver.h
+    matchesMonitor.h
+    matchStatus.h
+    playerInfo.h
     acceptor.h
 
     )

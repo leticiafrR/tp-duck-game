@@ -2,18 +2,19 @@
 #define ACCEPTOR_H
 
 #include <list>
+#include <memory>
 #include <utility>
 
-#include "sender.h"
+#include "network/sender.h"
 
 class AcceptorThread: public Thread {
 private:
     Socket skt;
-    std::list<SenderThread*> clients;
-    Match match;
+    std::list<std::unique_ptr<SenderThread>> clients;
+    MatchesMonitor matchesMonitor;
 
     void acceptLoop();
-    void reapDead();
+    void reapDeadClients();
 
     /* This method first kills the clients (that havent joined a match), then it forces the end of
      * the unique match available and this will make sure to kill the communication threads of its
@@ -22,7 +23,7 @@ private:
     void killAllClients();
 
     /* Method that calls .join on the clients threads and also on the match thread */
-    void cleanUpThreads();
+    void cleanUpClientThreads();
 
 public:
     explicit AcceptorThread(const char* servname, Config& config);

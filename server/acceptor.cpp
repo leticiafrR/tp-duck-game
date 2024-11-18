@@ -1,72 +1,66 @@
 #include "acceptor.h"
 
+#include <memory>
+
 #define PRINT_NEW_CONNECTION() std::cout << "New user connected!" << std::endl;
-#define TEST_NUMBER_PLAYERS_IN_MATCH 2
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
-        skt(servname), match(config, TEST_NUMBER_PLAYERS_IN_MATCH) {}
+        skt(servname), matchesMonitor(config) {}
 
-void AcceptorThread::forceClosure() {
-    skt.shutdown(2);
-    skt.close();
-}
-void AcceptorThread::killAllClients() {
-    // first we kill the ones that arent part of a match
-    for (auto& client: clients) {
-        client->kill();
-    }
-}
 void AcceptorThread::run() {
     try {
         acceptLoop();
     } catch (const LibError& e) {
 
-    } catch (const std::runtime_error& e) {
+    } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {
         std::cerr << "SE DETECTÒ UN PROBLEMA desconocido EN EL HILO ACEPTOR\n";
     }
-    /* Forcing the end of the match that will kill all of its clients  */
-    match.forceEnd();
-    cleanUpThreads();
+
+    matchesMonitor.forceEndAllMatches();
+    matchesMonitor.reapEndedMatches();
+    killAllClients();
+    reapDeadClients();
 }
 
 void AcceptorThread::acceptLoop() {
     PlayerID_t idClient = 1;
+
     while (_keep_running) {
+
         Socket peer = skt.accept();
         PRINT_NEW_CONNECTION();
-        SenderThread* client = new SenderThread(std::move(peer), std::ref(match), idClient);
-        // std::cout << "se instanciò el sender\n";
-        clients.push_back(client);
-        client->start();
-        // std::cout << "Sender of the client shooted\n";
 
-        reapDead();
+        clients.emplace_back(std::make_unique<SenderThread>(std::move(peer),
+                                                            std::ref(matchesMonitor), idClient));
+        clients.back()->start();
+
+        reapDeadClients();
+        matchesMonitor.reapEndedMatches();
         idClient++;
     }
 }
 
-void AcceptorThread::reapDead() {
-
-    clients.remove_if([](SenderThread* client) {
+void AcceptorThread::reapDeadClients() {
+    clients.remove_if([](std::unique_ptr<SenderThread>& client) {
         if (!client->is_alive()) {
             client->join();
-            delete client;
             return true;
         }
         return false;
     });
 }
 
-
-void AcceptorThread::cleanUpThreads() {
-    match.join();
+void AcceptorThread::killAllClients() {
     for (auto& client: clients) {
-        client->join();
-        delete client;
+        client->kill();
     }
-    clients.clear();
+}
+
+void AcceptorThread::forceClosure() {
+    skt.shutdown(2);
+    skt.close();
 }
 
 AcceptorThread::~AcceptorThread() {}

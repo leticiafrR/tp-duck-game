@@ -1,0 +1,23 @@
+#ifndef DATA_MATCH_
+#define DATA_MATCH_
+
+#include <cstdint>
+#include <string>
+
+#include "id.h"
+
+struct DataMatch {
+    uint8_t currentPlayers;
+    uint8_t maxPlayers;
+    PlayerID_t matchID;
+    std::string creatorNickname;
+
+    DataMatch(uint8_t _currentPlayers, uint8_t _maxPlayers, PlayerID_t _matchID,
+              const std::string& _creatorNickname):
+            currentPlayers(_currentPlayers),
+            maxPlayers(_maxPlayers),
+            matchID(_matchID),
+            creatorNickname(_creatorNickname) {}
+};
+
+#endif

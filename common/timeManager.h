@@ -7,29 +7,35 @@
 class TimeManager {
 private:
     // objetivo de frames (updtes que se pasen a los clientes) por segundo
-    int targetFPS;
-
     // Càlculo del tiempo que debrìa durar cada tick del gameLoop
-    std::chrono::duration<double, std::milli> frameTime;
+    float tickDurationTarget;
+    float tickDuration = 0.0f;
 
     // tiempo de inicio del tick
-    std::chrono::time_point<std::chrono::steady_clock> lastUpdateTime =
-            std::chrono::steady_clock::now();
+    std::chrono::time_point<std::chrono::high_resolution_clock> lastTickTime;
+
 
 public:
     explicit TimeManager(int targetFPS):
-            targetFPS(targetFPS),
-            frameTime(std::chrono::duration<double, std::milli>(1000.0 / targetFPS)) {}
+            tickDurationTarget(1.0f / targetFPS),
+            lastTickTime(std::chrono::high_resolution_clock::now()) {}
 
-    std::chrono::duration<double, std::milli> synchronizeTick() {
-        auto currentTime = std::chrono::steady_clock::now();
+    // returns the deltaTime (duration of the last Tick) and sets
+    float updateTickTimer() {
+        auto now = std::chrono::high_resolution_clock::now();
+        tickDuration = std::chrono::duration<float>(now - lastTickTime).count();
+        lastTickTime = now;
+        return tickDuration;
+    }
 
-        auto deltaTime = frameTime - (currentTime - lastUpdateTime);
-        if (deltaTime > std::chrono::duration<double, std::milli>(0)) {
-            std::this_thread::sleep_for(deltaTime);
+
+    float getTickDuration() const { return tickDuration; }
+
+    void sleepIfNeeded() {
+        if (tickDuration < tickDurationTarget) {
+            std::this_thread::sleep_for(
+                    std::chrono::duration<float>(tickDurationTarget - tickDuration));
         }
-        lastUpdateTime = currentTime;
-        return deltaTime;
     }
 };
 

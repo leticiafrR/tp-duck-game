@@ -1,13 +1,6 @@
 #include "serverProtocol.h"
 
-
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
-
-void ServerProtocol::sendResultOfJoining(bool success) {
-    assistant.sendNumber(RESULT_JOINING);
-    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(response);
-}
 
 std::string ServerProtocol::receiveNickName() {
     if (assistant.receiveNumberOneByte() == NICKNAME) {
@@ -15,6 +8,49 @@ std::string ServerProtocol::receiveNickName() {
         return nickname;
     }
     throw BrokenProtocol();
+}
+void ServerProtocol::sendIdentification(PlayerID_t playerID) {
+    assistant.sendNumber(IDENTIFICATION);
+    assistant.sendNumber(playerID);
+}
+
+PlayerID_t ServerProtocol::receiveMatchSelection() {
+    if (assistant.receiveNumberOneByte() == MATCH_SELECTION) {
+        return assistant.receiveNumberFourBytes();
+    }
+    throw BrokenProtocol();
+}
+
+void ServerProtocol::sendResultOfJoining(bool success) {
+    assistant.sendNumber(RESULT_JOINING);
+    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(response);
+}
+
+void ServerProtocol::sendAvailableMatches(const std::vector<DataMatch>& matches) {
+    assistant.sendNumber(AVAILABLE_MATCHES);
+
+    uint8_t numberMatches = (uint8_t)matches.size();
+    assistant.sendNumber(numberMatches);
+
+    for (uint8_t i = 0; i < numberMatches; i++) {
+        assistant.sendNumber(matches[i].currentPlayers);
+        assistant.sendNumber(matches[i].maxPlayers);
+        assistant.sendNumber(matches[i].matchID);
+        assistant.sendString(matches[i].creatorNickname);
+    }
+}
+
+void ServerProtocol::receiveStartMatchIntention() {
+    if (assistant.receiveNumberOneByte() != START_MATCH_INTENTION) {
+        throw BrokenProtocol();
+    }
+}
+
+void ServerProtocol::sendStartMatchResult(bool success) {
+    assistant.sendNumber(RESULT_START_MATCH);
+    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
+    assistant.sendNumber(response);
 }
 
 void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) {
@@ -116,16 +152,6 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendNumber((uint8_t)it->second.stateTransition);
         assistant.sendNumber((uint8_t)it->second.flipping);
     }
-
-    uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
-    assistant.sendNumber(numberProjectiles);
-
-    for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
-        // assistant.sendFloat(it->speed);
-        assistant.sendNumber((uint8_t)it->type);
-        assistant.sendVector2D(it->origin);
-        assistant.sendVector2D(it->end);
-    }
 }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
@@ -149,18 +175,4 @@ void ServerProtocol::sendMatchWinner(PlayerID_t finalWinner) {
 void ServerProtocol::endConnection() {
     skt.shutdown(2);
     skt.close();
-}
-
-void ServerProtocol::sendActivesMatches(
-        const std::unordered_map<PlayerID_t, ActiveMatch>& matches) {
-    assistant.sendNumber(ACTIVE_MATCHES);
-    uint8_t numberElements = (uint8_t)matches.size();
-
-    assistant.sendNumber(numberElements);
-    for (const auto& pair: matches) {
-        assistant.sendNumber(pair.first);  // o pair.first
-        assistant.sendString(pair.second.name);
-        assistant.sendNumber(pair.second.actualPlayers);
-        assistant.sendNumber(pair.second.maxPlayers);
-    }
 }

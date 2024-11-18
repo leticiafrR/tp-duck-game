@@ -1,0 +1,12 @@
+#ifndef MATCH_STATUS_
+#define MATCH_STATUS_
+
+typedef enum {
+    WAITING_PLAYERS,
+    MATCH_ON_COURSE,
+    NATURALLY_WON,
+    WON_BY_DEFAULT,
+    ENDED
+} MATCH_STATUS;
+
+#endif

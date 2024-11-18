@@ -8,6 +8,7 @@
 #include "common/Vector2D.h"
 
 #define MAX_PLAYERS 5
+#define MIN_PLAYERS 2
 
 class Config {
 
@@ -22,10 +23,11 @@ class Config {
     /* its a number with the quantity of different skins availables (for the clients), probably must
      * be read from a file .yaml with the settings*/
     const int maxPlayers;
+    const int minPlayers;
 
 
 public:
-    Config(): availableLevels({"level_1.yaml"}), maxPlayers(MAX_PLAYERS) {
+    Config(): availableLevels({"level_1.yaml"}), maxPlayers(MAX_PLAYERS), minPlayers(MIN_PLAYERS) {
 
         /* for example for the correct initialization of the `availableLevels`.
 
@@ -45,11 +47,7 @@ public:
     const std::vector<std::string> getAvailableLevels() const { return availableLevels; }
     int getAvailableSkins() const { return maxPlayers; }
     int getMaxPlayers() const { return maxPlayers; }
-
-    // Vector2D getDuckSize() {
-    //     Vector2D duckSize(1.0, 1.0);
-    //     return duckSize;
-    // }
+    int getMinPlayers() const { return minPlayers; }
 };
 
 #endif

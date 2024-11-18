@@ -1,51 +1,113 @@
 #include "match.h"
 
-#include <iostream>
+#include <cstdint>
+#include <set>
+#include <utility>
+#include <vector>
 
+#include "data/command.h"
+#include "data/dataMatch.h"
 #include "model/types.h"
+#include "network/messageSender.h"
 
-#define MAX_COMMANDS 500
+#include "gamesHandler.h"
+
+#define MAX_COMMANDS 100
 #define NO_WINNER_FORCED_END 0
-// si se tiene menos de esta cantidad o igual se pararà de jugar màs partidas
 
-Match::Match(Config& config, int numberPlayers):
-        numberPlayers(numberPlayers),
-        commandQueue(MAX_COMMANDS),
-        players(numberPlayers),
-        config(config) {
-    if (numberPlayers > config.getMaxPlayers()) {
-        throw std::runtime_error(
-                "ERROR: Too many players, can't manage a match with so many players.");
+Match::Match(Config& config, PlayerID_t playerCreator):
+        matchStatus(WAITING_PLAYERS),
+        playerCreator(playerCreator),
+        commandQueue(std::make_shared<Queue<Command>>(MAX_COMMANDS)),
+        players(config.getMaxPlayers()),
+        config(config) {}
+
+
+bool Match::isAvailable() {
+    return matchStatus == WAITING_PLAYERS && (config.getMaxPlayers() - players.size()) > 0;
+}
+
+bool Match::hasEnoughPlayers() { return players.size() >= config.getMinPlayers(); }
+
+void Match::loadDataIfAvailble(std::vector<DataMatch>& availableMatches) {
+    if (isAvailable()) {
+        uint8_t currentPlayers = (uint8_t)players.size();
+        PlayerInfo playerInfo;
+        players.get(playerCreator, playerInfo);
+        availableMatches.emplace_back(currentPlayers, (uint8_t)config.getMaxPlayers(),
+                                      playerCreator, playerInfo.nickname);
     }
 }
 
-/* method that will be called from the different Receivers threads. Has to be thread safe */
-bool Match::logInPlayer(PlayerID_t idClient, const PlayerInfo& playerInfo) {
-    std::unique_lock<std::mutex> lock(m);
-    if (!players.tryInsert(idClient, playerInfo)) {
-        return false;
+std::shared_ptr<Queue<Command>> Match::logInPlayer(PlayerID_t playerID,
+                                                   const PlayerInfo& playerInfo) {
+    if (isAvailable() && players.tryInsert(playerID, playerInfo)) {
+        return commandQueue;
     }
-    if ((int)players.size() == numberPlayers && !_is_alive) {
-        this->start();
-    }
-    return true;
+    return nullptr;
 }
 
-// will be closed when the match is over. If someone tries to push a commd it will throw an
-// exception (CosedQueue)
-void Match::pushCommand(const Command& cmmd) { commandQueue.push(cmmd); }
-
-/*Method that would be called concurrently (by the senderThreads) when the sender thread of the
- * client notices the disconection */
+/* Method that would be called by the senderThreads through the monitor of matches */
 void Match::logOutPlayer(PlayerID_t idClient) {
-    if (players.tryErase(idClient)) {
+    if (players.tryErase(idClient) && matchStatus == MATCH_ON_COURSE) {
         Command quit(CommandCode::_quit);
         quit.playerId = idClient;
-        // eventually it will be removed from the current game but it is already removed from the
-        // list to which the match make the broadcasts.
-        commandQueue.push(quit);
+        commandQueue->push(quit);
     }
 }
+
+void Match::run() try {
+    auto playersData = assignSkins(config.getAvailableSkins());
+    auto matchStartSender = std::make_shared<MatchStartSender>(std::move(playersData),
+                                                               Vector2D(Size::DUCK, Size::DUCK));
+    broadcastMatchMssg(matchStartSender);
+    GamesHandler gamesHandler(config, players, commandQueue, matchStatus);
+
+    while (matchStatus == MATCH_ON_COURSE) {
+        gamesHandler.playGroupOfGames();
+    }
+
+    auto winner = gamesHandler.whoWon();
+    setEndOfMatch(winner);
+
+} catch (const ClosedQueue& q) {
+} catch (const RunOutOfPlayers& r) {}
+
+bool Match::isOver() { return matchStatus == ENDED; }
+
+void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
+
+void Match::setEndOfMatch(PlayerID_t winner) {
+    std::unique_lock<std::mutex> lock(endMatch);
+    matchStatus = ENDED;
+    try {
+        commandQueue->close();
+        if (players.size() != 0) {
+            auto messageSender = std::make_shared<MatchExitSender>(winner);
+            players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
+                playerInfo.senderQueue->try_push(messageSender);
+                playerInfo.senderQueue->close();
+            });
+            players.clear();
+        }
+    } catch (const ClosedQueue& q) {
+    } catch (const std::runtime_error& e) {
+    } catch (...) {}
+}
+
+void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {
+    checkNumberPlayers();
+    players.applyToValues(
+            [&message](PlayerInfo& player) { player.senderQueue->try_push(message); });
+    checkNumberPlayers();
+}
+
+void Match::checkNumberPlayers() {
+    if (players.size() == 0) {
+        throw RunOutOfPlayers();
+    }
+}
+
 std::vector<PlayerData> Match::assignSkins(int numberSkins) {
     checkNumberPlayers();
     // Generador de números aleatorios
@@ -63,78 +125,9 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
             skin = dis(gen);
         } while (assignedSkins.find(skin) != assignedSkins.end());
 
-        assignation.emplace_back(playerID, skin, playerInfo.nickName);
+        assignation.emplace_back(playerID, skin, playerInfo.nickname);
         assignedSkins.insert(skin);
     });
+
     return assignation;
-}
-
-void Match::run() {
-    try {
-
-        auto playersData = assignSkins(config.getAvailableSkins());
-
-        broadcastMatchMssg(std::make_shared<MatchStartSender>(std::move(playersData),
-                                                              Vector2D(Size::DUCK, Size::DUCK)));
-
-        HandlerGames handlerGames(config, players, commandQueue);
-
-        while (!handlerGames.isThereFinalWinner() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
-            handlerGames.playGroupOfGames();
-        }
-        auto winner = handlerGames.whoWon();
-        std::cout << "\n\n   [Final -1] [MATCH THR: out of the loop of gruoup of games]: The match "
-                     "has ended. The winner is player: "
-                  << winner << "\n";
-
-        setEndOfMatch(winner);
-
-    } catch (const ClosedQueue& q) {
-        // forceEnd of the match may generate this exception.
-    } catch (const RunOutOfPlayers& r) {
-        // forceEnd of the match may generate to try to do a broadcast over no players
-    }
-    std::cout << "El hilo de la match terminò!\n";
-}
-
-void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
-
-void Match::setEndOfMatch(PlayerID_t winner) {
-    // only makes sence to do this operation if there are more than 0 players.
-    // and also in this way i know that im not doing this twice.
-    try {
-        commandQueue.close();
-        std::unique_lock<std::mutex> lock(m);
-        if (players.size() != 0) {
-            std::cout << "\n   [Final -2] [MATCH THR]: sending the last broadcast ofwith the "
-                         "EndMatchSender\n";
-            auto messageSender = std::make_shared<MatchExitSender>(winner);
-            players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
-                // CREO QUE ESTE PUSH SÌ DEBERÌA DE SER BLOQUEANTE
-                playerInfo.senderQueue->push(messageSender);
-                playerInfo.senderQueue->close();
-            });
-            players.clear();
-        }
-    } catch (const ClosedQueue& q) {
-        std::cout << "[Match: wen trying to end the match]:  youre trying to close a queue that is "
-                     "already closed\n";
-    } catch (const std::runtime_error& e) {
-        std::cerr << "[Match: wen trying to end the match]:" << e.what() << std::endl;
-    } catch (...) {
-        std::cout << "[Match: wen trying to end the match]: The is an uknow exception!!\n";
-    }
-}
-
-void Match::checkNumberPlayers() {
-    if (players.size() == 0) {
-        throw RunOutOfPlayers();
-    }
-}
-void Match::broadcastMatchMssg(const std::shared_ptr<MessageSender>& message) {
-    // want to interrumpt the game if there are no players and ia notice that
-    checkNumberPlayers();
-    players.applyToValues(
-            [&message](PlayerInfo& player) { player.senderQueue->try_push(message); });
-    checkNumberPlayers();
 }

@@ -4,13 +4,14 @@
 #include <iostream>
 #include <set>
 #include <string>
-#include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include "common/protocolAssistant.h"
 #include "common/socket.h"
 #include "data/command.h"
 #include "data/communicationCodes.h"
+#include "data/dataMatch.h"
 #include "data/dataTransferObjects.h"
 #include "data/gameScene.h"
 #include "data/snapshot.h"
@@ -28,22 +29,28 @@ private:
     V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
 
 public:
-    // Constructor
     explicit ServerProtocol(Socket&& skt);
+
+    /* Receives through the socket  the player's name. If the connection with the client has been
+     * detected lost it throws an exeption*/
+    std::string receiveNickName();
+
+    void sendIdentification(PlayerID_t playerID);
+
+    // 0 if client wants to refresh the availableMatches
+    // the ID of the client itself it wants to create its own
+    PlayerID_t receiveMatchSelection();
 
     /* Send the result of trying to joing the match. If the connection with the client has been
      * detected lost it throws an exeption*/
     void sendResultOfJoining(bool success);
 
-    // Recibe la partida que el cliente desea joinear (si crea una el mismo monitor deberia chequear
-    // que no existe y crearla) dataMatch receiveRequestJoin();
+    void sendAvailableMatches(const std::vector<DataMatch>& matches);
 
-    // envia las partidas activas , probablemente reciba el monitor de partidas
-    void sendActivesMatches(const std::unordered_map<PlayerID_t, ActiveMatch>& activeMatches);
+    void receiveStartMatchIntention();
 
-    /* Receives through the socket  the player's name. If the connection with the client has been
-     * detected lost it throws an exeption*/
-    std::string receiveNickName();
+    void sendStartMatchResult(bool success);
+
 
     // BEGGINING OF A MATCH
     /* Sends to the client a message with the ids of the participants of the match, their nickName,
@@ -59,7 +66,7 @@ public:
     /* Receives through the socket the command (to apply to its player in the current game) and sets
      * the boolean received*/
     Command receiveCommand();
-    // agregar lasers
+
     /* Sends an update of the world of the current game: changes regarding the state of the world*/
     void sendGameUpdate(const Snapshot& snapshot);
 

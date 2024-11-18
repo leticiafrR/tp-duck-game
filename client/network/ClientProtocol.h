@@ -50,7 +50,7 @@ private:
 
     PlayerID_t receiveMatchWinner();
 
-    ListActiveMatches receiveActiveMatches();
+    // ListActiveMatches receiveActiveMatches();
 
 
 public:
@@ -58,9 +58,11 @@ public:
 
     void sendNickname(const std::string& nickname);
 
-    std::shared_ptr<NetworkMsg> receiveMessage();
+    void sendMatchSelection(PlayerID_t matchID);
 
-    void sendRequestJoinMatch(const PlayerID_t& matchID);
+    void sendStartMatchIntention();
+
+    std::shared_ptr<NetworkMsg> receiveMessage();
 
     void sendCommand(CommandCode cmdCode);
 
