@@ -12,6 +12,7 @@
 
 #include "ClientProtocol.h"
 #include "Sender.h"
+#include "bindCmmd.h"
 
 class Receiver: public Thread {
 private:
@@ -19,22 +20,23 @@ private:
     Queue<std::shared_ptr<NetworkMsg>>& msgQueue;
     Sender sender;
     std::string name;
-    std::atomic<MatchID_t>& matchSelection;
+    Queue<BindCmmd>& bindingCommands;
 
 public:
     Receiver(ClientProtocol& protocol, Queue<std::shared_ptr<NetworkMsg>>& msgQueue,
              Queue<CommandCode>& cmmdQueue, const std::string& name,
-             std::atomic<MatchID_t>& matchSelection):
+             Queue<BindCmmd>& bindingCommands):
             protocol(protocol),
             msgQueue(msgQueue),
             sender(protocol, cmmdQueue),
             name(name),
-            matchSelection(matchSelection) {}
+            bindingCommands(bindingCommands) {}
 
     void run() override {
         try {
             protocol.sendNickname(name);
-            // MatchBinder::BindClient(matchSelection, protocol, msgQueue);
+            PlayerID_t playerID = protocol.receiveMyID();
+            MatchBinder::ClientBind(playerID, msgQueue, bindingCommands, protocol);
             sender.start();
             while (_keep_running) {
                 std::shared_ptr<NetworkMsg> msg = protocol.receiveMessage();

@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "client/network/ClientProtocol.h"
+#include "client/network/bindCmmd.h"
 #include "data/dataMatch.h"
 #include "data/id.h"
 #include "server/matchesMonitor.h"
@@ -16,20 +17,41 @@
 
 class MessageSender;  // not used
 
-
 class MatchBinder {
 public:
-    static void BindClient(std::atomic<MatchID_t>& matchSelection, ClientProtocol& protocol,
-                           Queue<std::shared_ptr<NetworkMsg>>& msgQueue) {
+    static void ClientBind(PlayerID_t id, Queue<std::shared_ptr<NetworkMsg>>& msgQueue,
+                           Queue<BindCmmd>& bindingCommands, ClientProtocol& protocol) {
 
-        while (matchSelection == REFRESHED_ID_CODE) {
-            msgQueue.push(protocol.receiveAvailableMatches());
+        msgQueue.push(protocol.receiveAvailableMatches());
+        BindCmmd cmd;
+        while (true) {
+            cmd = bindingCommands.pop();
+            if (cmd.code == BindCmmdCode::CREATE_MATCH) {
+                cmd.selection = id;
+            }
+
+            // despues de recibir las availables matches siempre se envia la selecciòn (0 si
+            // refresca, idclient si crea, idmatch si se une)
+            protocol.sendMatchSelection(cmd.selection);
+            if (cmd.code == BindCmmdCode::REFRESH_MATCHES) {
+                msgQueue.push(protocol.receiveAvailableMatches());
+            } else {
+                auto msg = protocol.receiveResultJoining();
+                msgQueue.push(msg);
+                if (msg->joined) {
+                    break;
+                }
+            }
         }
 
-        std::shared_ptr<NetworkMsg> msg = protocol.receiveResultJoining();
-        msgQueue.push(msg);
-        if (!dynamic_pointer_cast<ResultJoining>(msg)->joined) {
-            BindClient(matchSelection, protocol, msgQueue);
+        while (cmd.code == BindCmmdCode::CREATE_MATCH) {
+            bindingCommands.pop();
+            protocol.sendStartMatchIntention();
+            auto msg = protocol.receiveResultJoining();
+            msgQueue.push(msg);
+            if (msg->joined) {
+                break;
+            }
         }
     }
 
@@ -83,6 +105,7 @@ public:
         }
         return REFRESH;
     }
+
 
     MatchBinder() = delete;
     ~MatchBinder() = delete;

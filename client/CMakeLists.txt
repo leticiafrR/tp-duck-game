@@ -24,7 +24,8 @@ target_sources(taller_client
     Text.h
     Button.h
     ButtonsManager.h
-
+    
+    network/bindCmmd.h
     network/ClientProtocol.h
     network/Client.h
     network/Receiver.h

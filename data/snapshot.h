@@ -18,6 +18,15 @@ struct PlayerEvent {
     DuckState stateTransition;
     Flip flipping;
 };
+// enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};
+// enum class DamageState : uint8_t {NO_DAMAGE,BULLET};
+
+// struct PlayerEvent {
+//     Vector2D motion;
+//     DuckState stateTransition;
+//     Flip flipping;
+//     DamageState damageState
+// };
 
 struct InstantProjectileEventDto {
     TypeProjectile type;

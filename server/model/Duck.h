@@ -21,6 +21,7 @@ private:
     PlayerEventListener* l;
     Flip myFlip;
     DuckState myState;
+    // DamageState damageState;
     Collectable* itemInHand;
     TypeCollectable typeInHand;
 
