@@ -46,6 +46,7 @@ public:
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this, &startButton]() {
+                    client.StartMatch();
                     bool startSuccess;
                     startButton.SetInteractable(false);
                     std::cout << "Start match!\n";

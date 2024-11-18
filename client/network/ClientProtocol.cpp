@@ -40,7 +40,8 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
             return std::make_shared<FinalWinner>(receiveMatchWinner());
 
         default:
-            std::cout << "ERROR: the client recieved a unknown message  header!\n";
+            std::cout << "ERROR: the client recieved a unknown message  header! :"
+                      << (int)typeMessage << "\n";
             throw BrokenProtocol();
     }
 }

@@ -97,7 +97,7 @@ void Duck::UpdateState() {
 
 void Duck::TryJump() {
     if (isGrounded) {
-        body.ApplyForce(Vector2D::Up() * 40);
+        body.ApplyForce(Vector2D::Up() * 60);
     }
 }
 

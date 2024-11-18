@@ -17,7 +17,7 @@ const std::string Forest = "FOREST";
 }
 namespace FullMapSize {
 const size_t xMapSize = 100;
-const size_t yMapSize = 500;
+const size_t yMapSize = 160;
 }  // namespace FullMapSize
 
 namespace DuckSpawnPoints {
