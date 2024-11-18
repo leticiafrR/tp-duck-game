@@ -1,7 +1,7 @@
 # Mini- Documentación del avance del Trabajo Práctico Final
 ## Requerimientos commpletados a fecha 18/11/24
 **Globalmente**
-* Se estableció un protocolo consistente para comunicar la información necesaria para cada cliente como para el servidor.
+* Se estableció un protocolo consistente para comunicar la información necesaria para cada cliente como para el servidor.\
 **Respecto al servidor**
 * Se logró levantar un servidor que acepta a múltiples clientes, permitiendo que según lo indicado por cada cliente, se creen nuevas partidas o se vincule a este mismo a alguna creada por algún otro jugador.
 * Se permite decidir al jugador owner de cada match (quien la creó) decidir cuándo iniciar esta misma regulando que se inicie siempre con un mínimo de 2 jugadores.
