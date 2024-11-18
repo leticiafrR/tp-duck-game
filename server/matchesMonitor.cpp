@@ -26,11 +26,22 @@ std::vector<DataMatch> MatchesMonitor::getAvailableMatches() {
     }
     return availableMatches;
 }
-
-std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(PlayerID_t matchID, PlayerID_t player,
+// if doesnt exist
+std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(PlayerID_t matchID,
+                                                             PlayerID_t playerID,
                                                              const PlayerInfo& playerInfo) {
     std::unique_lock<std::mutex> lck(m);
-    return matches[matchID]->logInPlayer(player, playerInfo);
+    auto it = matches.find(matchID);
+    if (it != matches.end()) {
+        return matches[matchID]->logInPlayer(playerID, playerInfo);
+    }
+    if (matchID == playerID) {
+        matches.emplace(matchID, std::make_unique<Match>(config, playerID));
+        return matches[matchID]->logInPlayer(playerID, playerInfo);
+    }
+    std::cerr << "ERROR: Trying to join a match that doesnt exist, but MatchID is different from "
+                 "playerID .\n";
+    return nullptr;
 }
 
 bool MatchesMonitor::tryStartMatch(PlayerID_t matchID) {

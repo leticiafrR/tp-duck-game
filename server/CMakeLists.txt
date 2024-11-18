@@ -14,11 +14,12 @@ target_sources(taller_server
     network/receiver.cpp
     network/serverProtocol.cpp
     network/messageSender.cpp
-
-    acceptor.cpp
+    network/acceptor.cpp
+    
     gamesHandler.cpp
     match.cpp
     matchesMonitor.cpp
+    server.cpp
     
     main.cpp
 
@@ -49,12 +50,13 @@ target_sources(taller_server
     network/messageSender.h
     network/sender.h
     network/receiver.h
+    network/acceptor.h
+
     config.h
     gamesHandler.h
     match.h
     matchesMonitor.h
     matchStatus.h
     playerInfo.h
-    acceptor.h
-
+    server.h
     )

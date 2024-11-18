@@ -80,6 +80,10 @@ public:
     void sendMatchWinner(PlayerID_t finalWinner);
 
     void endConnection();
+
+    // not copyable
+    ServerProtocol(const ServerProtocol&) = delete;
+    ServerProtocol& operator=(const ServerProtocol&) = delete;
 };
 
 #endif

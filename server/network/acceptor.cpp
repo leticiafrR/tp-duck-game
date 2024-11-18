@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#define FIRST_PLAYER_ID 1
 #define PRINT_NEW_CONNECTION() std::cout << "New user connected!" << std::endl;
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
@@ -10,12 +11,10 @@ AcceptorThread::AcceptorThread(const char* servname, Config& config):
 void AcceptorThread::run() {
     try {
         acceptLoop();
-    } catch (const LibError& e) {
-
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {
-        std::cerr << "SE DETECTÒ UN PROBLEMA desconocido EN EL HILO ACEPTOR\n";
+        std::cerr << "There was an unexpected exception at the Aceptor thread.\n";
     }
 
     matchesMonitor.forceEndAllMatches();
@@ -25,13 +24,11 @@ void AcceptorThread::run() {
 }
 
 void AcceptorThread::acceptLoop() {
-    PlayerID_t idClient = 1;
+    PlayerID_t idClient = FIRST_PLAYER_ID;
 
     while (_keep_running) {
-
         Socket peer = skt.accept();
         PRINT_NEW_CONNECTION();
-
         clients.emplace_back(std::make_unique<SenderThread>(std::move(peer),
                                                             std::ref(matchesMonitor), idClient));
         clients.back()->start();
@@ -62,5 +59,3 @@ void AcceptorThread::forceClosure() {
     skt.shutdown(2);
     skt.close();
 }
-
-AcceptorThread::~AcceptorThread() {}

@@ -11,7 +11,7 @@
 #define TPS 20
 #define PLAYERS_TO_WIN_BY_DEFAULT 1
 
-GamesHandler::GamesHandler(Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
+GamesHandler::GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                            std::shared_ptr<Queue<Command>> commandQueue,
                            std::atomic<MATCH_STATUS>& matchStatus):
         availableLevels(config.getAvailableLevels()),

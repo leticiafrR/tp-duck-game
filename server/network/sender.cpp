@@ -52,15 +52,11 @@ void SenderThread::kill() {
     }
 }
 
-// no es definitivo este bloque try-catch, solo era para asegurarme que no crashee el servidor
-// (ya que si se lanza una excepciòn en un desructor los programas crashean)
 SenderThread::~SenderThread() {
     try {
         if (_is_alive) {
-            kill();
+            protocol.endConnection();
             join();
         }
-    } catch (...) {
-        std::cout << "ERROR: se atrapò un error en el destructor  del sender\n";
-    }
+    } catch (...) {}
 }

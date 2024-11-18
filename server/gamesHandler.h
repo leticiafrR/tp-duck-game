@@ -44,7 +44,7 @@ private:
     std::optional<GameWorld> currentGame;
 
 public:
-    GamesHandler(Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
+    GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
                  std::shared_ptr<Queue<Command>> commandQueue,
                  std::atomic<MATCH_STATUS>& matchStatus);
     void playGroupOfGames();
