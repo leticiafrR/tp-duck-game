@@ -1,17 +1,19 @@
 #ifndef DATA_MATCH_
 #define DATA_MATCH_
 
+#include <cstdint>
 #include <string>
 
 #include "id.h"
+#define REFRESHED_ID_CODE 0
 
 struct DataMatch {
-    int currentPlayers;
-    int maxPlayers;
+    uint8_t currentPlayers;
+    uint8_t maxPlayers;
     PlayerID_t matchID;
     std::string creatorNickname;
 
-    DataMatch(int _currentPlayers, int _maxPlayers, PlayerID_t _matchID,
+    DataMatch(uint8_t _currentPlayers, uint8_t _maxPlayers, PlayerID_t _matchID,
               const std::string& _creatorNickname):
             currentPlayers(_currentPlayers),
             maxPlayers(_maxPlayers),
