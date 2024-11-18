@@ -48,7 +48,6 @@ void ServerProtocol::sendAvailableMatches(const std::vector<DataMatch>& matches)
 }
 
 void ServerProtocol::receiveStartMatchIntention() {
-    std::cout << "[Server protocol]: intention for starting a match received\n";
     if (assistant.receiveNumberOneByte() != START_MATCH_INTENTION) {
         throw BrokenProtocol();
     }
@@ -158,6 +157,15 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendVector2D(it->second.motion);
         assistant.sendNumber((uint8_t)it->second.stateTransition);
         assistant.sendNumber((uint8_t)it->second.flipping);
+    }
+    uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
+    assistant.sendNumber(numberProjectiles);
+
+    for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
+        // assistant.sendFloat(it->speed);
+        assistant.sendNumber((uint8_t)it->type);
+        assistant.sendVector2D(it->origin);
+        assistant.sendVector2D(it->end);
     }
 }
 
