@@ -195,12 +195,13 @@ std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
     if (assistant.receiveNumberOneByte() == AVAILABLE_MATCHES) {
         auto numberMatches = assistant.receiveNumberOneByte();
         std::vector<DataMatch> matches;
-        DataMatch match;
+
         for (uint8_t i = 0; i < numberMatches; i++) {
-            match.matchID = assistant.receiveNumberFourBytes();
-            match.creatorNickname = assistant.receiveString();
+            DataMatch match;
             match.currentPlayers = assistant.receiveNumberOneByte();
             match.maxPlayers = assistant.receiveNumberOneByte();
+            match.matchID = assistant.receiveNumberFourBytes();
+            match.creatorNickname = assistant.receiveString();
             matches.push_back(match);
         }
         return std::make_shared<AvailableMatches>(AvailableMatches(matches));
