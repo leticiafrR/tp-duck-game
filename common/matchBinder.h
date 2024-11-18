@@ -23,6 +23,7 @@ public:
                            Queue<BindCmmd>& bindingCommands, ClientProtocol& protocol) {
 
         msgQueue.push(protocol.receiveAvailableMatches());
+
         BindCmmd cmd;
         while (true) {
             cmd = bindingCommands.pop();
@@ -33,10 +34,17 @@ public:
             // despues de recibir las availables matches siempre se envia la selecciòn (0 si
             // refresca, idclient si crea, idmatch si se une)
             protocol.sendMatchSelection(cmd.selection);
+            std::cout << "[Client Binder]: you"
+                      << ((cmd.code == BindCmmdCode::CREATE_MATCH) ? " create " : " has joined ")
+                      << "a match\n";
             if (cmd.code == BindCmmdCode::REFRESH_MATCHES) {
                 msgQueue.push(protocol.receiveAvailableMatches());
+                std::cout << "[Client Binder]: you receive the available matches\n";
             } else {
                 auto msg = protocol.receiveResultJoining();
+                std::cout << "[Client Binder]: you receive the boolean indicating if the "
+                             "joining/creating was succes. It was:"
+                          << msg->joined << " \n";
                 msgQueue.push(msg);
                 if (msg->joined) {
                     break;
@@ -68,6 +76,9 @@ public:
             while (matchID == REFRESH) {
                 selection = protocol.receiveMatchSelection();
                 if (selection != REFRESH) {
+                    std::cout << "[ServerBinding]: You [" << playerID
+                              << "] tried to join/create a match. The selection was " << selection
+                              << "\n ";
                     std::shared_ptr<Queue<Command>> commandQueue =
                             matches.tryJoinMatch(selection, playerID, playerInfo);
                     if (commandQueue != nullptr) {
@@ -78,6 +89,7 @@ public:
                         protocol.sendResultOfJoining(false);
                     }
                 } else {
+                    std::cout << "[ServerBinding]: You [" << playerID << "] want to refresh\n";
                     protocol.sendAvailableMatches(matches.getAvailableMatches());
                 }
             }
@@ -85,6 +97,8 @@ public:
                 bool matchStarted = false;
                 while (!matchStarted) {
                     protocol.receiveStartMatchIntention();
+                    std::cout << "[ServerBinding]: you just received the indication for trying to "
+                                 "start the match\n";
                     matchStarted = matches.tryStartMatch(matchID);
                     protocol.sendStartMatchResult(matchStarted);
                 }

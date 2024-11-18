@@ -48,6 +48,7 @@ void ServerProtocol::sendAvailableMatches(const std::vector<DataMatch>& matches)
 }
 
 void ServerProtocol::receiveStartMatchIntention() {
+    std::cout << "[Server protocol]: intention for starting a match received\n";
     if (assistant.receiveNumberOneByte() != START_MATCH_INTENTION) {
         throw BrokenProtocol();
     }

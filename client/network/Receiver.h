@@ -36,6 +36,7 @@ public:
         try {
             protocol.sendNickname(name);
             PlayerID_t playerID = protocol.receiveMyID();
+            std::cout << "[Receiver]: your id is: " << playerID << std::endl;
             MatchBinder::ClientBind(playerID, msgQueue, bindingCommands, protocol);
             sender.start();
             while (_keep_running) {
