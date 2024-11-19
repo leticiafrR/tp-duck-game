@@ -87,5 +87,4 @@ if [ -f "Makefile" ]; then
 else
     echo "No Makefile found. Skipping clean step."
 fi
-# Build the project
-make
+
