@@ -46,6 +46,9 @@ public:
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this, &startButton]() {
+                    AudioManager::GetInstance().PlayButtonSFX();
+
+                    client.StartMatch();
                     bool startSuccess;
                     startButton.SetInteractable(false);
                     std::cout << "Start match!\n";
@@ -57,7 +60,7 @@ public:
                         }
                         return false;
                     });
-                    loading.Render("Waiting for server");
+                    loading.Render("Waiting for server", true);
 
                     if (!startSuccess) {
                         startButton.SetInteractable(true);
@@ -72,11 +75,18 @@ public:
                                            Vector2D(0.5, 0.5)),
                              ColorExtension::White(), 5);
 
+        Text waitingTest("Waiting the host to start the match", 45,
+                         RectTransform(Vector2D(0, 0), Vector2D(800, 150), Vector2D(0.5, 0.5),
+                                       Vector2D(0.5, 0.5)),
+                         ColorExtension::White(), 5);
+
         if (!isOwner) {
             waitingToStart = true;
             startButton.SetVisible(false);
             startButtonText.SetVisible(false);
         }
+
+        waitingTest.SetVisible(!isOwner);
 
         while (running) {
             cam.Clean();

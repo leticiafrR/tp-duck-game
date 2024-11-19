@@ -23,7 +23,8 @@ public:
         return Instance;
     }
 
-    void PlayShoot() { PlaySFX("instant_boom.wav"); }
+    void PlayShootSFX() { PlaySFX("instant_boom.wav"); }
+    void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 
     void PlaySFX(const string& filename) {
         Chunk& audio = AudioCache::GetData(filename);

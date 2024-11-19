@@ -53,7 +53,7 @@ constexpr uint16_t PISTOLA_COWBOY = 6;
 }  // namespace Ammo
 
 namespace Speed {
-constexpr int DUCK = 10;  // to make the duck moves fastly per tick, add here
+constexpr int DUCK = 12;  // to make the duck moves fastly per tick, add here
 }  // namespace Speed
 
 namespace Size {
@@ -62,7 +62,7 @@ constexpr int DUCK = 3;
 }  // namespace Size
 
 namespace Mass {
-constexpr int DUCK = 8;  // en 7 ticks de 0.4s realiza 1 salto
+constexpr int DUCK = 15;  // en 7 ticks de 0.4s realiza 1 salto
 }  // namespace Mass
 
 namespace Life {

@@ -21,6 +21,7 @@ private:
     std::vector<float> limits;
     std::vector<Transform> plataforms;
     std::vector<GroundDto> grounds;
+    std::vector<Vector2D> playersSpawnPlaces;
     void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
 

@@ -2,9 +2,7 @@
 
 #include "../Duck.h"
 #include "../projectile/ProjectilesController.h"
-/**********************************************************************************
- *                              DEFINITIONS
- ***********************************************************************************/
+
 EventsManager::EventsManager():
         instantProjectileEvents(), instantProjectileListener(instantProjectileEvents) {}
 
@@ -24,16 +22,7 @@ void EventsManager::SendPlayersListeners(const std::unordered_map<PlayerID_t, Du
         Duck* player = pair.second;
         PlayerID_t id = pair.first;
 
-        // PlayerEventListener l ;
         playersListeners.emplace_back(playerEvents, id);
         player->RegistListener(&playersListeners.back());
     }
 }
-
-// EventsManager::~EventsManager() {
-//     for (PlayerEventListener* listener: playersListeners) {
-//         delete listener;
-//     }
-//     playersListeners.clear();
-//     delete instantProjectileListener;
-// }

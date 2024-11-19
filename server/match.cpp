@@ -58,6 +58,7 @@ void Match::logOutPlayer(PlayerID_t idClient) {
 
 void Match::run() {
     try {
+        matchStatus = MATCH_ON_COURSE;
         auto playersData = assignSkins(config.getAvailableSkins());
         auto matchStartSender = std::make_shared<MatchStartSender>(
                 std::move(playersData), Vector2D(Size::DUCK, Size::DUCK));

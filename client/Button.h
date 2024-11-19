@@ -5,11 +5,11 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Camera.h"
+#include "Definitions.h"
 #include "Image.h"
 #include "RectTransform.h"
 
 using namespace SDL2pp;  // NOLINT
-using Callback = std::function<void()>;
 
 class Button {
 private:

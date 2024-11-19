@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: true
     - uses: actions/setup-python@v2
     
     - name: Install cppcheck
@@ -47,11 +45,15 @@ jobs:
     # Actualizar los submódulos (si el proyecto los usa)
     #- name: Update submodules
     #  run: git submodule update --init --recursive
-
+    
+    - name: Dar permisos de ejecución al instalador de dependencias
+      run: chmod +x ./install_dependencies.sh
+      
+    - name: instalar dependencias necesarias SDL
+      run: ./install_dependencies.sh
+    - name: instalar CMake y Make
+      run: |
+        sudo apt-get install -y cmake make build-essential
     # Ejecutar CMake y compilar
-    #- name: Build project
-    #  run: |
-    #    mkdir -p build/
-    #    cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
-    #- name: Build project using make
-    #  run: make -C build
+    - name: compile project using makefile
+      run: make compile-debug

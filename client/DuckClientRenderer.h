@@ -23,6 +23,7 @@ private:
     bool damaged = false;
 
 public:
+    CameraController& camController;
     Object2D spr;
     Animator anim;
 
@@ -31,23 +32,27 @@ public:
 
     PlayerEvent target;
 
-    Object2D akSpr;
+    Object2D pistolSpr;
 
-    DuckClientRenderer(const Transform& transform, uint8_t colorId):
+    DuckClientRenderer(const Transform& transform, uint8_t colorId,
+                       CameraController& camController):
+            camController(camController),
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 17),
             fromPos(transform.GetPos()),
             tLerp(0),
             target(),
-            akSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(3.6, 1.8))) {
+            pistolSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(3.2, 1.6))) {
         target.stateTransition = DuckState::IDLE;
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
-        spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
-        target.motion = transform.GetPos() + Vector2D::Up() * 0.4f;
+        // spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
+        // target.motion = transform.GetPos() + Vector2D::Up() * 0.4f;
+        target.motion = transform.GetPos();
         spr.SetColor(SkinColors.at(colorId));
         skinColor = spr.GetColor();
         SetEventTarget(target);
-        akSpr.SetSourceRect(SheetDataCache::GetData("pistols.yaml")["cowboy_pistol"][0]);
+        pistolSpr.SetSourceRect(SheetDataCache::GetData("pistols.yaml")["cowboy_pistol"][0]);
+        camController.AddTransform(&spr.GetTransform());
     }
 
     void Update(float deltaTime) {
@@ -62,13 +67,13 @@ public:
         }
         anim.Update(deltaTime);
 
-        akSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.7f);
-        akSpr.SetFlip(spr.GetFlip());
+        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.7f);
+        pistolSpr.SetFlip(spr.GetFlip());
     }
 
     void Draw(Camera& cam) {
         spr.Draw(cam);
-        akSpr.Draw(cam);
+        pistolSpr.Draw(cam);
     }
 
     Transform& GetTransform() { return spr.GetTransform(); }
@@ -76,7 +81,7 @@ public:
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;
-        newTarget.motion += Vector2D::Up() * 0.4f;
+        // newTarget.motion += Vector2D::Up() * 0.4f;
         target = newTarget;
 
         switch (target.stateTransition) {
@@ -107,7 +112,20 @@ public:
                 anim.SetTarget("dead");
                 damagedTimer.Stop();
                 spr.SetColor(skinColor);
-                akSpr.SetVisible(false);
+                pistolSpr.SetVisible(false);
+
+                camController.RemoveTransform(&spr.GetTransform());
+
+                break;
+            case DuckState::DEAD_BY_FALLING:
+                damaged = false;
+                anim.SetTarget("dead");
+                damagedTimer.Stop();
+                spr.SetColor(skinColor);
+                pistolSpr.SetVisible(false);
+
+                camController.RemoveTransform(&spr.GetTransform());
+
                 break;
             default:
                 break;

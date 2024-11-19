@@ -97,7 +97,7 @@ void Duck::UpdateState() {
 
 void Duck::TryJump() {
     if (isGrounded) {
-        body.ApplyForce(Vector2D::Up() * 40);
+        body.ApplyForce(Vector2D::Up() * 60);
     }
 }
 
@@ -139,6 +139,8 @@ void Duck::HandleOutOfBounds(float displacement) {
         mySpace.Move(add);
     } else {
         std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
+        myState = DuckState::DEAD_BY_FALLING;
+        l->NewPlayerEvent();
         MarkAsDead();
     }
 }

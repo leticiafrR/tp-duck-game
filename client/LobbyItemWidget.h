@@ -4,12 +4,11 @@
 
 #include "Button.h"
 #include "ColorExtension.h"
+#include "Definitions.h"
 #include "Image.h"
 #include "Text.h"
 
 using std::string;
-
-using OnSelectLobbyCallback = std::function<void(int)>;
 
 class LobbyItemWidget {
 private:
@@ -20,10 +19,10 @@ public:
     Text matchPlayersText;
     Button matchJoinButton;
     Text matchJoinText;
-    OnSelectLobbyCallback onJoinClicked;
+    CallbackParam<int> onJoinClicked;
 
     LobbyItemWidget(int id, const string& ownerName, int playerCount, int maxPlayersCount,
-                    OnSelectLobbyCallback onJoin):
+                    CallbackParam<int> onJoin):
             lobbyId(id),
             matchConentImage(
                     RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120)), Vector2D(0.5, 1)),

@@ -18,8 +18,8 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
     // AddTestLevel();
-    // AddEasyLevel();
-    InitialMap();
+    AddEasyLevel();
+    // InitialMap();
 }
 
 
@@ -42,7 +42,7 @@ std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrig
 }
 
 
-std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return DuckSpawnPoints::points; }
+std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
 
 bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D dir = Vector2D::Down();
@@ -106,7 +106,7 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
 GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
 
 void StaticMap::AddEasyLevel() {
-
+    playersSpawnPlaces = PlayersSpawnPlaceEasyLevel::points;
     // plataforma 1
     Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
                            Vector2D(PlataformOne::xLength, PlataformOne::yLength), 0);
@@ -123,7 +123,7 @@ void StaticMap::AddEasyLevel() {
                              Vector2D(PlataformThree::xLength, PlataformThree::yLength), 0);
     GroundDto GRThree(PlataformThree, PlataformThree::edges);
     AddGround(GRThree);
-    // plataforma 4
+    /*// plataforma 4
     Transform PlataformFour(Vector2D(PlataformFour::xPosition, PlataformFour::yPosition),
                             Vector2D(PlataformFour::xLength, PlataformFour::yLength), 0);
 
@@ -259,7 +259,7 @@ void StaticMap::AddEasyLevel() {
             Vector2D(PlataformTwentyEight::xPosition, PlataformTwentyEight::yPosition),
             Vector2D(PlataformTwentyEight::xLength, PlataformTwentyEight::yLength), 0);
     GroundDto GRTwentyEight(PlataformTwentyEight, PlataformTwentyEight::edges);
-    AddGround(GRTwentyEight);
+    AddGround(GRTwentyEight);*/
 }
 
 /* bool somethingUnderThisPosition(const Vector2D& t) {

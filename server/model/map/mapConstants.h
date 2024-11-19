@@ -17,42 +17,46 @@ const std::string Forest = "FOREST";
 }
 namespace FullMapSize {
 const size_t xMapSize = 100;
-const size_t yMapSize = 500;
+const size_t yMapSize = 160;
 }  // namespace FullMapSize
 
 namespace DuckSpawnPoints {
 std::vector<Vector2D> points{Vector2D(7, 10), Vector2D(-7, 10)};
 }
 
+namespace PlayersSpawnPlaceEasyLevel {
+std::vector<Vector2D> points{Vector2D(20, 10), Vector2D(-20, 20)};
+}
+
 namespace TestLevel {
-const float xPosition = 0;
-const float yPosition = -1.5;
-const float xLength = 60;
-const float yLength = 3;
+const float xPosition = 30;
+const float yPosition = 0;
+const float xLength = 20;
+const float yLength = 10;
 std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 }  // namespace TestLevel
 namespace PlataformOne {
-const float xPosition = -31;
-const float yPosition = 28;
-const float xLength = 17;
-const float yLength = 9;
+const float xPosition = 30;
+const float yPosition = 0;
+const float xLength = 40;
+const float yLength = 10;
 std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 }  // namespace PlataformOne
 
 namespace PlataformTwo {
-const float xPosition = 19;
-const float yPosition = 14;
-const float xLength = 25;
-const float yLength = 9;
+const float xPosition = -15;
+const float yPosition = 10;
+const float xLength = 40;
+const float yLength = 10;
 std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 }  // namespace PlataformTwo
 
 namespace PlataformThree {
-const float xPosition = 47.5;
-const float yPosition = -16.5;
-const float xLength = 5;
-const float yLength = 17;
-std::set<VISIBLE_EDGES> edges = {TOP};
+const float xPosition = -37;
+const float yPosition = 15;
+const float xLength = 10;
+const float yLength = 10;
+std::set<VISIBLE_EDGES> edges = {LEFT, RIGHT, TOP, BOTTOM};
 }  // namespace PlataformThree
 
 namespace PlataformFour {
