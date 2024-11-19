@@ -53,6 +53,23 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(yaml-cpp)
+# FindSDL2_image.cmake
+
+find_path(SDL2_IMAGE_INCLUDE_DIR
+  NAMES SDL_image.h
+  PATHS /usr/local/include /usr/include
+)
+
+find_library(SDL2_IMAGE_LIBRARY
+  NAMES SDL2_image
+  PATHS /usr/local/lib /usr/lib
+)
+
+if (SDL2_IMAGE_INCLUDE_DIR AND SDL2_IMAGE_LIBRARY)
+  set(SDL2_IMAGE_FOUND TRUE)
+  set(SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIR})
+  set(SDL2_IMAGE_LIBRARIES ${SDL2_IMAGE_LIBRARY})
+endif()
 
 # Install libSDL2pp (for client or editor)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
