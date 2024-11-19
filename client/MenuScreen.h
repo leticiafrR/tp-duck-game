@@ -22,46 +22,93 @@ private:
     Camera& cam;
     Rate rate;
 
+    Text titleShadow;
+    Text titleText;
+    Text nicknamePlaceHolderText;
+
+    Text nicknameText;
+
+    Button startButton;
+    Text buttonText;
+
+    bool running = true;
+    string nicknameInput = "";
+
+    void TakeInput() {
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+                case SDL_KEYDOWN: {
+                    SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+
+                    switch (keyEvent.keysym.sym) {
+                        case SDLK_BACKSPACE:
+                            if (nicknameInput.size() > 0)
+                                nicknameInput.pop_back();
+                            break;
+                        default:
+                            if (!SDLExtension::IsAlphaNumeric(keyEvent.keysym.sym))
+                                break;
+
+                            const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+
+                            bool shiftPressed = (currentKeyStates[SDL_SCANCODE_LSHIFT] ||
+                                                 currentKeyStates[SDL_SCANCODE_RSHIFT]);
+
+                            char c = static_cast<char>(keyEvent.keysym.sym);
+                            if (shiftPressed)
+                                c = std::toupper(c);
+                            nicknameInput.push_back(c);
+                            break;
+                    }
+                    break;
+                }
+            }
+
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+    }
+
 public:
-    MenuScreen(Camera& cam, const Rate& rate): cam(cam), rate(rate) {}
+    MenuScreen(Camera& c, const Rate& r):
+            cam(c),
+            rate(r),
+            titleShadow("DUCK GAME", 160,
+                        RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
+                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                        ColorExtension::Black()),
+            titleText("DUCK GAME", 160,
+                      RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
+                                    Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                      ColorExtension::White()),
+            nicknamePlaceHolderText("Write your nickname", 50,
+                                    RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
+                                                  Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                                    ColorExtension::White().SetAlpha(120)),
+            nicknameText("", 50,
+                         RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
+                                       Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                         ColorExtension::White()),
+            startButton(
+                    RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
+                                  Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                    [this]() {
+                        running = false;
+                        AudioManager::GetInstance().PlayButtonSFX();
+                    },
+                    Color(40, 40, 40)),
+
+            buttonText("START", 200,
+                       RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
+                                     Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                       ColorExtension::White()) {}
 
     string Render() {
-        bool running = true;
-
-        Text titleShadow("DUCK GAME", 160,
-                         RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
-                                       Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                         ColorExtension::Black());
-        Text titleText("DUCK GAME", 160,
-                       RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
-                                     Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                       ColorExtension::White());
-
-
-        Text nicknamePlaceHolderText("Write your nickname", 50,
-                                     RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
-                                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                                     ColorExtension::White().SetAlpha(120));
-
-        string nicknameInput = "";
-        Text nicknameText(nicknameInput, 50,
-                          RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
-                                        Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                          ColorExtension::White());
-
-        Button startButton(
-                RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
-                              Vector2D(0.5, 0.5)),
-                [&running]() {
-                    running = false;
-                    AudioManager::GetInstance().PlayButtonSFX();
-                },
-                Color(40, 40, 40));
-
-        Text buttonText("START", 200,
-                        RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
-                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                        ColorExtension::White());
+        running = true;
 
         Transform& btnTransform = startButton.GetRectTransform().GetTransform();
         Transform& textTransform = buttonText.GetRectTransform().GetTransform();
@@ -75,42 +122,8 @@ public:
 
         while (running) {
             cam.Clean();
-            SDL_Event event;
 
-            while (SDL_PollEvent(&event)) {
-                switch (event.type) {
-                    case SDL_QUIT:
-                        exit(0);
-                        break;
-                    case SDL_KEYDOWN: {
-                        SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
-
-                        switch (keyEvent.keysym.sym) {
-                            case SDLK_BACKSPACE:
-                                if (nicknameInput.size() > 0)
-                                    nicknameInput.pop_back();
-                                break;
-                            default:
-                                if (!SDLExtension::IsAlphaNumeric(keyEvent.keysym.sym))
-                                    break;
-
-                                const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-
-                                bool shiftPressed = (currentKeyStates[SDL_SCANCODE_LSHIFT] ||
-                                                     currentKeyStates[SDL_SCANCODE_RSHIFT]);
-
-                                char c = static_cast<char>(keyEvent.keysym.sym);
-                                if (shiftPressed)
-                                    c = std::toupper(c);
-                                nicknameInput.push_back(c);
-                                break;
-                        }
-                        break;
-                    }
-                }
-
-                ButtonsManager::GetInstance().HandleEvent(event, cam);
-            }
+            TakeInput();
 
             nicknameText.SetText(nicknameInput);
 

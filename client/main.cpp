@@ -39,7 +39,6 @@
 #include "MenuScreen.h"
 #include "Object2D.h"
 #include "Rate.h"
-#include "SheetDataCache.h"
 #include "Text.h"
 
 using namespace SDL2pp;  // NOLINT
@@ -86,7 +85,7 @@ void ShowWinner(Camera& cam, Client& client, const Rate& rate, vector<PlayerData
     }
 }
 
-int main() try {
+int main() {
     // Initialization
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDLMixer sdlMixer(MIX_INIT_MP3 | MIX_INIT_OGG);
@@ -101,69 +100,78 @@ int main() try {
 
     Camera cam(std::move(render), 70);
     Rate rate(90);
-    // TestMain(cam);
-    string nickname = MenuScreen(cam, rate).Render();
 
-    Client client("8080", "localhost", nickname);
-    bool isOwner = MatchListScreen(cam, rate, client).Render();
+    try {
+        // TestMain(cam);
+        string nickname = MenuScreen(cam, rate).Render();
 
-    std::shared_ptr<MatchStartDto> playerData = LobbyScreen(cam, rate, client, isOwner).Render();
+        Client client("8080", "localhost", nickname);
+        bool isOwner = MatchListScreen(cam, rate, client).Render();
 
-    bool matchEnded = false;
+        std::shared_ptr<MatchStartDto> playerData =
+                LobbyScreen(cam, rate, client, isOwner).Render();
 
-    while (!matchEnded) {
-        std::shared_ptr<GameSceneDto> mapData = nullptr;
-        std::shared_ptr<Snapshot> firstSnapshot = nullptr;
+        bool matchEnded = false;
 
-        LoadingScreen loadingRoundScreen(cam, rate, [&client, &mapData, &firstSnapshot]() {
-            if (!mapData)
-                client.TryRecvNetworkMsg(mapData);
-            if (mapData && !firstSnapshot)
-                client.TryRecvNetworkMsg(firstSnapshot);
-            return mapData && firstSnapshot;
-        });
-        loadingRoundScreen.Render("LOADING...");
+        while (!matchEnded) {
+            std::shared_ptr<GameSceneDto> mapData = nullptr;
+            std::shared_ptr<Snapshot> firstSnapshot = nullptr;
 
-        Gameplay(client, cam, rate, *playerData, *mapData, *firstSnapshot).Run();
-
-        bool isFinalGroup = false;
-        while (!isFinalGroup) {
-            mapData = nullptr;
-            firstSnapshot = nullptr;
+            LoadingScreen loadingRoundScreen(cam, rate, [&client, &mapData, &firstSnapshot]() {
+                if (!mapData)
+                    client.TryRecvNetworkMsg(mapData);
+                if (mapData && !firstSnapshot)
+                    client.TryRecvNetworkMsg(firstSnapshot);
+                return mapData && firstSnapshot;
+            });
             loadingRoundScreen.Render("LOADING...");
+
             Gameplay(client, cam, rate, *playerData, *mapData, *firstSnapshot).Run();
 
-            LoadingScreen loadingFinalGroup(cam, rate, [&isFinalGroup, &client]() {
-                std::shared_ptr<FinalGroupGame> finalGroupData;
+            bool isFinalGroup = false;
+            while (!isFinalGroup) {
+                mapData = nullptr;
+                firstSnapshot = nullptr;
+                loadingRoundScreen.Render("LOADING...");
+                Gameplay(client, cam, rate, *playerData, *mapData, *firstSnapshot).Run();
 
-                if (client.TryRecvNetworkMsg(finalGroupData)) {
-                    isFinalGroup = finalGroupData->finalGroupGame;
+                LoadingScreen loadingFinalGroup(cam, rate, [&isFinalGroup, &client]() {
+                    std::shared_ptr<FinalGroupGame> finalGroupData;
+
+                    if (client.TryRecvNetworkMsg(finalGroupData)) {
+                        isFinalGroup = finalGroupData->finalGroupGame;
+                        return true;
+                    }
+                    return false;
+                });
+                loadingFinalGroup.Render("LOADING...");
+            }
+
+            LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded]() {
+                std::shared_ptr<GamesRecountDto> recountData;
+                if (client.TryRecvNetworkMsg(recountData)) {
+                    matchEnded = recountData->matchEnded;
                     return true;
                 }
                 return false;
             });
-            loadingFinalGroup.Render("LOADING...");
+            matchEndedScreen.Render("GETTING RESULTS");
         }
 
-        LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded]() {
-            std::shared_ptr<GamesRecountDto> recountData;
-            if (client.TryRecvNetworkMsg(recountData)) {
-                matchEnded = recountData->matchEnded;
-                return true;
-            }
+        ShowWinner(cam, client, rate, playerData->playersData);
+
+    } catch (LibError& e) {
+        std::cerr << e.what() << std::endl;
+
+        LoadingScreen(cam, rate, []() {
             return false;
-        });
-        matchEndedScreen.Render("GETTING RESULTS");
+        }).Render("Can't connect to server, please try again later");
+
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+
+        LoadingScreen(cam, rate, []() {
+            return false;
+        }).Render("An unexpected error occurred, please try again later");
     }
-
-    ShowWinner(cam, client, rate, playerData->playersData);
-
-    FontCache::Clear();
-    SheetDataCache::Clear();
-    //  Here all resources are automatically released and library deinitialized
-    return 0;
-} catch (std::exception& e) {
-    // If case of error, print it and exit with error
-    std::cerr << e.what() << std::endl;
-    return 1;
 }
