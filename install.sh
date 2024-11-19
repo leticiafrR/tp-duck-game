@@ -25,6 +25,40 @@ sudo apt-get update
 #libwavpack-dev libmodplug-dev libsdl2-dev libyaml-dev
 
 #sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_image" ]; then
+    sudo mkdir -p /usr/lib/x86_64-linux-gnu/cmake/SDL2_image
+    print_colored_message $YELLOW_BOLD "══ Created SDL2_image folder ══"
+fi
+
+# Check if the CMake file exists, if not, copy it
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_image/sdl2_image-config.cmake" ]; then
+    sudo cp "$SCRIPT_DIR"/files/sdl2_image-config.cmake /usr/lib/x86_64-linux-gnu/cmake/SDL2_image/sdl2_image-config.cmake
+    print_colored_message $YELLOW_BOLD "══ Copied sdl2_image-config.cmake ══"
+fi
+
+# Check if the folder exists, if not, create it
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_mixer" ]; then
+    sudo mkdir -p /usr/lib/x86_64-linux-gnu/cmake/SDL2_mixer
+    print_colored_message $YELLOW_BOLD "══ Created SDL2_mixer folder ══"
+fi
+
+# Check if the CMake file exists, if not, copy it
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_mixer/sdl2_mixer-config.cmake" ]; then
+    sudo cp "$SCRIPT_DIR"/files/sdl2_mixer-config.cmake /usr/lib/x86_64-linux-gnu/cmake/SDL2_mixer/sdl2_mixer-config.cmake
+    print_colored_message $YELLOW_BOLD "══ Copied sdl2_mixer-config.cmake ══"
+fi
+
+# Check if the folder exists, if not, create it
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_ttf" ]; then
+    sudo mkdir -p /usr/lib/x86_64-linux-gnu/cmake/SDL2_ttf
+    print_colored_message $YELLOW_BOLD "══ Created SDL2_ttf folder ══"
+fi
+
+# Check if the CMake file exists, if not, copy it
+if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_ttf/sdl2_ttf-config.cmake" ]; then
+    sudo cp "$SCRIPT_DIR"/files/sdl2_ttf-config.cmake /usr/lib/x86_64-linux-gnu/cmake/SDL2_ttf/sdl2_ttf-config.cmake
+    print_colored_message $YELLOW_BOLD "══ Copied sdl2_ttf-config.cmake ══"
+fi
 
 # Move to the external directory where all dependencies are located
 cd external
