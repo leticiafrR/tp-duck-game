@@ -5,12 +5,26 @@
 # Update the repositories
 sudo apt-get update -y
 
-# Install the dependencies for C++
-sudo apt-get install -y build-essential g++ cmake libjpeg-dev libpng-dev \
-libfreetype-dev libopusfile-dev libflac-dev libxmp-dev libfluidsynth-dev \
-libwavpack-dev libmodplug-dev libsdl2-dev libyaml-dev
+sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          g++ \
+          cmake \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-ttf-dev \
+          libsdl2-mixer-dev \
+          libyaml-dev \
+          libjpeg-dev \
+          libpng-dev \
+          libfreetype-dev
 
-sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+# Install the dependencies for C++
+#sudo apt-get install -y build-essential g++ cmake libjpeg-dev libpng-dev \
+#libfreetype-dev libopusfile-dev libflac-dev libxmp-dev libfluidsynth-dev \
+#libwavpack-dev libmodplug-dev libsdl2-dev libyaml-dev
+
+#sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 
 # Move to the external directory where all dependencies are located
 cd external
