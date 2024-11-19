@@ -82,6 +82,7 @@ void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
 void Match::setEndOfMatch(PlayerID_t winner) {
     std::unique_lock<std::mutex> lock(endMatch);
     if (matchStatus != ENDED) {
+        std::cout << "GOING TO SET END OF THE MATCH [id:" << playerCreator << "]\n";
         matchStatus = ENDED;
         try {
             commandQueue->close();

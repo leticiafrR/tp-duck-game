@@ -11,14 +11,19 @@ AcceptorThread::AcceptorThread(const char* servname, Config& config):
 void AcceptorThread::run() {
     try {
         acceptLoop();
+    } catch (const LibError& e) {
+
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {
         std::cerr << "There was an unexpected exception at the Aceptor thread.\n";
     }
-
+    // std::cout <<"antes de matar a todas las partidas\n";
     matchesMonitor.forceEndAllMatches();
+    // std::cout << "Se mataron a todas las partidas\n";
+    std::cout << "\nantes de recoger a las ended matches\n";
     matchesMonitor.reapEndedMatches();
+    std::cout << "Se recogieron a todas las ended Matches\n";
     killAllClients();
     reapDeadClients();
 }
@@ -57,5 +62,6 @@ void AcceptorThread::killAllClients() {
 
 void AcceptorThread::forceClosure() {
     skt.shutdown(2);
+    std::cout << "Despuès de hacer el shutdown\n";
     skt.close();
 }
