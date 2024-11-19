@@ -54,7 +54,7 @@ jobs:
     # Ejecutar CMake y compilar
     - name: Build project
       run: |
-       mkdir -p build/
-       cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
+       cd build
+       # cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug -DSDL2PP_WITH_IMAGE=ON -DSDL2PP_WITH_TTF=ON -DSDL2PP_WITH_MIXER=ON
     - name: Build project using make
-      run: make -C build
+      run: make
