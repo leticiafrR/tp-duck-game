@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# A helper function to add color to a string message
+print_colored_message() {
+    color=$1
+    shift
+    printf "\e[${color}m$@\e[0m\n"
+}
+
+# List of available colors
+RED="31";GREEN="32";GREEN_BOLD="1;32";YELLOW="33";YELLOW_BOLD="1;33";
+
 # This script installs all the dependencies needed for the project
 
 # Update the repositories
