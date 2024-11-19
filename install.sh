@@ -24,6 +24,7 @@ sudo apt-get update
 #libfreetype-dev libopusfile-dev libflac-dev libxmp-dev libfluidsynth-dev \
 #libwavpack-dev libmodplug-dev libsdl2-dev libyaml-dev
 
+SCRIPT_DIR="$(dirname "$0")"
 #sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 if [ ! -e "/usr/lib/x86_64-linux-gnu/cmake/SDL2_image" ]; then
     sudo mkdir -p /usr/lib/x86_64-linux-gnu/cmake/SDL2_image
