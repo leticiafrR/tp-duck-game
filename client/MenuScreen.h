@@ -52,13 +52,9 @@ public:
         Button startButton(
                 RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
                               Vector2D(0.5, 0.5)),
-                [&running, &nicknameInput]() {
-                    if (nicknameInput.size() == 0) {
-                        // Avoid stop running in this case
-                        nicknameInput = "Guest";
-                    }
-
+                [&running]() {
                     running = false;
+                    AudioManager::GetInstance().PlayButtonSFX();
                 },
                 Color(40, 40, 40));
 

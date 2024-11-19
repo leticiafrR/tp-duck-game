@@ -233,7 +233,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
             for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
                 auto ray = snapshot.raycastsEvents[i];
                 bullets.emplace_back(ray.origin, ray.end, 100);
-                AudioManager::GetInstance().PlayShoot();
+                AudioManager::GetInstance().PlayShootSFX();
             }
 
             for (const auto& it: snapshot.updates) {

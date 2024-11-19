@@ -54,7 +54,7 @@ public:
             auto lobbyData = data[i];
             widgets.emplace_back(lobbyData.matchID, lobbyData.creatorNickname,
                                  lobbyData.currentPlayers, lobbyData.maxPlayers, [this](int id) {
-                                     std::cout << id << "_match clicked!\n";
+                                     AudioManager::GetInstance().PlayButtonSFX();
 
                                      bool joinSuccess;
                                      client.SelectMatch(id);
@@ -150,11 +150,10 @@ public:
                 RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this, &refreshButton]() {
-                    // Refresh...
+                    AudioManager::GetInstance().PlayButtonSFX();
                     refreshButton.SetInteractable(false);
                     client.Refresh();
-                    // Wait for refresh complete
-                    std::cout << "Refreshing lobbies!\n";
+
                     LoadingScreen loading(cam, rate, [this]() {
                         std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
                         if (GetServerMsg(client, lobbyListResult)) {
@@ -172,19 +171,6 @@ public:
                                RectTransform(Vector2D(180, -240), Vector2D(250, 80),
                                              Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
                                ColorExtension::White(), 5);
-
-        // LoadWidgetList(vector<LobbyDataDummy>{
-        //         LobbyDataDummy{0, "josValentin", 2, 5},
-        //         LobbyDataDummy{1, "metalica", 4, 5},
-        //         LobbyDataDummy{2, "andrew garfield", 3, 5},
-        //         LobbyDataDummy{3, "antuaned garfield", 4, 5},
-        //         LobbyDataDummy{4, "random", 4, 5},
-        //         LobbyDataDummy{5, "random", 4, 5},
-        //         LobbyDataDummy{6, "random", 4, 5},
-        //         LobbyDataDummy{7, "random", 4, 5},
-        //         LobbyDataDummy{8, "random", 4, 5},
-        //         LobbyDataDummy{9, "random", 4, 5},
-        // });
 
         // Load the first available lobbies
         LoadingScreen loading(cam, rate, [this]() {
