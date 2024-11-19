@@ -26,6 +26,7 @@
 
 ## ¿Qué sabemos de antemano que está mal?
 [... aqui se unificará lo que cada uno note en el codigo que escribió]:#
+* El cierre ordenado del sevridor.
 
 ## ¿Qué necesito hacer para ejecutar las aplicaciones de cliente y servidor? 
 [... aquí la parte que cande ya hizo]:#
