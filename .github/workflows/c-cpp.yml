@@ -49,12 +49,11 @@ jobs:
     - name: Dar permisos de ejecución al instalador de dependencias
       run: chmod +x ./install_dependencies.sh
       
-    - name: instalar dependencias necesarias
+    - name: instalar dependencias necesarias SDL
       run: ./install_dependencies.sh
-      
-    # Ejecutar CMake y compilar
-    - name: Build project
+    - name: instalar CMake y Make
       run: |
-        mkdir -p build
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-        cmake --build build
+        sudo apt-get install -y cmake make build-essential
+    # Ejecutar CMake y compilar
+    - name: compile project using makefile
+      run: make compile-debug
