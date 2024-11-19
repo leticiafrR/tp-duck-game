@@ -11,9 +11,14 @@
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
+#include "BulletRenderer.h"
 #include "CameraController.h"
+#include "Definitions.h"
+#include "DuckClientRenderer.h"
+#include "GUIManager.h"
 #include "Image.h"
 #include "MapBlock2D.h"
+#include "Object2D.h"
 #include "Rate.h"
 
 using std::list;

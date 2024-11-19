@@ -65,7 +65,7 @@ private:
             }
             return false;
         });
-        loading.Render("Creating match");
+        loading.Run("Creating match");
 
         if (createSuccess) {
             isOwner = true;
@@ -86,7 +86,7 @@ private:
             }
             return false;
         });
-        loading.Render("Joining match");
+        loading.Run("Joining match");
 
         if (joinSuccess) {
             isOwner = false;
@@ -111,7 +111,7 @@ private:
             }
             return false;
         });
-        loading.Render("Getting available lobbies");
+        loading.Run("Getting available lobbies");
     }
 
     void LoadWidgetList(std::vector<DataMatch> data) {

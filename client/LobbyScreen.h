@@ -60,7 +60,7 @@ public:
                         }
                         return false;
                     });
-                    loading.Render("Waiting for server", true);
+                    loading.Run("Waiting for server", true);
 
                     if (!startSuccess) {
                         startButton.SetInteractable(true);
