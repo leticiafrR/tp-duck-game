@@ -11,11 +11,10 @@
 
 using namespace SDL2pp;  // NOLINT
 
-class Button {
+class Button: public Image {
 private:
-    Image image;
     std::function<void()> onClick;
-    Color color;
+    Color normalColor;
     Color pressedColor;
     Color disabledColor;
     bool isPressed;
@@ -28,19 +27,13 @@ public:
 
     static bool IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam);
 
-    void Draw(Camera& cam);
-
-    RectTransform& GetRectTransform() { return image.GetRectTransform(); }
-
     bool IsTarget(int mouseX, int mouseY, Camera& cam);
 
     void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
 
     void SetInteractable(bool interactable);
 
-    void SetVisible(bool visible);
-
-    int GetLayerOrder() { return image.GetLayerOrder(); }
+    void SetCallback(Callback onClick) { this->onClick = onClick; }
 };
 
 #endif

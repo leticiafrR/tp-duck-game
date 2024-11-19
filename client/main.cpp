@@ -305,10 +305,8 @@ int main() try {
 
     Client client("8080", "localhost", nickname);
     bool isOwner = MatchListScreen(cam, rate, client).Render();
-    // Connecting(cam, client, rate);
-    // std::shared_ptr<MatchStartDto> playerData = LoadingPlayers(cam, client, rate);
-    LobbyScreen lobby(cam, rate, client, isOwner);
-    std::shared_ptr<MatchStartDto> playerData = lobby.Render();
+
+    std::shared_ptr<MatchStartDto> playerData = LobbyScreen(cam, rate, client, isOwner).Render();
 
     bool matchEnded = false;
 

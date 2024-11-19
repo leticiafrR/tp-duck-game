@@ -42,7 +42,7 @@ public:
             fromPos(transform.GetPos()),
             tLerp(0),
             target(),
-            pistolSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(3.2, 1.6))) {
+            pistolSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(2.8, 1.4))) {
         target.stateTransition = DuckState::IDLE;
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
         // spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
@@ -67,7 +67,7 @@ public:
         }
         anim.Update(deltaTime);
 
-        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.7f);
+        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.4f);
         pistolSpr.SetFlip(spr.GetFlip());
     }
 

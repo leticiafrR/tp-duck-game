@@ -5,9 +5,9 @@
 #include "GUIManager.h"
 
 Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder):
-        image(rect, color, layerOrder),
+        Image(rect, color, layerOrder),
         onClick(onClick),
-        color(color),
+        normalColor(color),
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
         interactable(true) {
@@ -21,22 +21,20 @@ bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera&
            mouseY < sdlRect.y + sdlRect.h;
 }
 
-void Button::Draw(Camera& cam) { image.Draw(cam); }
-
 bool Button::IsTarget(int mouseX, int mouseY, Camera& cam) {
     auto graphics = GUIManager::GetInstance().GetGraphics();
 
     // Search for the first same layer in th sorted vector
     auto it = std::lower_bound(
-            graphics.begin(), graphics.end(), &image,
+            graphics.begin(), graphics.end(), this,
             [](GraphicUI* a, GraphicUI* b) { return a->GetLayerOrder() < b->GetLayerOrder(); });
 
-    if (it != graphics.end() && (*it)->GetLayerOrder() >= image.GetLayerOrder()) {
+    if (it != graphics.end() && (*it)->GetLayerOrder() >= this->GetLayerOrder()) {
         bool startCheckingFront = false;
         for (auto iter = it;
-             iter != graphics.end() && (*iter)->GetLayerOrder() >= image.GetLayerOrder(); ++iter) {
+             iter != graphics.end() && (*iter)->GetLayerOrder() >= this->GetLayerOrder(); ++iter) {
 
-            if ((*iter) == &image) {
+            if ((*iter) == this) {
                 startCheckingFront = true;
                 continue;
             }
@@ -55,32 +53,31 @@ bool Button::IsTarget(int mouseX, int mouseY, Camera& cam) {
 }
 
 void Button::SetInteractable(bool interactable) {
-    image.SetColor(interactable ? color : disabledColor);
+    SetColor(interactable ? normalColor : disabledColor);
     this->interactable = interactable;
 }
-void Button::SetVisible(bool visible) { image.SetVisible(visible); }
 
 void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
-    if (!interactable || !image.GetVisible())
+    if (!interactable || !GetVisible())
         return;
 
-    bool isMouseOver = IsMouseOver(image.GetRectTransform(), mouseX, mouseY, cam);
+    bool isMouseOver = IsMouseOver(GetRectTransform(), mouseX, mouseY, cam);
 
     if (isMouseOver)
         isMouseOver = IsTarget(mouseX, mouseY, cam);
 
     if (e.type == SDL_MOUSEMOTION && !isPressed) {
-        image.SetColor(isMouseOver ? ColorExtension::AddValue(color, -12) : color);
+        SetColor(isMouseOver ? ColorExtension::AddValue(normalColor, -12) : normalColor);
     }
 
     if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (isMouseOver) {
-            image.SetColor(pressedColor);
+            SetColor(pressedColor);
             isPressed = true;
         }
 
     } else if (e.type == SDL_MOUSEBUTTONUP) {
-        image.SetColor(color);
+        SetColor(normalColor);
         if (isMouseOver && isPressed) {
             onClick();
         }
