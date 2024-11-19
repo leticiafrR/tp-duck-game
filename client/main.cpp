@@ -197,7 +197,7 @@ void Game(Camera& cam, Client& client, const Rate& rate, MatchStartDto matchData
                         case SDLK_SPACE:
                             client.TrySendRequest(CommandCode::Jump);
                             break;
-                        case SDLK_r:
+                        case SDLK_f:
                             client.TrySendRequest(CommandCode::UseItem_KeyDown);
                             break;
                     }
