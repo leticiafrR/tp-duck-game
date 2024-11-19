@@ -79,12 +79,8 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     set(SDL2PP_WITH_MIXER ON)
     
     #include(FetchContent)
-    FetchContent_Declare(
-        libSDL2pp
-        URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
-    )
+    add_subdirectory(external/libSDL2pp)
 
-    FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
 # Program section
