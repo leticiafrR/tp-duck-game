@@ -68,7 +68,7 @@ Si ya estás en el directorio build, simplemente ejecuta:
 * Falta limitar las municiones de cada arma, por lo pronto se tienen disparos ilimitados.
 * Falta las funcionalidades de mirar arriba, tirarse al suelo y aletear. 
 
-* Respecto al cliente gráfico: Falta mostrar las asignaciones de los colores del pato de cada jugador al iniciar la partida, mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante, reproducir música de ambiente, además de soportar 2 jugadores en la misma máquina
+* Respecto al cliente gráfico: Falta mostrar las asignaciones de los colores del pato de cada jugador al iniciar la partida, mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante, además de soportar 2 jugadores en la misma máquina.
 
 * No se incluyó nada relativo al editor de niveles, cheats ni Unit tests.
 
