@@ -73,4 +73,5 @@ Si ya estás en el directorio build, simplemente ejecuta:
 
 ## ¿Qué sabemos de antemano que está mal?
 * El cierre ordenado del sevridor.
+* El reap ended matches. 
 * Frente a la desconexión de un jugador partície de una partida ya iniciada no se está sacando del modelo al duck del mismo.
