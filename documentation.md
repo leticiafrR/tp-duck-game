@@ -58,7 +58,7 @@ Si ya estás en el directorio build, simplemente ejecuta:
 * Una vez iniciada la partida todos los jugadores se ubicarán en el mundo del primer game que finaliza cuando solo quede un jugador vivo, siendo que cada jugador (por ahora) aparece con una arma (una pistola cowboy). Dentro del mundo de cada game, puedes controlar a tu personaje con las siguientes teclas:
   * 'A': Desplazarse hacia la izquierda.
   * 'D': Desplazarse hacia la derecha.
-  * 'R': Disparar.
+  * 'F': Disparar.
   * Espaciadora: Saltar.
 * A continuación se irán repitiendo games hasta que haya un jugador ganador de toda la partida según el criterio establecido por la cátedra.
 
