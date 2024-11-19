@@ -9,9 +9,10 @@
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
-Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesController):
+Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController):
         DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK)),
                       Life::DUCK),
+        id(id),
         isShooting(false),
         isCrouched(false),
         isGrounded(true),
@@ -25,18 +26,15 @@ Duck::Duck(const Vector2D& initialPos, ProjectilesController& projectilesControl
 
 const Flip& Duck::GetFlip() const { return myFlip; }
 
-void Duck::SayImShooting() {
-    if (isShooting) {
-        std::cout << "Hello, IM SHOTING\n";
-    } else {
-        std::cout << "NO SHOTING\n";
-    }
-}
 void Duck::HandleDead() {
     myState = DuckState::DEAD;
-    l->NewPlayerEvent();
+    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
     MarkAsDead();
 }
+
+void Duck::StopShooting() { isShooting = false; }
+
+void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
     isWounded = true;
@@ -57,10 +55,9 @@ void Duck::StopUseItem() {
 
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
-    l->Suscribe(&mySpace, &myFlip, &myState);
 
     // on the first iteration, everything is new
-    l->NewPlayerEvent();
+    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
 }
 
 void Duck::Update(StaticMap& map, float deltaTime) {
@@ -74,12 +71,13 @@ void Duck::Update(StaticMap& map, float deltaTime) {
 
 void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initialPos) {
     if (initialPos.IsFarFrom(mySpace.GetPos())) {
-        l->NewPlayerEvent();
+        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
     }
     if (initialState != myState) {
-        l->NewPlayerEvent();
+        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
     }
 }
+
 DuckState Duck::GetLowerPriorityState() {
     DuckState lowerPriorityState = (velocity.x) ? DuckState::RUNNING : DuckState::IDLE;
     if (!isGrounded) {
@@ -107,8 +105,6 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     if (isGrounded) {
         body.ResetGravity();
         CheckCollisionWithMap(map);
-    } else {
-        // std::cout << "you're falling :( \n";
     }
 }
 
@@ -116,7 +112,7 @@ void Duck::TryMoveLeft() {
     motionHandler.StartMoveLeft(velocity, speedX);
     if (myFlip != Flip::Left) {
         myFlip = Flip::Left;
-        l->NewPlayerEvent();
+        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
     }
 }
 
@@ -124,7 +120,7 @@ void Duck::TryMoveRight() {
     motionHandler.StartMoveRight(velocity, speedX);
     if (myFlip != Flip::Right) {
         myFlip = Flip::Right;
-        l->NewPlayerEvent();
+        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
     }
 }
 
@@ -140,7 +136,7 @@ void Duck::HandleOutOfBounds(float displacement) {
     } else {
         std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
         myState = DuckState::DEAD_BY_FALLING;
-        l->NewPlayerEvent();
+        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
         MarkAsDead();
     }
 }

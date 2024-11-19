@@ -25,6 +25,7 @@ public:
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
 
     virtual void Use(Duck* shooter) override {
+        Weapon::Use(shooter);
         InstantProjectile* p =
                 new InstantProjectile(shooter->GetTransform().GetPos(), shooter->GetFlip(), scope,
                                       damage, typeProjectile, l);

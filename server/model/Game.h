@@ -27,9 +27,7 @@ private:
     void ExecCommand(Duck* player, const CommandCode& code);
 
 public:
-    explicit GameWorld(const Vector2D& posToTest = Vector2D(INFINITY, INFINITY),
-                       const std::vector<PlayerID_t>& playersIds = {ID_PLAYER_UNIQUE_TEST},
-                       const std::string& sceneName = "");
+    explicit GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName);
     GameSceneDto getSceneDto();
 
     void HandleCommand(const Command& cmd);

@@ -68,7 +68,7 @@ void GamesHandler::playOneGame() {
     auto playerIDs = players.getKeys();
     checkNumberPlayers();
     // can take out the first argument
-    currentGame.emplace(Vector2D(INFINITY, INFINITY), playerIDs, getRandomLevel());
+    currentGame.emplace(playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
     gameLoop();
     registerGameWinnerPoint();

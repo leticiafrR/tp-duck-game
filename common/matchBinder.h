@@ -72,6 +72,7 @@ public:
             PlayerInfo playerInfo{protocol.receiveNickName(), senderQueue};
             protocol.sendIdentification(playerID);
             protocol.sendAvailableMatches(matches.getAvailableMatches());
+
             PlayerID_t selection;
             while (matchID == REFRESH) {
                 selection = protocol.receiveMatchSelection();

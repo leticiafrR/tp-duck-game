@@ -24,7 +24,7 @@ public:
 };
 
 // class PhysicalProjectile: public Projectile{
-//     //no me voy a preocupar por esto aun
+//     //bananas y granadas
 // };
 
 #endif

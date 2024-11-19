@@ -16,8 +16,6 @@ enum class TypeCollectable {
     Escopeta,
     Sniper
 };
-// enum class TypeHelmet { NoHelmet, KnightsHelmet, Helmet};
-// enum class TypeArmor { NoArmor,Chestplate};
 
 namespace Cooldown {
 constexpr uint8_t NONE = 0;
@@ -68,6 +66,6 @@ constexpr int DUCK = 15;  // en 7 ticks de 0.4s realiza 1 salto
 namespace Life {
 constexpr int DUCK = 100;
 }  // namespace Life
-/*si un pato se colisiona por arriba asumo que solo puede ser saltando*/
+
 
 #endif

@@ -1,8 +1,6 @@
 target_sources(taller_server
     PRIVATE
     # .cpp files
-    model/event/InstantProjectileEventListener.cpp
-    model/event/PlayerEventListener.cpp
     model/event/EventsManager.cpp
     model/DynamicObj.cpp
     model/Duck.cpp

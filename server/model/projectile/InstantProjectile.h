@@ -49,10 +49,8 @@ public:
         for (auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
-        l->NewInstantProjectile(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
-        MarkAsDead();  // al finalizar un tick, se elimina
+        l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
+        MarkAsDead();
     }
-
-    void UpdateListener() {}
 };
 #endif

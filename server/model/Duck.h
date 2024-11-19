@@ -10,6 +10,7 @@ class ProjectilesController;
 
 class Duck: public DynamicObject {
 private:
+    PlayerID_t id;
     bool isShooting;  // just touched by the ones who needs key up and key down (not used as the
                       // momment)
     bool isCrouched;
@@ -26,22 +27,18 @@ private:
     TypeCollectable typeInHand;
 
 public:
-    explicit Duck(const Vector2D& initialPos, ProjectilesController& projectilesController);
-    void SayImShooting();  // de juguete: solo para que pueda compilar a los demàs sin que aparezca
-                           // que hay una variable sin usar
-
+    explicit Duck(const Vector2D& initialPos, PlayerID_t id,
+                  ProjectilesController& projectilesController);
     void TryMoveLeft();
     void TryMoveRight();
     void StopMoveRight();
     void StopMoveLeft();
     void TryJump();
-
-
     void TryUseItem();
     void StopUseItem();
 
-
-    // void TryCollect();
+    void StartShooting();
+    void StopShooting();
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
@@ -55,11 +52,9 @@ public:
     DuckState GetLowerPriorityState();
     void UpdateState();
     void Update(StaticMap& map, float deltaTime);
-
+    const Flip& GetFlip() const;
 
     ~Duck() override = default;
-    const Flip& GetFlip() const;
-    // not copyable
     Duck(const Duck&) = delete;
     Duck& operator=(const Duck&) = delete;
 };

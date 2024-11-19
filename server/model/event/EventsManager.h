@@ -1,7 +1,6 @@
 #ifndef EVENTS_MANAGER_H
 #define EVENTS_MANAGER_H
 #include <iostream>
-#include <list>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -18,9 +17,9 @@ class ProjectilesController;
 class EventsManager {
 private:
     std::unordered_map<PlayerID_t, PlayerEvent> playerEvents;
-    std::list<PlayerEventListener> playersListeners;
-
     std::vector<InstantProjectileEventDto> instantProjectileEvents;
+
+    PlayerEventListener playerListener;
     InstantProjectileEventListener instantProjectileListener;
 
 public:
@@ -31,6 +30,9 @@ public:
 
     EventsManager(const EventsManager&) = delete;
     EventsManager& operator=(const EventsManager&) = delete;
+
+    EventsManager(EventsManager&&) = delete;
+    EventsManager& operator=(EventsManager&&) = delete;
 };
 
 #endif
