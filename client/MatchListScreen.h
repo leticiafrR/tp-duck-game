@@ -116,6 +116,8 @@ public:
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this]() {
+                    AudioManager::GetInstance().PlayButtonSFX();
+
                     bool joinSuccess;
                     client.CreateMatch();
                     std::cout << "Create match!\n";

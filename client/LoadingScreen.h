@@ -5,20 +5,19 @@
 
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "Definitions.h"
 #include "GUIManager.h"
 #include "Rate.h"
 #include "Text.h"
-
-using BoolFunction = std::function<bool()>;
 
 class LoadingScreen {
 private:
     Camera& cam;
     Rate rate;
-    BoolFunction endFunction;
+    Function<bool> endFunction;
 
 public:
-    LoadingScreen(Camera& cam, const Rate& rate, BoolFunction endFunction):
+    LoadingScreen(Camera& cam, const Rate& rate, Function<bool> endFunction):
             cam(cam), rate(rate), endFunction(endFunction) {}
 
     void Render(const string& text = "", bool lockerOnly = false) {
