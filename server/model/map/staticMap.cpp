@@ -42,9 +42,7 @@ std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrig
 }
 
 
-std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() {
-    return PlayersSpawnPlaceEasyLevel::points;
-}
+std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
 
 bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D dir = Vector2D::Down();
@@ -108,7 +106,7 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
 GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
 
 void StaticMap::AddEasyLevel() {
-
+    playersSpawnPlaces = PlayersSpawnPlaceEasyLevel::points;
     // plataforma 1
     Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
                            Vector2D(PlataformOne::xLength, PlataformOne::yLength), 0);
