@@ -10,7 +10,7 @@ Para instalar las dependencias necesarias para que el proyecto compile ejecutar.
 
 Si por alguna razón no puedes ejecutar el script debido a restricciones de acceso, ejecuta el siguiente comando para darle permisos de ejecución, y luego intenta nuevamente instalar las dependencias:
 ````bash
-chmod +x /scripts/install_depedencies.sh
+chmod +x scripts/install_depedencies.sh
 ````
 
 Una vez instaladas las dependencias se debe compilar el proyecto ejecutando el siguiente comando.
