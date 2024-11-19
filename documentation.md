@@ -4,53 +4,53 @@
 ### Compilar
 Ingresar al directorio donde se encuentra el proyecto.
 Para instalar las dependencias necesarias para que el proyecto compile ejecutar.
-'''bash
+````bash
 ./install_depenencies.sh
-'''
+````
 
 Si por alguna razón no puedes ejecutar el script debido a restricciones de acceso, ejecuta el siguiente comando para darle permisos de ejecución, y luego intenta nuevamente instalar las dependencias:
-'''bash
+````bash
 chmod +x nombre_del_archivo.sh
-'''
+````
 
 Una vez instaladas las dependencias se debe compilar el proyecto ejecutando el siguiente comando.
-'''bash
+````bash
 make
-'''
+````
 
 ### Ejecucion del servidor
 Para iniciar el juego, es requerido inciar el servidor antes que los clientes. Para esto se debe ejecutar:
 
 Si te encuentras en el directorio principal del proyecto, navega al directorio de compilación:
-'''bash
+````bash
 cd build
-'''
+````
 Luego ejecuta el servidor con el siguiente comando:
-'''bash
+````bash
 ./taller_server
-'''
+````
 
 Si ya estás en el directorio build, puedes ejecutar directamente:
-'''bash
+````bash
 ./taller_server
-'''
+````
 
 ### Ejecucion del cliente
 Una vez iniciado el servidor, ya es posible iniciar uno o mas clientes. Para esto se debe ejecutar.
 
 Si te encuentras en el directorio principal del proyecto, navega al directorio build:
-'''bash
+````bash
 cd build
-'''
+````
 Luego ejecuta el cliente con el siguiente comando:
-'''bash
+````bash
 ./taller_client
-'''
+````
 
 Si ya estás en el directorio build, simplemente ejecuta:
-'''bash
+````bash
 ./taller_client
-'''
+````
 
 ## Qué acciones puede realizar un usuario como cliente gráfico y cómo
 * Al ejecutar la app de cliente el usuario debe introducir su nickname que será visible para otros jugadores, luego serás redirigido a un menú, donde podrás unirte a una partida existente o crear una nueva. Cada partida puede tener un máximo de 5 jugadores, y comenzará cuando el jugador que la creó decida iniciar. Para que la partida comience, deben estar al menos el creador y un jugador más.
