@@ -11,19 +11,39 @@ target_sources(taller_client
 
     PUBLIC
     # .h files
+    tweening/ImageTween.h
+    tweening/TransformTween.h
+    tweening/Tween.h
+    tweening/TweenManager.h
+    Definitions.h
+    SDLExtension.h
+    RectTransform.h
+    Timer.h
     GraphicUI.h
+    Image.h
+    Text.h
+    Button.h
     Object2D.h
     Camera.h
     CameraController.h
     Animator.h
     TextureCache.h
-    MapBlock2D.h
+    FontCache.h
+    AudioCache.h
+    AudioManager.h
     SheetDataCache.h
+    MapBlock2D.h
     ColorExtension.h
-    Image.h
-    Text.h
-    Button.h
+    GUIManager.h
     ButtonsManager.h
+    MenuScreen.h
+    LoadingScreen.h
+    MatchListScreen.h
+    LobbyScreen.h
+    LobbyItemWidget.h
+    Gameplay.h
+    ClientRunner.h
+    Rate.h
     
     network/bindCmmd.h
     network/ClientProtocol.h
