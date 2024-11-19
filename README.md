@@ -1,4 +1,16 @@
-# Ejemplo de CMAKE para el TP Final
+
+# Duck Game - Taller de programación I – 7542/9508 - FIUBA
+
+## Authors
+| Nombre | Apellido |
+| ------ | -------- |
+| Candela | Matelica |
+| Josué | Martel |
+| Leticia | Figueroa |
+| Andrea | Figueroa |
+
+
+<!-- # Ejemplo de CMAKE para el TP Final
 
 **Importante:** el primer commit de este repositorio tiene el setup
 básico para el TP Final que incluye la instalación de la lib
@@ -32,12 +44,4 @@ haciendo.
 Tambien, por default solo se compila una version *debug* sin
 optimizar. Si se quiere compilar binarios optimizados
 (lo que cmake llama *release*) se puede, solo hay modificar
-cmake.
-
-Aprender del ejemplo para saber como extenderlo!
-
-**Importante:** este repositorio **no** incluye pre-commits hooks,
-ni scripts adicionales (como correr valgrind).
-
-**Eso esta a cargo de los estudiantes,** tal como fue mostrado
-en los tps individuales, recaps y hands-on.
+cmake. -->
