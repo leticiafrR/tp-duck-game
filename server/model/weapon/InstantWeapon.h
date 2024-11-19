@@ -25,12 +25,15 @@ public:
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
 
     virtual void Use(Duck* shooter) override {
-        Weapon::Use(shooter);
-        InstantProjectile* p =
-                new InstantProjectile(shooter->GetTransform().GetPos(), shooter->GetFlip(), scope,
-                                      damage, typeProjectile, l);
-        projectilesController.RelaseProjectile(p);
+        if (ammo > 0) {
+            InstantProjectile* p =
+                    new InstantProjectile(shooter->GetTransform().GetPos(), shooter->GetFlip(),
+                                          scope, damage, typeProjectile, l);
+            projectilesController.RelaseProjectile(p);
+            ammo--;
+        }
     }
+
     virtual ~InstantWeapon() = default;
 
     /* de esta derivan (todas las que tienen disparos prolongados):
