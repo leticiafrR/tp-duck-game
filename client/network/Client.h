@@ -37,8 +37,16 @@ public:
 
 
     bool TrySendRequest(const CommandCode& cmmd) { return cmmdQueue.try_push(cmmd); }
-    bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsg>& msg) { return msgQueue.try_pop(msg); }
 
+    template <typename NetworkMsgDerivedClass>
+    bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsgDerivedClass>& concretMsg) {
+        std::shared_ptr<NetworkMsg> msg;
+        if (msgQueue.try_pop(msg)) {
+            concretMsg = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
+            return true;
+        }
+        return false;
+    }
 
     ~Client() {
         // receiver->kill();

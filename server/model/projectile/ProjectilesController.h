@@ -54,8 +54,6 @@ public:
         }
         projectiles.clear();
     }
-
-    void SayHello() { std::cout << "Hello\n"; }
 };
 
 #endif

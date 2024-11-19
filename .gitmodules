@@ -1,3 +1,0 @@
-[submodule "external/SDL2pp"]
-	path = external/SDL2pp
-	url = git@github.com:libSDL2pp/libSDL2pp.git

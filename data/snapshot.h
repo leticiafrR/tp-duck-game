@@ -25,6 +25,10 @@ struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
+
+    PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping):
+            motion(_motion), stateTransition(_stateTransition), flipping(_flipping) {}
+    PlayerEvent() = default;
 };
 
 // enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};

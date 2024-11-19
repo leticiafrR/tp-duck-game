@@ -3,6 +3,8 @@
 Camera::Camera(Renderer render, float size):
         render(std::move(render)), textureCache(this->render), size(size) {}
 
+Camera::~Camera() { textureCache.Clear(); }
+
 void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                          const Transform& transform, int flip) {
     Vector2D sprSize = transform.GetSize();
@@ -78,5 +80,3 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
 
 
 void Camera::Render() { render.Present(); }
-
-Camera::~Camera() {}

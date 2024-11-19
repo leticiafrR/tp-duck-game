@@ -9,19 +9,12 @@
 class PlayerEventListener {
 private:
     std::unordered_map<PlayerID_t, PlayerEvent>& events;
-    PlayerID_t sourceId;
-
-    Transform* motionEventSrc;
-    Flip* flippingEventSrc;
-    DuckState* stateEventSrc;
 
 public:
-    explicit PlayerEventListener(std::unordered_map<PlayerID_t, PlayerEvent>& events,
-                                 PlayerID_t sourceId);
+    explicit PlayerEventListener(std::unordered_map<PlayerID_t, PlayerEvent>& events):
+            events(events) {}
 
-    void Suscribe(Transform* motionEventSrc, Flip* flippingEventSrc, DuckState* stateEventSrc);
-
-    void NewPlayerEvent();
+    void NewPlayerEvent(PlayerID_t sourceID, PlayerEvent event) { events[sourceID] = event; }
 };
 
 #endif

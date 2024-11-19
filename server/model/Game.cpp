@@ -2,23 +2,11 @@
 
 #include "data/command.h"
 
-GameWorld::GameWorld(const Vector2D& posToTest, const std::vector<PlayerID_t>& playersIds,
-                     const std::string& sceneName):
+GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName):
         livePlayers(playersIds.size()) {
     eventsManager.SendInstantProjectileListener(p);
     std::cout << "welcom to " << sceneName << std::endl;
-
-    if (std::isinf(posToTest.x)) {
-        CreatePlayers(playersIds);
-    } else {
-        /**
-         * for testing, call like: GameWorld game = GameWorld(Vector2D(16, -13));
-         * the game'll create a *unique duck* with id 1 in the position indicated (maybe corrected
-         * by applying gravity (once at the start)).
-         */
-
-        Testing(posToTest);
-    }
+    CreatePlayers(playersIds);
     eventsManager.SendPlayersListeners(players);
 }
 
@@ -32,7 +20,7 @@ GameWorld::~GameWorld() {
 void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
-        players[playersIds[i]] = new Duck(spawnPoints[i], p);
+        players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], p);
     }
 }
 
@@ -83,7 +71,6 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
             player->TryJump();
             break;
         case CommandCode::UseItem_KeyDown:
-            std::cout << "[game:execCommand] try useItem\n";
             player->TryUseItem();
 
             break;
@@ -102,9 +89,3 @@ Snapshot GameWorld::GetSnapshot() { return eventsManager.GetSnapshot(IsOver()); 
 PlayerID_t GameWorld::WhoWon() { return players.begin()->first; }
 
 bool GameWorld::IsOver() { return livePlayers <= 1; }
-
-void GameWorld::Testing(const Vector2D& posToTest) {
-    std::cout << "[TESTING]: Receiving unique player [" << ID_PLAYER_UNIQUE_TEST
-              << "]. Spawned in:(" << posToTest.x << "," << posToTest.y << ")\n";
-    players[ID_PLAYER_UNIQUE_TEST] = new Duck(posToTest, p);
-}

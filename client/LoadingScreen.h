@@ -21,11 +21,11 @@ public:
             cam(cam), rate(rate), endFunction(endFunction) {}
 
     void Render(const string& text = "", bool lockerOnly = false) {
-        Image bg(RectTransform(Transform(Vector2D::Zero(), Vector2D(2000, 2000))),
-                 ColorExtension::Black(), 10);
+        Image bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black(),
+                 10);
         Text titleText(text, 160,
-                       RectTransform(Transform(Vector2D(0, 30), Vector2D(500, 160)),
-                                     Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                       RectTransform(Vector2D(0, 30), Vector2D(800, 160), Vector2D(0.5, 0.5),
+                                     Vector2D(0.5, 0.5)),
                        ColorExtension::White(), 11);
 
         bg.SetVisible(!lockerOnly);

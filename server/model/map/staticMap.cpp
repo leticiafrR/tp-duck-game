@@ -8,7 +8,13 @@ enum : int { L, R, B, T };
 
 
 void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
+
+std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
+
+GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
+
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
+
 
 StaticMap::StaticMap(): theme(Theme::Forest) {
     size.emplace_back(FullMapSize::xMapSize);
@@ -17,11 +23,8 @@ StaticMap::StaticMap(): theme(Theme::Forest) {
     limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
     limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
-    // AddTestLevel();
     AddEasyLevel();
-    // InitialMap();
 }
-
 
 std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrigin,
                                                          const Vector2D& rayDirection,
@@ -42,8 +45,6 @@ std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrig
 }
 
 
-std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
-
 bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D dir = Vector2D::Down();
     float len = (dynamicT.GetSize().y) / 2;
@@ -61,28 +62,18 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
 }
 
 
-void StaticMap::InitialMap() {
-    AddGround(GroundDto(Transform(Vector2D(0, 0), Vector2D(50, 20)), TestLevel::edges));
-    // AddGround(GroundDto(Transform(Vector2D(0, 15), Vector2D(8, 16)), TestLevel::edges));
-    //  AddGround(GroundDto(Transform(Vector2D(15, 10), Vector2D(10, 10)), TestLevel::edges));
-    AddTransform(Transform(Vector2D(0, -20), Vector2D(80, 20)));
-}
-
-
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
     Vector2D posDynamic = dynamicT.GetPos();
     float xDynamic = posDynamic.x;
     float yDynamic = posDynamic.y;
-
     float radio = (dynamicT.GetSize().y) / 2;
-
     if (yDynamic - radio < limits[B]) {
         return -1;
     }
-    if (xDynamic - radio < limits[L]) {  // caso izquierda
+    if (xDynamic - radio < limits[L]) {
         return limits[L] - (xDynamic - radio);
     }
-    if (yDynamic + radio > limits[T]) {  // caso arriba
+    if (yDynamic + radio > limits[T]) {
         return yDynamic + radio - limits[T];
     }
     if (xDynamic + radio > limits[R]) {
@@ -90,7 +81,6 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
     }
     return std::nullopt;  // El objeto está dentro de los límites
 }
-
 
 std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     auto it = std::find_if(grounds.begin(), grounds.end(), [&dynamicT](const auto& ground) {
@@ -102,181 +92,50 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     return std::nullopt;
 }
 
-
-GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
-
 void StaticMap::AddEasyLevel() {
     playersSpawnPlaces = PlayersSpawnPlaceEasyLevel::points;
     // plataforma 1
-    Transform PlataformOne(Vector2D(PlataformOne::xPosition, PlataformOne::yPosition),
-                           Vector2D(PlataformOne::xLength, PlataformOne::yLength), 0);
+    Transform PlataformOne(Vector2D(PlataformOne::xPos, PlataformOne::yPos),
+                           Vector2D(PlataformOne::xSize, PlataformOne::ySize));
 
     GroundDto GROne(PlataformOne, PlataformOne::edges);
     AddGround(GROne);
     // plataforma 2
-    Transform PlataformTwo(Vector2D(PlataformTwo::xPosition, PlataformTwo::yPosition),
-                           Vector2D(PlataformTwo::xLength, PlataformTwo::yLength), 0);
+    Transform PlataformTwo(Vector2D(PlataformTwo::xPos, PlataformTwo::yPos),
+                           Vector2D(PlataformTwo::xSize, PlataformTwo::ySize));
     GroundDto GRTwo(PlataformTwo, PlataformTwo::edges);
     AddGround(GRTwo);
+
     // plataforma 3
-    Transform PlataformThree(Vector2D(PlataformThree::xPosition, PlataformThree::yPosition),
-                             Vector2D(PlataformThree::xLength, PlataformThree::yLength), 0);
+    Transform PlataformThree(Vector2D(PlataformThree::xPos, PlataformThree::yPos),
+                             Vector2D(PlataformThree::xSize, PlataformThree::ySize));
     GroundDto GRThree(PlataformThree, PlataformThree::edges);
     AddGround(GRThree);
-    /*// plataforma 4
-    Transform PlataformFour(Vector2D(PlataformFour::xPosition, PlataformFour::yPosition),
-                            Vector2D(PlataformFour::xLength, PlataformFour::yLength), 0);
 
-    AddTransform(PlataformFour);
+
+    // plataforma 4
+    Transform PlataformFour(Vector2D(PlataformFour::xPos, PlataformFour::yPos),
+                            Vector2D(PlataformFour::xSize, PlataformFour::ySize));
+
+    AddGround(GroundDto(PlataformFour, PlataformFour::edges));
     // plataforma 5
-    Transform PlataformFive(Vector2D(PlataformFive::xPosition, PlataformFive::yPosition),
-                            Vector2D(PlataformFive::xLength, PlataformFive::yLength), 0);
+    Transform PlataformFive(Vector2D(PlataformFive::xPos, PlataformFive::yPos),
+                            Vector2D(PlataformFive::xSize, PlataformFive::ySize));
     GroundDto GRFive(PlataformFive, PlataformFive::edges);
     AddGround(GRFive);
     // plataforma 6
-    Transform PlataformSix(Vector2D(PlataformSix::xPosition, PlataformSix::yPosition),
-                           Vector2D(PlataformSix::xLength, PlataformSix::yLength), 0);
+    Transform PlataformSix(Vector2D(PlataformSix::xPos, PlataformSix::yPos),
+                           Vector2D(PlataformSix::xSize, PlataformSix::ySize));
     GroundDto GRSix(PlataformSix, PlataformSix::edges);
     AddGround(GRSix);
     // plataforma 7
-    Transform PlataformSeven(Vector2D(PlataformSeven::xPosition, PlataformSeven::yPosition),
-                             Vector2D(PlataformSeven::xLength, PlataformSeven::yLength), 0);
+    Transform PlataformSeven(Vector2D(PlataformSeven::xPos, PlataformSeven::yPos),
+                             Vector2D(PlataformSeven::xSize, PlataformSeven::ySize));
     GroundDto GRSeven(PlataformSeven, PlataformSeven::edges);
     AddGround(GRSeven);
     // plataforma 8
-    Transform PlataformEight(Vector2D(PlataformEight::xPosition, PlataformEight::yPosition),
-                             Vector2D(PlataformEight::xLength, PlataformEight::yLength), 0);
+    Transform PlataformEight(Vector2D(PlataformEight::xPos, PlataformEight::yPos),
+                             Vector2D(PlataformEight::xSize, PlataformEight::ySize));
     GroundDto GREight(PlataformEight, PlataformEight::edges);
     AddGround(GREight);
-    // plataforma 9
-    Transform PlataformNine(Vector2D(PlataformNine::xPosition, PlataformNine::yPosition),
-                            Vector2D(PlataformNine::xLength, PlataformNine::yLength), 0);
-    GroundDto GRNine(PlataformNine, PlataformNine::edges);
-    AddGround(GRNine);
-    // plataforma 10
-    Transform PlataformTen(Vector2D(PlataformTen::xPosition, PlataformTen::yPosition),
-                           Vector2D(PlataformTen::xLength, PlataformTen::yLength), 0);
-    GroundDto GRTen(PlataformTen, PlataformTen::edges);
-    AddGround(GRTen);
-    // plataforma 11
-    Transform PlataformEleven(Vector2D(PlataformEleven::xPosition, PlataformEleven::yPosition),
-                              Vector2D(PlataformEleven::xLength, PlataformEleven::yLength), 0);
-    GroundDto GREleven(PlataformEleven, PlataformEleven::edges);
-    AddGround(GREleven);
-    // plataforma 12
-    Transform PlataformTwelve(Vector2D(PlataformTwelve::xPosition, PlataformTwelve::yPosition),
-                              Vector2D(PlataformTwelve::xLength, PlataformTwelve::yLength), 0);
-    GroundDto GRTwelve(PlataformTwelve, PlataformTwelve::edges);
-    AddGround(GRTwelve);
-    // plataforma 13
-    Transform PlataformThirdteen(
-            Vector2D(PlataformThirdteen::xPosition, PlataformThirdteen::yPosition),
-            Vector2D(PlataformThirdteen::xLength, PlataformThirdteen::yLength), 0);
-    GroundDto GRThirdteen(PlataformThirdteen, PlataformThirdteen::edges);
-    AddGround(GRThirdteen);
-    // plataforma 14
-    Transform PlataformFourteen(
-            Vector2D(PlataformFourteen::xPosition, PlataformFourteen::yPosition),
-            Vector2D(PlataformFourteen::xLength, PlataformFourteen::yLength), 0);
-    GroundDto GRFourteen(PlataformFourteen, PlataformFourteen::edges);
-    AddGround(GRFourteen);
-    // plataforma 15
-    Transform PlataformFifthteen(
-            Vector2D(PlataformFifthteen::xPosition, PlataformFifthteen::yPosition),
-            Vector2D(PlataformFifthteen::xLength, PlataformFifthteen::yLength), 0);
-    GroundDto GRFifthteen(PlataformFifthteen, PlataformFifthteen::edges);
-    AddGround(GRFifthteen);
-    // plataforma 16
-    Transform PlataformSixteen(Vector2D(PlataformSixteen::xPosition, PlataformSixteen::yPosition),
-                               Vector2D(PlataformSixteen::xLength, PlataformSixteen::yLength), 0);
-    AddTransform(PlataformSixteen);
-    // plataforma 17
-    Transform PlataformSeventeen(
-            Vector2D(PlataformSeventeen::xPosition, PlataformSeventeen::yPosition),
-            Vector2D(PlataformSeventeen::xLength, PlataformSeventeen::yLength), 0);
-    GroundDto GRSeventeen(PlataformSeventeen, PlataformSeventeen::edges);
-    AddGround(GRSeventeen);
-    // plataforma 18
-    Transform PlataformEighteen(
-            Vector2D(PlataformEighteen::xPosition, PlataformEighteen::yPosition),
-            Vector2D(PlataformEighteen::xLength, PlataformEighteen::yLength), 0);
-    GroundDto GREighteen(PlataformEighteen, PlataformEighteen::edges);
-    AddGround(GREighteen);
-    // plataforma 19
-    Transform PlataformNineteen(
-            Vector2D(PlataformNineteen::xPosition, PlataformNineteen::yPosition),
-            Vector2D(PlataformNineteen::xLength, PlataformNineteen::yLength), 0);
-    GroundDto GRNineteen(PlataformNineteen, PlataformNineteen::edges);
-    AddGround(GRNineteen);
-    // plataforma 20
-    Transform PlataformTwenty(Vector2D(PlataformTwenty::xPosition, PlataformTwenty::yPosition),
-                              Vector2D(PlataformTwenty::xLength, PlataformTwenty::yLength), 0);
-    GroundDto GRTwenty(PlataformTwenty, PlataformTwenty::edges);
-    AddGround(GRTwenty);
-    // plataforma 21
-    Transform PlataformTwentyOne(
-            Vector2D(PlataformTwentyOne::xPosition, PlataformTwentyOne::yPosition),
-            Vector2D(PlataformTwentyOne::xLength, PlataformTwentyOne::yLength), 0);
-    GroundDto GRTwentyOne(PlataformTwentyOne, PlataformTwentyOne::edges);
-    AddGround(GRTwentyOne);
-    // plataforma 22
-    Transform PlataformTwentyTwo(
-            Vector2D(PlataformTwentyTwo::xPosition, PlataformTwentyTwo::yPosition),
-            Vector2D(PlataformTwentyTwo::xLength, PlataformTwentyTwo::yLength), 0);
-    GroundDto GRTwentyTwo(PlataformTwentyTwo, PlataformTwentyTwo::edges);
-    AddGround(GRTwentyTwo);
-    // plataforma 23
-    Transform PlataformTwentyThree(
-            Vector2D(PlataformTwentyThree::xPosition, PlataformTwentyThree::yPosition),
-            Vector2D(PlataformTwentyThree::xLength, PlataformTwentyThree::yLength), 0);
-    GroundDto GRTwentyThree(PlataformTwentyThree, PlataformTwentyThree::edges);
-    AddGround(GRTwentyThree);
-    // plataforma 24
-    Transform PlataformTwentyFour(
-            Vector2D(PlataformTwentyFour::xPosition, PlataformTwentyFour::yPosition),
-            Vector2D(PlataformTwentyFour::xLength, PlataformTwentyFour::yLength), 0);
-    GroundDto GRTwentyFour(PlataformTwentyFour, PlataformTwentyFour::edges);
-    AddGround(GRTwentyFour);
-    // plataforma 25
-    Transform PlataformTwentyFive(
-            Vector2D(PlataformTwentyFive::xPosition, PlataformTwentyFive::yPosition),
-            Vector2D(PlataformTwentyFive::xLength, PlataformTwentyFive::yLength), 0);
-    GroundDto GRTwentyFive(PlataformTwentyFive, PlataformTwentyFive::edges);
-    AddGround(GRTwentyFive);
-    // plataforma 26
-    Transform PlataformTwentySix(
-            Vector2D(PlataformTwentySix::xPosition, PlataformTwentySix::yPosition),
-            Vector2D(PlataformTwentySix::xLength, PlataformTwentySix::yLength), 0);
-    AddTransform(PlataformTwentySix);
-    // plataforma 27
-    Transform PlataformTwentySeven(
-            Vector2D(PlataformTwentySeven::xPosition, PlataformTwentySeven::yPosition),
-            Vector2D(PlataformTwentySeven::xLength, PlataformTwentySeven::yLength), 0);
-    GroundDto GRTwentySeven(PlataformTwentySeven, PlataformTwentySeven::edges);
-    AddGround(GRTwentySeven);
-    // plataforma 28
-    Transform PlataformTwentyEight(
-            Vector2D(PlataformTwentyEight::xPosition, PlataformTwentyEight::yPosition),
-            Vector2D(PlataformTwentyEight::xLength, PlataformTwentyEight::yLength), 0);
-    GroundDto GRTwentyEight(PlataformTwentyEight, PlataformTwentyEight::edges);
-    AddGround(GRTwentyEight);*/
 }
-
-/* bool somethingUnderThisPosition(const Vector2D& t) {
-     for (int i = t.GetPos().y; i <= limits[1]; i--) {
-         Transform t(Vector2D(t.GetPos().x, i), Vector2D(1, 1), 0);
-         if (CheckCollision(t)) {
-             return true;
-         }
-     }
-     return false;
- }
- void getRandomPosition(float& x, float& y) {
- std::random_device rd;
- std::mt19937 gen(rd());
- std::uniform_int_distribution<> distribX(limits[L], limits[R]);
- std::uniform_int_distribution<> distribY(limits[B], limits[T]);
-     x = distribX(gen);
-     y = distribY(gen);
- }
-*/

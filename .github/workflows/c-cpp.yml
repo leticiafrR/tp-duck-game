@@ -47,13 +47,20 @@ jobs:
     #  run: git submodule update --init --recursive
     
     - name: Dar permisos de ejecución al instalador de dependencias
-      run: chmod +x ./install_dependencies.sh
+      run: chmod +x ./install.sh
       
     - name: instalar dependencias necesarias SDL
-      run: ./install_dependencies.sh
+      run: ./install.sh
+
+    - name: Verify installation of packages
+      run: |
+        dpkg -s libsdl2-dev libyaml-dev
+      
     - name: instalar CMake y Make
       run: |
         sudo apt-get install -y cmake make build-essential
+        
+
     # Ejecutar CMake y compilar
     - name: compile project using makefile
       run: make compile-debug

@@ -40,9 +40,79 @@ private:
     bool running = false;
     bool isOwner = false;
 
-public:
-    MatchListScreen(Camera& cam, const Rate& rate, Client& client):
-            cam(cam), rate(rate), client(client) {}
+    Image header;
+    Text titleText;
+
+    Button createButton;
+    Text createButtonText;
+
+    Text joinLobbyText;
+
+    Button refreshButton;
+    Text refreshButtonText;
+
+
+    void OnCreatePressed() {
+        AudioManager::GetInstance().PlayButtonSFX();
+
+        bool createSuccess;
+        client.CreateMatch();
+        LoadingScreen loading(cam, rate, [this, &createSuccess]() {
+            std::shared_ptr<ResultJoining> joinResult = nullptr;
+            if (client.TryRecvNetworkMsg(joinResult)) {
+                createSuccess = joinResult->joined;
+                return true;
+            }
+            return false;
+        });
+        loading.Render("Creating match");
+
+        if (createSuccess) {
+            isOwner = true;
+            running = false;
+        }
+    }
+
+    void OnJoinLobbyPressed(int id) {
+        AudioManager::GetInstance().PlayButtonSFX();
+
+        bool joinSuccess;
+        client.SelectMatch(id);
+        LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
+            std::shared_ptr<ResultJoining> joinResult = nullptr;
+            if (client.TryRecvNetworkMsg(joinResult)) {
+                joinSuccess = joinResult->joined;
+                return true;
+            }
+            return false;
+        });
+        loading.Render("Joining match");
+
+        if (joinSuccess) {
+            isOwner = false;
+            running = false;
+        }
+    }
+
+    void OnRefreshPressed() {
+        AudioManager::GetInstance().PlayButtonSFX();
+        refreshButton.SetInteractable(false);
+        client.Refresh();
+        WaitRefresh();
+        refreshButton.SetInteractable(true);
+    }
+
+    void WaitRefresh() {
+        LoadingScreen loading(cam, rate, [this]() {
+            std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
+            if (client.TryRecvNetworkMsg(lobbyListResult)) {
+                LoadWidgetList(lobbyListResult->matches);
+                return true;
+            }
+            return false;
+        });
+        loading.Render("Getting available lobbies");
+    }
 
     void LoadWidgetList(std::vector<DataMatch> data) {
         widgets.clear();
@@ -53,35 +123,17 @@ public:
         for (size_t i = 0; i < data.size(); i++) {
             auto lobbyData = data[i];
             widgets.emplace_back(lobbyData.matchID, lobbyData.creatorNickname,
-                                 lobbyData.currentPlayers, lobbyData.maxPlayers, [this](int id) {
-                                     AudioManager::GetInstance().PlayButtonSFX();
-
-                                     bool joinSuccess;
-                                     client.SelectMatch(id);
-                                     LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
-                                         std::shared_ptr<ResultJoining> joinResult = nullptr;
-                                         if (GetServerMsg(client, joinResult)) {
-                                             joinSuccess = joinResult->joined;
-                                             return true;
-                                         }
-                                         return false;
-                                     });
-                                     loading.Render("Creating match");
-
-                                     if (joinSuccess) {
-                                         isOwner = false;
-                                         running = false;
-                                     }
-                                 });
+                                 lobbyData.currentPlayers, lobbyData.maxPlayers,
+                                 [this](int id) { this->OnJoinLobbyPressed(id); });
 
             widgets.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
         }
 
         scrollSize = 400 + data.size() * 130;
+        currentY = 0;
     }
 
     void UpdateWidgetListPosition(Vector2D movement) {
-
         if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
             return;
         }
@@ -91,99 +143,44 @@ public:
         }
     }
 
-    template <typename NetworkMsgDerivedClass>
-    bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concretPtr) {
-        shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
-            concretPtr = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
-            return true;
-        }
-        return false;
-    }
+public:
+    MatchListScreen(Camera& c, const Rate& r, Client& cl):
+            cam(c),
+            rate(r),
+            client(cl),
+            header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
+                                 Vector2D(0.5, 1)),
+                   ColorExtension::Black(), 3),
+            titleText("CREATE A LOBBY", 30,
+                      RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1),
+                                    Vector2D(0.5, 0.5)),
+                      ColorExtension::White(), 4),
+            createButton(
+                    RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
+                                  Vector2D(0.5, 0.5)),
+                    [this]() { this->OnCreatePressed(); }, Color(40, 40, 40), 4),
+            createButtonText("CREATE", 20,
+                             RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
+                                           Vector2D(0.5, 0.5)),
+                             ColorExtension::White(), 5),
+            joinLobbyText("OR JOIN A LOBBY", 30,
+                          RectTransform(Vector2D(-180, -240), Vector2D(500, 160), Vector2D(0.5, 1),
+                                        Vector2D(0.5, 0.5)),
+                          ColorExtension::White(), 4),
+            refreshButton(
+                    RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+                                  Vector2D(0.5, 0.5)),
+                    [this]() { this->OnRefreshPressed(); }, Color(40, 40, 40), 4),
+            refreshButtonText("REFRESH", 20,
+                              RectTransform(Vector2D(180, -240), Vector2D(250, 80),
+                                            Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
+                              ColorExtension::White(), 5) {}
 
     bool Render() {
         running = true;
-        Image header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
-                                   Vector2D(0.5, 1)),
-                     ColorExtension::Black(), 3);
 
-        Text titleText("CREATE A LOBBY", 30,
-                       RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1),
-                                     Vector2D(0.5, 0.5)),
-                       ColorExtension::White(), 4);
-
-        Button createButton(
-                RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this]() {
-                    AudioManager::GetInstance().PlayButtonSFX();
-
-                    bool joinSuccess;
-                    client.CreateMatch();
-                    std::cout << "Create match!\n";
-                    LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
-                        std::shared_ptr<ResultJoining> joinResult = nullptr;
-                        if (GetServerMsg(client, joinResult)) {
-                            joinSuccess = joinResult->joined;
-                            return true;
-                        }
-                        return false;
-                    });
-                    loading.Render("Creating match");
-
-                    if (joinSuccess) {
-                        isOwner = true;
-                        running = false;
-                    }
-                },
-                Color(40, 40, 40), 4);
-
-        Text createButtonText("CREATE", 20,
-                              RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                                            Vector2D(0.5, 0.5)),
-                              ColorExtension::White(), 5);
-
-        Text joinLobbyText("OR JOIN A LOBBY", 30,
-                           RectTransform(Vector2D(-180, -240), Vector2D(500, 160), Vector2D(0.5, 1),
-                                         Vector2D(0.5, 0.5)),
-                           ColorExtension::White(), 4);
-
-        Button refreshButton(
-                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this, &refreshButton]() {
-                    AudioManager::GetInstance().PlayButtonSFX();
-                    refreshButton.SetInteractable(false);
-                    client.Refresh();
-
-                    LoadingScreen loading(cam, rate, [this]() {
-                        std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
-                        if (GetServerMsg(client, lobbyListResult)) {
-                            LoadWidgetList(lobbyListResult->matches);
-                            return true;
-                        }
-                        return false;
-                    });
-                    loading.Render("Getting available lobbies");
-                    refreshButton.SetInteractable(true);
-                },
-                Color(40, 40, 40), 4);
-
-        Text refreshButtonText("REFRESH", 20,
-                               RectTransform(Vector2D(180, -240), Vector2D(250, 80),
-                                             Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
-                               ColorExtension::White(), 5);
-
-        // Load the first available lobbies
-        LoadingScreen loading(cam, rate, [this]() {
-            std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
-            if (GetServerMsg(client, lobbyListResult)) {
-                LoadWidgetList(lobbyListResult->matches);
-                return true;
-            }
-            return false;
-        });
-        loading.Render("Getting available lobbies");
+        // Get the first available lobbies
+        WaitRefresh();
 
         while (running) {
             cam.Clean();
