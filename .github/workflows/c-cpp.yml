@@ -21,36 +21,12 @@ jobs:
     - uses: pre-commit/action@v2.0.3
       with:
         extra_args: --all-files
-        
-    # Instalar SDL2
-    #- name: Install SDL2 
-    #  run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
-
-     # Instalar SDL2_image
-    #- name: Install SDL2_image
-    #  run: sudo apt-get install -y libsdl2-image-dev
-
-    # Instalar SDL2_ttf
-    #- name: Install SDL2_ttf
-    #  run: sudo apt-get install -y libsdl2-ttf-dev
-
-    #Instalar SDL2_mixer
-    #- name: Install SDL2_mixer
-    #  run: sudo apt-get install -y libsdl2-mixer-dev
-      
-    # Instalar herramientas necesarias para la compilación
-    #- name: Install dependencies
-    #  run: sudo apt-get install -y cmake unzip
-
-    # Actualizar los submódulos (si el proyecto los usa)
-    #- name: Update submodules
-    #  run: git submodule update --init --recursive
     
     - name: Dar permisos de ejecución al instalador de dependencias
-      run: chmod +x ./install.sh
+      run: chmod +x ./scripts/install_dependencies.sh
       
     - name: instalar dependencias necesarias SDL
-      run: ./install.sh
+      run: ./scripts/install_dependencies.sh
 
     - name: Verify installation of packages
       run: |
@@ -63,4 +39,4 @@ jobs:
 
     # Ejecutar CMake y compilar
     - name: compile project using makefile
-      run: make compile-debug
+      run: make
