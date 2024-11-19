@@ -107,6 +107,7 @@ public:
 
             MatchStartDto matchData = *(LobbyScreen(cam, rate, client, isOwner).Render());
 
+            AudioManager::GetInstance().PlayGameMusic();
             bool matchEnded = false;
 
             while (!matchEnded) {
@@ -120,6 +121,9 @@ public:
 
                 LoadMatchEnded(client, matchEnded);
             }
+
+            AudioManager::GetInstance().StopMusic();
+
             ShowWinner(client, matchData.playersData);
 
         } catch (LibError& e) {

@@ -197,13 +197,14 @@ public:
         ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 0.6f,
                                   [this]() { running = false; });
 
+        camController.Reset();
         while (running) {
             cam.Clean();
 
             TakeInput();
             TakeSnapshots([&fadePanelTween]() { fadePanelTween.Play(); });
 
-            camController.Update();
+            camController.Update(rate.GetDeltaTime());
             TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
             BulletsReapDead();

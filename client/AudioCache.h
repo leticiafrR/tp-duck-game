@@ -18,24 +18,39 @@ using std::vector;
 
 class AudioCache {
 private:
-    static map<string, Chunk> cache;
+    static map<string, Chunk> sfxCache;
+    static map<string, Music> musicCache;
 
 public:
     AudioCache() = delete;
     ~AudioCache() = delete;
 
-    static Chunk& GetData(const string& filename) {
-        auto it = cache.find(filename);
-        if (it != cache.end()) {
+    static Chunk& GetSFXData(const string& filename) {
+        auto it = sfxCache.find(filename);
+        if (it != sfxCache.end()) {
             return it->second;
         }
 
-        cache.emplace(filename, Chunk(AUDIO_PATH + filename));
-        return cache.at(filename);
+        sfxCache.emplace(filename, Chunk(AUDIO_PATH + filename));
+        return sfxCache.at(filename);
     }
 
-    static void Clear() { cache.clear(); }
+    static Music& GetMusicData(const string& filename) {
+        auto it = musicCache.find(filename);
+        if (it != musicCache.end()) {
+            return it->second;
+        }
+
+        musicCache.emplace(filename, Music(AUDIO_PATH + filename));
+        return musicCache.at(filename);
+    }
+
+    static void Clear() {
+        sfxCache.clear();
+        musicCache.clear();
+    }
 };
-map<string, Chunk> AudioCache::cache;
+map<string, Chunk> AudioCache::sfxCache;
+map<string, Music> AudioCache::musicCache;
 
 #endif
