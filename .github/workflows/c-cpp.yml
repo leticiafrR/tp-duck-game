@@ -23,10 +23,10 @@ jobs:
         extra_args: --all-files
     
     - name: Dar permisos de ejecución al instalador de dependencias
-      run: chmod +x scripts/install_dependencies.sh
+      run: chmod +x scripts/install_depedencies.sh
       
     - name: instalar dependencias necesarias SDL
-      run: ./scripts/install_dependencies.sh
+      run: ./scripts/install_depedencies.sh
 
     - name: Verify installation of packages
       run: |
