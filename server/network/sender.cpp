@@ -15,7 +15,8 @@ SenderThread::SenderThread(Socket&& sktPeer, MatchesMonitor& matches, PlayerID_t
 void SenderThread::run() {
 
     std::shared_ptr<Queue<Command>> matchQueue;
-    PlayerID_t matchID = MatchBinder::bind(matches, &senderQueue, playerID, protocol, matchQueue);
+    PlayerID_t matchID =
+            MatchBinder::ServerBind(matches, &senderQueue, playerID, protocol, matchQueue);
     if (matchID == 0) {
         return;
     }

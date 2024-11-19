@@ -64,9 +64,10 @@ public:
     }
 
     // returns an ID = 0 if the client didnt join a match
-    static PlayerID_t bind(MatchesMonitor& matches,
-                           Queue<std::shared_ptr<MessageSender>>* senderQueue, PlayerID_t playerID,
-                           ServerProtocol& protocol, std::shared_ptr<Queue<Command>>& matchQueue) {
+    static PlayerID_t ServerBind(MatchesMonitor& matches,
+                                 Queue<std::shared_ptr<MessageSender>>* senderQueue,
+                                 PlayerID_t playerID, ServerProtocol& protocol,
+                                 std::shared_ptr<Queue<Command>>& matchQueue) {
         PlayerID_t matchID = REFRESH;
         try {
             PlayerInfo playerInfo{protocol.receiveNickName(), senderQueue};
