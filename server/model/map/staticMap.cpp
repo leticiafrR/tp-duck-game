@@ -2,10 +2,15 @@
 
 #include <algorithm>
 #include <cmath>
+#include <set>
+
+#include <yaml-cpp/yaml.h>
 
 #include "mapConstants.h"
 enum : int { L, R, B, T };
 
+const static char filePath[] = "/home/candematelica/Documents/Taller de Programacion/Duck "
+                               "Game/tp-duck-game/server/model/map/level_1.yaml";
 
 void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 
@@ -16,15 +21,7 @@ GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grou
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
 
-StaticMap::StaticMap(): theme(Theme::Forest) {
-    size.emplace_back(FullMapSize::xMapSize);
-    size.emplace_back(FullMapSize::yMapSize);
-    limits.emplace_back(-static_cast<int>(FullMapSize::xMapSize) / 2);  // izquierda [0]
-    limits.emplace_back(FullMapSize::xMapSize / 2);                     // derecha [1]
-    limits.emplace_back(-static_cast<int>(FullMapSize::yMapSize) / 2);  // inferior [2]
-    limits.emplace_back(FullMapSize::yMapSize / 2);                     // superior [3]
-    AddEasyLevel();
-}
+StaticMap::StaticMap(): theme(Theme::Forest) { SetTheLevel(filePath); }
 
 std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrigin,
                                                          const Vector2D& rayDirection,
@@ -61,7 +58,6 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
             });
 }
 
-
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
     Vector2D posDynamic = dynamicT.GetPos();
     float xDynamic = posDynamic.x;
@@ -91,51 +87,52 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     }
     return std::nullopt;
 }
+void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
+    auto plats = config[platformName];
+    for (std::size_t i = 0; i < plats.size(); ++i) {
+        float x = plats[i]["x"].as<float>();
+        float y = plats[i]["y"].as<float>();
+        float w = plats[i]["w"].as<float>();
+        float h = plats[i]["h"].as<float>();
 
-void StaticMap::AddEasyLevel() {
-    playersSpawnPlaces = PlayersSpawnPlaceEasyLevel::points;
-    // plataforma 1
-    Transform PlataformOne(Vector2D(PlataformOne::xPos, PlataformOne::yPos),
-                           Vector2D(PlataformOne::xSize, PlataformOne::ySize));
+        std::set<VISIBLE_EDGES> edges;
+        for (auto edge: plats[i]["edges"]) {
+            std::string edgeStr = edge.as<std::string>();
+            if (edgeStr == "LEFT")
+                edges.insert(LEFT);
+            else if (edgeStr == "RIGHT")
+                edges.insert(RIGHT);
+            else if (edgeStr == "TOP")
+                edges.insert(TOP);
+            else if (edgeStr == "BOTTOM")
+                edges.insert(BOTTOM);
+        }
+        AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
+    }
+}
+void StaticMap::SetTheLevel(const std::string& filePath) {
+    YAML::Node config = YAML::LoadFile(filePath);
 
-    GroundDto GROne(PlataformOne, PlataformOne::edges);
-    AddGround(GROne);
-    // plataforma 2
-    Transform PlataformTwo(Vector2D(PlataformTwo::xPos, PlataformTwo::yPos),
-                           Vector2D(PlataformTwo::xSize, PlataformTwo::ySize));
-    GroundDto GRTwo(PlataformTwo, PlataformTwo::edges);
-    AddGround(GRTwo);
+    size_t xSize = config["full_map_size"]["x"].as<size_t>();
+    size.emplace_back(xSize);
+    size_t ySize = config["full_map_size"]["y"].as<size_t>();
+    size.emplace_back(ySize);
+    limits.emplace_back(-static_cast<int>(xSize) / 2);  // izquierda [0]
+    limits.emplace_back(xSize / 2);                     // derecha [1]
+    limits.emplace_back(-static_cast<int>(ySize) / 2);  // inferior [2]
+    limits.emplace_back(ySize / 2);                     // superior [3]
 
-    // plataforma 3
-    Transform PlataformThree(Vector2D(PlataformThree::xPos, PlataformThree::yPos),
-                             Vector2D(PlataformThree::xSize, PlataformThree::ySize));
-    GroundDto GRThree(PlataformThree, PlataformThree::edges);
-    AddGround(GRThree);
+    auto spawnPoints = config["players_spawn_points"];
+    for (std::size_t i = 0; i < spawnPoints.size(); ++i) {
+        Vector2D pos;
+        pos.x = spawnPoints[i]["x"].as<float>();
+        pos.y = spawnPoints[i]["y"].as<float>();
+        playersSpawnPlaces.push_back(pos);
+    }
 
-
-    // plataforma 4
-    Transform PlataformFour(Vector2D(PlataformFour::xPos, PlataformFour::yPos),
-                            Vector2D(PlataformFour::xSize, PlataformFour::ySize));
-
-    AddGround(GroundDto(PlataformFour, PlataformFour::edges));
-    // plataforma 5
-    Transform PlataformFive(Vector2D(PlataformFive::xPos, PlataformFive::yPos),
-                            Vector2D(PlataformFive::xSize, PlataformFive::ySize));
-    GroundDto GRFive(PlataformFive, PlataformFive::edges);
-    AddGround(GRFive);
-    // plataforma 6
-    Transform PlataformSix(Vector2D(PlataformSix::xPos, PlataformSix::yPos),
-                           Vector2D(PlataformSix::xSize, PlataformSix::ySize));
-    GroundDto GRSix(PlataformSix, PlataformSix::edges);
-    AddGround(GRSix);
-    // plataforma 7
-    Transform PlataformSeven(Vector2D(PlataformSeven::xPos, PlataformSeven::yPos),
-                             Vector2D(PlataformSeven::xSize, PlataformSeven::ySize));
-    GroundDto GRSeven(PlataformSeven, PlataformSeven::edges);
-    AddGround(GRSeven);
-    // plataforma 8
-    Transform PlataformEight(Vector2D(PlataformEight::xPos, PlataformEight::yPos),
-                             Vector2D(PlataformEight::xSize, PlataformEight::ySize));
-    GroundDto GREight(PlataformEight, PlataformEight::edges);
-    AddGround(GREight);
+    YAML::Node platformsList = config["plataforms"][0];
+    for (std::size_t i = 0; i < platformsList.size(); ++i) {
+        std::string platformName = platformsList[i].as<std::string>();
+        loadPlatforms(config, platformName);
+    }
 }
