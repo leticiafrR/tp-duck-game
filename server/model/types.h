@@ -37,15 +37,15 @@ constexpr uint8_t LONG = 2;
 namespace Scope {
 constexpr float GRANADA = 20;
 constexpr float BANANA = 10;
-constexpr float LASER = 30;
-constexpr float PISTOLA_COWBOY = 20;  // Por consigna pero cuestionable)?
+constexpr float LASER_RIFLE = 30;
+constexpr float PISTOLA_COWBOY = 20;
 //...
 }  // namespace Scope
 
 namespace Ammo {
 constexpr uint8_t GRANADA = 1;
 constexpr uint16_t BANANA = 1;
-constexpr uint16_t LASER = 10;
+constexpr uint16_t LASER_RIFLE = 10;
 constexpr uint16_t PISTOLA_COWBOY = 6;
 //...
 }  // namespace Ammo
