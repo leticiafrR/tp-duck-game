@@ -11,7 +11,7 @@ enum : int { L, R, B, T };
 
 const static char filePath[] = "../server/model/map/level_1.yaml";
 
-void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
+// void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
 

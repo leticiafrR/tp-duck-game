@@ -5,12 +5,22 @@
 enum class CommandCode : uint8_t {
     MoveRight_KeyUp,
     MoveRight_KeyDown,
+
     MoveLeft_KeyUp,
     MoveLeft_KeyDown,
+
     Jump,
     _quit,
+
     UseItem_KeyDown,
-    UseItem_KeyUp
+    UseItem_KeyUp,
+
+    LookUp_KeyDown,
+    LookUp_KeyUp,
+
+    Crouch_KeyDown,  // empezar a agacharse
+    Crouch_KeyUp
+
 };
 
 struct Command {

@@ -4,8 +4,6 @@
 #include "../projectile/InstantProjectile.h"
 
 #include "Weapon.h"
-// #include "data/snapshot.h"
-
 
 class InstantWeapon: public Weapon {
 protected:
@@ -36,29 +34,11 @@ public:
 
     virtual ~InstantWeapon() = default;
 
-    /* de esta derivan (todas las que tienen disparos prolongados):
-        -> LaserRifle
-        -> PistolaDuelos
+    /* from this class derive:
+        -> pistolaCowboy
+        -> laserRifles
         -> etc
     */
 };
-
-// class LaserRifle: public InstantWeapon {
-// public:
-//     explicit LaserRifle(ProjectilesController& projectilesController,
-//                         const Transform& initialSpace):
-//             InstantWeapon(projectilesController, initialSpace, Scope::LASER, Ammo::LASER,
-//                 Time::COOLDOWN_SHORT) {}
-
-//     void BeCollected(TypeCollectable& collectorTypeRef) override {
-//         collectorTypeRef = TypeCollectable::Laser;
-//     }
-
-//     void Use(Duck* shooter) override {
-//         InstantWeapon::Use(shooter);
-//         // shooter->ApplyRetrocces();
-//         /*logic to shoot, aqui es donde se usa el ProjectilesController*/
-//     }
-// };
 
 #endif
