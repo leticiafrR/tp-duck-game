@@ -2,21 +2,6 @@
 #define TYPES_H
 #include <cstdint>
 
-enum class TypeCollectable {
-    EMPTY,
-    PISTOLA_COWBOY,
-    LASER_RIFLE,
-    Helmet,
-    Armor,
-    Granada,
-    Banana,
-    Ak47,
-    PistolaDuelo,
-    Magnum,
-    Escopeta,
-    Sniper
-};
-
 namespace Cooldown {
 constexpr float NONE = 0;
 constexpr float BASIC = 0.3;  // for every weapon with long shot

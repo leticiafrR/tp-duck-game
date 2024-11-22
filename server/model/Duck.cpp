@@ -26,10 +26,13 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
         // itemOnHand(new LaserRifle(projectilesController, mySpace)),
         typeOnHand(TypeCollectable::PISTOLA_COWBOY) {}
+
 void Duck::TriggerEvent() {
-    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp));
+    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand));
 }
+
 const Flip& Duck::GetFlip() const { return myFlip; }
+
 bool Duck::IsShooting() const { return isShooting; }
 
 void Duck::HandleDead() {
@@ -73,7 +76,7 @@ void Duck::RegistListener(PlayerEventListener* listener) {
 }
 bool Duck::HasWeaponOnHand() {
     return (itemOnHand &&
-            !(typeOnHand == TypeCollectable::Helmet || typeOnHand == TypeCollectable::Armor));
+            !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));
 }
 
 void Duck::UpdateWeapon(float deltaTime) {

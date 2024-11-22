@@ -20,20 +20,30 @@ enum class DuckState : uint8_t {
     DEAD,
     DEAD_BY_FALLING
 };
+enum class TypeCollectable : uint8_t { EMPTY, PISTOLA_COWBOY, LASER_RIFLE, HELMET, ARMOR };
 
 struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
     bool isLookingUp;
-    // TypeCollectable typeOnHand;
+    TypeCollectable typeOnHand;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
                 bool _isLookingUp):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),
-            isLookingUp(_isLookingUp) {}
+            isLookingUp(_isLookingUp),
+            typeOnHand(TypeCollectable::EMPTY) {}
+
+    PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
+                bool _isLookingUp, TypeCollectable _typeOnHand):
+            motion(_motion),
+            stateTransition(_stateTransition),
+            flipping(_flipping),
+            isLookingUp(_isLookingUp),
+            typeOnHand(_typeOnHand) {}
     PlayerEvent() = default;
 };
 

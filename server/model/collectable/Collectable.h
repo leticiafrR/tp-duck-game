@@ -1,9 +1,9 @@
 #ifndef COLLECTABLE_H
 #define COLLECTABLE_H
 #include "common/Transform.h"
+#include "data/snapshot.h"
 
 class Duck;
-enum class TypeCollectable;
 
 class Collectable {
 protected:
