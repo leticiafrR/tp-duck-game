@@ -1,6 +1,7 @@
 #ifndef ZOOM_CONTROLLER
 #define ZOOM_CONTROLLER
 
+#include <algorithm>
 #include <list>
 
 #include "Camera.h"
@@ -44,7 +45,35 @@ public:
 
     void RemoveTransform(Transform* transform) { transforms.remove(transform); }
 
-    void Update() {
+    float MoveSizeTowards(float current, float target, float maxDelta) {
+        if (std::abs(target - current) <= maxDelta) {
+            return target;
+        } else {
+            if (target > current)
+                return current + maxDelta;
+            else
+                return current - maxDelta;
+        }
+    }
+
+    void Reset() {
+        Vector2D minCorner;
+        Vector2D maxCorner;
+
+        CalculateCorners(minCorner, maxCorner);
+
+        float offset = 5.5;
+        camera.SetPos((minCorner + maxCorner) / 2);
+
+        Vector2D total = maxCorner - minCorner;
+        float size = std::max(total.x, total.y) + offset;
+
+        if (size < minSize)
+            size = minSize;
+        camera.SetSize(size);
+    }
+
+    void Update(float deltaTime) {
         if (transforms.size() == 0)
             return;
 
@@ -57,15 +86,17 @@ public:
             return;
 
         float offset = 5.5;
+        Vector2D targetPos =
+                Vector2D::MoveTowards(camera.GetPos(), (minCorner + maxCorner) / 2, 25 * deltaTime);
+        camera.SetPos(targetPos);
 
-        camera.SetPos((minCorner + maxCorner) / 2);
-        float size = Vector2D::Distance(minCorner, maxCorner) + offset;
+        Vector2D total = maxCorner - minCorner;
+        float size = MoveSizeTowards(camera.GetSize(), std::max(total.x, total.y) + offset,
+                                     25 * deltaTime);
+
         if (size < minSize)
             size = minSize;
         camera.SetSize(size);
-
-        // Vector2D total = maxPos - minPos;
-        // camera.SetSize(std::max(total.x, total.y) + offset);
     }
 };
 

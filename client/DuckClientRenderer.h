@@ -7,6 +7,7 @@
 #include "data/snapshot.h"
 
 #include "Animator.h"
+#include "AudioManager.h"
 #include "ColorExtension.h"
 #include "Object2D.h"
 #include "Timer.h"
@@ -43,10 +44,10 @@ public:
             tLerp(0),
             target(),
             pistolSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(2.8, 1.4))) {
+
         target.stateTransition = DuckState::IDLE;
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
-        // spr.GetTransform().Move(Vector2D::Up() * 0.4f);         // Pos rendering offset
-        // target.motion = transform.GetPos() + Vector2D::Up() * 0.4f;
+
         target.motion = transform.GetPos();
         spr.SetColor(SkinColors.at(colorId));
         skinColor = spr.GetColor();
@@ -81,7 +82,6 @@ public:
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;
-        // newTarget.motion += Vector2D::Up() * 0.4f;
         target = newTarget;
 
         switch (target.stateTransition) {
@@ -105,6 +105,7 @@ public:
                     anim.SetTarget("idle");
                     spr.SetColor(skinColor);
                 });
+                AudioManager::GetInstance().PlayDamagedSFX();
                 damagedTimer.Start();
                 break;
             case DuckState::DEAD:

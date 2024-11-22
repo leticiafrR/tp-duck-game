@@ -11,9 +11,14 @@
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
+#include "BulletRenderer.h"
 #include "CameraController.h"
+#include "Definitions.h"
+#include "DuckClientRenderer.h"
+#include "GUIManager.h"
 #include "Image.h"
 #include "MapBlock2D.h"
+#include "Object2D.h"
 #include "Rate.h"
 
 using std::list;
@@ -192,13 +197,14 @@ public:
         ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 0.6f,
                                   [this]() { running = false; });
 
+        camController.Reset();
         while (running) {
             cam.Clean();
 
             TakeInput();
             TakeSnapshots([&fadePanelTween]() { fadePanelTween.Play(); });
 
-            camController.Update();
+            camController.Update(rate.GetDeltaTime());
             TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
             BulletsReapDead();

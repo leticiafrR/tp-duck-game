@@ -25,6 +25,19 @@ public:
         return start + (end - start) * t;
     }
 
+    static Vector2D MoveTowards(const Vector2D& current, const Vector2D& target,
+                                float maxDistanceDelta) {
+        Vector2D dir = target - current;
+        float dist = dir.GetMagnitude();
+
+        if (dist <= maxDistanceDelta || dist == 0) {
+            return target;
+        } else {
+            Vector2D normalizedDirection = dir.Normalized();
+            return current + normalizedDirection * maxDistanceDelta;
+        }
+    }
+
     static float DotProduct(Vector2D a, Vector2D b) { return a.x * b.x + a.y * b.y; }
 
     static float AngleBetween(Vector2D a, Vector2D b) {

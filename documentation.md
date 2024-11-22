@@ -10,7 +10,7 @@ Para instalar las dependencias necesarias para que el proyecto compile ejecutar.
 
 Si por alguna razón no puedes ejecutar el script debido a restricciones de acceso, ejecuta el siguiente comando para darle permisos de ejecución, y luego intenta nuevamente instalar las dependencias:
 ````bash
-chmod +x /scripts/install_depedencies.sh
+chmod +x scripts/install_depedencies.sh
 ````
 
 Una vez instaladas las dependencias se debe compilar el proyecto ejecutando el siguiente comando.
@@ -19,7 +19,7 @@ make
 ````
 
 ### Ejecucion del servidor
-Para iniciar el juego, es requerido inciar el servidor antes que los clientes. Para esto se debe ejecutar:
+Para iniciar el juego, es requerido levantar primero el servidor. Para esto se debe ejecutar:
 
 Si te encuentras en el directorio principal del proyecto, navega al directorio de compilación:
 ````bash
@@ -65,13 +65,13 @@ Si ya estás en el directorio build, simplemente ejecuta:
 ## Requerimientos faltantes  a fecha 19/11/24
 
 * Falta incluir en el modelo del mundo en el juego las cajas y los spawn places para las armas/armaduras/cascos (items colectables), por lo cual los patos no pueden recoger/dejar items de/en el mundo del juego, entonces inicialmente ya tienen una arma en la mano (pistola cowboy).
-* Falta limitar las municiones de cada arma, por lo pronto se tienen disparos ilimitados.
 * Falta las funcionalidades de mirar arriba, tirarse al suelo y aletear. 
 
-* Respecto al cliente gráfico: Falta mostrar las asignaciones de los colores del pato de cada jugador al iniciar la partida, mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante, reproducir música de ambiente, además de soportar 2 jugadores en la misma máquina
+* Falta mostrar las asignaciones de los colores del pato de cada jugador al iniciar la partida, mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante, además de soportar 2 jugadores en la misma máquina.
 
 * No se incluyó nada relativo al editor de niveles, cheats ni Unit tests.
 
 ## ¿Qué sabemos de antemano que está mal?
 * El cierre ordenado del sevridor.
+* El reap ended matches. 
 * Frente a la desconexión de un jugador partície de una partida ya iniciada no se está sacando del modelo al duck del mismo.

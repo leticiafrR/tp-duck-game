@@ -20,10 +20,10 @@ public:
     LoadingScreen(Camera& cam, const Rate& rate, Function<bool> endFunction):
             cam(cam), rate(rate), endFunction(endFunction) {}
 
-    void Render(const string& text = "", bool lockerOnly = false) {
+    void Run(const string& text = "", bool lockerOnly = false) {
         Image bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black(),
                  10);
-        Text titleText(text, 160,
+        Text titleText(text, 60,
                        RectTransform(Vector2D(0, 30), Vector2D(800, 160), Vector2D(0.5, 0.5),
                                      Vector2D(0.5, 0.5)),
                        ColorExtension::White(), 11);

@@ -23,13 +23,23 @@ public:
         return Instance;
     }
 
-    void PlayShootSFX() { PlaySFX("instant_boom.wav"); }
+    void PlayShootSFX() { PlaySFX("shootSFX.wav"); }
+    void PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
     void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 
+    void PlayGameMusic() { PlayMusic("bgMusic.mp3"); }
+
     void PlaySFX(const string& filename) {
-        Chunk& audio = AudioCache::GetData(filename);
+        Chunk& audio = AudioCache::GetSFXData(filename);
         mixer.PlayChannel(-1, audio, 0);
     }
+
+    void PlayMusic(const string& filename) {
+        Music& audio = AudioCache::GetMusicData(filename);
+        mixer.PlayMusic(audio, -1);
+    }
+
+    void StopMusic() { mixer.PauseMusic(); }
 
     // Remove copy
     AudioManager(const AudioManager&) = delete;
