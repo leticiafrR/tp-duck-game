@@ -24,34 +24,9 @@ public:
     SheetDataCache() = delete;
     ~SheetDataCache() = delete;
 
-    static map<string, vector<Rect>> GetData(const string& filename) {
-        auto it = cache.find(filename);
-        if (it != cache.end()) {
-            return it->second;
-        }
+    static map<string, vector<Rect>> GetData(const string& filename);
 
-        YAML::Node yamlData = YAML::LoadFile(SHEET_DATA_PATH + filename);
-
-        map<string, vector<Rect>> data;
-
-        for (const auto& item: yamlData) {
-            const string key = item.first.as<string>();
-
-            vector<Rect> rects;
-            std::transform(item.second.begin(), item.second.end(), std::back_inserter(rects),
-                           [](const YAML::Node& rectItem) {
-                               return Rect(rectItem["x"].as<int>(), rectItem["y"].as<int>(),
-                                           rectItem["w"].as<int>(), rectItem["h"].as<int>());
-                           });
-
-            data[key] = rects;
-        }
-        cache[filename] = data;
-        return data;
-    }
-
-    static void Clear() { cache.clear(); }
+    static void Clear();
 };
-map<string, map<string, vector<Rect>>> SheetDataCache::cache;
 
 #endif

@@ -36,8 +36,9 @@ void DynamicObject::CheckOutOfMapBoundaries(StaticMap& map) {
 
 void DynamicObject::CheckCollisionWithMap(StaticMap& map) {
     std::optional<Transform> maybeCollision = map.CheckCollision(mySpace);
-    if (maybeCollision.has_value()) {
+    while (maybeCollision.has_value()) {
         HandleCollisionWithMap(maybeCollision.value());
+        maybeCollision = map.CheckCollision(mySpace);
     }
 }
 

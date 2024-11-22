@@ -1,6 +1,7 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
+    SheetDataCache.cpp
     GraphicUI.cpp
     tweening/Tween.cpp
     Object2D.cpp

@@ -41,7 +41,7 @@ public:
                        CameraController& camController):
             camController(camController),
             spr("base_duck.png", transform),
-            anim(this->spr, "duck.yaml", "idle", 17),
+            anim(this->spr, "duck.yaml", "idle", 22),
             fromPos(transform.GetPos()),
             tLerp(0),
             target(),
@@ -85,6 +85,28 @@ public:
 
     Transform& GetTransform() { return spr.GetTransform(); }
 
+    void OnDamaged() {
+        damaged = true;
+        spr.SetColor(Color(230, 40, 40));
+        damagedTimer = Timer(0.15f, [this]() {
+            damaged = false;
+            anim.SetTarget("idle");
+            spr.SetColor(skinColor);
+        });
+        AudioManager::GetInstance().PlayDamagedSFX();
+        damagedTimer.Start();
+    }
+
+    void OnDead() {
+        damaged = false;
+        anim.SetTarget("dead");
+        damagedTimer.Stop();
+        spr.SetColor(skinColor);
+        pistolSpr.SetVisible(false);
+
+        camController.RemoveTransform(&spr.GetTransform());
+    }
+
     void SetEventTarget(PlayerEvent newTarget) {
         fromPos = spr.GetTransform().GetPos();
         tLerp = 0;
@@ -104,35 +126,13 @@ public:
                 anim.SetTarget("falling");
                 break;
             case DuckState::WOUNDED:
-                damaged = true;
-                spr.SetColor(Color(230, 40, 40));
-                damagedTimer = Timer(0.15f, [this]() {
-                    damaged = false;
-                    anim.SetTarget("idle");
-                    spr.SetColor(skinColor);
-                });
-                AudioManager::GetInstance().PlayDamagedSFX();
-                damagedTimer.Start();
+                OnDamaged();
                 break;
             case DuckState::DEAD:
-                damaged = false;
-                anim.SetTarget("dead");
-                damagedTimer.Stop();
-                spr.SetColor(skinColor);
-                pistolSpr.SetVisible(false);
-
-                camController.RemoveTransform(&spr.GetTransform());
-
+                OnDead();
                 break;
             case DuckState::DEAD_BY_FALLING:
-                damaged = false;
-                anim.SetTarget("dead");
-                damagedTimer.Stop();
-                spr.SetColor(skinColor);
-                pistolSpr.SetVisible(false);
-
-                camController.RemoveTransform(&spr.GetTransform());
-
+                OnDead();
                 break;
             default:
                 break;

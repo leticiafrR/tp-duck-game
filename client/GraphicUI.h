@@ -1,18 +1,24 @@
 #ifndef GRAPHIC_UI_H
 #define GRAPHIC_UI_H
 
+#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
+
 #include "Camera.h"
+#include "ColorExtension.h"
 #include "RectTransform.h"
 
 class GraphicUI {
 protected:
     RectTransform rect;
+    Color color = ColorExtension::Empty();
     int layerOrder = 0;
     bool canTarget = true;
     bool visible = true;
 
 public:
-    explicit GraphicUI(RectTransform rect, int layerOrder = 0);
+    explicit GraphicUI(const RectTransform& rect, Color color = ColorExtension::White(),
+                       int layerOrder = 0);
 
     virtual ~GraphicUI();
 
@@ -27,7 +33,14 @@ public:
     void SetCanTarget(bool target);
     bool GetCanTarget();
 
+    void SetRectTransform(const RectTransform& rect);
     RectTransform& GetRectTransform();
+
+    void SetColor(Color color);
+    Color GetColor();
+
+    void SetBase(const RectTransform& rect, Color color = ColorExtension::White(),
+                 int layerOrder = 0);
 };
 
 #endif

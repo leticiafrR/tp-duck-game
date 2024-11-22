@@ -3,7 +3,8 @@
 #include "Camera.h"
 #include "GUIManager.h"
 
-GraphicUI::GraphicUI(RectTransform rect, int layerOrder): rect(rect), layerOrder(layerOrder) {
+GraphicUI::GraphicUI(const RectTransform& rect, Color color, int layerOrder):
+        rect(rect), color(color), layerOrder(layerOrder) {
     GUIManager::GetInstance().AddGUI(this);
 }
 
@@ -21,4 +22,14 @@ bool GraphicUI::GetVisible() { return visible; }
 void GraphicUI::SetCanTarget(bool canTarget) { this->canTarget = canTarget; }
 bool GraphicUI::GetCanTarget() { return canTarget; }
 
+void GraphicUI::SetRectTransform(const RectTransform& rect) { this->rect = rect; }
 RectTransform& GraphicUI::GetRectTransform() { return rect; }
+
+void GraphicUI::SetColor(Color color) { this->color = color; }
+Color GraphicUI::GetColor() { return color; }
+
+void GraphicUI::SetBase(const RectTransform& rect, Color color, int layerOrder) {
+    SetRectTransform(rect);
+    SetColor(color);
+    SetLayerOrder(layerOrder);
+}

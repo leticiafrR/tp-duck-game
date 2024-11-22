@@ -16,6 +16,7 @@
 #include "Definitions.h"
 #include "DuckClientRenderer.h"
 #include "GUIManager.h"
+#include "GameplayGUI.h"
 #include "Image.h"
 #include "MapBlock2D.h"
 #include "Object2D.h"
@@ -40,6 +41,8 @@ private:
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
     vector<MapBlock2D> mapBlocks;
     list<BulletRenderer> bullets;
+
+    GameplayGUI gui;
 
     set<int> pressedKeysSet;
 
@@ -168,18 +171,6 @@ private:
         }
     }
 
-public:
-    Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
-             Snapshot firstSnapshot):
-            client(cl),
-            cam(c),
-            camController(c),
-            rate(r),
-            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))) {
-        InitPlayers(matchData, firstSnapshot);
-        InitMap(mapData);
-    }
-
     void DrawGameWorld() {
         mapBg.Draw(cam);
 
@@ -197,6 +188,19 @@ public:
             data->Update(rate.GetDeltaTime());
             data->Draw(cam);
         }
+    }
+
+public:
+    Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
+             Snapshot firstSnapshot):
+            client(cl),
+            cam(c),
+            camController(c),
+            rate(r),
+            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
+            gui(GameplayGUI(ColorExtension::White(), "josValentin")) {
+        InitPlayers(matchData, firstSnapshot);
+        InitMap(mapData);
     }
 
     void Run(bool isInitial) {
