@@ -157,6 +157,7 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendVector2D(it->second.motion);
         assistant.sendNumber((uint8_t)it->second.stateTransition);
         assistant.sendNumber((uint8_t)it->second.flipping);
+        assistant.sendNumber((uint8_t)(it->second.isLookingUp ? 1 : 0));
     }
     uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
     assistant.sendNumber(numberProjectiles);
