@@ -6,10 +6,10 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "mapConstants.h"
+#include "server/constantServer.h"
 enum : int { L, R, B, T };
 
-const static char filePath[] = "../server/model/map/level_1.yaml";
+const static char filePath[] = "../config/levels/level_1.yaml";
 
 // void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 
@@ -20,7 +20,7 @@ GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grou
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
 
-StaticMap::StaticMap(): theme(Theme::Forest) { SetTheLevel(filePath); }
+StaticMap::StaticMap() { SetTheLevel(filePath); }
 
 std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrigin,
                                                          const Vector2D& rayDirection,
@@ -43,7 +43,7 @@ std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrig
 
 bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D dir = Vector2D::Down();
-    float len = (dynamicT.GetSize().y) / 2;
+    float len = (dynamicT.GetSize().y) / HALF;
     float margen = (80 * len / 100);
     Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
     Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
@@ -61,9 +61,9 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
     Vector2D posDynamic = dynamicT.GetPos();
     float xDynamic = posDynamic.x;
     float yDynamic = posDynamic.y;
-    float radio = (dynamicT.GetSize().y) / 2;
+    float radio = (dynamicT.GetSize().y) / HALF;
     if (yDynamic - radio < limits[B]) {
-        return -1;
+        return FALLING;
     }
     if (xDynamic - radio < limits[L]) {
         return limits[L] - (xDynamic - radio);
@@ -89,49 +89,50 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
 void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
     auto plats = config[platformName];
     for (std::size_t i = 0; i < plats.size(); ++i) {
-        float x = plats[i]["x"].as<float>();
-        float y = plats[i]["y"].as<float>();
-        float w = plats[i]["w"].as<float>();
-        float h = plats[i]["h"].as<float>();
+        float x = plats[i][X_STR].as<float>();
+        float y = plats[i][Y_STR].as<float>();
+        float w = plats[i][WEIGHT_STR].as<float>();
+        float h = plats[i][HIGH_STR].as<float>();
 
         std::set<VISIBLE_EDGES> edges;
-        for (auto edge: plats[i]["edges"]) {
+        for (auto edge: plats[i][EDGES_STR]) {
             std::string edgeStr = edge.as<std::string>();
-            if (edgeStr == "LEFT")
+            if (edgeStr == LEFT_STR)
                 edges.insert(LEFT);
-            else if (edgeStr == "RIGHT")
+            else if (edgeStr == RIGHT_STR)
                 edges.insert(RIGHT);
-            else if (edgeStr == "TOP")
+            else if (edgeStr == TOP_STR)
                 edges.insert(TOP);
-            else if (edgeStr == "BOTTOM")
+            else if (edgeStr == BOTTOM_STR)
                 edges.insert(BOTTOM);
         }
         AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
     }
 }
+
 void StaticMap::SetTheLevel(const std::string& filePath) {
     YAML::Node config = YAML::LoadFile(filePath);
-
-    size_t xSize = config["full_map_size"]["x"].as<size_t>();
+    theme = config[THEME_STR].as<std::string>();
+    size_t xSize = config[FULL_MAP_STR][X_STR].as<size_t>();
     size.emplace_back(xSize);
-    size_t ySize = config["full_map_size"]["y"].as<size_t>();
+    size_t ySize = config[FULL_MAP_STR][Y_STR].as<size_t>();
     size.emplace_back(ySize);
     limits.emplace_back(-static_cast<int>(xSize) / 2);  // izquierda [0]
     limits.emplace_back(xSize / 2);                     // derecha [1]
     limits.emplace_back(-static_cast<int>(ySize) / 2);  // inferior [2]
     limits.emplace_back(ySize / 2);                     // superior [3]
 
-    auto spawnPoints = config["players_spawn_points"];
+    auto spawnPoints = config[PLAYERS_POINTS_STR];
     for (std::size_t i = 0; i < spawnPoints.size(); ++i) {
         Vector2D pos;
-        pos.x = spawnPoints[i]["x"].as<float>();
-        pos.y = spawnPoints[i]["y"].as<float>();
+        pos.x = spawnPoints[i][X_STR].as<float>();
+        pos.y = spawnPoints[i][Y_STR].as<float>();
         playersSpawnPlaces.push_back(pos);
     }
-
-    YAML::Node platformsList = config["plataforms"][0];
+    YAML::Node platformsList = config[PLATAFORM_STR][0];
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
+
         loadPlatforms(config, platformName);
     }
 }
