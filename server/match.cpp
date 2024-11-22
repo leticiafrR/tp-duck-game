@@ -22,13 +22,6 @@ Match::Match(const Config& config, PlayerID_t playerCreator):
         players(config.getMaxPlayers()),
         config(config) {}
 
-
-bool Match::isAvailable() {
-    return matchStatus == WAITING_PLAYERS && (config.getMaxPlayers() - players.size()) > 0;
-}
-
-bool Match::hasEnoughPlayers() { return players.size() >= config.getMinPlayers(); }
-
 void Match::loadDataIfAvailble(std::vector<DataMatch>& availableMatches) {
     if (isAvailable()) {
         uint8_t currentPlayers = (uint8_t)players.size();
@@ -47,7 +40,6 @@ std::shared_ptr<Queue<Command>> Match::logInPlayer(PlayerID_t playerID,
     return nullptr;
 }
 
-/* Method that would be called by the senderThreads through the monitor of matches */
 void Match::logOutPlayer(PlayerID_t idClient) {
     if (players.tryErase(idClient) && matchStatus == MATCH_ON_COURSE) {
         Command quit(CommandCode::_quit);
@@ -57,8 +49,9 @@ void Match::logOutPlayer(PlayerID_t idClient) {
 }
 
 void Match::run() {
+    _hadStarted = true;
+    matchStatus = MATCH_ON_COURSE;
     try {
-        matchStatus = MATCH_ON_COURSE;
         auto playersData = assignSkins(config.getAvailableSkins());
         auto matchStartSender = std::make_shared<MatchStartSender>(
                 std::move(playersData), Vector2D(Size::DUCK, Size::DUCK));
@@ -76,29 +69,21 @@ void Match::run() {
     } catch (const RunOutOfPlayers& r) {}
 }
 
-bool Match::isOver() { return matchStatus == ENDED; }
-
 void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }
 
 void Match::setEndOfMatch(PlayerID_t winner) {
     std::unique_lock<std::mutex> lock(endMatch);
     if (matchStatus != ENDED) {
-        std::cout << "GOING TO SET END OF THE MATCH [id:" << playerCreator << "]\n";
         matchStatus = ENDED;
-        try {
-            commandQueue->close();
-            if (players.size() != 0) {
-                auto messageSender = std::make_shared<MatchExitSender>(winner);
-                players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
-                    playerInfo.senderQueue->try_push(messageSender);
-                    playerInfo.senderQueue->close();
-                });
-                players.clear();
-            }
-        } catch (const ClosedQueue& q) {
-        } catch (const std::exception& e) {
-
-        } catch (...) {}
+        commandQueue->close();
+        if (players.size() != 0) {
+            auto messageSender = std::make_shared<MatchExitSender>(winner);
+            players.applyToValues([&messageSender](PlayerInfo& playerInfo) {
+                playerInfo.senderQueue->try_push(messageSender);
+                playerInfo.senderQueue->close();
+            });
+            players.clear();
+        }
     }
 }
 
@@ -138,3 +123,10 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
 
     return assignation;
 }
+
+bool Match::isAvailable() {
+    return matchStatus == WAITING_PLAYERS && (config.getMaxPlayers() - players.size()) > 0;
+}
+bool Match::hasEnoughPlayers() { return players.size() >= config.getMinPlayers(); }
+bool Match::isOver() { return matchStatus == ENDED; }
+bool Match::hadStarted() { return _hadStarted; }

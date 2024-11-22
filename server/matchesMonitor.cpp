@@ -4,11 +4,14 @@
 
 MatchesMonitor::MatchesMonitor(const Config& config): config(config) {}
 
+
 void MatchesMonitor::reapEndedMatches() {
     std::unique_lock<std::mutex> lck(m);
     for (auto it = matches.begin(); it != matches.end();) {
-        if (it->second->isOver()) {
-            it->second->join();
+        if ((it->second)->isOver()) {
+            if (matches[it->first]->hadStarted()) {
+                matches[it->first]->join();
+            }
             it = matches.erase(it);
         } else {
             ++it;
@@ -26,7 +29,6 @@ std::vector<DataMatch> MatchesMonitor::getAvailableMatches() {
     }
     return availableMatches;
 }
-// if doesnt exist
 std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(PlayerID_t matchID,
                                                              PlayerID_t playerID,
                                                              const PlayerInfo& playerInfo) {

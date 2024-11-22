@@ -22,6 +22,7 @@ struct DataMatch;
 class Match: public Thread {
 private:
     std::atomic<MATCH_STATUS> matchStatus;
+    std::atomic<bool> _hadStarted = false;
 
     PlayerID_t playerCreator;
 
@@ -44,11 +45,15 @@ public:
 
     bool isOver();
 
+    bool hadStarted();
+
     void logOutPlayer(PlayerID_t idClient);
 
     void run() override;
 
     void forceEnd();
+
+    ~Match() = default;
 
 private:
     bool isAvailable();
