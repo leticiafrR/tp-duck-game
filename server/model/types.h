@@ -18,11 +18,12 @@ enum class TypeCollectable {
 };
 
 namespace Cooldown {
-constexpr uint8_t NONE = 0;
-constexpr uint8_t SHORT = 3;
-constexpr uint8_t MEDIUM = 6;
-constexpr uint8_t LONG = 9;
-constexpr uint8_t TO_EXPLOTE_GRANADA = 4;
+constexpr float NONE = 0;
+constexpr float BASIC = 0.3;  // for every weapon with long shot
+constexpr float SHORT = 1;
+constexpr float MEDIUM = 2.5;
+constexpr float LONG = 7.5;
+constexpr float TO_EXPLOTE_GRANADA = 4;
 
 }  // namespace Cooldown
 
@@ -30,7 +31,7 @@ namespace Damage {
 constexpr uint8_t MINIMUN = 10;
 constexpr uint8_t SHORT = 12;
 constexpr uint8_t MEDIUM = 17;
-constexpr uint8_t LONG = 2;
+constexpr uint8_t LONG = 20;
 //...
 }  // namespace Damage
 
@@ -51,12 +52,11 @@ constexpr uint16_t PISTOLA_COWBOY = 6;
 }  // namespace Ammo
 
 namespace Speed {
-constexpr int DUCK = 12;  // to make the duck moves fastly per tick, add here
+constexpr int DUCK = 12;
 }  // namespace Speed
 
 namespace Size {
 constexpr int DUCK = 3;
-// constexpr int BULLET = 2;
 }  // namespace Size
 
 namespace Mass {
@@ -66,6 +66,12 @@ constexpr int DUCK = 15;  // en 7 ticks de 0.4s realiza 1 salto
 namespace Life {
 constexpr int DUCK = 100;
 }  // namespace Life
+
+namespace DispersionRange {
+constexpr float NO_DISPERSION = 0;
+constexpr float LONG = 0.4;
+constexpr float SHORT = 0.15;
+}  // namespace DispersionRange
 
 
 #endif

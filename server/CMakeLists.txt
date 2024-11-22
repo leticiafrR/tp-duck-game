@@ -6,6 +6,7 @@ target_sources(taller_server
     model/Duck.cpp
     model/Game.cpp
     model/map/staticMap.cpp
+    model/weapon/InstantWeapon.cpp
 
     #network
     network/sender.cpp

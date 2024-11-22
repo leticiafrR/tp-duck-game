@@ -9,7 +9,7 @@
 #include "id.h"
 #include "networkMsg.h"
 
-enum class Flip : uint8_t { Left = 1, Right, Up };
+enum class Flip : uint8_t { Left = 1, Right };
 enum class TypeProjectile : uint8_t { RayoLaser, Bullet, Banana, GranadaFragment };
 enum class DuckState : uint8_t {
     IDLE = 1,
@@ -26,9 +26,10 @@ struct PlayerEvent {
     DuckState stateTransition;
     Flip flipping;
     bool isLookingUp;
+    // TypeCollectable typeOnHand;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
-                bool _isLookingUp = false):
+                bool _isLookingUp):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),

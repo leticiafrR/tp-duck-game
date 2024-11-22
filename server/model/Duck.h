@@ -16,6 +16,7 @@ private:
     bool isCrouched;
     bool isGrounded;
     bool isWounded;
+    bool isLookingUp;
 
     MotionHandler motionHandler;
     RigidBody body;
@@ -23,8 +24,14 @@ private:
     Flip myFlip;
     DuckState myState;
     // DamageState damageState;
-    Collectable* itemInHand;
-    TypeCollectable typeInHand;
+    Collectable* itemOnHand;
+    TypeCollectable typeOnHand;
+    void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
+    DuckState GetLowerPriorityState();
+    void UpdateState();
+    void UpdateWeapon(float deltaTime);
+    bool HasWeaponOnHand();
+    void TriggerEvent();
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id,
@@ -36,9 +43,13 @@ public:
     void TryJump();
     void TryUseItem();
     void StopUseItem();
-
     void StartShooting();
     void StopShooting();
+    void LookUp();
+    void StopLookUp();
+
+    // void Crouch();
+    // void StopCrouch();
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
@@ -48,11 +59,10 @@ public:
     void ApplyGravity(StaticMap& map, float deltaTime) override;
 
     void RegistListener(PlayerEventListener* listener);
-    void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
-    DuckState GetLowerPriorityState();
-    void UpdateState();
     void Update(StaticMap& map, float deltaTime);
     const Flip& GetFlip() const;
+    Vector2D GetLookVector();
+    bool IsShooting() const;
 
     ~Duck() override = default;
     Duck(const Duck&) = delete;

@@ -3,6 +3,7 @@
 #include "common/Collision.h"
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
+#include "weapon/instant/LaserRifle.h"
 #include "weapon/instant/PistolaCowboy.h"
 
 #include "types.h"
@@ -17,20 +18,31 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         isCrouched(false),
         isGrounded(true),
         isWounded(false),
+        isLookingUp(false),
         body(mySpace, Mass::DUCK),
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        itemInHand(new PistolaCowboy(projectilesController, mySpace)),
-        typeInHand(TypeCollectable::PISTOLA_COWBOY) {}
-
+        itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
+        // itemOnHand(new LaserRifle(projectilesController, mySpace)),
+        typeOnHand(TypeCollectable::PISTOLA_COWBOY) {}
+void Duck::TriggerEvent() {
+    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp));
+}
 const Flip& Duck::GetFlip() const { return myFlip; }
+bool Duck::IsShooting() const { return isShooting; }
 
 void Duck::HandleDead() {
     myState = DuckState::DEAD;
-    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+    TriggerEvent();
     MarkAsDead();
 }
+
+void Duck::LookUp() {
+    isLookingUp = true;
+    TriggerEvent();
+}
+void Duck::StopLookUp() { isLookingUp = false; }
 
 void Duck::StopShooting() { isShooting = false; }
 
@@ -42,22 +54,42 @@ void Duck::HandleReceiveDamage(uint8_t damage) {
 }
 
 void Duck::TryUseItem() {
-    if (itemInHand) {
-        itemInHand->Use(this);
+    if (itemOnHand) {
+        itemOnHand->Use(this);
     }
 }
 
 void Duck::StopUseItem() {
-    if (itemInHand) {
-        itemInHand->StopUse(this);
+    if (itemOnHand) {
+        itemOnHand->StopUse(this);
     }
 }
 
+
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
-
     // on the first iteration, everything is new
-    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+    TriggerEvent();
+}
+bool Duck::HasWeaponOnHand() {
+    return (itemOnHand &&
+            !(typeOnHand == TypeCollectable::Helmet || typeOnHand == TypeCollectable::Armor));
+}
+
+void Duck::UpdateWeapon(float deltaTime) {
+    if (HasWeaponOnHand()) {
+        itemOnHand->Update(deltaTime);
+        if (isShooting) {
+            itemOnHand->Use(this);
+        }
+    }
+}
+
+Vector2D Duck::GetLookVector() {
+    if (isLookingUp) {
+        return Vector2D::Up();
+    }
+    return ((myFlip == Flip::Left) ? Vector2D::Left() : Vector2D::Right());
 }
 
 void Duck::Update(StaticMap& map, float deltaTime) {
@@ -65,16 +97,17 @@ void Duck::Update(StaticMap& map, float deltaTime) {
     Vector2D initialPos = mySpace.GetPos();
 
     UpdatePosition(map, deltaTime);
+    UpdateWeapon(deltaTime);
     UpdateState();
     UpdateListener(initialState, initialPos);
 }
 
 void Duck::UpdateListener(const DuckState& initialState, const Vector2D& initialPos) {
     if (initialPos.IsFarFrom(mySpace.GetPos())) {
-        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+        TriggerEvent();
     }
     if (initialState != myState) {
-        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+        TriggerEvent();
     }
 }
 
@@ -112,7 +145,7 @@ void Duck::TryMoveLeft() {
     motionHandler.StartMoveLeft(velocity, speedX);
     if (myFlip != Flip::Left) {
         myFlip = Flip::Left;
-        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+        TriggerEvent();
     }
 }
 
@@ -120,7 +153,7 @@ void Duck::TryMoveRight() {
     motionHandler.StartMoveRight(velocity, speedX);
     if (myFlip != Flip::Right) {
         myFlip = Flip::Right;
-        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+        TriggerEvent();
     }
 }
 
@@ -136,7 +169,7 @@ void Duck::HandleOutOfBounds(float displacement) {
     } else {
         std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
         myState = DuckState::DEAD_BY_FALLING;
-        l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip));
+        TriggerEvent();
         MarkAsDead();
     }
 }

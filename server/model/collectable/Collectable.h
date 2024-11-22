@@ -20,6 +20,7 @@ public:
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual void Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;
+    virtual void Update(float deltaTime) = 0;
 };
 
 
