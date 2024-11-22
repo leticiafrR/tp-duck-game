@@ -2,6 +2,7 @@
 #define DUCK_CLIENT_RENDERER_H
 
 #include <map>
+#include <string>
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
@@ -21,6 +22,7 @@ private:
 
     Timer damagedTimer;
     Color skinColor;
+    std::string nickname;
     bool damaged = false;
 
 public:
@@ -35,7 +37,7 @@ public:
 
     Object2D pistolSpr;
 
-    DuckClientRenderer(const Transform& transform, uint8_t colorId,
+    DuckClientRenderer(const Transform& transform, PlayerData data,
                        CameraController& camController):
             camController(camController),
             spr("base_duck.png", transform),
@@ -49,14 +51,16 @@ public:
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
         target.motion = transform.GetPos();
-        spr.SetColor(SkinColors.at(colorId));
+        spr.SetColor(SkinColors.at(data.playerSkin));
+        nickname = data.nickname;
         skinColor = spr.GetColor();
         SetEventTarget(target);
         pistolSpr.SetSourceRect(SheetDataCache::GetData("pistols.yaml")["cowboy_pistol"][0]);
         camController.AddTransform(&spr.GetTransform());
     }
 
-    Color GetSkinColor() { return skinColor; }
+    Color GetSkinColor() const { return skinColor; }
+    std::string GetNickname() const { return nickname; }
 
     void Update(float deltaTime) {
         tLerp += deltaTime * 13;
