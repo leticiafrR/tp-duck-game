@@ -130,8 +130,14 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto evMotion = assistant.receiveVector2D();
         auto evState = (DuckState)assistant.receiveNumberOneByte();
         auto evFlip = (Flip)assistant.receiveNumberOneByte();
+
+        auto booleanAsInt = assistant.receiveNumberOneByte();
+        if (booleanAsInt != 0 && booleanAsInt != 1) {
+            throw BrokenProtocol();
+        }
+        auto lookingUp = booleanAsInt == 1 ? true : false;
         // building PlayerEvent
-        updates[ID] = PlayerEvent{evMotion, evState, evFlip};
+        updates[ID] = PlayerEvent{evMotion, evState, evFlip, lookingUp};
     }
     std::vector<InstantProjectileEventDto> projectiles;
     uint8_t numberProjectile = assistant.receiveNumberOneByte();
