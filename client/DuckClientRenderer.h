@@ -56,6 +56,8 @@ public:
         camController.AddTransform(&spr.GetTransform());
     }
 
+    Color GetSkinColor() { return skinColor; }
+
     void Update(float deltaTime) {
         tLerp += deltaTime * 13;
 

@@ -44,7 +44,9 @@ target_sources(taller_client
     Gameplay.h
     ClientRunner.h
     Rate.h
-    
+    ShowColorsScreen.h
+    DuckClientRenderer.h
+
     network/bindCmmd.h
     network/ClientProtocol.h
     network/Client.h

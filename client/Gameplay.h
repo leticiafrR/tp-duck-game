@@ -20,6 +20,7 @@
 #include "MapBlock2D.h"
 #include "Object2D.h"
 #include "Rate.h"
+#include "ShowColorsScreen.h"
 
 using std::list;
 using std::map;
@@ -145,6 +146,9 @@ private:
                         case SDLK_d:
                             client.TrySendRequest(CommandCode::MoveRight_KeyUp);
                             break;
+                        case SDLK_f:
+                            client.TrySendRequest(CommandCode::UseItem_KeyUp);
+                            break;
                     }
                     break;
                 }
@@ -188,7 +192,7 @@ public:
         InitMap(mapData);
     }
 
-    void Run() {
+    void Run(bool isInitial) {
         finishing = false;
         running = true;
 
@@ -196,6 +200,11 @@ public:
                         ColorExtension::Black().SetAlpha(0), 10);
         ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 0.6f,
                                   [this]() { running = false; });
+
+        if (isInitial) {
+            // DrawGame();
+            // ShowColorsScreen().Run();
+        }
 
         camController.Reset();
         while (running) {

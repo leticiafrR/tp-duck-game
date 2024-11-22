@@ -74,7 +74,7 @@ private:
         matchEndedScreen.Run("GETTING RESULTS");
     }
 
-    void PlayRound(Client& client, MatchStartDto matchData) {
+    void PlayRound(Client& client, MatchStartDto matchData, bool isInitial) {
         shared_ptr<GameSceneDto> mapData = nullptr;
         shared_ptr<Snapshot> firstSnapshot = nullptr;
 
@@ -87,7 +87,7 @@ private:
         });
 
         laodRoundScreen.Run("LOADING...");
-        Gameplay(client, cam, rate, matchData, *mapData, *firstSnapshot).Run();
+        Gameplay(client, cam, rate, matchData, *mapData, *firstSnapshot).Run(isInitial);
     }
 
     void ErrorScreen(const string& text) {
@@ -110,12 +110,14 @@ public:
             AudioManager::GetInstance().PlayGameMusic();
             bool matchEnded = false;
 
+            bool isInitial = true;
             while (!matchEnded) {
-                PlayRound(client, matchData);
+                PlayRound(client, matchData, isInitial);
+                isInitial = false;
 
                 bool isFinalGroup = false;
                 while (!isFinalGroup) {
-                    PlayRound(client, matchData);
+                    PlayRound(client, matchData, isInitial);
                     LoadFinalGroup(client, isFinalGroup);
                 }
 
