@@ -112,6 +112,9 @@ private:
                         case SDLK_f:
                             client.TrySendRequest(CommandCode::UseItem_KeyDown);
                             break;
+                        case SDLK_w:
+                            client.TrySendRequest(CommandCode::LookUp_KeyDown);
+                            break;
                     }
                 } break;
                 case SDL_KEYUP: {
@@ -130,6 +133,9 @@ private:
                             break;
                         case SDLK_f:
                             client.TrySendRequest(CommandCode::UseItem_KeyUp);
+                            break;
+                        case SDLK_w:
+                            client.TrySendRequest(CommandCode::LookUp_KeyUp);
                             break;
                     }
                     break;
