@@ -41,7 +41,7 @@ void SenderThread::sendLoop(PlayerID_t matchID) {
     } catch (const ClosedQueue& q) {
 
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Exception in the sender thread (sendLoop): " << e.what() << std::endl;
     } catch (...) {
         std::cout << "Error. There was an unexpected exception in the sender Thread.\n";
     }
@@ -54,10 +54,10 @@ void SenderThread::kill() {
 }
 
 SenderThread::~SenderThread() {
-    try {
-        if (_is_alive) {
-            protocol.endConnection();
-            join();
-        }
-    } catch (...) {}
+    // try {
+    //     if (_is_alive) {
+    //         protocol.endConnection();
+    //         join();
+    //     }
+    // } catch (...) {}
 }

@@ -14,7 +14,7 @@ void ReceiverThread::run() {
             matchQueue->push(cmmd);
         }
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Exception in the receiver thread: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
                   << idClient << "\n";
