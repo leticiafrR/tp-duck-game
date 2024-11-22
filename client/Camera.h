@@ -41,6 +41,9 @@ public:
 
     void DrawGUI(RectTransform rect, Color color);
 
+    void DrawImageGUI(const string& filename, RectTransform rect, SDL2pp::Optional<Rect> srcRect,
+                      Color color);
+
     void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
 
     Rect RectTransformToRenderRect(RectTransform& rectTransform);
