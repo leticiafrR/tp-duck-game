@@ -114,7 +114,8 @@ public:
             if (matchID != REFRESH)
                 matches.forceEndMatch(matchID);
         } catch (const std::exception& e) {
-            std::cerr << e.what() << std::endl;
+            std::cerr << "ERROR at ServerBind to the player " << playerID << " " << e.what()
+                      << std::endl;
         } catch (...) {
             std::cout << "Error. There was an unexpected exception in the sender thread while "
                          "making the match bindng.\n";
