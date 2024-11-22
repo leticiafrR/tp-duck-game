@@ -25,9 +25,14 @@ struct PlayerEvent {
     Vector2D motion;
     DuckState stateTransition;
     Flip flipping;
+    bool isLookingUp;
 
-    PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping):
-            motion(_motion), stateTransition(_stateTransition), flipping(_flipping) {}
+    PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
+                bool _isLookingUp = false):
+            motion(_motion),
+            stateTransition(_stateTransition),
+            flipping(_flipping),
+            isLookingUp(_isLookingUp) {}
     PlayerEvent() = default;
 };
 
