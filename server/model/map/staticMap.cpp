@@ -9,8 +9,7 @@
 #include "mapConstants.h"
 enum : int { L, R, B, T };
 
-const static char filePath[] = "/home/candematelica/Documents/Taller de Programacion/Duck "
-                               "Game/tp-duck-game/server/model/map/level_1.yaml";
+const static char filePath[] = "../server/model/map/level_1.yaml";
 
 void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 
