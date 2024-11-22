@@ -1,0 +1,23 @@
+COOLDOWN:
+  - NONE: 0
+  - SHORT: 3
+  - MEDIUM: 6
+  - LONG: 9
+  - TO_EXPLOTE_GRANADA: 4
+DAMAGE:
+  - MINIMUN: 10
+  - SHORT: 12
+  - MEDIUM: 17
+  - LONG: 2
+BANANA:
+  - SCOPE: 10
+  - AMMO: 1
+GRANADA:
+  - SCOPE: 20
+  - AMMO: 1
+LASER:
+  - SCOPE: 30
+  - AMM0: 10
+PISTOLA_COWBOY:
+  - SCOPE: 20
+  - AMMO: 6

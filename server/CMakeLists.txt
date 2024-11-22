@@ -27,7 +27,6 @@ target_sources(taller_server
     model/types.h
     model/map/staticMap.h
     model/MotionHandler.h
-    model/map/mapConstants.h
     model/DynamicObj.h
     model/Duck.h
     model/Game.h
