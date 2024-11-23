@@ -8,11 +8,6 @@
 #include "data/gameScene.h"
 #include "data/snapshot.h"
 
-struct BrokenProtocol: public std::runtime_error {
-    BrokenProtocol():
-            std::runtime_error("ERROR: client perceived that the server broke the protocol!") {}
-};
-
 /*                  ---------PUBLIC METHODS---------                  */
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
@@ -31,15 +26,13 @@ uint16_t ClientProtocol::receiveLocalID() {
 std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
     if (assistant.receiveNumberOneByte() == AVAILABLE_MATCHES) {
         auto numberMatches = assistant.receiveNumberOneByte();
-        std::vector<DataMatch> matches;
-
+        std::vector<DataMatch> matches(numberMatches);
         for (uint8_t i = 0; i < numberMatches; i++) {
-            DataMatch match;
-            match.currentPlayers = assistant.receiveNumberOneByte();
-            match.maxPlayers = assistant.receiveNumberOneByte();
-            match.matchID = assistant.receiveNumberTwoBytes();
-            match.creatorNickname = assistant.receiveString();
-            matches.push_back(match);
+            auto currentPlayers = assistant.receiveNumberOneByte();
+            auto maxPlayers = assistant.receiveNumberOneByte();
+            auto matchID = assistant.receiveNumberTwoBytes();
+            auto creatorNickname = assistant.receiveString();
+            matches[i] = DataMatch{currentPlayers, maxPlayers, matchID, creatorNickname};
         }
         return std::make_shared<AvailableMatches>(AvailableMatches(matches));
     }
@@ -65,10 +58,7 @@ void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATC
 
 std::shared_ptr<ResultStartingMatch> ClientProtocol::receiveResultStarting() {
     if (assistant.receiveNumberOneByte() == RESULT_STARTING) {
-        uint8_t response = assistant.receiveNumberOneByte();
-        if (response == 1 || response == 0) {
-            return std::make_shared<ResultStartingMatch>((response == 1 ? true : false));
-        }
+        return std::make_shared<ResultStartingMatch>(assistant.receiveBooelan());
     }
     throw BrokenProtocol();
 }
@@ -168,11 +158,7 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
 }
 
 Snapshot ClientProtocol::receiveGameUpdateDto() {
-    auto gameOverCode = assistant.receiveNumberOneByte();
-    if (gameOverCode != 1 && gameOverCode != 0)
-        throw BrokenProtocol();
-    bool gameOver = gameOverCode == 1 ? true : false;
-
+    bool gameOver = assistant.receiveBooelan();
     // receiving the cont of the map player ID and position vector
     uint8_t numberUpdates = assistant.receiveNumberOneByte();
     std::unordered_map<PlayerID_t, PlayerEvent> updates((size_t)numberUpdates);
@@ -183,14 +169,11 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto evMotion = assistant.receiveVector2D();
         auto evState = (DuckState)assistant.receiveNumberOneByte();
         auto evFlip = (Flip)assistant.receiveNumberOneByte();
-
-        auto booleanAsInt = assistant.receiveNumberOneByte();
-        if (booleanAsInt != 0 && booleanAsInt != 1) {
-            throw BrokenProtocol();
-        }
-        auto lookingUp = booleanAsInt == 1 ? true : false;
+        auto lookingUp = assistant.receiveBooelan();
+        auto typeOnHand = (TypeCollectable)assistant.receiveNumberOneByte();
+        auto isCrouched = assistant.receiveBooelan();
         // building PlayerEvent
-        updates[ID] = PlayerEvent{evMotion, evState, evFlip, lookingUp};
+        updates[ID] = PlayerEvent{evMotion, evState, evFlip, lookingUp, typeOnHand, isCrouched};
     }
 
     uint8_t numberProjectile = assistant.receiveNumberOneByte();

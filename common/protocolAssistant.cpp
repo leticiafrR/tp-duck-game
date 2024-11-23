@@ -77,3 +77,16 @@ Vector2D ProtocolAssistant::receiveVector2D() {
     Vector2D vec(x, y);
     return vec;
 }
+
+void ProtocolAssistant::sendBoolean(bool value) {
+    uint8_t boolAsInt = (value ? 1 : 0);
+    sendNumber(boolAsInt);
+}
+
+bool ProtocolAssistant::receiveBooelan() {
+    auto booleanAsInt = receiveNumberOneByte();
+    if (booleanAsInt != 0 && booleanAsInt != 1) {
+        throw BrokenProtocol();
+    }
+    return (booleanAsInt == 1 ? true : false);
+}

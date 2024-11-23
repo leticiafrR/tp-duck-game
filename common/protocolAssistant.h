@@ -12,6 +12,11 @@
 #include "Vector2D.h"
 #include "socket.h"
 
+struct BrokenProtocol: public std::runtime_error {
+    BrokenProtocol():
+            std::runtime_error(
+                    "ERROR: the other point of the connection has broken the protocol!") {}
+};
 
 struct ConnectionFailed: public std::runtime_error {
     ConnectionFailed(): std::runtime_error("Connection with the other endpoint was lost") {}
@@ -57,5 +62,8 @@ public:
 
     void sendVector2D(const Vector2D& vector);
     Vector2D receiveVector2D();
+
+    void sendBoolean(bool);
+    bool receiveBooelan();
 };
 #endif
