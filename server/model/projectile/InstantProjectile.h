@@ -47,7 +47,7 @@ public:
 
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override {
         UpdateLenght(map);
-        for (auto& pair: players) {
+        for (const auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
         l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);

@@ -9,8 +9,6 @@
 #include "server/constantServer.h"
 enum : int { L, R, B, T };
 
-const static char filePath[] = "../config/levels/level_1.yaml";
-
 // void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
 
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
@@ -20,7 +18,7 @@ GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grou
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
 
-StaticMap::StaticMap() { SetTheLevel(filePath); }
+StaticMap::StaticMap(const std::string& fileName) { SetTheLevel(fileName); }
 
 
 std::optional<float> StaticMap::CheckCollisionRay(const Vector2D& rayOrigin,
@@ -119,10 +117,10 @@ void StaticMap::SetTheLevel(const std::string& filePath) {
     size.emplace_back(xSize);
     size_t ySize = config[FULL_MAP_STR][Y_STR].as<size_t>();
     size.emplace_back(ySize);
-    limits.emplace_back(-static_cast<int>(xSize) / 2);  // izquierda [0]
-    limits.emplace_back(xSize / 2);                     // derecha [1]
-    limits.emplace_back(-static_cast<int>(ySize) / 2);  // inferior [2]
-    limits.emplace_back(ySize / 2);                     // superior [3]
+    limits.emplace_back(-static_cast<int>(xSize) / HALF);  // izquierda [0]
+    limits.emplace_back(xSize / HALF);                     // derecha [1]
+    limits.emplace_back(-static_cast<int>(ySize) / HALF);  // inferior [2]
+    limits.emplace_back(ySize / HALF);                     // superior [3]
 
     auto spawnPoints = config[PLAYERS_POINTS_STR];
     for (std::size_t i = 0; i < spawnPoints.size(); ++i) {

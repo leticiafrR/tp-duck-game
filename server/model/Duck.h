@@ -3,6 +3,7 @@
 #include "collectable/Collectable.h"
 #include "common/RigidBody.h"
 #include "event/PlayerEventListener.h"
+#include "server/config.h"
 
 #include "DynamicObj.h"
 #include "Equipment.h"
@@ -11,21 +12,35 @@ class ProjectilesController;
 
 class Duck: public DynamicObject {
 private:
-    PlayerID_t id;
-    bool isShooting;  // just touched by the ones who needs key up and key down (not used as the
-                      // momment)
-    bool isCrouched;
-    bool isGrounded;
-    bool isWounded;
-    bool isLookingUp;
+    // cppcheck-suppress unusedStructMember
 
+    PlayerID_t id;
+    // cppcheck-suppress unusedStructMember
+    // cppcheck-suppress unusedStructMember
+    bool isShooting;  // just touched by the ones who needs key up and key down (not used as the
+                      // cppcheck-suppress unusedStructMember            // momment)
+    bool isLookingUp;
+    // cppcheck-suppress unusedStructMember
+    bool isCrouched;
+    // cppcheck-suppress unusedStructMember
+    bool isGrounded;
+    // cppcheck-suppress unusedStructMember
+    bool isWounded;
+    // cppcheck-suppress unusedStructMember
     MotionHandler motionHandler;
+    // cppcheck-suppress unusedStructMember
     RigidBody body;
+    // cppcheck-suppress unusedStructMember
     PlayerEventListener* l;
+    // cppcheck-suppress unusedStructMember
     Flip myFlip;
+    // cppcheck-suppress unusedStructMember
     DuckState myState;
+    // cppcheck-suppress unusedStructMember
     Collectable* itemOnHand;
+    // cppcheck-suppress unusedStructMember
     TypeCollectable typeOnHand;
+    // cppcheck-suppress unusedStructMember
     Equipment protectiveEquipment;
 
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
@@ -37,7 +52,7 @@ private:
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id,
-                  ProjectilesController& projectilesController);
+                  ProjectilesController& projectilesController, const Config& conf);
     void TryMoveLeft();
     void TryMoveRight();
     void StopMoveRight();

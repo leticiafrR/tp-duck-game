@@ -19,7 +19,6 @@ struct DataMatch {
             maxPlayers(_maxPlayers),
             matchID(_matchID),
             creatorNickname(_creatorNickname) {}
-    DataMatch() = default;
 };
 
 #endif

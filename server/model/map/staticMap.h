@@ -18,11 +18,17 @@
 
 class StaticMap {
 private:
+    // cppcheck-suppress unusedStructMember
     std::string theme;
+    // cppcheck-suppress unusedStructMember
     std::vector<size_t> size;
+    // cppcheck-suppress unusedStructMember
     std::vector<float> limits;
+    // cppcheck-suppress unusedStructMember
     std::vector<Transform> plataforms;
+    // cppcheck-suppress unusedStructMember
     std::vector<GroundDto> grounds;
+    // cppcheck-suppress unusedStructMember
     std::vector<Vector2D> playersSpawnPlaces;
 
     // void AddTransform(const Transform& obj);
@@ -32,7 +38,7 @@ private:
     void loadPlatforms(const YAML::Node& config, const std::string& platformName);
 
 public:
-    StaticMap();
+    explicit StaticMap(const std::string& fileName);
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);
