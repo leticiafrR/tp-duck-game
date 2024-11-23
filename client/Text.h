@@ -16,19 +16,14 @@ using namespace SDL2pp;  // NOLINT
 
 class Text: public GraphicUI {
 private:
-    string text;
-    string filename;
-    int fontSize;
-    Color color;
+    string text = "";
+    string filename = "pixel.ttf";
+    int fontSize = 0;
 
 public:
     Text(const string& text, int fontSize, const RectTransform& rect, Color color,
          int layerOrder = 0, const string& filename = "pixel.ttf"):
-            GraphicUI(rect, layerOrder),
-            text(text),
-            filename(filename),
-            fontSize(fontSize),
-            color(color) {
+            GraphicUI(rect, color, layerOrder), text(text), filename(filename), fontSize(fontSize) {
         SetCanTarget(false);
     }
 

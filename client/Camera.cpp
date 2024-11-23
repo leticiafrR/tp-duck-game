@@ -25,7 +25,7 @@ void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRe
     Texture& tex = textureCache.GetTexture(filename);
 
     tex.SetColorAndAlphaMod(color);
-    render.Copy(textureCache.GetTexture(filename), sourceRect,
+    render.Copy(tex, sourceRect,
                 Rect(screenX - ((sprSize.x) * screenScale) / 2,
                      screenY - ((sprSize.y) * screenScale) / 2,
                      ((sprSize.x) * screenScale) + 1,  // +1 to avoid lost of pixels
@@ -40,6 +40,14 @@ void Camera::DrawGUI(RectTransform rect, Color color) {
     render.SetDrawColor(color);
     render.FillRect(RectTransformToRenderRect(rect));
     render.SetDrawColor(tmpColor);  // Restore color
+}
+
+void Camera::DrawImageGUI(const string& filename, RectTransform rect,
+                          SDL2pp::Optional<Rect> srcRect, Color color) {
+    Texture& tex = textureCache.GetTexture(filename);
+    tex.SetColorAndAlphaMod(color);
+    render.Copy(tex, srcRect, RectTransformToRenderRect(rect));
+    tex.SetColorAndAlphaMod(Color(255, 255, 255, 255));  // Return texture color to normal
 }
 
 void Camera::DrawText(const string& text, Font& font, RectTransform rectTransform, Color color) {

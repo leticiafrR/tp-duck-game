@@ -38,6 +38,8 @@ public:
         }
     }
 
+    static Vector2D GetOrthogonal(const Vector2D& v) { return Vector2D(-v.y, v.x); }
+
     static float DotProduct(Vector2D a, Vector2D b) { return a.x * b.x + a.y * b.y; }
 
     static float AngleBetween(Vector2D a, Vector2D b) {

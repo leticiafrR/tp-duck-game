@@ -1,9 +1,9 @@
 #ifndef COLLECTABLE_H
 #define COLLECTABLE_H
 #include "common/Transform.h"
+#include "data/snapshot.h"
 
 class Duck;
-enum class TypeCollectable;
 
 class Collectable {
 protected:
@@ -20,6 +20,7 @@ public:
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual void Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;
+    virtual void Update(float deltaTime) = 0;
 };
 
 

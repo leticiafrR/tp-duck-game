@@ -2,6 +2,7 @@
 #define INSTANT_PROJECTILE_H
 #include <unordered_map>
 
+#include "../Duck.h"
 #include "../event/InstantProjectileEventListener.h"
 #include "../map/staticMap.h"
 #include "common/Vector2D.h"
@@ -19,11 +20,11 @@ private:
     InstantProjectileEventListener* l;
 
 public:
-    InstantProjectile(const Vector2D& shooterPos, const Flip& shooterFlip, float scope,
+    InstantProjectile(const Vector2D& shooterPos, const Vector2D& direction, float scope,
                       uint8_t damage, TypeProjectile type, InstantProjectileEventListener* l):
             Projectile(type),
             rayOrigin(shooterPos),
-            rayDirection((shooterFlip == Flip::Left) ? Vector2D::Left() : Vector2D::Right()),
+            rayDirection(direction),
             rayLenght(scope),
             damage(damage),
             l(l) {}

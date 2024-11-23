@@ -16,6 +16,7 @@
 #include "Definitions.h"
 #include "DuckClientRenderer.h"
 #include "GUIManager.h"
+#include "GameplayGUI.h"
 #include "Image.h"
 #include "MapBlock2D.h"
 #include "Object2D.h"
@@ -36,24 +37,30 @@ private:
     Rate rate;
     Object2D mapBg;
 
+    vector<PlayerData> playersData;
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
     vector<MapBlock2D> mapBlocks;
     list<BulletRenderer> bullets;
+
+    GameplayGUI gui;
 
     set<int> pressedKeysSet;
 
     bool running = false;
     bool finishing = true;
 
-    void InitPlayers(MatchStartDto matchData, Snapshot firstSnapshot) {
-        for (auto& playerData: matchData.playersData) {
-            if (firstSnapshot.updates.find(playerData.playerID) == firstSnapshot.updates.end())
-                continue;
-            Vector2D spawnPos = firstSnapshot.updates[playerData.playerID].motion;
+    void InitPlayers(const MatchStartDto& matchData, const Snapshot& firstSnapshot) {
+        Vector2D duckSize = matchData.duckSize;
+        playersData = matchData.playersData;
 
-            players.emplace(playerData.playerID, std::make_shared<DuckClientRenderer>(
-                                                         Transform(spawnPos, matchData.duckSize),
-                                                         playerData.playerSkin, camController));
+        for (auto& pData: playersData) {
+            if (firstSnapshot.updates.find(pData.playerID) == firstSnapshot.updates.end())
+                continue;
+            Vector2D spawnPos = firstSnapshot.updates.at(pData.playerID).motion;
+
+            players.emplace(pData.playerID,
+                            std::make_shared<DuckClientRenderer>(Transform(spawnPos, duckSize),
+                                                                 pData, camController));
         }
     }
 
@@ -73,28 +80,6 @@ private:
 
             mapBlocks[i].SetBorders(left, right, top, bottom);
         }
-    }
-
-    void DrawGame() {
-        mapBg.Draw(cam);
-
-        for (auto& it: mapBlocks) {
-            it.Draw(cam);
-        }
-
-        for (auto& it: bullets) {
-            it.Update(rate.GetDeltaTime());
-            it.Draw(cam);
-        }
-
-        for (const auto& it: players) {
-            auto data = it.second;
-            data->Update(rate.GetDeltaTime());
-            data->Draw(cam);
-        }
-
-        GUIManager::GetInstance().Draw(cam);
-        cam.Render();
     }
 
     void BulletsReapDead() {
@@ -119,16 +104,28 @@ private:
 
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
+                            std::cout << "A KeyDown\n";
                             client.TrySendRequest(CommandCode::MoveLeft_KeyDown);
                             break;
                         case SDLK_d:
+                            std::cout << "D KeyDown\n";
                             client.TrySendRequest(CommandCode::MoveRight_KeyDown);
                             break;
                         case SDLK_SPACE:
+                            std::cout << "Space KeyDown\n";
                             client.TrySendRequest(CommandCode::Jump);
                             break;
                         case SDLK_f:
+                            std::cout << "F KeyDown\n";
                             client.TrySendRequest(CommandCode::UseItem_KeyDown);
+                            break;
+                        case SDLK_w:
+                            std::cout << "W KeyDown\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyDown);
+                            break;
+                        case SDLK_s:
+                            std::cout << "S KeyDown\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyDown);
                             break;
                     }
                 } break;
@@ -141,13 +138,24 @@ private:
 
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
+                            std::cout << "A KeyUp\n";
                             client.TrySendRequest(CommandCode::MoveLeft_KeyUp);
                             break;
                         case SDLK_d:
+                            std::cout << "D KeyUp\n";
                             client.TrySendRequest(CommandCode::MoveRight_KeyUp);
                             break;
                         case SDLK_f:
+                            std::cout << "F KeyUp\n";
                             client.TrySendRequest(CommandCode::UseItem_KeyUp);
+                            break;
+                        case SDLK_w:
+                            std::cout << "W KeyUp\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyUp);
+                            break;
+                        case SDLK_s:
+                            std::cout << "S KeyUp\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyUp);
                             break;
                     }
                     break;
@@ -180,6 +188,25 @@ private:
         }
     }
 
+    void DrawGameWorld() {
+        mapBg.Draw(cam);
+
+        for (auto& it: mapBlocks) {
+            it.Draw(cam);
+        }
+
+        for (auto& it: bullets) {
+            it.Update(rate.GetDeltaTime());
+            it.Draw(cam);
+        }
+
+        for (const auto& it: players) {
+            auto data = it.second;
+            data->Update(rate.GetDeltaTime());
+            data->Draw(cam);
+        }
+    }
+
 public:
     Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
              Snapshot firstSnapshot):
@@ -187,7 +214,8 @@ public:
             cam(c),
             camController(c),
             rate(r),
-            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))) {
+            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
+            gui(GameplayGUI(ColorExtension::White(), "josValentin")) {
         InitPlayers(matchData, firstSnapshot);
         InitMap(mapData);
     }
@@ -198,15 +226,15 @@ public:
 
         Image fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
                         ColorExtension::Black().SetAlpha(0), 10);
-        ImageTween fadePanelTween(fadePanel, ColorExtension::Black(), 0.6f,
+        ImageTween fadePanelTween(fadePanel, ColorExtension::Black().SetAlpha(255), 0.6f,
                                   [this]() { running = false; });
 
+        camController.Reset();
+
         if (isInitial) {
-            // DrawGame();
-            // ShowColorsScreen().Run();
+            ShowColorsScreen(cam, rate, players).Run([this]() { DrawGameWorld(); });
         }
 
-        camController.Reset();
         while (running) {
             cam.Clean();
 
@@ -217,7 +245,10 @@ public:
             TweenManager::GetInstance().Update(rate.GetDeltaTime());
 
             BulletsReapDead();
-            DrawGame();
+            DrawGameWorld();
+            GUIManager::GetInstance().Draw(cam);
+
+            cam.Render();
 
             SDL_Delay(rate.GetMiliseconds());
         }
