@@ -104,19 +104,28 @@ private:
 
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
+                            std::cout << "A KeyDown\n";
                             client.TrySendRequest(CommandCode::MoveLeft_KeyDown);
                             break;
                         case SDLK_d:
+                            std::cout << "D KeyDown\n";
                             client.TrySendRequest(CommandCode::MoveRight_KeyDown);
                             break;
                         case SDLK_SPACE:
+                            std::cout << "Space KeyDown\n";
                             client.TrySendRequest(CommandCode::Jump);
                             break;
                         case SDLK_f:
+                            std::cout << "F KeyDown\n";
                             client.TrySendRequest(CommandCode::UseItem_KeyDown);
                             break;
                         case SDLK_w:
+                            std::cout << "W KeyDown\n";
                             client.TrySendRequest(CommandCode::LookUp_KeyDown);
+                            break;
+                        case SDLK_s:
+                            std::cout << "S KeyDown\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyDown);
                             break;
                     }
                 } break;
@@ -129,16 +138,24 @@ private:
 
                     switch (keyEvent.keysym.sym) {
                         case SDLK_a:
+                            std::cout << "A KeyUp\n";
                             client.TrySendRequest(CommandCode::MoveLeft_KeyUp);
                             break;
                         case SDLK_d:
+                            std::cout << "D KeyUp\n";
                             client.TrySendRequest(CommandCode::MoveRight_KeyUp);
                             break;
                         case SDLK_f:
+                            std::cout << "F KeyUp\n";
                             client.TrySendRequest(CommandCode::UseItem_KeyUp);
                             break;
                         case SDLK_w:
+                            std::cout << "W KeyUp\n";
                             client.TrySendRequest(CommandCode::LookUp_KeyUp);
+                            break;
+                        case SDLK_s:
+                            std::cout << "S KeyUp\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyUp);
                             break;
                     }
                     break;
