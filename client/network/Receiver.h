@@ -22,21 +22,23 @@ private:
     Sender sender;
     std::string name;
     Queue<std::optional<MatchSelection>>& matchSelections;
+    std::atomic<uint16_t>& localID;
 
 public:
     Receiver(ClientProtocol& protocol, Queue<std::shared_ptr<NetworkMsg>>& msgQueue,
              Queue<Command>& cmmdQueue, const std::string& name,
-             Queue<std::optional<MatchSelection>>& matchSelections):
+             Queue<std::optional<MatchSelection>>& matchSelections, std::atomic<uint16_t>& localID):
             protocol(protocol),
             msgQueue(msgQueue),
             sender(protocol, cmmdQueue),
             name(name),
-            matchSelections(matchSelections) {}
+            matchSelections(matchSelections),
+            localID(localID) {}
 
     void run() override {
         try {
             protocol.sendNickname(name);
-            uint16_t localID = protocol.receiveLocalID();
+            localID = protocol.receiveLocalID();
             std::cout << "[Receiver]: Got the local id: " << localID << std::endl;
 
             MatchBinder::ClientBind(localID, msgQueue, matchSelections, protocol);

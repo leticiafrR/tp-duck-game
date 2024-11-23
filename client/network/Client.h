@@ -20,18 +20,18 @@ private:
     Queue<Command> cmmdQueue;
     Queue<std::optional<MatchSelection>> matchSelections;
     Receiver* receiver;
-    // uint8_t
+    std::atomic<uint16_t> localID = 0;
 
 public:
     Client(const char* servname, const char* hostname, const std::string& name):
             protocol(std::move(Socket(hostname, servname))),
             msgQueue(),
             cmmdQueue(),
-            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, matchSelections)) {
+            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, matchSelections, localID)) {
         receiver->start();
     }
 
-    // uint8_t getLocalID()
+    uint16_t getLocalID() { return localID; }
 
     void Refresh() {
         // Empty selection to denote refresh
