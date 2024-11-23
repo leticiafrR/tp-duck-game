@@ -39,7 +39,7 @@ public:
 
     void UpdateLenght(const StaticMap& map) {
         std::optional<float> maybeNewLenght =
-                map.CheckCollisionLateralRay(rayOrigin, rayDirection, rayLenght);
+                map.CheckCollisionRay(rayOrigin, rayDirection, rayLenght);
         if (maybeNewLenght.has_value()) {
             rayLenght = maybeNewLenght.value();
         }

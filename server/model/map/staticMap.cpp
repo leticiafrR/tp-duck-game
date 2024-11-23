@@ -22,9 +22,11 @@ void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
 StaticMap::StaticMap(): theme(Theme::Forest) { SetTheLevel(filePath); }
 
-std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrigin,
-                                                         const Vector2D& rayDirection,
-                                                         float rayLenght) const {
+
+std::optional<float> StaticMap::CheckCollisionRay(const Vector2D& rayOrigin,
+                                                  const Vector2D& rayDirection,
+                                                  float rayLenght) const {
+
     auto min_it = std::min_element(
             grounds.begin(), grounds.end(),
             [&rayDirection, &rayOrigin, rayLenght](const GroundDto& a, const GroundDto& b) {
@@ -35,7 +37,7 @@ std::optional<float> StaticMap::CheckCollisionLateralRay(const Vector2D& rayOrig
     if (min_it != grounds.end()) {
         float min_distance =
                 Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, min_it->mySpace);
-        return (std::isinf(min_distance)) ? std::nullopt : std::optional<float>(min_distance);
+        return ((min_distance == rayLenght) ? std::nullopt : std::optional<float>(min_distance));
     }
     return std::nullopt;
 }

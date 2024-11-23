@@ -23,9 +23,9 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
-        // itemOnHand(new LaserRifle(projectilesController, mySpace)),
-        typeOnHand(TypeCollectable::PISTOLA_COWBOY) {}
+        // itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
+        itemOnHand(new LaserRifle(projectilesController, mySpace)),
+        typeOnHand(TypeCollectable::LASER_RIFLE) {}
 
 void Duck::TriggerEvent() {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
@@ -68,8 +68,10 @@ void Duck::StopShooting() { isShooting = false; }
 void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
-    isWounded = true;
-    DynamicObject::HandleReceiveDamage(damage);
+    if (isCrouched) {
+        isWounded = true;
+        DynamicObject::HandleReceiveDamage(damage);
+    }
 }
 
 void Duck::TryUseItem() {

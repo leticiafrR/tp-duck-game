@@ -41,8 +41,8 @@ public:
     }
 
 
-    static float RaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
-                                 float rayLenght, const Transform& candidateT) {
+    static float LateralRaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
+                                        float rayLenght, const Transform& candidateT) {
         Vector2D candidateApothem = (candidateT.GetSize() * 0.5f);
 
         float maxHeightCandidate = candidateT.GetPos().y + candidateApothem.y;
@@ -64,6 +64,56 @@ public:
         return (candidateSideX - rayOrigin.x) * rayDirection.x;
     }
 
+    static float RaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
+                                 float rayLenght, const Transform& candidateT) {
+
+        Vector2D maxLimitisCandidate = candidateT.GetPos() + candidateT.GetSize() * 0.5f;
+        Vector2D minLimitisCandidate = candidateT.GetPos() - candidateT.GetSize() * 0.5f;
+
+        Vector2D rayEnd = rayOrigin + (rayDirection * rayLenght);
+        Vector2D candidateSides;
+
+        candidateSides.x = ((rayDirection.x > 0) ? minLimitisCandidate.x : maxLimitisCandidate.x);
+        candidateSides.y = ((rayDirection.y > 0) ? minLimitisCandidate.y : maxLimitisCandidate.y);
+
+        bool possibleCollisionX =
+                ((rayDirection.x > 0) ?
+                         ((rayOrigin.x < candidateSides.x) && (rayEnd.x > candidateSides.x)) :
+                         (((rayDirection.x != 0) && rayOrigin.x > candidateSides.x) &&
+                          (rayEnd.x < candidateSides.x)));
+        bool possibleCollisionY =
+                ((rayDirection.y > 0) ?
+                         ((rayOrigin.y < candidateSides.y) && (rayEnd.y > candidateSides.y)) :
+                         (((rayDirection.y != 0) && rayOrigin.y > candidateSides.y) &&
+                          (rayEnd.y < candidateSides.y)));
+
+        Vector2D rayEndByX = rayEnd;
+        Vector2D rayEndByY = rayEnd;
+
+        if (possibleCollisionX) {
+            rayEndByX.x = candidateSides.x;
+            rayEndByX.y = rayOrigin.y +
+                          (rayDirection.y * ((candidateSides.x - rayOrigin.x) / rayDirection.x));
+
+            if (!(minLimitisCandidate.y < rayEndByX.y && rayEndByX.y < maxLimitisCandidate.y)) {
+                rayEndByX = rayOrigin + (rayDirection * rayLenght);
+            }
+        }
+
+        if (possibleCollisionY) {
+            rayEndByY.y = candidateSides.y;
+            rayEndByY.x = rayOrigin.x +
+                          (rayDirection.x * ((candidateSides.y - rayOrigin.y) / rayDirection.y));
+
+            if (!(minLimitisCandidate.x < rayEndByY.x && rayEndByY.x < maxLimitisCandidate.x)) {
+                rayEndByY = rayOrigin + (rayDirection * rayLenght);
+            }
+        }
+
+        float minRayLenght = std::min((rayEndByX - rayOrigin).GetMagnitude(),
+                                      (rayEndByY - rayOrigin).GetMagnitude());
+        return minRayLenght;
+    }
 
     static bool RectCollision(const Transform& a, const Transform& b) {
         Vector2D aMax = a.Max();

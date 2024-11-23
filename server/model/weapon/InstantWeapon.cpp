@@ -10,31 +10,40 @@ float InstantWeapon::RandomDisturbance() {
 
 InstantProjectile* InstantWeapon::Shoot(Duck* shooter) {
     Vector2D direction = shooter->GetLookVector();
-
+    if (inclination != 0) {
+        direction.Rotate(inclination);
+    }
     if (shooter->IsShooting() && dispersionRange != 0) {
         direction += (Vector2D::GetOrthogonal(direction)) * RandomDisturbance();
     }
-    return new InstantProjectile(shooter->GetTransform().GetPos(), direction, scope, damage,
-                                 typeProjectile, l);
+    return new InstantProjectile(shooter->GetTransform().GetPos(), direction.Normalized(), scope,
+                                 damage, typeProjectile, l);
 }
 
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
-                             TypeProjectile typeProjectile):
+                             TypeProjectile typeProjectile, float inclination,
+                             uint8_t projectilesPerShot):
         Weapon(projectilesController, initialSpace, ammo, typeProjectile),
         scope(scope),
         damage(damage),
         dispersionRange(dispersionRange),
         cooldown(cooldown),
         cooldownTimer(0),
+        projectilesPerShot(projectilesPerShot),
+        inclination(inclination),
         l(projectilesController.GetInstantProjectileListener()) {}
 
 
 void InstantWeapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
-        InstantProjectile* projectile = Shoot(shooter);
-        projectilesController.RelaseProjectile(projectile);
+        for (int i = 0; i < projectilesPerShot; i++) {
+            InstantProjectile* projectile =
+                    Shoot(shooter);  // la logica de disparar debe dejar la inclinaciòn preparada
+                                     // para el siguiente disparo
+            projectilesController.RelaseProjectile(projectile);
+        }
         ammo--;
         cooldownTimer = 0;
     }
