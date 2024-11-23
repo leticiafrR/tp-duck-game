@@ -29,6 +29,7 @@ private:
     bool visible = true;
 
 public:
+    Object2D() {}
     Object2D(const std::string& filename, const Transform& transform,
              Color color = Color(255, 255, 255));
 
@@ -36,8 +37,10 @@ public:
     Color GetColor();
 
     Transform& GetTransform() { return this->transform; }
+    void SetTransform(Transform transform) { this->transform = transform; }
 
     std::string& GetFileName() { return filename; }
+    void SetFileName(const std::string& filename) { this->filename = filename; }
 
     void SetSourceRect(const SDL2pp::Optional<Rect>& rect) { this->sourceRect = rect; }
     SDL2pp::Optional<Rect> GetSourceRect() { return this->sourceRect; }
@@ -50,12 +53,14 @@ public:
     void Draw(Camera& cam) {
         if (!visible)
             return;
+        if (filename.empty())
+            return;
         cam.DrawTexture(filename, sourceRect, color, transform, GetFlipSDL());
     }
 
     void SetVisible(bool visible) { this->visible = visible; }
 
-    ~Object2D();
+    virtual ~Object2D();
 
     Object2D(const Object2D&) = default;
     Object2D& operator=(const Object2D&) = default;

@@ -17,7 +17,7 @@ private:
 
 public:
     BulletRenderer(Vector2D origin, Vector2D end, float speed = 10, Vector2D size = Vector2D(1, 1)):
-            spr("machine_guns.png", Transform(origin + (end - origin).Normalized() * 2, size)),
+            spr("machine_guns.png", Transform(origin, size)),
             origin(origin),
             end(end),
             speed(speed),

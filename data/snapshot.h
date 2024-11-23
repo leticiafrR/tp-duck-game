@@ -30,6 +30,8 @@ struct PlayerEvent {
     TypeCollectable typeOnHand;
     bool isCrouched;
 
+    PlayerEvent() = default;
+
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
                 bool _isLookingUp):
             motion(_motion),
@@ -64,6 +66,7 @@ struct InstantProjectileEventDto {
     Vector2D origin;
     Vector2D end;
 
+    InstantProjectileEventDto() = default;
     InstantProjectileEventDto(TypeProjectile type, const Vector2D& origin, const Vector2D& end):
             type(type), origin(origin), end(end) {}
 };
