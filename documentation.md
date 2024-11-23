@@ -62,7 +62,7 @@ Si ya estás en el directorio build, simplemente ejecuta:
   * Espaciadora: Saltar.
 * A continuación se irán repitiendo games hasta que haya un jugador ganador de toda la partida según el criterio establecido por la cátedra.
 
-## Requerimientos faltantes  a fecha 19/11/24
+## Requerimientos faltantes  a fecha 23/11/24
 
 * Falta incluir en el modelo del mundo en el juego las cajas y los spawn places para las armas/armaduras/cascos (items colectables), por lo cual los patos no pueden recoger/dejar items de/en el mundo del juego, entonces inicialmente ya tienen una arma en la mano (pistola cowboy).
 * Falta las funcionalidades de tirarse al suelo y aletear. 
