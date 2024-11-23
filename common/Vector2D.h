@@ -76,7 +76,18 @@ public:
 
     Vector2D Normalized() {
         float magnitude = GetMagnitude();
+        if (magnitude == 0) {
+            return Vector2D::Zero();
+        }
         return Vector2D(x / magnitude, y / magnitude);
+    }
+
+    void Rotate(float angle) {
+        float angleRadian = angle * M_PI / 180.0f;
+        float oldX = x;
+        float oldY = y;
+        x = oldX * std::cos(angleRadian) - oldY * std::sin(angleRadian);
+        y = oldX * std::sin(angleRadian) + oldY * std::cos(angleRadian);
     }
 
     std::string ToString() const {
