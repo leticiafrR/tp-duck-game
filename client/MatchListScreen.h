@@ -156,6 +156,7 @@ public:
                                     Vector2D(0.5, 0.5)),
                       ColorExtension::White(), 4),
             createButton(
+                    "button_1.png",
                     RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                                   Vector2D(0.5, 0.5)),
                     [this]() { this->OnCreatePressed(); }, Color(40, 40, 40), 4),
@@ -168,6 +169,7 @@ public:
                                         Vector2D(0.5, 0.5)),
                           ColorExtension::White(), 4),
             refreshButton(
+                    "button_1.png",
                     RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
                                   Vector2D(0.5, 0.5)),
                     [this]() { this->OnRefreshPressed(); }, Color(40, 40, 40), 4),

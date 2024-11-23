@@ -1,6 +1,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include <string>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -23,6 +25,8 @@ private:
 public:
     Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255),
            int layerOrder = 0);
+    Button(const std::string& filename, RectTransform rect, Callback onClick,
+           Color color = Color(255, 255, 255), int layerOrder = 0);
     ~Button();
 
     static bool IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam);
