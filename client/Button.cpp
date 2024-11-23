@@ -13,6 +13,18 @@ Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder
         interactable(true) {
     ButtonsManager::GetInstance().AddButton(this);
 }
+
+Button::Button(const std::string& filename, RectTransform rect, Callback onClick, Color color,
+               int layerOrder):
+        Image(filename, rect, color, layerOrder),
+        onClick(onClick),
+        normalColor(color),
+        pressedColor(ColorExtension::AddValue(color, -50)),
+        disabledColor(color.SetAlpha(120)),
+        interactable(true) {
+    ButtonsManager::GetInstance().AddButton(this);
+}
+
 Button::~Button() { ButtonsManager::GetInstance().RemoveButton(this); }
 
 bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam) {

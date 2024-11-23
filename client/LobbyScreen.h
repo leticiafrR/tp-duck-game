@@ -43,6 +43,7 @@ public:
     std::shared_ptr<MatchStartDto> Render() {
         running = true;
         Button startButton(
+                "button_1.png",
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this, &startButton]() {

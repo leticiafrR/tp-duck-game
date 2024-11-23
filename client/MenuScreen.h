@@ -22,8 +22,11 @@ private:
     Camera& cam;
     Rate rate;
 
-    Text titleShadow;
-    Text titleText;
+    Image bgImage;
+    Image logoImage;
+
+    Image inputBgImage;
+
     Text nicknamePlaceHolderText;
 
     Text nicknameText;
@@ -77,23 +80,20 @@ public:
     MenuScreen(Camera& c, const Rate& r):
             cam(c),
             rate(r),
-            titleShadow("DUCK GAME", 160,
-                        RectTransform(Transform(Vector2D(3, 157), Vector2D(500, 160)),
-                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                        ColorExtension::Black()),
-            titleText("DUCK GAME", 160,
-                      RectTransform(Transform(Vector2D(0, 160), Vector2D(500, 160)),
-                                    Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                      ColorExtension::White()),
+            bgImage("duck_game_bg.jpg", RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
+            logoImage("duck_game_logo.png", RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
+            inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),
+                         ColorExtension::Black().SetAlpha(80)),
             nicknamePlaceHolderText("Write your nickname", 50,
-                                    RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
+                                    RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)),
                                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                                     ColorExtension::White().SetAlpha(120)),
             nicknameText("", 50,
-                         RectTransform(Transform(Vector2D(0, 0), Vector2D(800, 80)),
+                         RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)),
                                        Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                          ColorExtension::White()),
             startButton(
+                    "button_1.png",
                     RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)),
                                   Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                     [this]() {
