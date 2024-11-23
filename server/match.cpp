@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <set>
+#include <string>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -44,26 +45,25 @@ std::shared_ptr<Queue<Command>> Match::logInClient(
 
     if (matchStatus != WAITING_PLAYERS) {
         eCode = E_CODE::ALREADY_STARTED;
-        std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-                  << " a la match " << matchHost << " pero ya inciò\n";
+        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
+        //           << " a la match " << matchHost << " pero ya inciò\n";
         return nullptr;
     }
     if ((config.getMaxPlayers() - currentPlayers) == 0) {
         eCode = E_CODE::NOT_ENOUGH_SPOTS;
-        std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-                  << " a la match " << matchHost << " pero no habian suficientes spots\n";
+        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
+        //           << " a la match " << matchHost << " pero no habian suficientes spots\n";
         return nullptr;
     }
     clientsQueues.tryInsert(connectionInfo.connectionId, clientQueue);
     playersPerClient.tryInsert(connectionInfo.connectionId, connectionInfo);
     currentPlayers += connectionInfo.playersPerConnection;
-    std::cout << "se logear la conexiòn " << connectionInfo.connectionId << " a la match "
-              << matchHost << "! se retronò al monitor el puntero a la queue de esta match\n";
+    // std::cout << "se logear la conexiòn " << connectionInfo.connectionId << " a la match "
+    //           << matchHost << "! se retronò al monitor el puntero a la queue de esta match\n";
 
     return matchQueue;
 }
 
-// DEBE ACTUALIZAR CURRENT PLAYERS
 void Match::logOutClient(uint16_t connectionID) {
     clientsQueues.tryErase(connectionID);
 
@@ -162,9 +162,15 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
                     std::advance(it, randomIndex);
 
                     PlayerID_t playerID = PlayerIdentifier::GeneratePlayerID(connectionID, i);
-                    std::stringstream nickname;
-                    nickname << clientInfo.baseNickname << "(" << (int)i << ")";
-                    assignation.emplace_back(playerID, *it, nickname.str());
+                    std::string nickname;
+                    if (i != 0) {
+                        std::stringstream nicknameCmp;
+                        nicknameCmp << clientInfo.baseNickname << "(" << (int)(i + 1) << ")";
+                        nickname = nicknameCmp.str();
+                    } else {
+                        nickname = clientInfo.baseNickname;
+                    }
+                    assignation.emplace_back(playerID, *it, nickname);
                     availableSkins.erase(it);
                 }
             });

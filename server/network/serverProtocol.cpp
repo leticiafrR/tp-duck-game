@@ -1,10 +1,4 @@
 #include "serverProtocol.h"
-
-struct BrokenProtocol: public std::runtime_error {
-    BrokenProtocol():
-            std::runtime_error("Error: server perceived that the client broke the protocol!") {}
-};
-
 /*                  ---------PUBLIC METHODS---------                  */
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
@@ -60,8 +54,7 @@ void ServerProtocol::receiveStartMatchIntention() {
 
 void ServerProtocol::sendStartMatchResult(bool success) {
     assistant.sendNumber(RESULT_STARTING);
-    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(response);
+    assistant.sendBoolean(success);
 }
 
 void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) {
@@ -133,8 +126,7 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
 
 void ServerProtocol::sendGameEndingStatus(bool finalGroupGame) {
     assistant.sendNumber(GAME_ENDING);
-    uint8_t response = finalGroupGame ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(response);
+    assistant.sendBoolean(finalGroupGame);
 }
 
 Command ServerProtocol::receiveCommand() {
@@ -149,14 +141,9 @@ Command ServerProtocol::receiveCommand() {
 
 void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(SNAPSHOT);
-
-    uint8_t gameOver = snapshot.gameOver ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(gameOver);
-
+    assistant.sendBoolean(snapshot.gameOver);
     // sending the cont of the map player ID and position vector
-    uint8_t numberElements = (uint8_t)snapshot.updates.size();
-    assistant.sendNumber(numberElements);
-
+    assistant.sendNumber((uint8_t)snapshot.updates.size());
     for (auto it = snapshot.updates.begin(); it != snapshot.updates.end(); ++it) {
         // playerID
         assistant.sendNumber(it->first);
@@ -164,7 +151,9 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendVector2D(it->second.motion);
         assistant.sendNumber((uint8_t)it->second.stateTransition);
         assistant.sendNumber((uint8_t)it->second.flipping);
-        assistant.sendNumber((uint8_t)(it->second.isLookingUp ? 1 : 0));
+        assistant.sendBoolean(it->second.isLookingUp);
+        assistant.sendNumber((uint8_t)it->second.typeOnHand);
+        assistant.sendBoolean(it->second.isCrouched);
     }
     uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
     assistant.sendNumber(numberProjectiles);
@@ -179,11 +168,8 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
     assistant.sendNumber(GAMES_RECOUNT);
-
-    uint8_t matchEnded = gamesRecount.matchEnded ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(matchEnded);
-    uint8_t numberElements = (uint8_t)gamesRecount.results.size();
-    assistant.sendNumber(numberElements);
+    assistant.sendBoolean(gamesRecount.matchEnded);
+    assistant.sendNumber((uint8_t)gamesRecount.results.size());
     for (auto it = gamesRecount.results.begin(); it != gamesRecount.results.end(); ++it) {
         assistant.sendNumber(it->first);
         assistant.sendNumber((uint8_t)it->second);
