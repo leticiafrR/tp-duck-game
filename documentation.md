@@ -65,13 +65,14 @@ Si ya estás en el directorio build, simplemente ejecuta:
 ## Requerimientos faltantes  a fecha 19/11/24
 
 * Falta incluir en el modelo del mundo en el juego las cajas y los spawn places para las armas/armaduras/cascos (items colectables), por lo cual los patos no pueden recoger/dejar items de/en el mundo del juego, entonces inicialmente ya tienen una arma en la mano (pistola cowboy).
-* Falta las funcionalidades de mirar arriba, tirarse al suelo y aletear. 
+* Falta las funcionalidades de tirarse al suelo y aletear. 
 
-* Falta mostrar las asignaciones de los colores del pato de cada jugador al iniciar la partida, mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante, además de soportar 2 jugadores en la misma máquina.
+* Falta mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante.
 
 * No se incluyó nada relativo al editor de niveles, cheats ni Unit tests.
 
 ## ¿Qué sabemos de antemano que está mal?
 * El cierre ordenado del sevridor.
-* El reap ended matches. 
+* El cierre ordenado del cliente frente a la desconexión del  servidor.
 * Frente a la desconexión de un jugador partície de una partida ya iniciada no se está sacando del modelo al duck del mismo.
+
