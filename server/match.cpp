@@ -44,15 +44,21 @@ std::shared_ptr<Queue<Command>> Match::logInClient(
 
     if (matchStatus != WAITING_PLAYERS) {
         eCode = E_CODE::ALREADY_STARTED;
+        std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
+                  << " a la match " << matchHost << " pero ya inciò\n";
         return nullptr;
     }
     if ((config.getMaxPlayers() - currentPlayers) == 0) {
         eCode = E_CODE::NOT_ENOUGH_SPOTS;
+        std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
+                  << " a la match " << matchHost << " pero no habian suficientes spots\n";
         return nullptr;
     }
     clientsQueues.tryInsert(connectionInfo.connectionId, clientQueue);
     playersPerClient.tryInsert(connectionInfo.connectionId, connectionInfo);
     currentPlayers += connectionInfo.playersPerConnection;
+    std::cout << "se logear la conexiòn " << connectionInfo.connectionId << " a la match "
+              << matchHost << "! se retronò al monitor el puntero a la queue de esta match\n";
 
     return matchQueue;
 }

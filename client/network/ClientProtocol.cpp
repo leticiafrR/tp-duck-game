@@ -37,7 +37,7 @@ std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
             DataMatch match;
             match.currentPlayers = assistant.receiveNumberOneByte();
             match.maxPlayers = assistant.receiveNumberOneByte();
-            match.matchID = assistant.receiveNumberFourBytes();
+            match.matchID = assistant.receiveNumberTwoBytes();
             match.creatorNickname = assistant.receiveString();
             matches.push_back(match);
         }
