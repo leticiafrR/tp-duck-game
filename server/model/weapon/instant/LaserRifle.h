@@ -21,6 +21,7 @@ public:
         // genera disparos continuos
         InstantWeapon::Use(shooter);
         shooter->StartShooting();
+        shooter->ApplyRecoil(5);
     }
 };
 

@@ -11,7 +11,11 @@ float InstantWeapon::RandomDisturbance() {
 InstantProjectile* InstantWeapon::Shoot(Duck* shooter) {
     Vector2D direction = shooter->GetLookVector();
     if (inclination != 0) {
-        direction.Rotate(inclination);
+        if (shooter->GetFlip() == Flip::Left) {
+            direction.Rotate(-inclination);
+        } else {
+            direction.Rotate(inclination);
+        }
     }
     if (shooter->IsShooting() && dispersionRange != 0) {
         direction += (Vector2D::GetOrthogonal(direction)) * RandomDisturbance();

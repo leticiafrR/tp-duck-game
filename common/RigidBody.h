@@ -28,7 +28,7 @@ public:
         ApplyForce(Vector2D::Down() * GRAVITY * mass * deltaTime);  // Gravity
 
         if (velocity.GetMagnitude() > 0)
-            velocity += (velocity.Normalized() * -0.1f * deltaTime);  // Friction
+            velocity.x += (velocity.Normalized() * -200 * deltaTime).x;  // Friction
 
         sourceT.Move(velocity * deltaTime);  // Movement update
     }

@@ -59,6 +59,7 @@ public:
     void HandleReceiveDamage(uint8_t damage) override;
 
     void ApplyGravity(StaticMap& map, float deltaTime) override;
+    void ApplyRecoil(float intensity);
 
     void RegistListener(PlayerEventListener* listener);
     void Update(StaticMap& map, float deltaTime);

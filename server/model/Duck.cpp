@@ -86,6 +86,9 @@ void Duck::StopUseItem() {
     }
 }
 
+void Duck::ApplyRecoil(float intensity) {
+    body.ApplyForce(((myFlip == Flip::Left) ? Vector2D::Right() : Vector2D::Left()) * intensity);
+}
 
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
