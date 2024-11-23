@@ -14,7 +14,7 @@ Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder
     ButtonsManager::GetInstance().AddButton(this);
 }
 
-Button::Button(const std::string filename, RectTransform rect, Callback onClick, Color color,
+Button::Button(const std::string& filename, RectTransform rect, Callback onClick, Color color,
                int layerOrder):
         Image(filename, rect, color, layerOrder),
         onClick(onClick),
