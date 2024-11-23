@@ -28,7 +28,8 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         typeOnHand(TypeCollectable::PISTOLA_COWBOY) {}
 
 void Duck::TriggerEvent() {
-    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand));
+    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
+                                      isCrouched));
 }
 
 const Flip& Duck::GetFlip() const { return myFlip; }
@@ -45,7 +46,22 @@ void Duck::LookUp() {
     isLookingUp = true;
     TriggerEvent();
 }
-void Duck::StopLookUp() { isLookingUp = false; }
+
+void Duck::StopLookUp() {
+    isLookingUp = false;
+    TriggerEvent();
+}
+
+// it is supposed to doesn let you make a move
+void Duck::Crouch() {
+    isCrouched = true;
+    TriggerEvent();
+}
+
+void Duck::StopCrouch() {
+    isCrouched = false;
+    TriggerEvent();
+}
 
 void Duck::StopShooting() { isShooting = false; }
 

@@ -1,28 +1,29 @@
 #ifndef EQUIPMENT_H
 #define EQUIPMENT_H
-#include "types.h"
+
+#include "data/snapshot.h"
 class Equipment {
 private:
     TypeCollectable armor;
     TypeCollectable helmet;
 
 public:
-    Equipment(): armor(TypeCollectable::Empty), helmet(TypeCollectable::Empty) {}
+    Equipment(): armor(TypeCollectable::EMPTY), helmet(TypeCollectable::EMPTY) {}
     bool TryEquip(TypeCollectable& item) {
 
-        if (item == TypeCollectable::Armor && !HasArmor()) {
+        if (item == TypeCollectable::ARMOR && !HasArmor()) {
             armor = item;
-            item = TypeCollectable::Empty;
+            item = TypeCollectable::EMPTY;
             return true;
         }
-        if (item == TypeCollectable::Helmet && !HasHelmet()) {
+        if (item == TypeCollectable::HELMET && !HasHelmet()) {
             helmet = item;
-            item = TypeCollectable::Empty;
+            item = TypeCollectable::EMPTY;
             return true;
         }
         return false;
     }
-    bool HasArmor() { return (armor != TypeCollectable::Empty); }
-    bool HasHelmet() { return (helmet != TypeCollectable::Empty); }
+    bool HasArmor() { return (armor != TypeCollectable::EMPTY); }
+    bool HasHelmet() { return (helmet != TypeCollectable::EMPTY); }
 };
 #endif

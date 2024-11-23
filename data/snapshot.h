@@ -28,6 +28,7 @@ struct PlayerEvent {
     Flip flipping;
     bool isLookingUp;
     TypeCollectable typeOnHand;
+    bool isCrouched;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
                 bool _isLookingUp):
@@ -35,15 +36,17 @@ struct PlayerEvent {
             stateTransition(_stateTransition),
             flipping(_flipping),
             isLookingUp(_isLookingUp),
-            typeOnHand(TypeCollectable::EMPTY) {}
+            typeOnHand(TypeCollectable::EMPTY),
+            isCrouched(false) {}
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
-                bool _isLookingUp, TypeCollectable _typeOnHand):
+                bool _isLookingUp, TypeCollectable _typeOnHand, bool _isCrouched):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),
             isLookingUp(_isLookingUp),
-            typeOnHand(_typeOnHand) {}
+            typeOnHand(_typeOnHand),
+            isCrouched(_isCrouched) {}
     PlayerEvent() = default;
 };
 

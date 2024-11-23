@@ -5,6 +5,7 @@
 #include "event/PlayerEventListener.h"
 
 #include "DynamicObj.h"
+#include "Equipment.h"
 #include "MotionHandler.h"
 class ProjectilesController;
 
@@ -23,9 +24,10 @@ private:
     PlayerEventListener* l;
     Flip myFlip;
     DuckState myState;
-    // DamageState damageState;
     Collectable* itemOnHand;
     TypeCollectable typeOnHand;
+    Equipment protectiveEquipment;
+
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     DuckState GetLowerPriorityState();
     void UpdateState();
@@ -48,8 +50,8 @@ public:
     void LookUp();
     void StopLookUp();
 
-    // void Crouch();
-    // void StopCrouch();
+    void Crouch();
+    void StopCrouch();
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;

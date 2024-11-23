@@ -34,10 +34,10 @@ target_sources(taller_server
     model/event/EventsManager.h
     model/event/PlayerEventListener.h
     model/event/InstantProjectileEventListener.h
-    # model/Equipment.h
+    model/Equipment.h
     # model/collectable/CollectablesController.h
     # model/collectable/Protection.h
-    # model/collectable/Collectable.h
+    model/collectable/Collectable.h
     model/weapon/Weapon.h
     model/weapon/InstantWeapon.h
     model/weapon/instant/PistolaCowboy.h
