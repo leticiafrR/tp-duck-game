@@ -74,7 +74,8 @@ public:
         }
         anim.Update(deltaTime);
 
-        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.4f);
+        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.4f +
+                                        (Vector2D::Up() * (target.isLookingUp ? 0.6f : 0)));
         pistolSpr.SetFlip(spr.GetFlip());
     }
 
@@ -138,6 +139,12 @@ public:
                 break;
         }
         spr.SetFlip(target.flipping == Flip::Left);
+
+        if (newTarget.isLookingUp) {
+            pistolSpr.GetTransform().SetAngle(target.flipping == Flip::Left ? -90 : 90);
+        } else {
+            pistolSpr.GetTransform().SetAngle(0);
+        }
     }
 
     ~DuckClientRenderer() {}
