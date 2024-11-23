@@ -24,14 +24,10 @@ GamesHandler::GamesHandler(const Config& config,
         matchStatus(matchStatus),
         currentPlayers(currentPlayers),
         config(config) {
-
-    playersPerClient.applyToItems([&playerPointsRecord = this->playerPointsRecord](
-                                          uint16_t baseID, const ClientInfo& infoConnection) {
-        for (uint8_t i = 0; i < infoConnection.playersPerConnection; i++) {
-            PlayerID_t playerID = PlayerIdentifier::GeneratePlayerID(baseID, i);
-            playerPointsRecord[playerID] = 0;
-        }
-    });
+    auto playerIDs = players.getKeys();
+    for (auto& id: playerIDs) {
+        playerPointsRecord[id] = 0;
+    }
 }
 
 PlayerID_t GamesHandler::whoWon() { return matchWinner; }
@@ -84,7 +80,8 @@ void GamesHandler::playOneGame() {
         }
     });
     checkNumberPlayers();
-    currentGame.emplace(playersIDs, getRandomLevel());
+    // can take out the first argument
+    currentGame.emplace(playerIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
     gameLoop();
     registerGameWinnerPoint();

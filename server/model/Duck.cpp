@@ -6,27 +6,27 @@
 #include "weapon/instant/LaserRifle.h"
 #include "weapon/instant/PistolaCowboy.h"
 
-#include "types.h"
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
-Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController):
-        DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK)),
-                      Life::DUCK),
+Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController,
+           const Config& conf):
+        DynamicObject(conf.getDuckSpeed(),
+                      Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize())),
+                      conf.getDuckLife()),
         id(id),
         isShooting(false),
+        isLookingUp(false),
         isCrouched(false),
         isGrounded(true),
         isWounded(false),
-        isLookingUp(false),
-        body(mySpace, Mass::DUCK),
+        body(mySpace, conf.getDuckMass()),
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
+        itemOnHand(new PistolaCowboy(projectilesController, mySpace, conf)),
         // itemOnHand(new LaserRifle(projectilesController, mySpace)),
-        typeOnHand(TypeCollectable::PISTOLA_COWBOY) {}
-
+        typeOnHand(conf.getLaserRifleCollectableType()) {}
 void Duck::TriggerEvent() {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
                                       isCrouched));

@@ -8,14 +8,14 @@ class LaserRifle: public InstantWeapon {
     // proyectiles
 
 public:
-    LaserRifle(ProjectilesController& controller, const Transform& initialSpace):
-            InstantWeapon(controller, initialSpace, Scope::LASER_RIFLE, Ammo::LASER_RIFLE,
-                          Damage::MEDIUM, DispersionRange::SHORT, Cooldown::BASIC,
-                          TypeProjectile::RayoLaser) {}
+    LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
+               const Config& conf):
+            InstantWeapon(controller, initialSpace, conf.getLaserRifleScope(),
+                          conf.getLaserRifleAmmo(), conf.getDamageMedium(),
+                          conf.getShortDispersion(), conf.getCooldownBasic(),
+                          conf.getLaserProjectileType(), conf.getLaserRifleCollectableType()) {}
 
-    void BeCollected(TypeCollectable& collectorTypeRef) override {
-        collectorTypeRef = TypeCollectable::LASER_RIFLE;
-    }
+    void BeCollected(TypeCollectable& collectorTypeRef) override { collectorTypeRef = type; }
 
     void Use(Duck* shooter) override {
         // genera disparos continuos

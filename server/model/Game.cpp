@@ -2,11 +2,12 @@
 
 #include "data/command.h"
 
-GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName):
-        livePlayers(playersIds.size()) {
+GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName,
+                     const Config& conf):
+        livePlayers(playersIds.size()), map(sceneName) {
     eventsManager.SendInstantProjectileListener(p);
     std::cout << "welcom to " << sceneName << std::endl;
-    CreatePlayers(playersIds);
+    CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
 }
 
@@ -17,10 +18,11 @@ GameWorld::~GameWorld() {
     players.clear();
 }
 
-void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds) {
+void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const Config& conf) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
-        players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], p);
+        std::cout << "CreatPlayers" << std::endl;
+        players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], p, conf);
     }
 }
 

@@ -21,14 +21,15 @@ InstantProjectile* InstantWeapon::Shoot(Duck* shooter) {
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
-                             TypeProjectile typeProjectile):
+                             TypeProjectile typeProjectile, TypeCollectable type):
         Weapon(projectilesController, initialSpace, ammo, typeProjectile),
         scope(scope),
         damage(damage),
         dispersionRange(dispersionRange),
         cooldown(cooldown),
         cooldownTimer(0),
-        l(projectilesController.GetInstantProjectileListener()) {}
+        l(projectilesController.GetInstantProjectileListener()),
+        type(type) {}
 
 
 void InstantWeapon::Use(Duck* shooter) {

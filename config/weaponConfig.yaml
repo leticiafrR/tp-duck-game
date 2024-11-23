@@ -1,0 +1,55 @@
+collectable_types:
+  empty: 0
+  cowboy_pistol: 1
+  laser_rifle: 2
+  helmet: 3
+  armor: 4
+  granada: 5
+  banana: 6
+  ak47: 7
+  dueling_pistol: 8
+  magnum: 9
+  shotgun: 10
+  sniper: 11
+
+projectiles_types:
+  laser: 0
+  bullet: 1
+  banana: 2
+  granada_fragment: 3
+
+cooldown:
+  none: 0
+  basic: 0.3
+  short: 1
+  medium: 2.5
+  long: 7.5
+  to_explote_granada: 4
+
+damage:
+  minimun: 10
+  short: 12
+  medium: 17
+  long: 20
+  
+dispersion:
+  no_dispersion: 0
+  long: 0.4
+  short: 0.15
+banana:
+  scope: 10
+  ammo: 1
+
+granada:
+  scope: 20
+  ammo: 1
+
+laser_rifle:
+  scope: 30
+  ammo: 10
+
+cowboy_pistol:
+  scope: 20
+  ammo: 6
+
+
