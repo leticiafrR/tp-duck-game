@@ -69,7 +69,7 @@ public:
         spr.GetTransform().SetPos(pos);
 
         if (damaged) {
-            anim.SetTarget("take_damage");
+            anim.SetTarget("damaged");
             damagedTimer.Update(deltaTime);
         }
         anim.Update(deltaTime);
