@@ -23,7 +23,8 @@ constexpr uint8_t LONG = 20;
 namespace Scope {
 constexpr float GRANADA = 20;
 constexpr float BANANA = 10;
-constexpr float LASER_RIFLE = 30;
+// constexpr float LASER_RIFLE = 30;
+constexpr float LASER_RIFLE = 20;
 constexpr float PISTOLA_COWBOY = 20;
 //...
 }  // namespace Scope
@@ -31,7 +32,8 @@ constexpr float PISTOLA_COWBOY = 20;
 namespace Ammo {
 constexpr uint8_t GRANADA = 1;
 constexpr uint16_t BANANA = 1;
-constexpr uint16_t LASER_RIFLE = 10;
+// constexpr uint16_t LASER_RIFLE = 10;
+constexpr uint16_t LASER_RIFLE = 100;
 constexpr uint16_t PISTOLA_COWBOY = 6;
 //...
 }  // namespace Ammo
@@ -57,6 +59,13 @@ constexpr float NO_DISPERSION = 0;
 constexpr float LONG = 0.4;
 constexpr float SHORT = 0.15;
 }  // namespace DispersionRange
+namespace ShootingInclination {
+constexpr float BASIC_NO_INCLINATION = 0;
+constexpr float LASER_RIFLE = -45;
+}  // namespace ShootingInclination
+namespace ProjectilesPerShot {
+constexpr float BASIC_ONE_SHOT = 1;
 
+}
 
 #endif
