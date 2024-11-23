@@ -53,9 +53,9 @@ public:
                     startButton.SetInteractable(false);
                     std::cout << "Start match!\n";
                     LoadingScreen loading(cam, rate, [this, &startSuccess]() {
-                        std::shared_ptr<ResultJoining> joinResult = nullptr;
-                        if (GetServerMsg(client, joinResult)) {
-                            startSuccess = joinResult->joined;
+                        std::shared_ptr<ResultStartingMatch> startResult = nullptr;
+                        if (GetServerMsg(client, startResult)) {
+                            startSuccess = startResult->success;
                             return true;
                         }
                         return false;

@@ -20,6 +20,7 @@ private:
     Queue<Command> cmmdQueue;
     Queue<std::optional<MatchSelection>> matchSelections;
     Receiver* receiver;
+    // uint8_t
 
 public:
     Client(const char* servname, const char* hostname, const std::string& name):
@@ -30,17 +31,19 @@ public:
         receiver->start();
     }
 
+    // uint8_t getLocalID()
+
     void Refresh() {
         // Empty selection to denote refresh
         std::optional<MatchSelection> selection{};
         matchSelections.try_push(selection);
     }
-    void SelectMatch(uint16_t matchID, uint8_t playersPerConnection) {
+    void SelectMatch(uint16_t matchID, uint8_t playersPerConnection = 1) {
         std::optional<MatchSelection> selection = MatchSelection(matchID, playersPerConnection);
         matchSelections.try_push(selection);
     }
 
-    void CreateMatch(uint8_t playersPerConnection) {
+    void CreateMatch(uint8_t playersPerConnection = 1) {
         std::optional<MatchSelection> createSelection = MatchSelection(0, playersPerConnection);
         matchSelections.try_push(createSelection);
     }
@@ -50,8 +53,10 @@ public:
         matchSelections.try_push(itentionStart);
     }
 
-
-    bool TrySendRequest(const Command& cmmd) { return cmmdQueue.try_push(cmmd); }
+    bool TrySendRequest(CommandCode code, uint8_t indexLocalPlayer = 0) {
+        Command command(code, indexLocalPlayer);
+        return cmmdQueue.try_push(command);
+    }
 
     template <typename NetworkMsgDerivedClass>
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsgDerivedClass>& concretMsg) {

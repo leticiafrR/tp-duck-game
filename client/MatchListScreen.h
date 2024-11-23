@@ -60,7 +60,7 @@ private:
         LoadingScreen loading(cam, rate, [this, &createSuccess]() {
             std::shared_ptr<ResultJoining> joinResult = nullptr;
             if (client.TryRecvNetworkMsg(joinResult)) {
-                createSuccess = joinResult->joined;
+                createSuccess = joinResult->eCode == 0;
                 return true;
             }
             return false;
@@ -81,7 +81,7 @@ private:
         LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
             std::shared_ptr<ResultJoining> joinResult = nullptr;
             if (client.TryRecvNetworkMsg(joinResult)) {
-                joinSuccess = joinResult->joined;
+                joinSuccess = joinResult->eCode == 0;
                 return true;
             }
             return false;

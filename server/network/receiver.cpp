@@ -16,7 +16,7 @@ void ReceiverThread::run() {
         while (_keep_running) {
             Command cmmd = protocol.receiveCommand();
             if (cmmd.indexLocalPlayer < playersPerConnection) {
-                cmmd.playerID = PlayerIdentifier::GeneratePlayerID(clientID, cmmd.indexLocalPlayer);
+                cmmd.playerId = PlayerIdentifier::GeneratePlayerID(clientID, cmmd.indexLocalPlayer);
                 matchQueue->push(cmmd);
             } else {
                 std::cout << "Receiver Warning: The connection " << clientID

@@ -27,9 +27,9 @@ struct Command {
     CommandCode code;
     uint8_t indexLocalPlayer;  // 0 hasta  n-1
     // will  be seted by the server
-    PlayerID_t playerID;
+    PlayerID_t playerId;
     explicit Command(CommandCode _code, uint8_t _indexLocalPlayer, PlayerID_t _playerID = 0):
-            code(_code), indexLocalPlayer(_indexLocalPlayer), playerID(_playerID) {}
+            code(_code), indexLocalPlayer(_indexLocalPlayer), playerId(_playerID) {}
     Command() = default;
 };
 

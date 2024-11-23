@@ -67,6 +67,7 @@ struct InstantProjectileEventDto {
 
     InstantProjectileEventDto(TypeProjectile type, const Vector2D& origin, const Vector2D& end):
             type(type), origin(origin), end(end) {}
+    InstantProjectileEventDto() = default;
 };
 
 struct Snapshot: public NetworkMsg {

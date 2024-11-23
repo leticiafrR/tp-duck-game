@@ -47,7 +47,7 @@ void GameWorld::ReapDead() {
 
 void GameWorld::HandleCommand(const Command& cmmd) {
     if (players.contains(cmmd.playerId)) {
-        ExecCommand(players[cmmd.playerId], cmmd.cmd);
+        ExecCommand(players[cmmd.playerId], cmmd.code);
     } else {
         std::cout << "[GAME WORLD]: tratas de mover un jugador muerto\n";
     }

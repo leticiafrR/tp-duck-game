@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "common/queue.h"
 #include "common/safeMap.h"
 #include "model/Game.h"
 
