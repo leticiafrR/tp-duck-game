@@ -15,8 +15,10 @@
 #include "common/socket.h"
 #include "data/command.h"
 #include "data/id.h"
+#include "data/matchSelection.h"
 #include "data/networkMsg.h"
 #include "data/snapshot.h"
+
 
 struct Snapshot;
 struct MatchStartDto;
@@ -40,14 +42,18 @@ private:
 public:
     explicit ClientProtocol(Socket&& skt);
     void sendNickname(const std::string& nickname);
-    void sendMatchSelection(MatchID_t id);
-    void sendStartMatchIntention();
-    std::shared_ptr<NetworkMsg> receiveMessage();
-    std::shared_ptr<AvailableMatches> receiveAvailableMatches();
-    std::shared_ptr<ResultJoining> receiveResultJoining();
-    PlayerID_t receiveMyID();
+    uint16_t receiveLocalID();
 
-    void sendCommand(CommandCode cmdCode);
+    std::shared_ptr<AvailableMatches> receiveAvailableMatches();
+    void sendMatchSelection(const MatchSelection& selection);
+    std::shared_ptr<ResultJoining> receiveResultJoining();
+
+    void sendStartMatchIntention();
+    std::shared_ptr<ResultStartingMatch> receiveResultStarting();
+
+    std::shared_ptr<NetworkMsg> receiveMessage();
+    void sendCommand(const Command& cmd);
+
     void endConnection();
 
     // not copyable

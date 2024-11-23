@@ -24,14 +24,14 @@ private:
 
     ServerProtocol protocol;
 
-    PlayerID_t playerID;
+    uint16_t connectionId;
 
     std::atomic<bool> _joinedAMatch = false;
 
-    void sendLoop(PlayerID_t matchID);
+    void sendLoop(uint16_t matchID);
 
 public:
-    explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, PlayerID_t playerID);
+    explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, uint16_t connectionId);
 
     void run() override;
 

@@ -3,16 +3,24 @@
 
 #include <vector>
 
+#include "data/errorCodesJoinMatch.h"
+
 #include "dataMatch.h"
 #include "id.h"
 
 struct NetworkMsg {
     virtual ~NetworkMsg() = default;
 };
+
 // wrappers for booleans that  cannot inherit from NetworkMssg
 struct ResultJoining: public NetworkMsg {
-    bool joined;
-    explicit ResultJoining(bool _joined): joined(_joined) {}
+    uint8_t eCode;
+    explicit ResultJoining(uint8_t _eCode): eCode(_eCode) {}
+};
+
+struct ResultStartingMatch: public NetworkMsg {
+    bool success;
+    explicit ResultStartingMatch(bool _success): success(_success) {}
 };
 
 struct FinalGroupGame: public NetworkMsg {

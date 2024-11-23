@@ -3,16 +3,17 @@
 
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <string>
 
 #include "common/matchBinder.h"
 #include "common/queue.h"
 #include "common/thread.h"
+#include "data/matchSelection.h"
 #include "data/networkMsg.h"
 
 #include "ClientProtocol.h"
 #include "Sender.h"
-#include "bindCmmd.h"
 
 class Receiver: public Thread {
 private:
@@ -20,24 +21,26 @@ private:
     Queue<std::shared_ptr<NetworkMsg>>& msgQueue;
     Sender sender;
     std::string name;
-    Queue<BindCmmd>& bindingCommands;
+    Queue<std::optional<MatchSelection>>& matchSelections;
 
 public:
     Receiver(ClientProtocol& protocol, Queue<std::shared_ptr<NetworkMsg>>& msgQueue,
-             Queue<CommandCode>& cmmdQueue, const std::string& name,
-             Queue<BindCmmd>& bindingCommands):
+             Queue<Command>& cmmdQueue, const std::string& name,
+             Queue<std::optional<MatchSelection>>& matchSelections):
             protocol(protocol),
             msgQueue(msgQueue),
             sender(protocol, cmmdQueue),
             name(name),
-            bindingCommands(bindingCommands) {}
+            matchSelections(matchSelections) {}
 
     void run() override {
         try {
             protocol.sendNickname(name);
-            PlayerID_t playerID = protocol.receiveMyID();
-            std::cout << "[Receiver]: your id is: " << playerID << std::endl;
-            MatchBinder::ClientBind(playerID, msgQueue, bindingCommands, protocol);
+            uint16_t localID = protocol.receiveLocalID();
+            std::cout << "[Receiver]: Got the local id: " << localID << std::endl;
+
+            MatchBinder::ClientBind(localID, msgQueue, matchSelections, protocol);
+
             sender.start();
             while (_keep_running) {
                 std::shared_ptr<NetworkMsg> msg = protocol.receiveMessage();

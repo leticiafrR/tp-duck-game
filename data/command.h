@@ -12,12 +12,15 @@ enum class CommandCode : uint8_t {
     UseItem_KeyDown,
     UseItem_KeyUp
 };
-
+// OJO FALTA QUE LOS PROTOCOLOS ENVIEN AHORA UN COMMAND ASÌ
 struct Command {
-    CommandCode cmd;
-    PlayerID_t playerId;
-    explicit Command(CommandCode _cmd, PlayerID_t _playerId = 0): cmd(_cmd), playerId(_playerId) {}
-    Command(): cmd(), playerId() {}
+    CommandCode code;
+    uint8_t indexLocalPlayer;  // 0 hasta  n-1
+    // will  be seted by the server
+    PlayerID_t playerID;
+    explicit Command(CommandCode _code, uint8_t _indexLocalPlayer, PlayerID_t _playerID = 0):
+            code(_code), indexLocalPlayer(_indexLocalPlayer), playerID(_playerID) {}
+    Command() = default;
 };
 
 #endif

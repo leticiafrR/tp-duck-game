@@ -11,9 +11,9 @@
 #include "common/safeMap.h"
 #include "model/Game.h"
 
+#include "clientInfo.h"
 #include "config.h"
 #include "matchStatus.h"
-#include "playerInfo.h"
 
 
 #define NOT_ENOUGH_NUMBER_PLAYERS 0
@@ -27,16 +27,17 @@ class MessageSender;
 
 class GamesHandler {
 private:
-    const std::vector<std::string> availableLevels;
+    SafeMap<uint16_t, Queue<std::shared_ptr<MessageSender>>*>& clientsQueues;
+    SafeMap<uint16_t, ClientInfo>&
+            playersPerClient;  // con la info de nickname base, connectionID, numberOfPlayers
 
-    SafeMap<PlayerID_t, PlayerInfo>& players;
-
-    std::shared_ptr<Queue<Command>> commandQueue;
+    std::shared_ptr<Queue<Command>> matchQueue;
 
     int currentRecord = 0;
     PlayerID_t matchWinner = 0;
 
     std::atomic<MATCH_STATUS>& matchStatus;
+    std::atomic<uint8_t>& currentPlayers;
 
     std::unordered_map<PlayerID_t, int> playerPointsRecord;
 
@@ -45,9 +46,12 @@ private:
     const Config& config;
 
 public:
-    GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                 std::shared_ptr<Queue<Command>> commandQueue,
-                 std::atomic<MATCH_STATUS>& matchStatus);
+    GamesHandler(const Config& config,
+                 SafeMap<uint16_t, Queue<std::shared_ptr<MessageSender>>*>& clientsQueues,
+                 SafeMap<uint16_t, ClientInfo>& playersPerClient,
+                 std::shared_ptr<Queue<Command>> matchQueue, std::atomic<MATCH_STATUS>& matchStatus,
+                 std::atomic<uint8_t>& currentPlayers);
+
     void playGroupOfGames();
 
     PlayerID_t whoWon();

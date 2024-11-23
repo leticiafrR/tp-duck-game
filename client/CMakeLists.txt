@@ -47,7 +47,6 @@ target_sources(taller_client
     ShowColorsScreen.h
     DuckClientRenderer.h
 
-    network/bindCmmd.h
     network/ClientProtocol.h
     network/Client.h
     network/Receiver.h

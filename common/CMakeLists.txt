@@ -22,4 +22,5 @@ target_sources(taller_common
     timeManager.h
     protocolAssistant.h
     matchBinder.h
+    playerIdentifier.h
     )

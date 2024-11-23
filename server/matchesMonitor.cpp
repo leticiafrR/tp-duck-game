@@ -1,6 +1,7 @@
 #include "matchesMonitor.h"
 
 #include "data/dataMatch.h"
+#include "data/errorCodesJoinMatch.h"
 
 MatchesMonitor::MatchesMonitor(const Config& config): config(config) {}
 
@@ -29,32 +30,38 @@ std::vector<DataMatch> MatchesMonitor::getAvailableMatches() {
     }
     return availableMatches;
 }
-std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(PlayerID_t matchID,
-                                                             PlayerID_t playerID,
-                                                             const PlayerInfo& playerInfo) {
+std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(
+        uint16_t matchID, Queue<std::shared_ptr<MessageSender>>* clientQueue,
+        const ClientInfo& clientInfo, uint8_t& eCode) {
     std::unique_lock<std::mutex> lck(m);
+
     auto it = matches.find(matchID);
     if (it != matches.end()) {
-        return matches[matchID]->logInPlayer(playerID, playerInfo);
+        return matches[matchID]->logInClient(clientInfo, clientQueue, eCode);
     }
-    if (matchID == playerID) {
-        matches.emplace(matchID, std::make_unique<Match>(config, playerID));
-        return matches[matchID]->logInPlayer(playerID, playerInfo);
+    if (matchID == clientInfo.connectionId) {
+        matches.emplace(matchID, std::make_unique<Match>(config, matchID));
+        auto matchQueue = matches[matchID]->logInClient(clientInfo, clientQueue, eCode);
+        if (matchQueue == nullptr) {
+            matches.erase(matchID);
+        }
+        return matchQueue;
     }
-    std::cerr << "ERROR: Trying to join a match that doesnt exist, but MatchID is different from "
+    eCode = E_CODE::NOT_FOUND;
+    std::cerr << "-Client trying to join a match that doesnt exist, but MatchID is different from "
                  "playerID .\n";
     return nullptr;
 }
 
-bool MatchesMonitor::tryStartMatch(PlayerID_t matchID) {
+bool MatchesMonitor::tryStartMatch(uint16_t matchID) {
+    bool started = false;
     std::unique_lock<std::mutex> lck(m);
     auto it = matches.find(matchID);
-    bool started = false;
     if (it == matches.end()) {
         std::cerr << "ERROR: Trying to start match with ID: " << matchID << " which wasnt found.\n";
-    } else if (!(it->second->hasEnoughPlayers())) {
-        std::cerr << "ERROR: Trying to start match with ID: " << matchID
-                  << " which doesnt have enough players to be started.\n";
+    } else if (!(it->second->readyToStart())) {
+        std::cerr << "-Client Trying to start match with ID: " << matchID
+                  << " but doesnt have enough players.\n";
     } else {
         it->second->start();
         started = true;
@@ -62,15 +69,15 @@ bool MatchesMonitor::tryStartMatch(PlayerID_t matchID) {
     return started;
 }
 
-void MatchesMonitor::logOutPlayer(PlayerID_t matchID, PlayerID_t player) {
+void MatchesMonitor::logOutClient(uint16_t matchID, uint16_t clientID) {
     std::unique_lock<std::mutex> lck(m);
     auto it = matches.find(matchID);
     if (it == matches.end()) {
-        std::cerr << "ERROR: Trying to logout player [ID:" << player
+        std::cerr << "ERROR: Trying to log out client [ID:" << clientID
                   << "] from match [ID: " << matchID << "] but match wasnt found on the server.\n";
         return;
     }
-    it->second->logOutPlayer(player);
+    it->second->logOutClient(clientID);
 }
 
 void MatchesMonitor::forceEndAllMatches() {
@@ -80,12 +87,12 @@ void MatchesMonitor::forceEndAllMatches() {
     }
 }
 
-void MatchesMonitor::forceEndMatch(PlayerID_t matchID) {
+void MatchesMonitor::forceEndMatch(uint16_t matchID) {
     std::unique_lock<std::mutex> lck(m);
     auto it = matches.find(matchID);
     if (it == matches.end()) {
         std::cerr << "ERROR: Trying to specifically end the match [ID:" << matchID
-                  << "] wich could be found in the matches in the server.\n";
+                  << "] that was not found on the server.\n";
         return;
     }
     it->second->forceEnd();

@@ -1,36 +1,36 @@
 #include "serverProtocol.h"
 
-
 struct BrokenProtocol: public std::runtime_error {
     BrokenProtocol():
             std::runtime_error("Error: server perceived that the client broke the protocol!") {}
 };
 
+/*                  ---------PUBLIC METHODS---------                  */
 ServerProtocol::ServerProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
 
 std::string ServerProtocol::receiveNickName() {
     if (assistant.receiveNumberOneByte() == NICKNAME) {
-        auto nickname = assistant.receiveString();
-        return nickname;
+        return assistant.receiveString();
     }
     throw BrokenProtocol();
 }
-void ServerProtocol::sendIdentification(PlayerID_t playerID) {
+void ServerProtocol::sendLocalId(uint16_t connectionId) {
     assistant.sendNumber(IDENTIFICATION);
-    assistant.sendNumber(playerID);
+    assistant.sendNumber(connectionId);
 }
 
-PlayerID_t ServerProtocol::receiveMatchSelection() {
+MatchSelection ServerProtocol::receiveMatchSelection() {
     if (assistant.receiveNumberOneByte() == MATCH_SELECTION) {
-        return assistant.receiveNumberFourBytes();
+        auto matchID = assistant.receiveNumberTwoBytes();
+        if (matchID == 0) {
+            MatchSelection refresh;
+            return refresh;
+        }
+        auto playersPerConnection = assistant.receiveNumberOneByte();
+        MatchSelection matchSelection(matchID, playersPerConnection);
+        return matchSelection;
     }
     throw BrokenProtocol();
-}
-
-void ServerProtocol::sendResultOfJoining(bool success) {
-    assistant.sendNumber(RESULT_JOINING);
-    uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
-    assistant.sendNumber(response);
 }
 
 void ServerProtocol::sendAvailableMatches(const std::vector<DataMatch>& matches) {
@@ -47,6 +47,11 @@ void ServerProtocol::sendAvailableMatches(const std::vector<DataMatch>& matches)
     }
 }
 
+void ServerProtocol::sendResultOfJoining(uint8_t eCode) {
+    assistant.sendNumber(RESULT_JOINING);
+    assistant.sendNumber(eCode);
+}
+
 void ServerProtocol::receiveStartMatchIntention() {
     if (assistant.receiveNumberOneByte() != START_MATCH_INTENTION) {
         throw BrokenProtocol();
@@ -54,13 +59,13 @@ void ServerProtocol::receiveStartMatchIntention() {
 }
 
 void ServerProtocol::sendStartMatchResult(bool success) {
-    assistant.sendNumber(RESULT_JOINING);
+    assistant.sendNumber(RESULT_STARTING);
     uint8_t response = success ? (uint8_t)1 : (uint8_t)0;
     assistant.sendNumber(response);
 }
 
 void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) {
-    assistant.sendNumber(MATCH_STARTING);
+    assistant.sendNumber(MATCH_STARTING_SETTINGS);
 
     // sending the quatity of players
     uint8_t numberPlayers = (uint8_t)matchStartDto.playersData.size();
@@ -125,6 +130,7 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
         assistant.sendVector2D(groundDto.mySpace.GetPos());
     }
 }
+
 void ServerProtocol::sendGameEndingStatus(bool finalGroupGame) {
     assistant.sendNumber(GAME_ENDING);
     uint8_t response = finalGroupGame ? (uint8_t)1 : (uint8_t)0;
@@ -134,7 +140,8 @@ void ServerProtocol::sendGameEndingStatus(bool finalGroupGame) {
 Command ServerProtocol::receiveCommand() {
     if (assistant.receiveNumberOneByte() == COMMAND) {
         auto commandCode = (CommandCode)assistant.receiveNumberOneByte();
-        Command cmmd(commandCode);
+        uint8_t indexLocalPlayer = assistant.receiveNumberOneByte();
+        Command cmmd(commandCode, indexLocalPlayer);
         return cmmd;
     }
     throw BrokenProtocol();

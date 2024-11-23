@@ -46,6 +46,15 @@ uint32_t ProtocolAssistant::receiveNumberFourBytes() {
     return number;
 }
 
+void ProtocolAssistant::sendNumber(uint16_t number) {
+    checkShipping(skt.sendall(&number, sizeof(number), &wasClosed));
+}
+
+uint16_t ProtocolAssistant::receiveNumberTwoBytes() {
+    uint16_t number;
+    checkShipping(skt.recvall(&number, sizeof(number), &wasClosed));
+    return number;
+}
 
 void ProtocolAssistant::sendFloat(const float& fl) {
     checkShipping(skt.sendall(&fl, sizeof(fl), &wasClosed));

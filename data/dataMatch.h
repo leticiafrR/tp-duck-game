@@ -10,10 +10,10 @@
 struct DataMatch {
     uint8_t currentPlayers;
     uint8_t maxPlayers;
-    PlayerID_t matchID;
+    uint16_t matchID;
     std::string creatorNickname;
 
-    DataMatch(uint8_t _currentPlayers, uint8_t _maxPlayers, PlayerID_t _matchID,
+    DataMatch(uint8_t _currentPlayers, uint8_t _maxPlayers, uint16_t _matchID,
               const std::string& _creatorNickname):
             currentPlayers(_currentPlayers),
             maxPlayers(_maxPlayers),

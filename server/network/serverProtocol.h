@@ -14,6 +14,7 @@
 #include "data/dataMatch.h"
 #include "data/dataTransferObjects.h"
 #include "data/gameScene.h"
+#include "data/matchSelection.h"
 #include "data/snapshot.h"
 
 class ServerProtocol {
@@ -30,15 +31,15 @@ public:
      * detected lost it throws an exeption*/
     std::string receiveNickName();
 
-    void sendIdentification(PlayerID_t playerID);
+    void sendLocalId(uint16_t connectionId);
 
     // 0 if client wants to refresh the availableMatches
     // the ID of the client itself it wants to create its own
-    PlayerID_t receiveMatchSelection();
+    MatchSelection receiveMatchSelection();
 
     /* Send the result of trying to joing the match. If the connection with the client has been
      * detected lost it throws an exeption*/
-    void sendResultOfJoining(bool success);
+    void sendResultOfJoining(uint8_t eCode);
 
     void sendAvailableMatches(const std::vector<DataMatch>& matches);
 

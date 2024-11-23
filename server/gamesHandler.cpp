@@ -3,6 +3,7 @@
 #include <random>
 #include <utility>
 
+#include "common/playerIdentifier.h"
 #include "common/timeManager.h"
 #include "network/messageSender.h"
 
@@ -11,18 +12,26 @@
 #define TPS 20
 #define PLAYERS_TO_WIN_BY_DEFAULT 1
 
-GamesHandler::GamesHandler(const Config& config, SafeMap<PlayerID_t, PlayerInfo>& players,
-                           std::shared_ptr<Queue<Command>> commandQueue,
-                           std::atomic<MATCH_STATUS>& matchStatus):
-        availableLevels(config.getAvailableLevels()),
-        players(players),
-        commandQueue(commandQueue),
+GamesHandler::GamesHandler(const Config& config,
+                           SafeMap<uint16_t, Queue<std::shared_ptr<MessageSender>>*>& clientsQueues,
+                           SafeMap<uint16_t, ClientInfo>& playersPerClient,
+                           std::shared_ptr<Queue<Command>> matchQueue,
+                           std::atomic<MATCH_STATUS>& matchStatus,
+                           std::atomic<uint8_t>& currentPlayers):
+        clientsQueues(clientsQueues),
+        playersPerClient(playersPerClient),
+        matchQueue(matchQueue),
         matchStatus(matchStatus),
+        currentPlayers(currentPlayers),
         config(config) {
-    auto playerIDs = players.getKeys();
-    for (auto& id: playerIDs) {
-        playerPointsRecord[id] = 0;
-    }
+
+    playersPerClient.applyToItems([&playerPointsRecord = this->playerPointsRecord](
+                                          uint16_t baseID, const ClientInfo& infoConnection) {
+        for (uint8_t i = 0; i < infoConnection.playersPerConnection; i++) {
+            PlayerID_t playerID = PlayerIdentifier::GeneratePlayerID(baseID, i);
+            playerPointsRecord[playerID] = 0;
+        }
+    });
 }
 
 PlayerID_t GamesHandler::whoWon() { return matchWinner; }
@@ -65,10 +74,17 @@ void GamesHandler::updateMatchWinnerStatus() {
 
 void GamesHandler::playOneGame() {
     clearQueue();
-    auto playerIDs = players.getKeys();
+
+    std::vector<PlayerID_t> playersIDs;
+
+    playersPerClient.applyToItems([&playersIDs](uint16_t baseID, const ClientInfo& infoConnection) {
+        for (uint8_t i = 0; i < infoConnection.playersPerConnection; i++) {
+            PlayerID_t playerID = PlayerIdentifier::GeneratePlayerID(baseID, i);
+            playersIDs.push_back(playerID);
+        }
+    });
     checkNumberPlayers();
-    // can take out the first argument
-    currentGame.emplace(playerIDs, getRandomLevel());
+    currentGame.emplace(playersIDs, getRandomLevel());
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
     gameLoop();
     registerGameWinnerPoint();
@@ -78,6 +94,7 @@ void GamesHandler::playOneGame() {
 void GamesHandler::registerGameWinnerPoint() {
     checkNumberPlayers();
     PlayerID_t gameWinner = currentGame->WhoWon();
+
     if (playerPointsRecord.find(gameWinner) != playerPointsRecord.end()) {
         int playerRecord = playerPointsRecord[gameWinner] += 1;
         if (playerRecord > currentRecord) {
@@ -85,7 +102,7 @@ void GamesHandler::registerGameWinnerPoint() {
         }
     }
 
-    if (players.size() == PLAYERS_TO_WIN_BY_DEFAULT)
+    if (currentPlayers == PLAYERS_TO_WIN_BY_DEFAULT)
         matchStatus = WON_BY_DEFAULT;
 }
 
@@ -93,10 +110,10 @@ void GamesHandler::gameLoop() {
 
     TimeManager timeManager(TPS);
 
-    while (!currentGame->IsOver() && players.size() > NOT_ENOUGH_NUMBER_PLAYERS) {
+    while (!currentGame->IsOver()) {
         Command cmmd;
-        for (int i = 0; i < MAX_CMMDS_PER_TICK && commandQueue->try_pop(std::ref(cmmd)); i++) {
-            if (cmmd.cmd == CommandCode::_quit)
+        for (int i = 0; i < MAX_CMMDS_PER_TICK && matchQueue->try_pop(std::ref(cmmd)); i++) {
+            if (cmmd.code == CommandCode::_quit)
                 // currentGame->quitPlayer(cmmd.playerId);
                 continue;
             else
@@ -111,13 +128,14 @@ void GamesHandler::gameLoop() {
 
 void GamesHandler::broadcastGameMssg(const std::shared_ptr<MessageSender>& message) {
     checkNumberPlayers();
-    players.applyToValues(
-            [&message](PlayerInfo& player) { player.senderQueue->try_push(message); });
+    clientsQueues.applyToValues([&message](Queue<std::shared_ptr<MessageSender>>* clientQueue) {
+        clientQueue->try_push(message);
+    });
     checkNumberPlayers();
 }
 
 void GamesHandler::checkNumberPlayers() {
-    if (players.size() == 0) {
+    if (currentPlayers == 0) {
         throw RunOutOfPlayers();
     }
 }
@@ -125,11 +143,11 @@ void GamesHandler::checkNumberPlayers() {
 std::string GamesHandler::getRandomLevel() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0, availableLevels.size() - 1);
-    return availableLevels[dist(gen)];
+    std::uniform_int_distribution<> dist(0, config.getAvailableLevels().size() - 1);
+    return config.getAvailableLevels()[dist(gen)];
 }
 
 void GamesHandler::clearQueue() {
     Command cmmd;
-    while (commandQueue->try_pop(std::ref(cmmd))) {}
+    while (matchQueue->try_pop(std::ref(cmmd))) {}
 }

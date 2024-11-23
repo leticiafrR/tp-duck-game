@@ -13,15 +13,79 @@ struct BrokenProtocol: public std::runtime_error {
             std::runtime_error("ERROR: client perceived that the server broke the protocol!") {}
 };
 
-
+/*                  ---------PUBLIC METHODS---------                  */
 ClientProtocol::ClientProtocol(Socket&& peer): skt(std::move(peer)), assistant(skt) {}
+
+void ClientProtocol::sendNickname(const std::string& nickname) {
+    assistant.sendNumber(NICKNAME);
+    assistant.sendString(nickname);
+}
+
+uint16_t ClientProtocol::receiveLocalID() {
+    if (assistant.receiveNumberOneByte() == IDENTIFICATION) {
+        return assistant.receiveNumberTwoBytes();
+    }
+    throw BrokenProtocol();
+}
+
+std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
+    if (assistant.receiveNumberOneByte() == AVAILABLE_MATCHES) {
+        auto numberMatches = assistant.receiveNumberOneByte();
+        std::vector<DataMatch> matches;
+
+        for (uint8_t i = 0; i < numberMatches; i++) {
+            DataMatch match;
+            match.currentPlayers = assistant.receiveNumberOneByte();
+            match.maxPlayers = assistant.receiveNumberOneByte();
+            match.matchID = assistant.receiveNumberFourBytes();
+            match.creatorNickname = assistant.receiveString();
+            matches.push_back(match);
+        }
+        return std::make_shared<AvailableMatches>(AvailableMatches(matches));
+    }
+    throw BrokenProtocol();
+}
+
+void ClientProtocol::sendMatchSelection(const MatchSelection& selection) {
+    assistant.sendNumber(MATCH_SELECTION);
+    assistant.sendNumber(selection.matchSelection);
+    if (selection.matchSelection != 0) {
+        assistant.sendNumber(selection.playersPerConection);
+    }
+}
+
+std::shared_ptr<ResultJoining> ClientProtocol::receiveResultJoining() {
+    if (assistant.receiveNumberOneByte() == RESULT_JOINING) {
+        return std::make_shared<ResultJoining>(ResultJoining(assistant.receiveNumberOneByte()));
+    }
+    throw BrokenProtocol();
+}
+
+void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATCH_INTENTION); }
+
+std::shared_ptr<ResultStartingMatch> ClientProtocol::receiveResultStarting() {
+    if (assistant.receiveNumberOneByte() == RESULT_STARTING) {
+        uint8_t response = assistant.receiveNumberOneByte();
+        if (response == 1 || response == 0) {
+            return std::make_shared<ResultStartingMatch>((response == 1 ? true : false));
+        }
+    }
+    throw BrokenProtocol();
+}
+
+void ClientProtocol::sendCommand(const Command& cmd) {
+    assistant.sendNumber(COMMAND);
+    assistant.sendNumber((uint8_t)cmd.code);
+    assistant.sendNumber((uint8_t)cmd.indexLocalPlayer);
+}
+
 
 std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
     auto typeMessage = assistant.receiveNumberOneByte();
 
     switch (typeMessage) {
 
-        case MATCH_STARTING:
+        case MATCH_STARTING_SETTINGS:
             return std::make_shared<MatchStartDto>(receiveMachStartDto());
 
         case GAME_SCENE:
@@ -46,18 +110,7 @@ std::shared_ptr<NetworkMsg> ClientProtocol::receiveMessage() {
     }
 }
 
-void ClientProtocol::sendNickname(const std::string& nickname) {
-    assistant.sendNumber(NICKNAME);
-    assistant.sendString(nickname);
-}
-
-void ClientProtocol::sendMatchSelection(MatchID_t id) {
-    assistant.sendNumber(MATCH_SELECTION);
-    assistant.sendNumber(id);
-}
-
-void ClientProtocol::sendStartMatchIntention() { assistant.sendNumber(START_MATCH_INTENTION); }
-
+/*                  ---------PRIVATE METHODS---------                  */
 
 MatchStartDto ClientProtocol::receiveMachStartDto() {
     auto numberPlayers = assistant.receiveNumberOneByte();
@@ -121,8 +174,8 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     bool gameOver = gameOverCode == 1 ? true : false;
 
     // receiving the cont of the map player ID and position vector
-    std::unordered_map<PlayerID_t, PlayerEvent> updates;
     uint8_t numberUpdates = assistant.receiveNumberOneByte();
+    std::unordered_map<PlayerID_t, PlayerEvent> updates((size_t)numberUpdates);
     for (uint8_t i = 0; i < numberUpdates; i++) {
         // playerID
         auto ID = assistant.receiveNumberFourBytes();
@@ -139,15 +192,14 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         // building PlayerEvent
         updates[ID] = PlayerEvent{evMotion, evState, evFlip, lookingUp};
     }
-    std::vector<InstantProjectileEventDto> projectiles;
-    uint8_t numberProjectile = assistant.receiveNumberOneByte();
-    for (uint8_t i = 0; i < numberProjectile; i++) {
 
-        // auto speed = assistant.receiveFloat();
+    uint8_t numberProjectile = assistant.receiveNumberOneByte();
+    std::vector<InstantProjectileEventDto> projectiles((size_t)numberProjectile);
+    for (uint8_t i = 0; i < numberProjectile; i++) {
         auto type = (TypeProjectile)assistant.receiveNumberOneByte();
         auto origin = assistant.receiveVector2D();
         auto end = assistant.receiveVector2D();
-        projectiles.emplace_back(InstantProjectileEventDto(type, origin, end));
+        projectiles[i] = InstantProjectileEventDto{type, origin, end};
     }
 
     return Snapshot(gameOver, updates, projectiles);
@@ -177,48 +229,8 @@ GamesRecountDto ClientProtocol::receiveGamesRecountDto() {
 
 PlayerID_t ClientProtocol::receiveMatchWinner() { return assistant.receiveNumberFourBytes(); }
 
-void ClientProtocol::sendCommand(CommandCode cmdCode) {
-    assistant.sendNumber(COMMAND);
-    assistant.sendNumber((uint8_t)cmdCode);
-}
 
 void ClientProtocol::endConnection() {
     skt.shutdown(2);
     skt.close();
-}
-
-
-std::shared_ptr<ResultJoining> ClientProtocol::receiveResultJoining() {
-    if (assistant.receiveNumberOneByte() == RESULT_JOINING) {
-        auto response = assistant.receiveNumberOneByte();
-        if (response != 1 && response != 0)
-            throw BrokenProtocol();
-        return std::make_shared<ResultJoining>(ResultJoining(response));
-    }
-    throw BrokenProtocol();
-}
-
-std::shared_ptr<AvailableMatches> ClientProtocol::receiveAvailableMatches() {
-    if (assistant.receiveNumberOneByte() == AVAILABLE_MATCHES) {
-        auto numberMatches = assistant.receiveNumberOneByte();
-        std::vector<DataMatch> matches;
-
-        for (uint8_t i = 0; i < numberMatches; i++) {
-            DataMatch match;
-            match.currentPlayers = assistant.receiveNumberOneByte();
-            match.maxPlayers = assistant.receiveNumberOneByte();
-            match.matchID = assistant.receiveNumberFourBytes();
-            match.creatorNickname = assistant.receiveString();
-            matches.push_back(match);
-        }
-        return std::make_shared<AvailableMatches>(AvailableMatches(matches));
-    }
-    throw BrokenProtocol();
-}
-
-PlayerID_t ClientProtocol::receiveMyID() {
-    if (assistant.receiveNumberOneByte() == IDENTIFICATION) {
-        return assistant.receiveNumberFourBytes();
-    }
-    throw BrokenProtocol();
 }

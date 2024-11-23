@@ -8,17 +8,16 @@
 class Sender: public Thread {
 private:
     ClientProtocol& protocol;
-    Queue<CommandCode>& cmmdQueue;
+    Queue<Command>& cmmdQueue;
 
 public:
-    Sender(ClientProtocol& protocol, Queue<CommandCode>& cmmdQueue):
+    Sender(ClientProtocol& protocol, Queue<Command>& cmmdQueue):
             protocol(protocol), cmmdQueue(cmmdQueue) {}
 
     void run() override {
-        std::cout << "el sender esta corriendo\n";
         try {
             while (_keep_running) {
-                CommandCode cmmd = cmmdQueue.pop();
+                Command cmmd = cmmdQueue.pop();
                 protocol.sendCommand(cmmd);
             }
         } catch (const ClosedQueue& q) {
@@ -26,7 +25,7 @@ public:
         } catch (const std::runtime_error& e) {
             std::cerr << e.what() << std::endl;
         } catch (...) {
-            std::cerr << "ERROR: An unkown error was catched at sending a message from the server"
+            std::cerr << "ERROR: An unkown error was catched when sending a message from the server"
                       << std::endl;
         }
     }

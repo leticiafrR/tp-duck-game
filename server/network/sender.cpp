@@ -5,29 +5,30 @@
 #include "messageSender.h"
 #include "receiver.h"
 
-SenderThread::SenderThread(Socket&& sktPeer, MatchesMonitor& matches, PlayerID_t playerID):
+SenderThread::SenderThread(Socket&& sktPeer, MatchesMonitor& matches, uint16_t connectionId):
         matches(matches),
         senderQueue(MAX_MESSAGES),
         protocol(std::move(sktPeer)),
-        playerID(playerID) {}
+        connectionId(connectionId) {}
 
 
 void SenderThread::run() {
 
     std::shared_ptr<Queue<Command>> matchQueue;
-    PlayerID_t matchID =
-            MatchBinder::ServerBind(matches, &senderQueue, playerID, protocol, matchQueue);
+    uint8_t playersPerConnection;
+    uint16_t matchID = MatchBinder::ServerBind(matches, &senderQueue, connectionId,
+                                               playersPerConnection, protocol, matchQueue);
     if (matchID == 0) {
         return;
     }
     _joinedAMatch = true;
-    ReceiverThread receiver(playerID, matchQueue, protocol);
+    ReceiverThread receiver(matchQueue, connectionId, playersPerConnection, protocol);
     receiver.start();
     sendLoop(matchID);
     receiver.join();
 }
 
-void SenderThread::sendLoop(PlayerID_t matchID) {
+void SenderThread::sendLoop(uint16_t matchID) {
     try {
         while (_keep_running) {
             auto messageSender = senderQueue.pop();
@@ -35,9 +36,9 @@ void SenderThread::sendLoop(PlayerID_t matchID) {
         }
 
     } catch (const ConnectionFailed& c) {
-        matches.logOutPlayer(matchID, playerID);
+        matches.logOutClient(matchID, connectionId);
     } catch (const LibError& e) {
-        matches.logOutPlayer(matchID, playerID);
+        matches.logOutClient(matchID, connectionId);
     } catch (const ClosedQueue& q) {
 
     } catch (const std::exception& e) {
@@ -50,14 +51,7 @@ void SenderThread::sendLoop(PlayerID_t matchID) {
 void SenderThread::kill() {
     if (!_joinedAMatch) {
         protocol.endConnection();
-    }
+    }  // else the match has to kill
 }
 
-SenderThread::~SenderThread() {
-    // try {
-    //     if (_is_alive) {
-    //         protocol.endConnection();
-    //         join();
-    //     }
-    // } catch (...) {}
-}
+SenderThread::~SenderThread() {}

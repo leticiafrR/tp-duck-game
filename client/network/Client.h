@@ -17,8 +17,8 @@ class Client {
 private:
     ClientProtocol protocol;
     Queue<std::shared_ptr<NetworkMsg>> msgQueue;
-    Queue<CommandCode> cmmdQueue;
-    Queue<BindCmmd> bindingCommands;
+    Queue<Command> cmmdQueue;
+    Queue<std::optional<MatchSelection>> matchSelections;
     Receiver* receiver;
 
 public:
@@ -26,17 +26,32 @@ public:
             protocol(std::move(Socket(hostname, servname))),
             msgQueue(),
             cmmdQueue(),
-            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, bindingCommands)) {
+            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, matchSelections)) {
         receiver->start();
     }
 
-    void Refresh() { bindingCommands.try_push(BindCmmd(BindCmmdCode::REFRESH_MATCHES)); }
-    void SelectMatch(MatchID_t selection) { bindingCommands.try_push(BindCmmd(selection)); }
-    void CreateMatch() { bindingCommands.try_push(BindCmmd(BindCmmdCode::CREATE_MATCH)); }
-    void StartMatch() { bindingCommands.try_push(BindCmmd()); }
+    void Refresh() {
+        // Empty selection to denote refresh
+        std::optional<MatchSelection> selection{};
+        matchSelections.try_push(selection);
+    }
+    void SelectMatch(uint16_t matchID, uint8_t playersPerConnection) {
+        std::optional<MatchSelection> selection = MatchSelection(matchID, playersPerConnection);
+        matchSelections.try_push(selection);
+    }
+
+    void CreateMatch(uint8_t playersPerConnection) {
+        std::optional<MatchSelection> createSelection = MatchSelection(0, playersPerConnection);
+        matchSelections.try_push(createSelection);
+    }
+
+    void StartMatch() {
+        std::optional<MatchSelection> itentionStart{};
+        matchSelections.try_push(itentionStart);
+    }
 
 
-    bool TrySendRequest(const CommandCode& cmmd) { return cmmdQueue.try_push(cmmd); }
+    bool TrySendRequest(const Command& cmmd) { return cmmdQueue.try_push(cmmd); }
 
     template <typename NetworkMsgDerivedClass>
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsgDerivedClass>& concretMsg) {

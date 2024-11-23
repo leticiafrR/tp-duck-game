@@ -25,18 +25,18 @@ void AcceptorThread::run() {
 }
 
 void AcceptorThread::acceptLoop() {
-    PlayerID_t idClient = FIRST_PLAYER_ID;
+    uint16_t connectionId = FIRST_PLAYER_ID;
 
     while (_keep_running) {
         Socket peer = skt.accept();
         PRINT_NEW_CONNECTION();
-        clients.emplace_back(std::make_unique<SenderThread>(std::move(peer),
-                                                            std::ref(matchesMonitor), idClient));
+        clients.emplace_back(std::make_unique<SenderThread>(
+                std::move(peer), std::ref(matchesMonitor), connectionId));
         clients.back()->start();
 
         reapDeadClients();
         matchesMonitor.reapEndedMatches();
-        idClient++;
+        connectionId++;
     }
 }
 

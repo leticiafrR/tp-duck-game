@@ -13,7 +13,7 @@ struct DataMatch;
 class MatchesMonitor {
 private:
     std::mutex m;
-    std::unordered_map<PlayerID_t, std::unique_ptr<Match>> matches;
+    std::unordered_map<uint16_t, std::unique_ptr<Match>> matches;
     const Config& config;
 
 public:
@@ -21,21 +21,19 @@ public:
 
     std::vector<DataMatch> getAvailableMatches();
 
-    std::shared_ptr<Queue<Command>> tryJoinMatch(PlayerID_t matchID, PlayerID_t player,
-                                                 const PlayerInfo& playerInfo);
+    std::shared_ptr<Queue<Command>> tryJoinMatch(uint16_t matchID,
+                                                 Queue<std::shared_ptr<MessageSender>>* clientQueue,
+                                                 const ClientInfo& clientInfo, uint8_t& eCode);
 
-    // returns false if there wasnt enough payers
-    bool tryStartMatch(PlayerID_t matchID);
+    bool tryStartMatch(uint16_t matchID);
 
-    void logOutPlayer(PlayerID_t matchID, PlayerID_t player);
+    void logOutClient(uint16_t matchID, uint16_t clientID);
 
-    // called everytime someone asks for availableMatches (sender) and everyTime the server accepts
-    // a new conextion
     void reapEndedMatches();
 
     void forceEndAllMatches();
 
-    void forceEndMatch(PlayerID_t matchID);
+    void forceEndMatch(uint16_t matchID);
 
     // not copyable
     MatchesMonitor(const MatchesMonitor&) = delete;

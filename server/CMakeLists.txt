@@ -55,6 +55,6 @@ target_sources(taller_server
     match.h
     matchesMonitor.h
     matchStatus.h
-    playerInfo.h
+    clientInfo.h
     server.h
     )

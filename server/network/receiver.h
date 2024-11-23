@@ -17,13 +17,14 @@ class ReceiverThread: public Thread {
 private:
     std::shared_ptr<Queue<Command>> matchQueue;
 
-    PlayerID_t idClient;
+    uint16_t clientID;
+    uint8_t playersPerConnection;
 
     ServerProtocol& protocol;
 
 public:
-    explicit ReceiverThread(PlayerID_t idClient, std::shared_ptr<Queue<Command>> matchQueue,
-                            ServerProtocol& protocol);
+    explicit ReceiverThread(std::shared_ptr<Queue<Command>> matchQueue, uint16_t clientID,
+                            uint8_t playersPerConnection, ServerProtocol& protocol);
 
     void run() override;
 

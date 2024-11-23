@@ -45,6 +45,9 @@ public:
     void sendNumber(uint32_t);
     uint32_t receiveNumberFourBytes();
 
+    void sendNumber(uint16_t);
+    uint16_t receiveNumberTwoBytes();
+
 
     // Send a float
     void sendFloat(const float& fl);
