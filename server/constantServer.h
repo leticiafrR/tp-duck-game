@@ -54,6 +54,7 @@ const std::string SHOTGUN_STR = "shotgun";
 const std::string SNIPER_STR = "sniper";
 const std::string AK47_STR = "ak47";
 const std::string DUELING_PISTOL_STR = "dueling_pistol";
+const std::string PEW_PEW_LASER_STR = "pew_pew_laser";
 
 const int BANANA_INDEX = 0;
 const int LASER_RIFLE_INDEX = 1;
@@ -64,6 +65,7 @@ const int DUELING_PISTOL_INDEX = 5;
 const int MAGNUM_INDEX = 6;
 const int SHOTGUN_INDEX = 7;
 const int SNIPER_INDEX = 8;
+const int PEW_PEW_LASER_INDEX = 9;
 const int HELMET_INDEX = 9;
 const int ARMOR_INDEX = 10;
 const int EMPTY_INDEX = 11;

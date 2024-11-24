@@ -76,6 +76,7 @@ public:
     uint16_t getMagnumAmmo() const;
     uint16_t getShotgunAmmo() const;
     uint16_t getSniperAmmo() const;
+    uint16_t getPewPewLaserAmmo() const;
     /****************************SCOPE********************************** */
     int getLaserRifleScope() const;
     int getBananaScope() const;
@@ -86,6 +87,7 @@ public:
     int getMagnumScope() const;
     int getShotgunScope() const;
     int getSniperScope() const;
+    int getPewPewLaserScope() const;
     /***********************DISPERSION********************************** */
     float getNoDispersion() const;
     float getShortDispersion() const;

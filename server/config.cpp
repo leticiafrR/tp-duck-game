@@ -91,6 +91,7 @@ void Config::setWeaponsConfig() {
     setAWeapon(MANGUM_STR, config);
     setAWeapon(SHOTGUN_STR, config);
     setAWeapon(SNIPER_STR, config);
+    setAWeapon(PEW_PEW_LASER_STR, config);
 }
 
 void Config::setCooldown(const YAML::Node& config) {
@@ -144,7 +145,10 @@ uint16_t Config::getShotgunAmmo() const { return (uint16_t)weapons[SHOTGUN_INDEX
 int Config::getShotgunScope() const { return (int)weapons[SHOTGUN_INDEX][SCOPE_INDEX]; }
 uint16_t Config::getSniperAmmo() const { return (uint16_t)weapons[SNIPER_INDEX][AMMO_INDEX]; }
 int Config::getSniperScope() const { return (int)weapons[SNIPER_INDEX][SCOPE_INDEX]; }
-
+uint16_t Config::getPewPewLaserAmmo() const {
+    return (uint16_t)weapons[PEW_PEW_LASER_INDEX][AMMO_INDEX];
+}
+int Config::getPewPewLaserScope() const { return (int)weapons[PEW_PEW_LASER_INDEX][SCOPE_INDEX]; }
 // Dispersion
 float Config::getNoDispersion() const { return dispersions[NONE_INDEX]; }
 float Config::getShortDispersion() const { return dispersions[SHORT_INDEX]; }
