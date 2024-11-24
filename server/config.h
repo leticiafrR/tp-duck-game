@@ -14,26 +14,18 @@
 enum class TypeCollectable : uint8_t;
 enum class TypeProjectile : uint8_t;
 class Config {
-    // cppcheck-suppress unusedStructMember
     std::vector<std::string> _availableLevels;
-    // cppcheck-suppress unusedStructMember
     int _maxPlayers;
-    // cppcheck-suppress unusedStructMember
     int _minPlayers;
-    // cppcheck-suppress unusedStructMember
     int _gamesToWinMatch;
-    // cppcheck-suppress unusedStructMember
     int _gamesInGroup;
-    // cppcheck-suppress unusedStructMember
     std::vector<int> duck;
-    // cppcheck-suppress unusedStructMember
     std::vector<std::vector<uint8_t>> weapons;
-    // cppcheck-suppress unusedStructMember
     std::vector<float> cooldown;
-    // cppcheck-suppress unusedStructMember
     std::vector<int> damage;
-    // cppcheck-suppress unusedStructMember
     std::vector<float> dispersions;
+    std::vector<float> inclinations;
+    std::vector<uint8_t> projectilesPerShot;
 
     void setAvaiableLevels();
     void setMatchConfig();
@@ -43,6 +35,7 @@ class Config {
     void setDispersion(const YAML::Node& config);
     void setCooldown(const YAML::Node& config);
     void setDamage(const YAML::Node& config);
+    void setShotConfig(const YAML::Node& config);
 
 public:
     Config();
@@ -62,7 +55,7 @@ public:
     float getCooldownLong() const;
     float getCooldownExploteGranada() const;
 
-
+    /***************************DAMAGE**************************************** */
     int getDamageMinimun() const;
     int getDamageShort() const;
     int getDamageMedium() const;
@@ -87,6 +80,13 @@ public:
     float getNoDispersion() const;
     float getShortDispersion() const;
     float getLongDispersion() const;
+
+    /*********************SHOTING INCILNATION**************************** */
+    float getBasicInclination() const;
+    float getLaserRifleInclination() const;
+
+    /********************PROJECTILES PER SHOT**************************** */
+    uint8_t getProjectilePerShotBasic() const;
 
     // faltan implementar:
     int getAK47Ammo() const;

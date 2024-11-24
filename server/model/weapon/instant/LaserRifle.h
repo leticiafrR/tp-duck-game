@@ -13,7 +13,7 @@ public:
             InstantWeapon(controller, initialSpace, conf.getLaserRifleScope(),
                           conf.getLaserRifleAmmo(), conf.getDamageMedium(),
                           conf.getShortDispersion(), conf.getCooldownBasic(),
-                          TypeProjectile::RayoLaser, -45) {}
+                          TypeProjectile::RayoLaser, conf.getLaserRifleInclination()) {}
 
 
     void BeCollected(TypeCollectable& collectorTypeRef) override {

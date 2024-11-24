@@ -40,7 +40,7 @@ const int MASS_INDEX = 1;
 const int SIZE_INDEX = 2;
 const int LIFE_INDEX = 3;
 
-/************************************WEAPON CONFIG****************************************/
+/************************************WEAPON CONFIG*******************************/
 
 const std::string DAMAGE_STR = "damage";
 const std::string COOLDOWN_STR = "cooldown";
@@ -58,10 +58,15 @@ const std::string EMPTY_STR = "empty";
 const std::string HELMET_STR = "helmet";
 const std::string ARMOR_STR = "armor";
 const std::string BASIC_STR = "basic";
-/****************************DISPERSION************************************* */
+
+const std::string SHO0TING_INCLINATION_STR = "shooting_inclination";
+const std::string PROJECTILE_PER_SHOT_STR = "projectiles_per_shot";
+
+
+/****************************DISPERSION****************************************/
 const std::string DISPERSION_STR = "dispersion";
 const std::string NO_DISPERSION_STR = "no_dispersion";
-// Weapons
+/****************************WEAPONS*******************************************/
 const std::string BANANA_STR = "banana";
 const std::string LASER_RIFLE_STR = "laser_rifle";
 const std::string COWBOY_PISTOL_STR = "cowboy_pistol";
@@ -72,8 +77,8 @@ const std::string SNIPER_STR = "sniper";
 const std::string AK47_STR = "ak47";
 
 const int BANANA_INDEX = 0;
-const int GRANADA_INDEX = 1;
-const int LASER_RIFLE_INDEX = 2;
+const int LASER_RIFLE_INDEX = 1;
+const int GRANADA_INDEX = 2;
 const int COWBOY_PISTOL_INDEX = 3;
 const int AK47_INDEX = 4;
 const int DUELING_PISTOL_INDEX = 5;
@@ -86,14 +91,14 @@ const int EMPTY_INDEX = 11;
 
 /***********************************INDEX VECTORS CONFIG*******************************************/
 const int AMMO_INDEX = 0;
-const int SCOPE_INDEX = 1;
-const int PRECISION_INDEX = 2;
-const int MINIMUN_INDEX = 0;
-const int SHORT_INDEX = 1;
-const int MEDIUM_INDEX = 3;
-const int LONG_INDEX = 2;
 const int NONE_INDEX = 0;
-const int TO_EXPLOTE_GRANADA_INDEX = 5;
+const int MINIMUN_INDEX = 0;
+const int SCOPE_INDEX = 1;
+const int SHORT_INDEX = 1;
+const int PRECISION_INDEX = 2;
+const int LONG_INDEX = 2;
+const int MEDIUM_INDEX = 3;
 const int BASIC_INDEX = 4;
+const int TO_EXPLOTE_GRANADA_INDEX = 5;
 
 #endif

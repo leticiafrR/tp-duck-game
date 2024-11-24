@@ -9,6 +9,13 @@ Config::Config() {
     setDuckConfig();
 }
 
+void Config::setShotConfig(const YAML::Node& config) {
+    inclinations.emplace_back(config[SHO0TING_INCLINATION_STR][BASIC_STR].as<float>());
+    inclinations.emplace_back(config[SHO0TING_INCLINATION_STR][LASER_RIFLE_STR].as<float>());
+
+    projectilesPerShot.emplace_back(config[PROJECTILE_PER_SHOT_STR][BASIC_STR].as<uint8_t>());
+}
+
 void Config::setAvaiableLevels() {
     YAML::Node config = YAML::LoadFile("../config/avaiableLevelsPath.yaml");
     _availableLevels = config[AVAIABLE_LEVELS_STR].as<std::vector<std::string>>();
@@ -69,12 +76,13 @@ void Config::setDispersion(const YAML::Node& config) {
 
 void Config::setWeaponsConfig() {
     YAML::Node config = YAML::LoadFile("../config/weaponConfig.yaml");
+    setShotConfig(config);
     setDispersion(config[DISPERSION_STR]);
     setCooldown(config[COOLDOWN_STR]);
     setDamage(config[DAMAGE_STR]);
     setAWeapon(BANANA_STR, config);
-    setAWeapon(GRANADA_STR, config);
     setAWeapon(LASER_RIFLE_STR, config);
+    setAWeapon(GRANADA_STR, config);
     setAWeapon(COWBOY_PISTOL_STR, config);
 }
 
@@ -130,3 +138,10 @@ int Config::getDamageMinimun() const { return damage[MINIMUN_INDEX]; }
 int Config::getDamageShort() const { return damage[SHORT_INDEX]; }
 int Config::getDamageMedium() const { return damage[MEDIUM_INDEX]; }
 int Config::getDamageLong() const { return damage[LONG_INDEX]; }
+
+/*********************SHOTING INCILNATION**************************** */
+float Config::getBasicInclination() const { return inclinations[NONE_INDEX]; }
+float Config::getLaserRifleInclination() const { return inclinations[LASER_RIFLE_INDEX]; }
+
+/********************PROJECTILES PER SHOT**************************** */
+uint8_t Config::getProjectilePerShotBasic() const { return projectilesPerShot[NONE_INDEX]; }

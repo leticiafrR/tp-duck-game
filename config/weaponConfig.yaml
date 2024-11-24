@@ -1,22 +1,9 @@
-collectable_types:
-  empty: 0
-  cowboy_pistol: 1
-  laser_rifle: 2
-  helmet: 3
-  armor: 4
-  granada: 5
-  banana: 6
-  ak47: 7
-  dueling_pistol: 8
-  magnum: 9
-  shotgun: 10
-  sniper: 11
+shooting_inclination:
+  basic: 0
+  laser_rifle: -45
 
-projectiles_types:
-  laser: 0
-  bullet: 1
-  banana: 2
-  granada_fragment: 3
+projectiles_per_shot:
+  basic: 1
 
 cooldown:
   none: 0
