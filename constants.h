@@ -32,5 +32,5 @@ const std::string MIN_PLAYERS_STR = "min_players";
 const std::string GAMES_TO_WIN_STR = "game_to_win_match";
 const std::string GAMES_IN_GROUP = "games_in_group";
 
-const std::string AVAILABLE_LEVELS_PATH = "../config/avaiableLevelsPath.yaml";
+const std::string AVAILABLE_LEVELS_PATH = "../config/availableLevelsPath.yaml";
 #endif
