@@ -48,13 +48,13 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
     Vector2D posLeft(dynamicT.GetPos().x - margen, dynamicT.GetPos().y);
     Vector2D posRight(dynamicT.GetPos().x + margen, dynamicT.GetPos().y);
 
-    return std::any_of(
-            grounds.begin(), grounds.end(),
-            [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
-                bool left = Collision::Raycast(posLeft, dir, len + 0.05f, ground.mySpace);
-                bool right = Collision::Raycast(posRight, dir, len + 0.05f, ground.mySpace);
-                return left || right;
-            });
+    return std::any_of(grounds.begin(), grounds.end(),
+                       [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
+                           bool left = Collision::Raycast(posLeft, dir, len + 0.1f, ground.mySpace);
+                           bool right =
+                                   Collision::Raycast(posRight, dir, len + 0.1f, ground.mySpace);
+                           return left || right;
+                       });
 }
 
 std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
