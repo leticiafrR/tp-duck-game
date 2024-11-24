@@ -24,7 +24,7 @@ void Config::setAvaiableLevels() {
 }
 
 void Config::setMatchConfig() {
-    YAML::Node config = YAML::LoadFile("../config/matchConfig.yaml");
+    YAML::Node config = YAML::LoadFile(MATCH_PATH);
     try {
         _maxPlayers = config[MAX_PLAYERS_STR].as<int>();
         _minPlayers = config[MIN_PLAYERS_STR].as<int>();
@@ -40,7 +40,7 @@ void Config::setMatchConfig() {
 }
 
 void Config::setDuckConfig() {
-    YAML::Node config = YAML::LoadFile("../config/duckConfig.yaml");
+    YAML::Node config = YAML::LoadFile(DUCK_PATH);
     try {
         duck.emplace_back(config[SPEED_STR].as<int>());
         duck.emplace_back(config[MASS_STR].as<int>());
@@ -77,7 +77,7 @@ void Config::setDispersion(const YAML::Node& config) {
 }
 
 void Config::setWeaponsConfig() {
-    YAML::Node config = YAML::LoadFile("../config/weaponConfig.yaml");
+    YAML::Node config = YAML::LoadFile(WEAPONS_PATH);
     setShotConfig(config);
     setDispersion(config[DISPERSION_STR]);
     setCooldown(config[COOLDOWN_STR]);
@@ -86,6 +86,11 @@ void Config::setWeaponsConfig() {
     setAWeapon(LASER_RIFLE_STR, config);
     setAWeapon(GRANADA_STR, config);
     setAWeapon(COWBOY_PISTOL_STR, config);
+    setAWeapon(AK47_STR, config);
+    setAWeapon(DUELING_PISTOL_STR, config);
+    setAWeapon(MANGUM_STR, config);
+    setAWeapon(SHOTGUN_STR, config);
+    setAWeapon(SNIPER_STR, config);
 }
 
 void Config::setCooldown(const YAML::Node& config) {
@@ -125,6 +130,22 @@ uint16_t Config::getCowboyPistolAmmo() const {
 int Config::getCowboyPistolScope() const { return (int)weapons[COWBOY_PISTOL_INDEX][SCOPE_INDEX]; }
 uint16_t Config::getGranadaAmmo() const { return (uint16_t)weapons[GRANADA_INDEX][AMMO_INDEX]; }
 int Config::getGranadaScope() const { return (int)weapons[GRANADA_INDEX][SCOPE_INDEX]; }
+uint16_t Config::getAK47Ammo() const { return (uint16_t)weapons[AK47_INDEX][SCOPE_INDEX]; }
+int Config::getAK47Scope() const { return (int)weapons[AK47_INDEX][AMMO_INDEX]; }
+uint16_t Config::getDuelingPistolAmmo() const {
+    return (uint16_t)weapons[DUELING_PISTOL_INDEX][AMMO_INDEX];
+}
+int Config::getDuelingPistolScope() const {
+    return (int)weapons[DUELING_PISTOL_INDEX][SCOPE_INDEX];
+}
+uint16_t Config::getMagnumAmmo() const { return (uint16_t)weapons[MAGNUM_INDEX][AMMO_INDEX]; }
+int Config::getMagnumScope() const { return (int)weapons[MAGNUM_INDEX][SCOPE_INDEX]; }
+uint16_t Config::getShotgunAmmo() const { return (uint16_t)weapons[SHOTGUN_INDEX][AMMO_INDEX]; }
+int Config::getShotgunScope() const { return (int)weapons[SHOTGUN_INDEX][SCOPE_INDEX]; }
+uint16_t Config::getSniperAmmo() const { return (uint16_t)weapons[SNIPER_INDEX][AMMO_INDEX]; }
+int Config::getSniperScope() const { return (int)weapons[SNIPER_INDEX][SCOPE_INDEX]; }
+
+// Dispersion
 float Config::getNoDispersion() const { return dispersions[NONE_INDEX]; }
 float Config::getShortDispersion() const { return dispersions[SHORT_INDEX]; }
 float Config::getLongDispersion() const { return dispersions[LONG_INDEX]; }

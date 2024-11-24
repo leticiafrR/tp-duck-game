@@ -8,40 +8,55 @@
 #include "constants.h"
 #include "constantsEditor.h"
 
-void AddNewLevelToTheList(const std::string& filePath) {
-    YAML::Node config = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
-    std::vector<std::string> _availableLevels =
-            config[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
-    _availableLevels.emplace_back(filePath);
-    config[AVAILABLE_LEVELS_STR] = _availableLevels;
+// Se encarga de crear o guardar los cambios y settear el nombre del nivel en la lista
+void SaveChanges(const std::string& fileName, const YAML::Node& config) {
+    std::string filePath = RELATIVE_LEVEL_PATH + fileName + YAML_FILE;
 
-    std::ofstream fout(AVAILABLE_LEVELS_PATH);
-    fout << config;
+    // Guardar el archivo de configuración
+    {
+        std::ofstream fout(filePath);
+        fout << config;
+    }
+
+    // Cargar niveles disponibles
+    YAML::Node availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
+    std::vector<std::string> availableLevels =
+            availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
+
+    // Verificar si el archivo ya existe en la lista de niveles disponibles
+    auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
+    if (it == availableLevels.end()) {
+        availableLevels.emplace_back(filePath);
+        availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
+
+        // Guardar los cambios en la lista de niveles disponibles
+        std::ofstream fout(AVAILABLE_LEVELS_PATH);
+        fout << availableConfig;
+    }
 }
 
 int main() {
     YAML::Node config;
     YAML::Node playersSpawnPoints = YAML::Node(YAML::NodeType::Sequence);
-    // Adding player spawn points
+
+    // Agregar puntos de aparición de jugadores
     int x = -18;
     int y = 12;
     playersSpawnPoints.push_back(YAML::Node(YAML::NodeType::Map));
     playersSpawnPoints[0]["x"] = x;
     playersSpawnPoints[0]["y"] = y;
+
     x = 32;
     y = -8;
     playersSpawnPoints.push_back(YAML::Node(YAML::NodeType::Map));
     playersSpawnPoints[1]["x"] = x;
-    playersSpawnPoints[1]["y"] = y;  // Adding the nodes to the config
+    playersSpawnPoints[1]["y"] = y;
+
+    // Agregar los nodos a la configuración
     config["players_spawn_points"] = playersSpawnPoints;
 
-    std::cout << "" << std::endl;
-    std::string fileName;
-    std::cin >> fileName;
-    std::string path = RELATIVE_LEVEL_PATH + fileName + YAML_FILE;
-
-    std::ofstream fout(path);
-    fout << config;
+    // Guardar cambios
+    SaveChanges("config.yaml", config);
 
     return 0;
 }

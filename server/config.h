@@ -71,11 +71,21 @@ public:
     uint16_t getBananaAmmo() const;
     uint16_t getGranadaAmmo() const;
     uint16_t getCowboyPistolAmmo() const;
+    uint16_t getAK47Ammo() const;
+    uint16_t getDuelingPistolAmmo() const;
+    uint16_t getMagnumAmmo() const;
+    uint16_t getShotgunAmmo() const;
+    uint16_t getSniperAmmo() const;
     /****************************SCOPE********************************** */
     int getLaserRifleScope() const;
     int getBananaScope() const;
     int getCowboyPistolScope() const;
     int getGranadaScope() const;
+    int getAK47Scope() const;
+    int getDuelingPistolScope() const;
+    int getMagnumScope() const;
+    int getShotgunScope() const;
+    int getSniperScope() const;
     /***********************DISPERSION********************************** */
     float getNoDispersion() const;
     float getShortDispersion() const;
@@ -87,26 +97,5 @@ public:
 
     /********************PROJECTILES PER SHOT**************************** */
     uint8_t getProjectilePerShotBasic() const;
-
-    // faltan implementar:
-    int getAK47Ammo() const;
-    int getAK47Scope() const;
-    float getAK47Dispersion() const;
-
-    int getDuelingPistolAmmo() const;
-    int getDuelingPistolScope() const;
-    float getDuelingPistolDispersion() const;
-
-    int getMagnumAmmo() const;
-    int getMAgnumScope() const;
-    float getMagnumDispersion() const;
-
-    int getShotgunAmmo() const;
-    int getShotgunScope() const;
-    float getShotgunDispersion() const;
-
-    int getSniperAmmo() const;
-    int getSniperScope() const;
-    float getSniperDispersion() const;
 };
 #endif

@@ -3,11 +3,11 @@
 
 #include <string>
 
-/************************************STATIC MAP YAML*************************************/
+/************************************STATIC MAP YAML*******************************/
 const float HALF = 2;
 const float FALLING = -1;
 
-/****************************************DUCK CONFIG***************************************/
+/****************************************DUCK CONFIG*******************************/
 const std::string SPEED_STR = "speed";
 const std::string MASS_STR = "mass";
 const std::string SIZE_STR = "size";
@@ -53,6 +53,7 @@ const std::string MANGUM_STR = "magnum";
 const std::string SHOTGUN_STR = "shotgun";
 const std::string SNIPER_STR = "sniper";
 const std::string AK47_STR = "ak47";
+const std::string DUELING_PISTOL_STR = "dueling_pistol";
 
 const int BANANA_INDEX = 0;
 const int LASER_RIFLE_INDEX = 1;
@@ -67,7 +68,7 @@ const int HELMET_INDEX = 9;
 const int ARMOR_INDEX = 10;
 const int EMPTY_INDEX = 11;
 
-/***********************************INDEX VECTORS CONFIG*******************************************/
+/***********************************INDEX VECTORS CONFIG******************************/
 const int AMMO_INDEX = 0;
 const int NONE_INDEX = 0;
 const int MINIMUN_INDEX = 0;
@@ -79,4 +80,9 @@ const int MEDIUM_INDEX = 3;
 const int BASIC_INDEX = 4;
 const int TO_EXPLOTE_GRANADA_INDEX = 5;
 
+
+/***********************************PATHS**************************************** */
+const std::string WEAPONS_PATH = "../config/weaponConfig.yaml";
+const std::string MATCH_PATH = "../config/matchConfig.yaml";
+const std::string DUCK_PATH = "../config/duckConfig.yaml";
 #endif

@@ -23,6 +23,7 @@ dispersion:
   no_dispersion: 0
   long: 0.4
   short: 0.15
+
 banana:
   scope: 10
   ammo: 1
@@ -33,10 +34,33 @@ granada:
 
 laser_rifle:
   scope: 30
-  ammo: 100
+  ammo: 10
 
 cowboy_pistol:
   scope: 20
   ammo: 6
 
+pew_pew_laser:
+  scope: 35 # 35 a 38
+  ammo: 12
+
+ak_47:
+  scope: 13
+  ammo: 30
+
+dueling_pistol:
+  scope: 5
+  ammo: 1
+
+magnum:
+  scope: 20
+  ammo: 6
+
+shotgun:
+  scope: 7 # 7 a 9
+  ammo: 2
+
+sniper:
+  scope: 64
+  ammo: 3
 
