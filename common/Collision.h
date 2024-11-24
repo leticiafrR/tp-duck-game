@@ -138,8 +138,7 @@ public:
 
         if (overlapX <= 0 || overlapY <= 0)
             return;
-        std::cout << "overlapX: " << overlapX << "\n";
-        std::cout << "overlapY: " << overlapY << "\n";
+
         if (overlapX < overlapY) {
             if (dMin.x > sMin.x) {
                 dynamicT.Move(Vector2D::Right() * (overlapX + 0.05f));  // Move right
@@ -147,8 +146,6 @@ public:
                 dynamicT.Move(Vector2D::Left() * (overlapX + 0.05f));  // Move left
             }
         } else {
-            std::cout << "D_MIN_Y: " << dMin.y << "\n";
-            std::cout << "S_MIN_Y: " << sMin.y << "\n";
             if (dMin.y >= sMin.y) {
                 dynamicT.Move(Vector2D::Up() * (overlapY + 0.05f));  // Move up
             } else {
