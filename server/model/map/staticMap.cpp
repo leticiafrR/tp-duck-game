@@ -7,6 +7,8 @@
 #include <yaml-cpp/yaml.h>
 
 #include "server/constantServer.h"
+
+#include "constants.h"
 enum : int { L, R, B, T };
 
 // void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
@@ -86,6 +88,7 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
     }
     return std::nullopt;
 }
+
 void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
     auto plats = config[platformName];
     for (std::size_t i = 0; i < plats.size(); ++i) {
@@ -129,6 +132,15 @@ void StaticMap::SetTheLevel(const std::string& filePath) {
         pos.y = spawnPoints[i][Y_STR].as<float>();
         playersSpawnPlaces.push_back(pos);
     }
+
+    auto _weaponsSpawnPoints = config[WEAPONS_POINTS_STR];
+    for (std::size_t i = 0; i < _weaponsSpawnPoints.size(); ++i) {
+        Vector2D pos;
+        pos.x = _weaponsSpawnPoints[i][X_STR].as<float>();
+        pos.y = _weaponsSpawnPoints[i][Y_STR].as<float>();
+        weaponsSpawnPoints.push_back(pos);
+    }
+
     YAML::Node platformsList = config[PLATAFORM_STR][0];
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
@@ -136,3 +148,5 @@ void StaticMap::SetTheLevel(const std::string& filePath) {
         loadPlatforms(config, platformName);
     }
 }
+
+std::vector<Vector2D> StaticMap::GetWeaponsSpawnPoints() { return weaponsSpawnPoints; }

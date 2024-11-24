@@ -4,30 +4,8 @@
 #include <string>
 
 /************************************STATIC MAP YAML*************************************/
-const std::string THEME_STR = "theme";
-const std::string FULL_MAP_STR = "full_map_size";
-const std::string X_STR = "x";
-const std::string Y_STR = "y";
-const std::string PLAYERS_POINTS_STR = "players_spawn_points";
-const std::string PLATAFORM_STR = "plataforms";
-const std::string EDGES_STR = "edges";
-const std::string WEIGHT_STR = "w";
-const std::string HIGH_STR = "h";
-const std::string LEFT_STR = "LEFT";
-const std::string RIGHT_STR = "RIGHT";
-const std::string BOTTOM_STR = "BOTTOM";
-const std::string TOP_STR = "TOP";
-
 const float HALF = 2;
 const float FALLING = -1;
-
-/**************************************CONFIG YAML****************************************/
-const std::string AVAIABLE_LEVELS_STR = "avaiable_levels";
-const std::string MAX_PLAYERS_STR = "max_players";
-const std::string MIN_PLAYERS_STR = "min_players";
-const std::string GAMES_TO_WIN_STR = "game_to_win_match";
-const std::string GAMES_IN_GROUP = "games_in_group";
-
 
 /****************************************DUCK CONFIG***************************************/
 const std::string SPEED_STR = "speed";

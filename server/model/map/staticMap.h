@@ -18,18 +18,13 @@
 
 class StaticMap {
 private:
-    // cppcheck-suppress unusedStructMember
     std::string theme;
-    // cppcheck-suppress unusedStructMember
     std::vector<size_t> size;
-    // cppcheck-suppress unusedStructMember
     std::vector<float> limits;
-    // cppcheck-suppress unusedStructMember
     std::vector<Transform> plataforms;
-    // cppcheck-suppress unusedStructMember
     std::vector<GroundDto> grounds;
-    // cppcheck-suppress unusedStructMember
     std::vector<Vector2D> playersSpawnPlaces;
+    std::vector<Vector2D> weaponsSpawnPoints;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -51,6 +46,8 @@ public:
     std::optional<Transform> CheckCollision(const Transform& dynamicT);
 
     std::vector<Vector2D> GetPlayersSpawnPoints();
+
+    std::vector<Vector2D> GetWeaponsSpawnPoints();
 
     GameSceneDto GetScene();
     ~StaticMap() {}

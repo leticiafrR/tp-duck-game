@@ -1,5 +1,7 @@
 #include "config.h"
 
+#include "../constants.h"
+
 #include "constantServer.h"
 
 Config::Config() {
@@ -17,8 +19,8 @@ void Config::setShotConfig(const YAML::Node& config) {
 }
 
 void Config::setAvaiableLevels() {
-    YAML::Node config = YAML::LoadFile("../config/avaiableLevelsPath.yaml");
-    _availableLevels = config[AVAIABLE_LEVELS_STR].as<std::vector<std::string>>();
+    YAML::Node config = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
+    _availableLevels = config[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
 }
 
 void Config::setMatchConfig() {
