@@ -17,15 +17,10 @@
 #define ID_PLAYER_UNIQUE_TEST 1
 class GameWorld {
 private:
-    // cppcheck-suppress unusedStructMember
     size_t livePlayers;
-    // cppcheck-suppress unusedStructMember
     StaticMap map;
-    // cppcheck-suppress unusedStructMember
     std::unordered_map<PlayerID_t, Duck*> players;
-    // cppcheck-suppress unusedStructMember
     EventsManager eventsManager;
-    // cppcheck-suppress unusedStructMember
     ProjectilesController p;
     void ReapDead();
     void Testing(const Vector2D& posToTest);

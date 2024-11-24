@@ -69,7 +69,7 @@ void Duck::StopShooting() { isShooting = false; }
 void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
-    if (isCrouched) {
+    if (!isCrouched) {
         isWounded = true;
         DynamicObject::HandleReceiveDamage(damage);
     }
@@ -96,6 +96,7 @@ void Duck::RegistListener(PlayerEventListener* listener) {
     // on the first iteration, everything is new
     TriggerEvent();
 }
+
 bool Duck::HasWeaponOnHand() {
     return (itemOnHand &&
             !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));

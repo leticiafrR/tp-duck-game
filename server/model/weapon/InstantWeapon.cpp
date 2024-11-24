@@ -50,7 +50,6 @@ bool InstantWeapon::Use(Duck* shooter) {
         }
         ammo--;
         cooldownTimer = 0;
-        std::cout << "SHOOT\n";
         return true;
     }
     return false;

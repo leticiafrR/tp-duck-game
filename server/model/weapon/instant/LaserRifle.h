@@ -13,7 +13,7 @@ public:
             InstantWeapon(controller, initialSpace, conf.getLaserRifleScope(),
                           conf.getLaserRifleAmmo(), conf.getDamageMedium(),
                           conf.getShortDispersion(), conf.getCooldownBasic(),
-                          TypeProjectile::RayoLaser) {}
+                          TypeProjectile::RayoLaser, -45) {}
 
 
     void BeCollected(TypeCollectable& collectorTypeRef) override {
@@ -23,9 +23,8 @@ public:
     bool Use(Duck* shooter) override {
         // genera disparos continuos
         if (InstantWeapon::Use(shooter)) {
-            std::cout << "Entra\n";
             shooter->StartShooting();
-            shooter->ApplyRecoil(30);  // era 5
+            shooter->ApplyRecoil(10);
             return true;
         }
         return false;
