@@ -12,35 +12,22 @@ class ProjectilesController;
 
 class Duck: public DynamicObject {
 private:
-    // cppcheck-suppress unusedStructMember
-
     PlayerID_t id;
-    // cppcheck-suppress unusedStructMember
-    // cppcheck-suppress unusedStructMember
-    bool isShooting;  // just touched by the ones who needs key up and key down (not used as the
-                      // cppcheck-suppress unusedStructMember            // momment)
+
+    bool isShooting;  // just touched by the ones who needs key up and key down (not used as
+                      // momment)
     bool isLookingUp;
-    // cppcheck-suppress unusedStructMember
     bool isCrouched;
-    // cppcheck-suppress unusedStructMember
     bool isGrounded;
-    // cppcheck-suppress unusedStructMember
     bool isWounded;
-    // cppcheck-suppress unusedStructMember
+
     MotionHandler motionHandler;
-    // cppcheck-suppress unusedStructMember
     RigidBody body;
-    // cppcheck-suppress unusedStructMember
     PlayerEventListener* l;
-    // cppcheck-suppress unusedStructMember
     Flip myFlip;
-    // cppcheck-suppress unusedStructMember
     DuckState myState;
-    // cppcheck-suppress unusedStructMember
     Collectable* itemOnHand;
-    // cppcheck-suppress unusedStructMember
     TypeCollectable typeOnHand;
-    // cppcheck-suppress unusedStructMember
     Equipment protectiveEquipment;
 
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
