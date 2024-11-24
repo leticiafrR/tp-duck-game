@@ -23,7 +23,7 @@ private:
     SDL2pp::Optional<Rect> sourceRect;
 
     Transform transform;
-    Color color;
+    Color color = ColorExtension::White();
 
     bool flipH = false;
     bool visible = true;

@@ -11,41 +11,27 @@
 
 #include "Object2D.h"
 #include "SheetDataCache.h"
+#include "SpriteRendererData.h"
 
 using std::string;
 using std::unordered_map;
 
-class HendItemRenderData {
+class HendItemRenderData: public SpriteRendererData {
 private:
 public:
-    string imageFile;
-    string yamlFile;
-    string rectId;
-    Transform offsetT;
+    Vector2D offset;
 
     HendItemRenderData() {}
 
     HendItemRenderData(const string& imageFile, const string& yamlFile, const string& rectId,
-                       Transform offsetT = Transform()) {
-        this->imageFile = imageFile;
-        this->yamlFile = yamlFile;
-        this->rectId = rectId;
-        this->offsetT = offsetT;
+                       Vector2D offset = Vector2D::Zero(), Vector2D size = Vector2D::Zero(),
+                       float angle = 0):
+            SpriteRendererData(imageFile, yamlFile, rectId, size, angle) {
+        this->offset = offset;
     }
 
     Transform GetTargetTransform(Vector2D playerPos) {
-        Transform target = offsetT;
-        target.SetPos(playerPos + offsetT.GetPos());
-        return target;
-    }
-
-    Vector2D GetOffset() { return offsetT.GetPos(); }
-    float GetAngle() { return offsetT.GetAngle(); }
-
-    SDL2pp::Optional<Rect> GetSourceRect() const {
-        if (yamlFile.empty())
-            return SDL2pp::NullOpt;
-        return SheetDataCache::GetData(yamlFile)[rectId][0];
+        return Transform(playerPos + offset, size, angle);
     }
 
     ~HendItemRenderData() = default;
@@ -57,11 +43,11 @@ private:
     const unordered_map<TypeCollectable, HendItemRenderData> itemsMap = {
             {TypeCollectable::EMPTY, HendItemRenderData("", "", "")},
             {TypeCollectable::COWBOY_PISTOL,
-             HendItemRenderData("pistols.png", "pistols.yaml", "cowboy_pistol",
-                                Transform(Vector2D(0, -0.4f), Vector2D(2.8, 1.4)))},
+             HendItemRenderData("pistols.png", "pistols.yaml", "cowboy_pistol", Vector2D(0, -0.4f),
+                                Vector2D(2.8, 1.4))},
             {TypeCollectable::LASER_RIFLE,
-             HendItemRenderData("laser.png", "laser.yaml", "laser_rifle",
-                                Transform(Vector2D(0, -0.5f), Vector2D(4, 4), -40))},
+             HendItemRenderData("laser.png", "laser.yaml", "laser_rifle", Vector2D(0, -0.5f),
+                                Vector2D(4, 4), -45)},
             {TypeCollectable::ARMOR, HendItemRenderData("", "", "")},
             {TypeCollectable::HELMET, HendItemRenderData("", "", "")}};
 
@@ -74,22 +60,20 @@ public:
     void SetItem(TypeCollectable type) {
         itemData = itemsMap.at(type);
         SetFileName(itemData.imageFile);
-        SetColor(ColorExtension::White());
         SetSourceRect(itemData.GetSourceRect());
-        SetTransform(itemData.offsetT);
 
-        GetTransform().SetPos(playerT.GetPos() + itemData.GetOffset());
+        SetTransform(Transform(playerT.GetPos() + itemData.offset, itemData.size, itemData.angle));
     }
 
     void Update(bool playerFlip, bool lookingUp) {
         SetFlip(playerFlip);
-        GetTransform().SetPos(playerT.GetPos() + itemData.GetOffset() +
+        GetTransform().SetPos(playerT.GetPos() + itemData.offset +
                               (lookingUp ? Vector2D(0, 0.6f) : Vector2D::Zero()));
 
         if (lookingUp) {
-            GetTransform().SetAngle((playerFlip ? -90 : 90));
+            GetTransform().SetAngle((playerFlip ? -90 - itemData.angle : 90 + itemData.angle));
         } else {
-            GetTransform().SetAngle(playerFlip ? -itemData.GetAngle() : itemData.GetAngle());
+            GetTransform().SetAngle(playerFlip ? -itemData.angle : itemData.angle);
         }
     }
     ~HandItemRenderer() = default;

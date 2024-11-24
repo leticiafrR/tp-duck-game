@@ -174,7 +174,7 @@ private:
         while (!finishing && client.TryRecvNetworkMsg(snapshot)) {
             for (size_t i = 0; i < snapshot->raycastsEvents.size(); i++) {
                 auto ray = snapshot->raycastsEvents[i];
-                bullets.emplace_back(ray.origin, ray.end, 100);
+                bullets.emplace_back(ray.type, ray.origin, ray.end, 100);
                 AudioManager::GetInstance().PlayShootSFX();
             }
 

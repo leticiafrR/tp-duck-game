@@ -1,2 +1,5 @@
 laser_rifle:
   - { x: 1, y: 97, w: 32, h: 32 }
+
+laser_ray:
+  - { x: 1, y: 156, w: 32, h: 16 }
