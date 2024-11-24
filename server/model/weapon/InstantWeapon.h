@@ -4,18 +4,28 @@
 #include <random>
 
 #include "../projectile/InstantProjectile.h"
+#include "server/config.h"
+#include "server/model/types.h"
 
 #include "Weapon.h"
 
 class InstantWeapon: public Weapon {
 protected:
+    // cppcheck-suppress unusedStructMember
     const float scope;
+    // cppcheck-suppress unusedStructMember
     const uint8_t damage;
+    // cppcheck-suppress unusedStructMember
     const float dispersionRange;
+    // cppcheck-suppress unusedStructMember
     const float cooldown;
+    // cppcheck-suppress unusedStructMember
     float cooldownTimer;
+    // cppcheck-suppress unusedStructMember
     const uint8_t projectilesPerShot;
+    // cppcheck-suppress unusedStructMember
     float inclination;
+    // cppcheck-suppress unusedStructMember
     InstantProjectileEventListener* l;
 
     float RandomDisturbance();

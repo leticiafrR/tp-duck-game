@@ -1,0 +1,4 @@
+max_players: 5
+min_players: 2
+game_to_win_match: 10
+games_in_group: 5

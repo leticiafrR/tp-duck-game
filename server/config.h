@@ -3,49 +3,110 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <utility>
 #include <vector>
+
+#include <yaml-cpp/yaml.h>
 
 #include "common/Vector2D.h"
 
-// would be readed form a file .yaml
-#define MAX_PLAYERS 5
-#define MIN_PLAYERS 2
-#define GAMES_TO_WIN_MATCH 10
-#define GAMES_IN_GROUP 5
-
-
+enum class TypeCollectable : uint8_t;
+enum class TypeProjectile : uint8_t;
 class Config {
+    // cppcheck-suppress unusedStructMember
+    std::vector<std::string> _availableLevels;
+    // cppcheck-suppress unusedStructMember
+    int _maxPlayers;
+    // cppcheck-suppress unusedStructMember
+    int _minPlayers;
+    // cppcheck-suppress unusedStructMember
+    int _gamesToWinMatch;
+    // cppcheck-suppress unusedStructMember
+    int _gamesInGroup;
+    // cppcheck-suppress unusedStructMember
+    std::vector<int> duck;
+    // cppcheck-suppress unusedStructMember
+    std::vector<std::vector<uint8_t>> weapons;
+    // cppcheck-suppress unusedStructMember
+    std::vector<float> cooldown;
+    // cppcheck-suppress unusedStructMember
+    std::vector<int> damage;
+    // cppcheck-suppress unusedStructMember
+    std::vector<float> dispersions;
 
-    /* A vector that must be initialized with the name of the files yaml in the directory
-     * server/maps. Those files must have the following content: The name of theme of that level
-     * (descibe the background maybe the tiles) and then a descripction that allow a parser to read
-     * where are the platafforms in the world of 100x100 */
-
-    /* For the dummy Match we are going to hardcode some fake names*/
-    const std::vector<std::string> _availableLevels;
-
-    /* its a number with the quantity of different skins availables (for the clients), probably must
-     * be read from a file .yaml with the settings*/
-    const int _maxPlayers;
-    const int _minPlayers;
-    const int _gamesToWinMatch;
-    const int _gamesInGroup;
-
+    void setAvaiableLevels();
+    void setMatchConfig();
+    void setDuckConfig();
+    void setAWeapon(const std::string& name, const YAML::Node& con);
+    void setWeaponsConfig();
+    void setDispersion(const YAML::Node& config);
+    void setCooldown(const YAML::Node& config);
+    void setDamage(const YAML::Node& config);
 
 public:
-    Config():
-            _availableLevels({"level_1.yaml"}),
-            _maxPlayers(MAX_PLAYERS),
-            _minPlayers(MIN_PLAYERS),
-            _gamesToWinMatch(GAMES_TO_WIN_MATCH),
-            _gamesInGroup(GAMES_IN_GROUP) {}
+    Config();
+    /************************GAME****************************************** */
+    const std::vector<std::string> getAvailableLevels() const;
+    int getAvailableSkins() const;
+    int getMaxPlayers() const;
+    int getMinPlayers() const;
+    int gamesToWinMatch() const;
+    int gamesInGroup() const;
 
-    const std::vector<std::string> getAvailableLevels() const { return _availableLevels; }
-    int getAvailableSkins() const { return _maxPlayers; }
-    int getMaxPlayers() const { return _maxPlayers; }
-    int getMinPlayers() const { return _minPlayers; }
-    int gamesToWinMatch() const { return _gamesToWinMatch; }
-    int gamesInGroup() const { return _gamesInGroup; }
+    /**************************COOLDOWN************************************* */
+    float getCooldownNone() const;
+    float getCooldownShort() const;
+    float getCooldownBasic() const;
+    float getCooldownMedium() const;
+    float getCooldownLong() const;
+    float getCooldownExploteGranada() const;
+
+
+    int getDamageMinimun() const;
+    int getDamageShort() const;
+    int getDamageMedium() const;
+    int getDamageLong() const;
+
+    /***************************DUCK************************************** */
+    int getDuckMass() const;
+    int getDuckSize() const;
+    int getDuckLife() const;
+    int getDuckSpeed() const;
+    /****************************AMMO*********************************** */
+    uint16_t getLaserRifleAmmo() const;
+    uint16_t getBananaAmmo() const;
+    uint16_t getGranadaAmmo() const;
+    uint16_t getCowboyPistolAmmo() const;
+    /****************************SCOPE********************************** */
+    int getLaserRifleScope() const;
+    int getBananaScope() const;
+    int getCowboyPistolScope() const;
+    int getGranadaScope() const;
+    /***********************DISPERSION********************************** */
+    float getNoDispersion() const;
+    float getShortDispersion() const;
+    float getLongDispersion() const;
+
+    // faltan implementar:
+    int getAK47Ammo() const;
+    int getAK47Scope() const;
+    float getAK47Dispersion() const;
+
+    int getDuelingPistolAmmo() const;
+    int getDuelingPistolScope() const;
+    float getDuelingPistolDispersion() const;
+
+    int getMagnumAmmo() const;
+    int getMAgnumScope() const;
+    float getMagnumDispersion() const;
+
+    int getShotgunAmmo() const;
+    int getShotgunScope() const;
+    float getShotgunDispersion() const;
+
+    int getSniperAmmo() const;
+    int getSniperScope() const;
+    float getSniperDispersion() const;
 };
-
 #endif

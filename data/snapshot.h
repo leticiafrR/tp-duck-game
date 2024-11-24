@@ -20,7 +20,7 @@ enum class DuckState : uint8_t {
     DEAD,
     DEAD_BY_FALLING
 };
-enum class TypeCollectable : uint8_t { EMPTY, PISTOLA_COWBOY, LASER_RIFLE, HELMET, ARMOR };
+enum class TypeCollectable : uint8_t { EMPTY, COWBOY_PISTOL, LASER_RIFLE, HELMET, ARMOR };
 
 struct PlayerEvent {
     Vector2D motion;
@@ -29,6 +29,8 @@ struct PlayerEvent {
     bool isLookingUp;
     TypeCollectable typeOnHand;
     bool isCrouched;
+
+    PlayerEvent() = default;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
                 bool _isLookingUp):
@@ -47,7 +49,6 @@ struct PlayerEvent {
             isLookingUp(_isLookingUp),
             typeOnHand(_typeOnHand),
             isCrouched(_isCrouched) {}
-    PlayerEvent() = default;
 };
 
 // enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};
@@ -65,9 +66,9 @@ struct InstantProjectileEventDto {
     Vector2D origin;
     Vector2D end;
 
+    InstantProjectileEventDto() = default;
     InstantProjectileEventDto(TypeProjectile type, const Vector2D& origin, const Vector2D& end):
             type(type), origin(origin), end(end) {}
-    InstantProjectileEventDto() = default;
 };
 
 struct Snapshot: public NetworkMsg {

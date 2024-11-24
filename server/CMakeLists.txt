@@ -1,6 +1,7 @@
 target_sources(taller_server
     PRIVATE
     # .cpp files
+    config.cpp
     model/event/EventsManager.cpp
     model/DynamicObj.cpp
     model/Duck.cpp
@@ -24,10 +25,10 @@ target_sources(taller_server
 
     PUBLIC
     # .h files
+    config.h
     model/types.h
     model/map/staticMap.h
     model/MotionHandler.h
-    model/map/mapConstants.h
     model/DynamicObj.h
     model/Duck.h
     model/Game.h

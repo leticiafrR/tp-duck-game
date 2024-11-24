@@ -57,10 +57,11 @@ private:
             if (firstSnapshot.updates.find(pData.playerID) == firstSnapshot.updates.end())
                 continue;
             Vector2D spawnPos = firstSnapshot.updates.at(pData.playerID).motion;
+            PlayerEvent initialEvent = firstSnapshot.updates.at(pData.playerID);
 
-            players.emplace(pData.playerID,
-                            std::make_shared<DuckClientRenderer>(Transform(spawnPos, duckSize),
-                                                                 pData, camController));
+            players.emplace(pData.playerID, std::make_shared<DuckClientRenderer>(
+                                                    Transform(spawnPos, duckSize), pData,
+                                                    initialEvent, camController));
         }
     }
 

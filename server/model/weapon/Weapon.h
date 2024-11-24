@@ -6,7 +6,6 @@
 #include "../collectable/Collectable.h"
 #include "../projectile/Projectile.h"
 #include "../projectile/ProjectilesController.h"
-#include "../types.h"
 
 class Weapon: public Collectable {
 protected:
