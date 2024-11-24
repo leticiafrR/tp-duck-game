@@ -52,7 +52,7 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
                        [&dynamicT, &dir, len, posLeft, posRight](const auto& ground) {
                            bool left = Collision::Raycast(posLeft, dir, len + 0.1f, ground.mySpace);
                            bool right =
-                                   Collision::Raycast(posRight, dir, len + 0.1f, ground.mySpace);
+                                   Collision::Raycast(posRight, dir, len + 0.2f, ground.mySpace);
                            return left || right;
                        });
 }

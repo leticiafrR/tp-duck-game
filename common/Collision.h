@@ -41,29 +41,6 @@ public:
     }
 
 
-    static float LateralRaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
-                                        float rayLenght, const Transform& candidateT) {
-        Vector2D candidateApothem = (candidateT.GetSize() * 0.5f);
-
-        float maxHeightCandidate = candidateT.GetPos().y + candidateApothem.y;
-        float minHeighCandidate = candidateT.GetPos().y - candidateApothem.y;
-
-        if (!(rayOrigin.y < maxHeightCandidate && minHeighCandidate < rayOrigin.y)) {
-            return INFINITY;
-        }
-
-        float candidateSideX =
-                candidateT.GetPos().x + ((rayDirection.x) * (-1) * candidateApothem.x);
-        float rayEndX = rayOrigin.x + (rayDirection.x * rayLenght);
-
-        if (!((rayOrigin.x < candidateSideX && candidateSideX < rayEndX) ||
-              (rayEndX < candidateSideX && candidateSideX < rayOrigin.x))) {
-            return INFINITY;
-        }
-
-        return (candidateSideX - rayOrigin.x) * rayDirection.x;
-    }
-
     static float RaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
                                  float rayLenght, const Transform& candidateT) {
 
