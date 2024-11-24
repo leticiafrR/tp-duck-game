@@ -29,7 +29,7 @@ public:
                   uint8_t projectilesPerShot = ProjectilesPerShot::BASIC_ONE_SHOT);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
-    virtual void Use(Duck* shooter) override;
+    virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;  // por el momento solo se usa para el cooldown
     virtual ~InstantWeapon() = default;
 };

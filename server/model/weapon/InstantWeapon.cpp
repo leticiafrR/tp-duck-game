@@ -40,7 +40,7 @@ InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
         l(projectilesController.GetInstantProjectileListener()) {}
 
 
-void InstantWeapon::Use(Duck* shooter) {
+bool InstantWeapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
         for (int i = 0; i < projectilesPerShot; i++) {
             InstantProjectile* projectile =
@@ -50,7 +50,10 @@ void InstantWeapon::Use(Duck* shooter) {
         }
         ammo--;
         cooldownTimer = 0;
+        std::cout << "SHOOT\n";
+        return true;
     }
+    return false;
 }
 
 void InstantWeapon::Update(float deltaTime) {

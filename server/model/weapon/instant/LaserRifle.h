@@ -17,11 +17,15 @@ public:
         collectorTypeRef = TypeCollectable::LASER_RIFLE;
     }
 
-    void Use(Duck* shooter) override {
+    bool Use(Duck* shooter) override {
         // genera disparos continuos
-        InstantWeapon::Use(shooter);
-        shooter->StartShooting();
-        shooter->ApplyRecoil(5);
+        if (InstantWeapon::Use(shooter)) {
+            std::cout << "Entra\n";
+            shooter->StartShooting();
+            shooter->ApplyRecoil(30);  // era 5
+            return true;
+        }
+        return false;
     }
 };
 

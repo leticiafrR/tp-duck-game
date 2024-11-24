@@ -23,7 +23,7 @@ public:
             typeProjectile(typeProjectile) {}
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
-    virtual void Use(Duck* shooter) override = 0;
+    virtual bool Use(Duck* shooter) override = 0;
     virtual void StopUse(Duck* shooter) override { shooter->StopShooting(); }
     virtual void Update(float deltaTime) override = 0;
     virtual ~Weapon() = default;
