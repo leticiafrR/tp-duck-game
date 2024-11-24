@@ -175,7 +175,7 @@ private:
             for (size_t i = 0; i < snapshot->raycastsEvents.size(); i++) {
                 auto ray = snapshot->raycastsEvents[i];
                 bullets.emplace_back(ray.type, ray.origin, ray.end, 100);
-                AudioManager::GetInstance().PlayShootSFX();
+                AudioManager::GetInstance().PlayShootSFX(ray.type);
             }
 
             for (const auto& it: snapshot->updates) {
