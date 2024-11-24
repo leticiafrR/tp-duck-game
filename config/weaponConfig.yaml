@@ -44,7 +44,7 @@ pew_pew_laser:
   scope: 35 # 35 a 38
   ammo: 12
 
-ak_47:
+ak47:
   scope: 13
   ammo: 30
 
