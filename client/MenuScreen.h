@@ -141,7 +141,10 @@ public:
         return nicknameInput;
     }
 
-    ~MenuScreen() = default;
+    ~MenuScreen() {
+        cam.ClearCacheItem("duck_game_bg.jpg");
+        cam.ClearCacheItem("duck_game_logo.png");
+    }
 };
 
 #endif

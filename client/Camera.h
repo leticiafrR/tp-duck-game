@@ -47,6 +47,8 @@ public:
     void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
 
     Rect RectTransformToRenderRect(RectTransform& rectTransform);
+
+    void ClearCacheItem(const string& filename);
 };
 
 #endif

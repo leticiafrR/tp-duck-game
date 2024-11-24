@@ -5,8 +5,10 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string>
 #include <vector>
 
+#include "common/playerIdentifier.h"
 #include "network/Client.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
@@ -208,6 +210,26 @@ private:
         }
     }
 
+    void InitGUI() {
+        uint16_t localConnectionId = client.getLocalID();
+
+        bool isPlayer1 = true;
+        for (uint8_t i = 0; i < (uint8_t)players.size(); i++) {
+            auto playerId = PlayerIdentifier::GeneratePlayerID(localConnectionId, i);
+
+            if (players.contains(playerId)) {
+                Color color = players[playerId]->GetSkinColor();
+                std::string nickname = players[playerId]->GetNickname();
+                if (isPlayer1) {
+                    gui.InitPlayer1GUI(color, nickname);
+                    isPlayer1 = false;
+                } else {
+                    gui.InitPlayer2GUI(color, nickname);
+                }
+            }
+        }
+    }
+
 public:
     Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
              Snapshot firstSnapshot):
@@ -215,10 +237,11 @@ public:
             cam(c),
             camController(c),
             rate(r),
-            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
-            gui(GameplayGUI(ColorExtension::White(), "josValentin")) {
+            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))) {
         InitPlayers(matchData, firstSnapshot);
         InitMap(mapData);
+
+        InitGUI();
     }
 
     void Run(bool isInitial) {

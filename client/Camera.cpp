@@ -88,3 +88,5 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
 
 
 void Camera::Render() { render.Present(); }
+
+void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }
