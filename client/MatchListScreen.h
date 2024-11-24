@@ -14,6 +14,7 @@
 #include "ButtonsManager.h"
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "ControlsScreen.h"
 #include "GUIManager.h"
 #include "Image.h"
 #include "LoadingScreen.h"
@@ -51,6 +52,10 @@ private:
     Button refreshButton;
     Text refreshButtonText;
 
+    Button controlsButton;
+    Text controlsButtonText;
+
+    ControlsScreen controls;
 
     void OnCreatePressed() {
         AudioManager::GetInstance().PlayButtonSFX();
@@ -176,7 +181,22 @@ public:
             refreshButtonText("REFRESH", 20,
                               RectTransform(Vector2D(180, -240), Vector2D(250, 80),
                                             Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
-                              ColorExtension::White(), 5) {}
+                              ColorExtension::White(), 5),
+            controlsButton(
+                    "button_1.png",
+                    RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
+                                  Vector2D(0.5, 0.5)),
+                    [this]() {
+                        this->controls.SetActive(true);
+                        AudioManager::GetInstance().PlayButtonSFX();
+                    },
+                    Color(40, 40, 40), 4),
+            controlsButtonText("CONTROLS", 20,
+                               RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
+                                             Vector2D(0.5, 0.5)),
+                               ColorExtension::White(), 5) {
+        controls.SetActive(false);
+    }
 
     bool Render() {
         running = true;

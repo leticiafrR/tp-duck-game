@@ -68,7 +68,7 @@ void Camera::DrawText(const string& text, Font& font, RectTransform rectTransfor
 
     rectTransform.SetSize(targetSize);
     Rect rect = RectTransformToRenderRect(rectTransform);
-    render.Copy(text_sprite, SDL2pp::NullOpt, rect);
+    render.Copy(text_sprite, SDL2pp::NullOpt, rect, -rectTransform.GetAngle());
 }
 
 Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
