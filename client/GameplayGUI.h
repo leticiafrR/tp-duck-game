@@ -60,7 +60,7 @@ public:
                                                        Vector2D(1, 0), Vector2D(0.5, 0)));
             txtNickname.SetRectTransform(RectTransform(Vector2D(-120, 15), Vector2D(210, 210),
                                                        Vector2D(1, 0), Vector2D(0.5, 0)));
-            shadowNickname.SetRectTransform(RectTransform(Vector2D(-124, 12), Vector2D(210, 210),
+            shadowNickname.SetRectTransform(RectTransform(Vector2D(-118, 12), Vector2D(210, 210),
                                                           Vector2D(1, 0), Vector2D(0.5, 0)));
         }
         imgDuck.SetSourceRect("duck.yaml", "head");

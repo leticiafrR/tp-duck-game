@@ -36,7 +36,6 @@ public:
 
     PlayerEvent target;
 
-    // Object2D pistolSpr;
     HandItemRenderer handItem;
 
     DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
@@ -50,8 +49,6 @@ public:
 
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
-        // target.stateTransition = DuckState::IDLE;
-        // target.motion = transform.GetPos();
         SetEventTarget(target);
         spr.SetColor(SkinColors.at(data.playerSkin));
         nickname = data.nickname;
@@ -75,14 +72,12 @@ public:
         anim.Update(deltaTime);
 
         handItem.Update(target.flipping == Flip::Left, target.isLookingUp);
-        // pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.4f +
-        //                                 (Vector2D::Up() * (target.isLookingUp ? 0.6f : 0)));
-        // pistolSpr.SetFlip(spr.GetFlip());
+
+        handItem.SetVisible(!target.isCrouched && target.stateTransition != DuckState::DEAD);
     }
 
     void Draw(Camera& cam) {
         spr.Draw(cam);
-        // pistolSpr.Draw(cam);
         handItem.Draw(cam);
     }
 
@@ -105,7 +100,6 @@ public:
         anim.SetTarget("dead");
         damagedTimer.Stop();
         spr.SetColor(skinColor);
-        // pistolSpr.SetVisible(false);
         handItem.SetVisible(false);
 
         camController.RemoveTransform(&spr.GetTransform());
@@ -142,12 +136,6 @@ public:
                 break;
         }
         spr.SetFlip(target.flipping == Flip::Left);
-
-        // if (newTarget.isLookingUp) {
-        //     pistolSpr.GetTransform().SetAngle(target.flipping == Flip::Left ? -90 : 90);
-        // } else {
-        //     pistolSpr.GetTransform().SetAngle(0);
-        // }
 
         if (newTarget.isCrouched)
             anim.SetTarget("crouched");
