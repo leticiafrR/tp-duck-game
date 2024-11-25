@@ -14,9 +14,7 @@ public:
                   const Config& conf):
             InstantWeapon(controller, initialSpace, conf.getCowboyPistolScope(),
                           conf.getCowboyPistolAmmo(), conf.getDamageShort(), conf.getNoDispersion(),
-                          conf.getCooldownMedium(), TypeProjectile::Bullet) {
-        std::cout << "Se crea la pistola cowboy" << std::endl;
-    }
+                          conf.getCooldownBasic(), TypeProjectile::BULLET) {}
     // a chequear
     void BeCollected(TypeCollectable& typeOnHandRef) override {
         typeOnHandRef = TypeCollectable::COWBOY_PISTOL;
