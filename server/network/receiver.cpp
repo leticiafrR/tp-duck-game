@@ -4,10 +4,13 @@
 #include "common/playerIdentifier.h"
 #include "data/command.h"
 
-ReceiverThread::ReceiverThread(std::shared_ptr<Queue<Command>> matchQueue, uint16_t clientID,
+ReceiverThread::ReceiverThread(MatchesMonitor& matches, std::shared_ptr<Queue<Command>> matchQueue,
+                               uint16_t matchID, uint16_t connectionId,
                                uint8_t playersPerConnection, ServerProtocol& protocol):
+        matches(matches),
         matchQueue(matchQueue),
-        clientID(clientID),
+        matchID(matchID),
+        connectionId(connectionId),
         playersPerConnection(playersPerConnection),
         protocol(protocol) {}
 
@@ -16,30 +19,22 @@ void ReceiverThread::run() {
         while (_keep_running) {
             Command cmmd = protocol.receiveCommand();
             if (cmmd.indexLocalPlayer < playersPerConnection) {
-                cmmd.playerId = PlayerIdentifier::GeneratePlayerID(clientID, cmmd.indexLocalPlayer);
+                cmmd.playerId =
+                        PlayerIdentifier::GeneratePlayerID(connectionId, cmmd.indexLocalPlayer);
                 matchQueue->push(cmmd);
-            } else {
-                std::cout << "Receiver Warning: The connection " << clientID
-                          << " has send a command binded to a index of local player that is out of "
-                             "the range of local players declared!"
-                          << "\n";
-                std::cout << cmmd.indexLocalPlayer << " not in range [0" << playersPerConnection - 1
-                          << "]\n";
             }
         }
+    } catch (const ConnectionFailed& c) {
+        matches.logOutClient(matchID, connectionId);
+    } catch (const LibError& e) {
+        matches.logOutClient(matchID, connectionId);
+
+    } catch (const ClosedQueue& q) {
+        std::cout << "[RECEIVER: " << connectionId << "] the match has closed its queue\n";
     } catch (const std::exception& e) {
         std::cerr << "Exception in the receiver thread: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
-                  << clientID << "\n";
+                  << connectionId << "\n";
     }
-}
-
-void ReceiverThread::kill() {
-    /* Got here because the server is closing the
-     * serving** (the aceptor: ended the match and it is killing all its clients) */
-
-    /* Making the receiver loop to not keep running (we dont want to keep recieving commands while
-     * the sender is ending) */
-    stop();
 }

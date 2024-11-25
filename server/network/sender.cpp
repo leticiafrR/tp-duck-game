@@ -22,13 +22,15 @@ void SenderThread::run() {
         return;
     }
     _joinedAMatch = true;
-    ReceiverThread receiver(matchQueue, connectionId, playersPerConnection, protocol);
+    ReceiverThread receiver(matches, matchQueue, matchID, connectionId, playersPerConnection,
+                            protocol);
     receiver.start();
-    sendLoop(matchID);
+    sendLoop();
     receiver.join();
+    std::cout << "The client " << connectionId << "is dead (recogible)\n";
 }
 
-void SenderThread::sendLoop(uint16_t matchID) {
+void SenderThread::sendLoop() {
     try {
         while (_keep_running) {
             auto messageSender = senderQueue.pop();
@@ -36,11 +38,8 @@ void SenderThread::sendLoop(uint16_t matchID) {
         }
 
     } catch (const ConnectionFailed& c) {
-        matches.logOutClient(matchID, connectionId);
     } catch (const LibError& e) {
-        matches.logOutClient(matchID, connectionId);
     } catch (const ClosedQueue& q) {
-
     } catch (const std::exception& e) {
         std::cerr << "Exception in the sender thread (sendLoop): " << e.what() << std::endl;
     } catch (...) {
@@ -51,7 +50,7 @@ void SenderThread::sendLoop(uint16_t matchID) {
 void SenderThread::kill() {
     if (!_joinedAMatch) {
         protocol.endConnection();
-    }  // else the match has to kill
+    }
 }
 
 SenderThread::~SenderThread() {}

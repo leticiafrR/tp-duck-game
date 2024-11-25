@@ -28,7 +28,7 @@ private:
 
     std::atomic<bool> _joinedAMatch = false;
 
-    void sendLoop(uint16_t matchID);
+    void sendLoop();
 
 public:
     explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, uint16_t connectionId);
