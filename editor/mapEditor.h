@@ -7,13 +7,15 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "data/gameScene.h"
+
 #include "constants.h"
 #include "constantsEditor.h"
 
 class MapEditor {
 private:
     YAML::Node config;
-    int plataformsCounter;
+    int platformsCounter;
     std::string filePath;
 
 public:
@@ -34,6 +36,7 @@ public:
                               const float& w, const float& h,
                               const std::vector<std::string>& edges);
     void DeleteAPlataform(const std::string& plataformName);
+    std::vector<GroundDto> GetPlataforms();
     // faltan implementar
 };
 #endif

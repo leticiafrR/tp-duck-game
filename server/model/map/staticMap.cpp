@@ -141,7 +141,7 @@ void StaticMap::SetTheLevel(const std::string& filePath) {
         weaponsSpawnPoints.push_back(pos);
     }
 
-    YAML::Node platformsList = config[PLATAFORMS_STR][0];
+    YAML::Node platformsList = config[PLATFORMS_STR][0];
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
 

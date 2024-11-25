@@ -8,30 +8,30 @@ weapons_spawn_points:
 players_spawn_points:
   -  {x: -18, y: 12}
   -  {x: 32, y: -8}
-plataforms:
-  - [ "plataform_one", "plataform_two", "plataform_three", "plataform_four", "plataform_five", "plataform_six", "plataform_seven", "plataform_eight"]
-plataform_one:
+platforms:
+  - [ "platform_one", "platform_two", "platform_three", "platform_four", "platform_five", "platform_six", "platform_seven", "platform_eight"]
+platform_one:
   - {x: 0, y: -12, w: 24, h: 8, edges: ["RIGHT", "TOP", "BOTTOM"] }
 
-plataform_two:
+platform_two:
   - {x: -32, y: 0, w: 40, h: 16, edges: ["LEFT", "RIGHT", "TOP"]} 
 
-plataform_three:
+platform_three:
   - {x: -32,y: -12, w: 40,h: 8, edges: ["LEFT", "BOTTOM"]} 
 
-plataform_four:
+platform_four:
   - {x: 20, y: -8,w: 16, h: 8, edges: ["LEFT", "RIGHT", "TOP"]}
 
-plataform_five:
+platform_five:
   - { x: 20, y:  -20, w: 16, h: 16, edges: ["LEFT", "BOTTOM"] }
 
-plataform_six:
+platform_six:
   - {x: 32, y:  -20, w:  8, h: 16, edges : ["TOP", "BOTTOM"]}
 
-plataform_seven:
+platform_seven:
   - {x:  40 , y: -20, w: 8, h: 16, edges: ["RIGHT", "BOTTOM"]}
 
-plataform_eight:
+platform_eight:
   - {x:  40, y: -4, w: 8, h: 16, edges: ["RIGHT", "LEFT", "TOP"]}
 
 
