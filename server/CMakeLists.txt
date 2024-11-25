@@ -9,6 +9,7 @@ target_sources(taller_server
     model/map/staticMap.cpp
     model/weapon/InstantWeapon.cpp
     model/projectile/ProjectilesController.cpp
+    model/projectile/BounceInstantProjectile.cpp
 
     #network
     network/sender.cpp
@@ -46,6 +47,7 @@ target_sources(taller_server
     model/projectile/InstantProjectile.h
     model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
+    model/projectile/BounceInstantProjectile.h
 
     network/serverProtocol.h
     network/messageSender.h
