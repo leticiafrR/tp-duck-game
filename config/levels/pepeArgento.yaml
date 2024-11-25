@@ -1,0 +1,52 @@
+theme: FOREST
+full_map_size:
+  x: 100
+  y: 160
+players_spawn_points:
+  - x: 0
+    y: 0
+plataform_0:
+  x: 8
+  y: 8
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
+plataforms:
+  - plataform_0
+  - plataform_1
+  - plataform_2
+  - plataform_3
+plataform_1:
+  x: 2
+  y: 2
+  w: 2
+  h: 2
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
+plataform_2:
+  x: 3
+  y: 3
+  w: 3
+  h: 3
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
+plataform_3:
+  x: 4
+  y: 4
+  w: 4
+  h: 4
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT

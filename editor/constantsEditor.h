@@ -4,5 +4,6 @@
 // file
 const std::string RELATIVE_LEVEL_PATH = "../config/levels/";
 const std::string YAML_FILE = ".yaml";
+const std::string PLATAFORM_KEY = "plataform_";
 
 #endif
