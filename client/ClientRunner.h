@@ -53,11 +53,15 @@ private:
     }
 
     void LoadFinalGroup(Client& client, bool& isFinalGroup) {
+        std::cout << "Waiting for final group"
+                  << "\n";
         LoadingScreen loadingFinalGroup(cam, rate, [&isFinalGroup, &client]() {
             shared_ptr<FinalGroupGame> finalGroupData;
 
             if (client.TryRecvNetworkMsg(finalGroupData)) {
                 isFinalGroup = finalGroupData->finalGroupGame;
+                std::cout << "Received final group"
+                          << "\n";
                 return true;
             }
             return false;
@@ -127,6 +131,8 @@ public:
                 isInitial = false;
 
                 bool isFinalGroup = false;
+                LoadFinalGroup(client, isFinalGroup);
+
                 while (!isFinalGroup) {
                     PlayRound(client, matchData, isInitial);
                     LoadFinalGroup(client, isFinalGroup);
