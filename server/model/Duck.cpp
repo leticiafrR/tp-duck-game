@@ -31,10 +31,12 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         typeOnHand(TypeCollectable::LASER_RIFLE) {}
 // typeOnHand(TypeCollectable::COWBOY_PISTOL) {}
 
-void Duck::TriggerEvent() {
+void Duck::TriggerEvent(bool cuack) {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
-                                      isCrouched));
+                                      isCrouched, cuack));
 }
+
+void Duck::Cuack() { TriggerEvent(true); }
 
 const Flip& Duck::GetFlip() const { return myFlip; }
 
