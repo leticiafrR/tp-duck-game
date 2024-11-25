@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "tweening/ImageTween.h"
+#include "tweening/TweenManager.h"
 
 #include "ColorExtension.h"
 #include "Definitions.h"
