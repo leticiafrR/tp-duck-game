@@ -52,12 +52,16 @@ public:
     Rect GetTargetRect() { return animations[target][frameIndex]; }
 
     void SetTarget(const std::string& target, bool reset_index = true) {
+        if (!animations.contains(target))
+            return;
         this->target = target;
         if (reset_index) {
             updateTimer = animFrameTime;
             frameIndex = 0;
         }
     }
+
+    std::string GetTarget() { return target; }
 };
 
 #endif
