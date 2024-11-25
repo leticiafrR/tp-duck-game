@@ -41,8 +41,8 @@ public:
 
 class ControlsScreen {
 private:
-    Image bg;
-    Button backButton;
+    Image imgBg;
+    Button btnBack;
 
     vector<shared_ptr<Text>> texts;
 
@@ -103,9 +103,9 @@ private:
 
 public:
     ControlsScreen():
-            bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
-               ColorExtension::Black().SetAlpha(225), 9),
-            backButton(
+            imgBg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
+                  ColorExtension::Black().SetAlpha(225), 9),
+            btnBack(
                     "back_icon.png",
                     RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
                     [this]() {
@@ -121,8 +121,8 @@ public:
     }
 
     void SetActive(bool active) {
-        bg.SetActive(active);
-        backButton.SetActive(active);
+        imgBg.SetActive(active);
+        btnBack.SetActive(active);
 
         for (auto it: texts) {
             it->SetActive(active);

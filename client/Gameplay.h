@@ -131,6 +131,37 @@ private:
                             client.TrySendRequest(CommandCode::Crouch_KeyDown);
                             break;
                     }
+
+                    if (!players.contains(
+                                PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                        continue;
+                    switch (keyEvent.keysym.sym) {
+
+                        case SDLK_LEFT:
+                            std::cout << "Left Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyDown, 1);
+                            break;
+                        case SDLK_RIGHT:
+                            std::cout << "Right Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::MoveRight_KeyDown, 1);
+                            break;
+                        case SDLK_KP_2:
+                            std::cout << "Numpad 2 KeyDown\n";
+                            client.TrySendRequest(CommandCode::Jump, 1);
+                            break;
+                        case SDLK_KP_3:
+                            std::cout << "Numpad 3 KeyDown\n";
+                            client.TrySendRequest(CommandCode::UseItem_KeyDown, 1);
+                            break;
+                        case SDLK_UP:
+                            std::cout << "Up Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyDown, 1);
+                            break;
+                        case SDLK_DOWN:
+                            std::cout << "Down Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyDown, 1);
+                            break;
+                    }
                 } break;
                 case SDL_KEYUP: {
                     if (finishing)
@@ -161,13 +192,39 @@ private:
                             client.TrySendRequest(CommandCode::Crouch_KeyUp);
                             break;
                     }
+
+                    if (!players.contains(
+                                PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                        continue;
+                    switch (keyEvent.keysym.sym) {
+
+                        case SDLK_LEFT:
+                            std::cout << "Left Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyUp, 1);
+                            break;
+                        case SDLK_RIGHT:
+                            std::cout << "Right Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::MoveRight_KeyUp, 1);
+                            break;
+                        case SDLK_KP_3:
+                            std::cout << "Numpad 3 KeyUp\n";
+                            client.TrySendRequest(CommandCode::UseItem_KeyUp, 1);
+                            break;
+                        case SDLK_UP:
+                            std::cout << "Up Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyUp, 1);
+                            break;
+                        case SDLK_DOWN:
+                            std::cout << "Down Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyUp, 1);
+                            break;
+                    }
                     break;
                 }
                 case SDL_QUIT:
                     exit(0);
                     break;
             }
-            // ButtonsManager::GetInstance().HandleEvent(event);
         }
     }
 
