@@ -90,6 +90,9 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
         case CommandCode::Crouch_KeyUp:
             player->StopCrouch();
             break;
+        case CommandCode::Cuack:
+            player->Cuack();
+            break;
         default:
             break;
     }
