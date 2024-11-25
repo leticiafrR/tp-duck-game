@@ -94,28 +94,38 @@ std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
 }
 
 void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
-    auto plats = config[platformName];
-    for (std::size_t i = 0; i < plats.size(); ++i) {
-        float x = plats[i][X_STR].as<float>();
-        float y = plats[i][Y_STR].as<float>();
-        float w = plats[i][WEIGHT_STR].as<float>();
-        float h = plats[i][HIGH_STR].as<float>();
 
-        std::set<VISIBLE_EDGES> edges;
-        for (auto edge: plats[i][EDGES_STR]) {
-            std::string edgeStr = edge.as<std::string>();
-            if (edgeStr == LEFT_STR)
-                edges.insert(LEFT);
-            else if (edgeStr == RIGHT_STR)
-                edges.insert(RIGHT);
-            else if (edgeStr == TOP_STR)
-                edges.insert(TOP);
-            else if (edgeStr == BOTTOM_STR)
-                edges.insert(BOTTOM);
+    auto plats = config[platformName];
+
+    float x = 0, y = 0, w = 0, h = 0;
+    for (auto fl: plats) {
+        std::string key = fl.first.as<std::string>();
+        auto value = fl.second;
+        if (key == X_STR) {
+            x = value.as<float>();
+        } else if (key == Y_STR) {
+            y = value.as<float>();
+        } else if (key == WEIGHT_STR) {
+            w = value.as<float>();
+        } else if (key == HIGH_STR) {
+            h = value.as<float>();
         }
-        AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
     }
+    std::set<VISIBLE_EDGES> edges;
+    for (auto edge: plats[EDGES_STR]) {
+        std::string edgeStr = edge.as<std::string>();
+        if (edgeStr == LEFT_STR)
+            edges.insert(LEFT);
+        else if (edgeStr == RIGHT_STR)
+            edges.insert(RIGHT);
+        else if (edgeStr == TOP_STR)
+            edges.insert(TOP);
+        else if (edgeStr == BOTTOM_STR)
+            edges.insert(BOTTOM);
+    }
+    AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
 }
+
 
 void StaticMap::SetTheLevel(const std::string& filePath) {
     YAML::Node config = YAML::LoadFile(filePath);
@@ -145,10 +155,9 @@ void StaticMap::SetTheLevel(const std::string& filePath) {
         weaponsSpawnPoints.push_back(pos);
     }
 
-    YAML::Node platformsList = config[PLATAFORM_STR][0];
+    auto platformsList = config[PLATFORMS_STR];
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
-
         loadPlatforms(config, platformName);
     }
 }

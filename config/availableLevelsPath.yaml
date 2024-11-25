@@ -1,2 +1,3 @@
 available_levels:
-  - "../config/levels/level_1.yaml"
+  - ../config/levels/level_1.yaml
+  - ../config/levels/pepeArgento.yaml

@@ -19,6 +19,8 @@ using std::string;
 
 class MenuScreen {
 private:
+    const int MAX_NAME_SIZE = 12;
+
     Camera& cam;
     Rate rate;
 
@@ -54,6 +56,8 @@ private:
                                 nicknameInput.pop_back();
                             break;
                         default:
+                            if ((int)nicknameInput.size() == MAX_NAME_SIZE)
+                                break;
                             if (!SDLExtension::IsAlphaNumeric(keyEvent.keysym.sym))
                                 break;
 

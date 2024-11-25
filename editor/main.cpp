@@ -7,56 +7,78 @@
 
 #include "constants.h"
 #include "constantsEditor.h"
+#include "mapEditor.h"
 
-// Se encarga de crear o guardar los cambios y settear el nombre del nivel en la lista
-void SaveChanges(const std::string& fileName, const YAML::Node& config) {
-    std::string filePath = RELATIVE_LEVEL_PATH + fileName + YAML_FILE;
+// Se encarga de crear o guardar los cambios y vectortear el nombre del nivel en la lista
+void NewFile() {
+    MapEditor editor;
 
-    // Guardar el archivo de configuración
-    {
-        std::ofstream fout(filePath);
-        fout << config;
-    }
+    editor.AddFileName("pepeArgento");
 
-    // Cargar niveles disponibles
-    YAML::Node availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
-    std::vector<std::string> availableLevels =
-            availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
+    editor.AddPlayerSpawnPoint(0, 8);
+    editor.AddPlayerSpawnPoint(3, 8);
+    std::vector<std::string> edges = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
+    editor.AddAPlataform(0, 0, 8, 8, edges);
+    editor.AddAPlataform(2, 2, 2, 2, edges);
 
-    // Verificar si el archivo ya existe en la lista de niveles disponibles
-    auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
-    if (it == availableLevels.end()) {
-        availableLevels.emplace_back(filePath);
-        availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
-
-        // Guardar los cambios en la lista de niveles disponibles
-        std::ofstream fout(AVAILABLE_LEVELS_PATH);
-        fout << availableConfig;
-    }
+    editor.SaveChanges();
 }
 
+void EditFile() {
+    MapEditor editor("../config/levels/pepeArgento.yaml");
+
+    editor.AddPlayerSpawnPoint(1, 1);
+    editor.AddPlayerSpawnPoint(0, 0);
+    std::vector<std::string> edges = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
+    editor.AddAPlataform(3, 3, 3, 3, edges);
+    editor.AddAPlataform(4, 4, 4, 4, edges);
+    editor.ModificateAPlataform("platform_0", 8, 8, 8, 8, edges);
+    editor.DeleteAPlataform("platform_1");
+
+    editor.SaveChanges();
+}
+
+void BasicGrounds() {
+    MapEditor editor;
+    editor.AddFileName("bascisGrounds");
+
+    std::vector<std::string> all = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
+    std::vector<std::string> t = {"TOP"};
+    std::vector<std::string> b = {"BOTTOM"};
+    std::vector<std::string> l = {"LEFT"};
+    std::vector<std::string> r = {"RIGHT"};
+    std::vector<std::string> tb = {"TOP", "BOTTOM"};
+    std::vector<std::string> tl = {"TOP", "LEFT"};
+    std::vector<std::string> tr = {"TOP", "RIGHT"};
+    std::vector<std::string> bl = {"BOTTOM", "LEFT"};
+    std::vector<std::string> br = {"BOTTOM", "RIGHT"};
+    std::vector<std::string> lr = {"LEFT", "RIGHT"};
+    std::vector<std::string> tbl = {"TOP", "BOTTOM", "LEFT"};
+    std::vector<std::string> tbr = {"TOP", "BOTTOM", "RIGHT"};
+    std::vector<std::string> tlr = {"TOP", "LEFT", "RIGHT"};
+    std::vector<std::string> blr = {"BOTTOM", "LEFT", "RIGHT"};
+
+    editor.AddAPlataform(0, 0, 8, 8, all);
+    editor.AddAPlataform(0, 0, 8, 8, t);
+    editor.AddAPlataform(0, 0, 8, 8, b);
+    editor.AddAPlataform(0, 0, 8, 8, l);
+    editor.AddAPlataform(0, 0, 8, 8, r);
+    editor.AddAPlataform(0, 0, 8, 8, tb);
+    editor.AddAPlataform(0, 0, 8, 8, tl);
+    editor.AddAPlataform(0, 0, 8, 8, tr);
+    editor.AddAPlataform(0, 0, 8, 8, bl);
+    editor.AddAPlataform(0, 0, 8, 8, br);
+    editor.AddAPlataform(0, 0, 8, 8, lr);
+    editor.AddAPlataform(0, 0, 8, 8, tbl);
+    editor.AddAPlataform(0, 0, 8, 8, tbr);
+    editor.AddAPlataform(0, 0, 8, 8, tlr);
+    editor.AddAPlataform(0, 0, 8, 8, blr);
+
+    editor.SaveChanges();
+}
 int main() {
-    YAML::Node config;
-    YAML::Node playersSpawnPoints = YAML::Node(YAML::NodeType::Sequence);
-
-    // Agregar puntos de aparición de jugadores
-    int x = -18;
-    int y = 12;
-    playersSpawnPoints.push_back(YAML::Node(YAML::NodeType::Map));
-    playersSpawnPoints[0]["x"] = x;
-    playersSpawnPoints[0]["y"] = y;
-
-    x = 32;
-    y = -8;
-    playersSpawnPoints.push_back(YAML::Node(YAML::NodeType::Map));
-    playersSpawnPoints[1]["x"] = x;
-    playersSpawnPoints[1]["y"] = y;
-
-    // Agregar los nodos a la configuración
-    config["players_spawn_points"] = playersSpawnPoints;
-
-    // Guardar cambios
-    SaveChanges("config.yaml", config);
-
+    // NewFile();
+    // EditFile();
+    // BasicGrounds();
     return 0;
 }
