@@ -37,7 +37,7 @@ public:
     Color GetColor();
 
     Transform& GetTransform() { return this->transform; }
-    void SetTransform(Transform transform) { this->transform = transform; }
+    void SetTransform(const Transform& transform) { this->transform = transform; }
 
     std::string& GetFileName() { return filename; }
     void SetFileName(const std::string& filename) { this->filename = filename; }

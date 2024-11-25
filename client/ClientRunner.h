@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -13,6 +14,7 @@
 
 #include "AudioManager.h"
 #include "Camera.h"
+#include "GameStatusScreen.h"
 #include "Gameplay.h"
 #include "LoadingScreen.h"
 #include "LobbyScreen.h"
@@ -22,6 +24,7 @@
 
 using std::shared_ptr;
 using std::string;
+using std::unordered_map;
 using std::vector;
 
 class ClientRunner {
@@ -29,7 +32,7 @@ private:
     Camera cam;
     Rate rate;
 
-    void ShowWinner(Client& client, vector<PlayerData> players) {
+    PlayerData LoadWinner(Client& client, vector<PlayerData> players) {
         PlayerID_t winnerId;
         LoadingScreen(cam, rate, [&client, &winnerId]() {
             shared_ptr<FinalWinner> msg;
@@ -40,13 +43,12 @@ private:
             }
             return false;
         }).Run("GETTING WINNER...");
-
         auto it = std::find_if(players.begin(), players.end(),
                                [&winnerId](PlayerData p) { return p.playerID == winnerId; });
-
-        LoadingScreen(cam, rate, [&client, &winnerId]() {
-            return false;
-        }).Run(it != players.end() ? "The winner is: " + it->nickname : "There is no winner");
+        return *it;
+        // LoadingScreen(cam, rate, [&client, &winnerId]() {
+        //     return false;
+        // }).Run(it != players.end() ? "The winner is: " + it->nickname : "There is no winner");
     }
 
     void LoadFinalGroup(Client& client, bool& isFinalGroup) {
@@ -62,11 +64,13 @@ private:
         loadingFinalGroup.Run("LOADING...");
     }
 
-    void LoadMatchEnded(Client& client, bool& matchEnded) {
-        LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded]() {
+    void LoadRoundResults(Client& client, bool& matchEnded,
+                          unordered_map<PlayerID_t, int>& results) {
+        LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded, &results]() {
             shared_ptr<GamesRecountDto> recountData;
             if (client.TryRecvNetworkMsg(recountData)) {
                 matchEnded = recountData->matchEnded;
+                results = recountData->results;
                 return true;
             }
             return false;
@@ -94,6 +98,12 @@ private:
         LoadingScreen(cam, rate, []() { return false; }).Run(text);
     }
 
+    void ShowResultsScreen(std::optional<PlayerData> winner, const vector<PlayerData>& players,
+                           const unordered_map<PlayerID_t, int>& gameResults) {
+
+        GameStatusScreen(cam, rate, players, gameResults, winner).Run();
+    }
+
 public:
     ClientRunner(Renderer& render, int fps): cam(std::move(render), 70), rate(fps) {}
     ~ClientRunner() = default;
@@ -109,7 +119,7 @@ public:
 
             AudioManager::GetInstance().PlayGameMusic();
             bool matchEnded = false;
-
+            unordered_map<PlayerID_t, int> roundResults;
             bool isInitial = true;
             while (!matchEnded) {
                 PlayRound(client, matchData, isInitial);
@@ -121,12 +131,17 @@ public:
                     LoadFinalGroup(client, isFinalGroup);
                 }
 
-                LoadMatchEnded(client, matchEnded);
-            }
+                LoadRoundResults(client, matchEnded, roundResults);
 
+                if (!matchEnded) {
+                    ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
+                }
+            }
             AudioManager::GetInstance().StopMusic();
 
-            ShowWinner(client, matchData.playersData);
+            PlayerData winner = LoadWinner(client, matchData.playersData);
+
+            ShowResultsScreen(winner, matchData.playersData, roundResults);
 
         } catch (LibError& e) {
             std::cerr << e.what() << std::endl;
