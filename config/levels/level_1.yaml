@@ -1,37 +1,100 @@
-theme: "FOREST"
+theme: FOREST
 full_map_size:
   x: 100
-  'y': 160
+  y: 160
 weapons_spawn_points:
-  - {x: 0, y: -6}
-  - {x: -32, y: 10}
+  - x: 0
+    y: -6
+  - x: -32 
+    y: 10
 players_spawn_points:
-  -  {x: -18, y: 12}
-  -  {x: 32, y: -8}
+  - x: -18 
+    y: 12
+  - x: 32
+    y: -8
 platforms:
-  - [ "platform_one", "platform_two", "platform_three", "platform_four", "platform_five", "platform_six", "platform_seven", "platform_eight"]
+  - platform_one
+  - platform_two
+  - platform_three
+  - platform_four
+  - platform_five
+  - platform_six
+  - platform_seven
+  - platform_eight
 platform_one:
-  - {x: 0, y: -12, w: 24, h: 8, edges: ["RIGHT", "TOP", "BOTTOM"] }
+  x: 0
+  y: -12
+  w: 24
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
 
 platform_two:
-  - {x: -32, y: 0, w: 40, h: 16, edges: ["LEFT", "RIGHT", "TOP"]} 
+  x: -32
+  y: 0
+  w: 40
+  h: 16
+  edges: 
+  - LEFT
+  - RIGHT
+  - TOP
 
 platform_three:
-  - {x: -32,y: -12, w: 40,h: 8, edges: ["LEFT", "BOTTOM"]} 
+  x: -32
+  y: -12
+  w: 40
+  h: 8
+  edges: 
+  - LEFT
+  - BOTTOM
 
 platform_four:
-  - {x: 20, y: -8,w: 16, h: 8, edges: ["LEFT", "RIGHT", "TOP"]}
+  x: 20
+  y: -8
+  w: 16
+  h: 8
+  edges: 
+  - LEFT
+  - RIGHT
+  - TOP
 
 platform_five:
-  - { x: 20, y:  -20, w: 16, h: 16, edges: ["LEFT", "BOTTOM"] }
+  x: 20
+  y: -20
+  w: 16
+  h: 16
+  edges: 
+  - LEFT
+  - BOTTOM
 
 platform_six:
-  - {x: 32, y:  -20, w:  8, h: 16, edges : ["TOP", "BOTTOM"]}
+  x: 32
+  y: -20
+  w:  8
+  h: 16
+  edges : 
+  - TOP
+  - BOTTOM
 
 platform_seven:
-  - {x:  40 , y: -20, w: 8, h: 16, edges: ["RIGHT", "BOTTOM"]}
+  x:  40
+  y: -20
+  w: 8
+  h: 16
+  edges: 
+  - RIGHT
+  - BOTTOM
 
 platform_eight:
-  - {x:  40, y: -4, w: 8, h: 16, edges: ["RIGHT", "LEFT", "TOP"]}
+  x:  40
+  y: -4
+  w: 8
+  h: 16
+  edges: 
+  - RIGHT
+  - LEFT
+  - TOP
 
 

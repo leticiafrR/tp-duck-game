@@ -4,83 +4,16 @@ full_map_size:
   y: 160
 platforms:
   - platform_0
-  - platform_2
-  - platform_3
-  - platform_4
-  - platform_5
-  - platform_6
 players_spawn_points:
   - x: 0
     y: 8
   - x: 3
     y: 8
-  - x: 1
-    y: 1
-  - x: 0
-    y: 0
-  - x: 1
-    y: 1
-  - x: 0
-    y: 0
-  - x: 1
-    y: 1
-  - x: 0
-    y: 0
 platform_0:
-  x: 8
-  y: 8
+  x: 0
+  y: 0
   w: 8
   h: 8
-  edges:
-    - TOP
-    - BOTTOM
-    - LEFT
-    - RIGHT
-platform_2:
-  x: 4
-  y: 4
-  w: 4
-  h: 4
-  edges:
-    - TOP
-    - BOTTOM
-    - LEFT
-    - RIGHT
-platform_3:
-  x: 3
-  y: 3
-  w: 3
-  h: 3
-  edges:
-    - TOP
-    - BOTTOM
-    - LEFT
-    - RIGHT
-platform_4:
-  x: 4
-  y: 4
-  w: 4
-  h: 4
-  edges:
-    - TOP
-    - BOTTOM
-    - LEFT
-    - RIGHT
-platform_5:
-  x: 3
-  y: 3
-  w: 3
-  h: 3
-  edges:
-    - TOP
-    - BOTTOM
-    - LEFT
-    - RIGHT
-platform_6:
-  x: 4
-  y: 4
-  w: 4
-  h: 4
   edges:
     - TOP
     - BOTTOM

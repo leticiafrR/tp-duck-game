@@ -37,16 +37,18 @@ void MapEditor::AddFileName(const std::string& _fileName) {
 }
 void MapEditor::AddAPlataform(const float& x, const float& y, const float& w, const float& h,
                               const std::vector<std::string>& edges) {
-    YAML::Node platform = YAML::Node(YAML::NodeType::Map);
-    // if (w >= MINIMUN_SIZE || h >= MINIMUN_SIZE){}
-    platform[X_STR] = x;
-    platform[Y_STR] = y;
-    platform[WEIGHT_STR] = w;
-    platform[HIGH_STR] = h;
-    platform[EDGES_STR] = edges;
-    std::string platformName = PLATFORM_KEY + std::to_string(platformsCounter++);
-    config[platformName] = platform;
-    config[PLATFORMS_STR].push_back(platformName);
+
+    if (w >= MINIMUN_SIZE || h >= MINIMUN_SIZE) {
+        YAML::Node platform = YAML::Node(YAML::NodeType::Map);
+        platform[X_STR] = x;
+        platform[Y_STR] = y;
+        platform[WEIGHT_STR] = w;
+        platform[HIGH_STR] = h;
+        platform[EDGES_STR] = edges;
+        std::string platformName = PLATFORM_KEY + std::to_string(platformsCounter++);
+        config[platformName] = platform;
+        config[PLATFORMS_STR].push_back(platformName);
+    }
 }
 void MapEditor::AddPlayerSpawnPoint(const float& x, const float& y) {
     YAML::Node playersSpawnPoint = YAML::Node(YAML::NodeType::Map);
