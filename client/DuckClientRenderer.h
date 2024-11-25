@@ -9,7 +9,6 @@
 
 #include "Animator.h"
 #include "AudioManager.h"
-#include "CameraController.h"
 #include "ColorExtension.h"
 #include "HandItemRenderer.h"
 #include "Object2D.h"
@@ -17,7 +16,10 @@
 
 class DuckClientRenderer {
 private:
-    static const std::map<uint8_t, Color> SkinColors;
+    const std::map<uint8_t, Color> SkinColors = {
+            {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
+            {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
+            {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
 
     Timer damagedTimer;
     Color skinColor;
@@ -53,7 +55,6 @@ public:
         skinColor = spr.GetColor();
         camController.AddTransform(&spr.GetTransform());
     }
-    ~DuckClientRenderer() {}
 
     Color GetSkinColor() const { return skinColor; }
     std::string GetNickname() const { return nickname; }
@@ -140,12 +141,7 @@ public:
             anim.SetTarget("crouched");
     }
 
-    static Color GetColorById(uint8_t id) { return SkinColors.at(id); }
+    ~DuckClientRenderer() {}
 };
-
-const std::map<uint8_t, Color> DuckClientRenderer::SkinColors = {
-        {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
-        {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
-        {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
 
 #endif
