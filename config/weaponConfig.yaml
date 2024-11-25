@@ -23,45 +23,46 @@ dispersion:
   no_dispersion: 0
   long: 0.4
   short: 0.15
-  super: 9
+  super: 0.45
+  hiper: 9
 
 banana:
-  scope: 10
+  scope: 13
   ammo: 1
 
 granada:
-  scope: 20
+  scope: 25
   ammo: 1
 
-laser_rifle:
-  scope: 30
-  ammo: 10
-
-cowboy_pistol:
-  scope: 20
-  ammo: 6
-
 pew_pew_laser:
-  scope: 35 # 35 a 38
+  scope: 44 # 35 a 38
   ammo: 12
 
+laser_rifle:
+  scope: 38
+  ammo: 10
+
 ak47:
-  scope: 13
+  scope: 17
   ammo: 30
 
 dueling_pistol:
-  scope: 5
+  scope: 9
   ammo: 1
 
+cowboy_pistol:
+  scope: 25
+  ammo: 6
+
 magnum:
-  scope: 20
+  scope: 25
   ammo: 6
 
 shotgun:
-  scope: 7 # 7 a 9
+  scope: 10 # 7 a 9
   ammo: 2
 
 sniper:
-  scope: 64
+  scope: 80
   ammo: 3
 

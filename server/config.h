@@ -93,6 +93,7 @@ public:
     float getShortDispersion() const;
     float getLongDispersion() const;
     float getSuperDispersion() const;
+    float getHiperDispersion() const;
 
     /*********************SHOTING INCILNATION**************************** */
     float getBasicInclination() const;

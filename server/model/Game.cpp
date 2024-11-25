@@ -21,7 +21,6 @@ GameWorld::~GameWorld() {
 void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const Config& conf) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
-        std::cout << "CreatPlayers" << std::endl;
         players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], p, conf);
     }
 }

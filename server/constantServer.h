@@ -45,6 +45,7 @@ const std::string PROJECTILE_PER_SHOT_STR = "projectiles_per_shot";
 const std::string DISPERSION_STR = "dispersion";
 const std::string NO_DISPERSION_STR = "no_dispersion";
 const std::string SUPER_DISPERSION = "super";
+const std::string HIPER_DISPERSION = "hiper";
 /****************************WEAPONS*******************************************/
 const std::string BANANA_STR = "banana";
 const std::string LASER_RIFLE_STR = "laser_rifle";
@@ -83,6 +84,7 @@ const int MEDIUM_INDEX = 3;
 const int BASIC_INDEX = 4;
 const int TO_EXPLOTE_GRANADA_INDEX = 5;
 const int SUPER_INDEX = 3;
+const int HIPER_INDEX = 4;
 
 
 /***********************************PATHS**************************************** */

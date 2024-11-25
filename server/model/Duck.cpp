@@ -3,9 +3,8 @@
 #include "common/Collision.h"
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
-#include "weapon/instant/LaserRifle.h"
-#include "weapon/instant/PewPewLaser.h"
-#include "weapon/instant/PistolaCowboy.h"
+#include "weapon/instant/DuelingPistol.h"
+#include "weapon/instant/Shotgun.h"
 
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
@@ -25,11 +24,9 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        // itemOnHand(new PewPewLaser(projectilesController, mySpace, conf)),
-        //  itemOnHand(new PistolaCowboy(projectilesController, mySpace,conf)),
-        itemOnHand(new LaserRifle(projectilesController, mySpace, conf)),
-        typeOnHand(TypeCollectable::LASER_RIFLE) {}
-// typeOnHand(TypeCollectable::COWBOY_PISTOL) {}
+        // itemOnHand(new LaserRifle(projectilesController, mySpace, conf)),
+        itemOnHand(new DuelingPistol(projectilesController, mySpace, conf)),
+        typeOnHand(TypeCollectable::COWBOY_PISTOL) {}
 
 void Duck::TriggerEvent(bool cuack) {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
