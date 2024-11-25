@@ -91,7 +91,6 @@ public:
                         playersPerConnection = selection.playersPerConection;
                         matchQueue = returnQueue;
                         retMatchID = selection.matchSelection;
-                        matches.printMatchStatus(selection.matchSelection);
                     }
                     protocol.sendResultOfJoining(eCode);
                 }
