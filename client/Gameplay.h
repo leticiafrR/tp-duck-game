@@ -130,6 +130,10 @@ private:
                             std::cout << "S KeyDown\n";
                             client.TrySendRequest(CommandCode::Crouch_KeyDown);
                             break;
+                        case SDLK_c:
+                            std::cout << "C KeyDown\n";
+                            client.TrySendRequest(CommandCode::Cuack);
+                            break;
                     }
 
                     if (!players.contains(
@@ -160,6 +164,10 @@ private:
                         case SDLK_DOWN:
                             std::cout << "Down Arrow KeyDown\n";
                             client.TrySendRequest(CommandCode::Crouch_KeyDown, 1);
+                            break;
+                        case SDLK_KP_6:
+                            std::cout << "Numpad 6 KeyDown\n";
+                            client.TrySendRequest(CommandCode::Cuack, 1);
                             break;
                     }
                 } break;

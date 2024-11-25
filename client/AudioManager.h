@@ -16,8 +16,11 @@ using namespace SDL2pp;  // NOLINT
 
 class AudioManager {
 private:
+    const int MAX_CHANELS = 20;
     Mixer mixer;
-    AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {}
+    AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {
+        mixer.AllocateChannels(MAX_CHANELS);
+    }
 
     const unordered_map<TypeProjectile, string> bulletSFX = {
             {TypeProjectile::BULLET, "bulletSFX.wav"},
@@ -40,6 +43,9 @@ public:
 
     void PlaySFX(const string& filename) {
         Chunk& audio = AudioCache::GetSFXData(filename);
+        if (mixer.IsChannelPlaying(-1) == MAX_CHANELS) {
+            return;
+        }
         mixer.PlayChannel(-1, audio, 0);
     }
 
