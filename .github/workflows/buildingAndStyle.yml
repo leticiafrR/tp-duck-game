@@ -1,0 +1,43 @@
+name: pre-commit hooks and build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    
+    - name: Dar permisos de ejecución al instalador de dependencias
+      run: chmod +x scripts/install_depedencies.sh
+      
+    - name: instalar dependencias necesarias SDL
+      run: ./scripts/install_depedencies.sh
+
+    - name: Verify installation of packages
+      run: |
+        dpkg -s libsdl2-dev libyaml-dev
+      
+    - name: instalar CMake, Make y stilers
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake make build-essential
+        sudo apt-get install -y cppcheck
+        sudo apt install -y clang-format
+        pip install cpplint
+        
+     # Ejecutar CMake y compilar
+    - name: compile project using makefile
+      run: make
+      
+    - uses: pre-commit/action@v2.0.3
+      with:
+        extra_args: --all-files
+   

@@ -33,6 +33,8 @@ public:
     void SetCanTarget(bool target);
     bool GetCanTarget();
 
+    void SetActive(bool visible);
+
     void SetRectTransform(const RectTransform& rect);
     RectTransform& GetRectTransform();
 

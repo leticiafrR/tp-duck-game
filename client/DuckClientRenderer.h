@@ -10,6 +10,7 @@
 #include "Animator.h"
 #include "AudioManager.h"
 #include "ColorExtension.h"
+#include "HandItemRenderer.h"
 #include "Object2D.h"
 #include "Timer.h"
 
@@ -31,31 +32,27 @@ public:
     Animator anim;
 
     Vector2D fromPos;
-    float tLerp;
+    float tLerp = 0;
 
     PlayerEvent target;
 
-    Object2D pistolSpr;
+    HandItemRenderer handItem;
 
-    DuckClientRenderer(const Transform& transform, PlayerData data,
+    DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
                        CameraController& camController):
             camController(camController),
             spr("base_duck.png", transform),
             anim(this->spr, "duck.yaml", "idle", 22),
             fromPos(transform.GetPos()),
-            tLerp(0),
-            target(),
-            pistolSpr("pistols.png", Transform(Vector2D::Zero(), Vector2D(2.8, 1.4))) {
+            target(initialEvent),
+            handItem(spr.GetTransform(), initialEvent.typeOnHand) {
 
-        target.stateTransition = DuckState::IDLE;
         spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
-        target.motion = transform.GetPos();
+        SetEventTarget(target);
         spr.SetColor(SkinColors.at(data.playerSkin));
         nickname = data.nickname;
         skinColor = spr.GetColor();
-        SetEventTarget(target);
-        pistolSpr.SetSourceRect(SheetDataCache::GetData("pistols.yaml")["cowboy_pistol"][0]);
         camController.AddTransform(&spr.GetTransform());
     }
 
@@ -74,14 +71,14 @@ public:
         }
         anim.Update(deltaTime);
 
-        pistolSpr.GetTransform().SetPos(spr.GetTransform().GetPos() + Vector2D::Down() * 0.4f +
-                                        (Vector2D::Up() * (target.isLookingUp ? 0.6f : 0)));
-        pistolSpr.SetFlip(spr.GetFlip());
+        handItem.Update(target.flipping == Flip::Left, target.isLookingUp);
+
+        handItem.SetVisible(!target.isCrouched && target.stateTransition != DuckState::DEAD);
     }
 
     void Draw(Camera& cam) {
         spr.Draw(cam);
-        pistolSpr.Draw(cam);
+        handItem.Draw(cam);
     }
 
     Transform& GetTransform() { return spr.GetTransform(); }
@@ -103,7 +100,7 @@ public:
         anim.SetTarget("dead");
         damagedTimer.Stop();
         spr.SetColor(skinColor);
-        pistolSpr.SetVisible(false);
+        handItem.SetVisible(false);
 
         camController.RemoveTransform(&spr.GetTransform());
     }
@@ -140,11 +137,8 @@ public:
         }
         spr.SetFlip(target.flipping == Flip::Left);
 
-        if (newTarget.isLookingUp) {
-            pistolSpr.GetTransform().SetAngle(target.flipping == Flip::Left ? -90 : 90);
-        } else {
-            pistolSpr.GetTransform().SetAngle(0);
-        }
+        if (newTarget.isCrouched)
+            anim.SetTarget("crouched");
     }
 
     ~DuckClientRenderer() {}

@@ -11,7 +11,11 @@ float InstantWeapon::RandomDisturbance() {
 InstantProjectile* InstantWeapon::Shoot(Duck* shooter) {
     Vector2D direction = shooter->GetLookVector();
     if (inclination != 0) {
-        direction.Rotate(inclination);
+        if (shooter->GetFlip() == Flip::Left) {
+            direction.Rotate(-inclination);
+        } else {
+            direction.Rotate(inclination);
+        }
     }
     if (shooter->IsShooting() && dispersionRange != 0) {
         direction += (Vector2D::GetOrthogonal(direction)) * RandomDisturbance();
@@ -36,7 +40,7 @@ InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
         l(projectilesController.GetInstantProjectileListener()) {}
 
 
-void InstantWeapon::Use(Duck* shooter) {
+bool InstantWeapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
         for (int i = 0; i < projectilesPerShot; i++) {
             InstantProjectile* projectile =
@@ -46,7 +50,9 @@ void InstantWeapon::Use(Duck* shooter) {
         }
         ammo--;
         cooldownTimer = 0;
+        return true;
     }
+    return false;
 }
 
 void InstantWeapon::Update(float deltaTime) {

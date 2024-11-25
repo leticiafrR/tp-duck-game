@@ -1,0 +1,66 @@
+shooting_inclination:
+  basic: 0
+  laser_rifle: -45
+
+projectiles_per_shot:
+  basic: 1
+
+cooldown:
+  none: 0
+  basic: 0.3
+  short: 1
+  medium: 2.5
+  long: 7.5
+  to_explote_granada: 4
+
+damage:
+  minimun: 10
+  short: 12
+  medium: 17
+  long: 20
+  
+dispersion:
+  no_dispersion: 0
+  long: 0.4
+  short: 0.15
+
+banana:
+  scope: 10
+  ammo: 1
+
+granada:
+  scope: 20
+  ammo: 1
+
+laser_rifle:
+  scope: 30
+  ammo: 10
+
+cowboy_pistol:
+  scope: 20
+  ammo: 6
+
+pew_pew_laser:
+  scope: 35 # 35 a 38
+  ammo: 12
+
+ak47:
+  scope: 13
+  ammo: 30
+
+dueling_pistol:
+  scope: 5
+  ammo: 1
+
+magnum:
+  scope: 20
+  ammo: 6
+
+shotgun:
+  scope: 7 # 7 a 9
+  ammo: 2
+
+sniper:
+  scope: 64
+  ammo: 3
+

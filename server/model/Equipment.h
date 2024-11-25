@@ -6,6 +6,7 @@ class Equipment {
 private:
     TypeCollectable armor;
     TypeCollectable helmet;
+    // const Config& conf;
 
 public:
     Equipment(): armor(TypeCollectable::EMPTY), helmet(TypeCollectable::EMPTY) {}

@@ -3,6 +3,7 @@
 #include "collectable/Collectable.h"
 #include "common/RigidBody.h"
 #include "event/PlayerEventListener.h"
+#include "server/config.h"
 
 #include "DynamicObj.h"
 #include "Equipment.h"
@@ -12,12 +13,13 @@ class ProjectilesController;
 class Duck: public DynamicObject {
 private:
     PlayerID_t id;
-    bool isShooting;  // just touched by the ones who needs key up and key down (not used as the
+
+    bool isShooting;  // just touched by the ones who needs key up and key down (not used as
                       // momment)
+    bool isLookingUp;
     bool isCrouched;
     bool isGrounded;
     bool isWounded;
-    bool isLookingUp;
 
     MotionHandler motionHandler;
     RigidBody body;
@@ -37,7 +39,7 @@ private:
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id,
-                  ProjectilesController& projectilesController);
+                  ProjectilesController& projectilesController, const Config& conf);
     void TryMoveLeft();
     void TryMoveRight();
     void StopMoveRight();
@@ -59,6 +61,7 @@ public:
     void HandleReceiveDamage(uint8_t damage) override;
 
     void ApplyGravity(StaticMap& map, float deltaTime) override;
+    void ApplyRecoil(float intensity);
 
     void RegistListener(PlayerEventListener* listener);
     void Update(StaticMap& map, float deltaTime);

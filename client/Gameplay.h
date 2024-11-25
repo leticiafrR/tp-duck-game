@@ -5,8 +5,10 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string>
 #include <vector>
 
+#include "common/playerIdentifier.h"
 #include "network/Client.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
@@ -57,10 +59,11 @@ private:
             if (firstSnapshot.updates.find(pData.playerID) == firstSnapshot.updates.end())
                 continue;
             Vector2D spawnPos = firstSnapshot.updates.at(pData.playerID).motion;
+            PlayerEvent initialEvent = firstSnapshot.updates.at(pData.playerID);
 
-            players.emplace(pData.playerID,
-                            std::make_shared<DuckClientRenderer>(Transform(spawnPos, duckSize),
-                                                                 pData, camController));
+            players.emplace(pData.playerID, std::make_shared<DuckClientRenderer>(
+                                                    Transform(spawnPos, duckSize), pData,
+                                                    initialEvent, camController));
         }
     }
 
@@ -128,6 +131,37 @@ private:
                             client.TrySendRequest(CommandCode::Crouch_KeyDown);
                             break;
                     }
+
+                    if (!players.contains(
+                                PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                        continue;
+                    switch (keyEvent.keysym.sym) {
+
+                        case SDLK_LEFT:
+                            std::cout << "Left Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyDown, 1);
+                            break;
+                        case SDLK_RIGHT:
+                            std::cout << "Right Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::MoveRight_KeyDown, 1);
+                            break;
+                        case SDLK_KP_2:
+                            std::cout << "Numpad 2 KeyDown\n";
+                            client.TrySendRequest(CommandCode::Jump, 1);
+                            break;
+                        case SDLK_KP_3:
+                            std::cout << "Numpad 3 KeyDown\n";
+                            client.TrySendRequest(CommandCode::UseItem_KeyDown, 1);
+                            break;
+                        case SDLK_UP:
+                            std::cout << "Up Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyDown, 1);
+                            break;
+                        case SDLK_DOWN:
+                            std::cout << "Down Arrow KeyDown\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyDown, 1);
+                            break;
+                    }
                 } break;
                 case SDL_KEYUP: {
                     if (finishing)
@@ -158,13 +192,39 @@ private:
                             client.TrySendRequest(CommandCode::Crouch_KeyUp);
                             break;
                     }
+
+                    if (!players.contains(
+                                PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                        continue;
+                    switch (keyEvent.keysym.sym) {
+
+                        case SDLK_LEFT:
+                            std::cout << "Left Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::MoveLeft_KeyUp, 1);
+                            break;
+                        case SDLK_RIGHT:
+                            std::cout << "Right Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::MoveRight_KeyUp, 1);
+                            break;
+                        case SDLK_KP_3:
+                            std::cout << "Numpad 3 KeyUp\n";
+                            client.TrySendRequest(CommandCode::UseItem_KeyUp, 1);
+                            break;
+                        case SDLK_UP:
+                            std::cout << "Up Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::LookUp_KeyUp, 1);
+                            break;
+                        case SDLK_DOWN:
+                            std::cout << "Down Arrow KeyUp\n";
+                            client.TrySendRequest(CommandCode::Crouch_KeyUp, 1);
+                            break;
+                    }
                     break;
                 }
                 case SDL_QUIT:
                     exit(0);
                     break;
             }
-            // ButtonsManager::GetInstance().HandleEvent(event);
         }
     }
 
@@ -173,8 +233,8 @@ private:
         while (!finishing && client.TryRecvNetworkMsg(snapshot)) {
             for (size_t i = 0; i < snapshot->raycastsEvents.size(); i++) {
                 auto ray = snapshot->raycastsEvents[i];
-                bullets.emplace_back(ray.origin, ray.end, 100);
-                AudioManager::GetInstance().PlayShootSFX();
+                bullets.emplace_back(ray.type, ray.origin, ray.end, 100);
+                AudioManager::GetInstance().PlayShootSFX(ray.type);
             }
 
             for (const auto& it: snapshot->updates) {
@@ -207,6 +267,26 @@ private:
         }
     }
 
+    void InitGUI() {
+        uint16_t localConnectionId = client.getLocalID();
+
+        bool isPlayer1 = true;
+        for (uint8_t i = 0; i < (uint8_t)players.size(); i++) {
+            auto playerId = PlayerIdentifier::GeneratePlayerID(localConnectionId, i);
+
+            if (players.contains(playerId)) {
+                Color color = players[playerId]->GetSkinColor();
+                std::string nickname = players[playerId]->GetNickname();
+                if (isPlayer1) {
+                    gui.InitPlayer1GUI(color, nickname);
+                    isPlayer1 = false;
+                } else {
+                    gui.InitPlayer2GUI(color, nickname);
+                }
+            }
+        }
+    }
+
 public:
     Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
              Snapshot firstSnapshot):
@@ -214,10 +294,11 @@ public:
             cam(c),
             camController(c),
             rate(r),
-            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
-            gui(GameplayGUI(ColorExtension::White(), "josValentin")) {
+            mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))) {
         InitPlayers(matchData, firstSnapshot);
         InitMap(mapData);
+
+        InitGUI();
     }
 
     void Run(bool isInitial) {

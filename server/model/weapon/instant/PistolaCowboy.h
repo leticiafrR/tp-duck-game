@@ -10,15 +10,17 @@ class PistolaCowboy: public InstantWeapon {
     // para esta arma es suficiente con la definiciòn estandart de de instantWeapon para generar
     // proyectiles
 public:
-    PistolaCowboy(ProjectilesController& controller, const Transform& initialSpace):
-            InstantWeapon(controller, initialSpace, Scope::PISTOLA_COWBOY, Ammo::PISTOLA_COWBOY,
-                          Damage::SHORT, DispersionRange::NO_DISPERSION, Cooldown::NONE,
-                          TypeProjectile::Bullet) {}
-
-    void BeCollected(TypeCollectable& typeOnHandRef) override {
-        typeOnHandRef = TypeCollectable::PISTOLA_COWBOY;
+    PistolaCowboy(ProjectilesController& controller, const Transform& initialSpace,
+                  const Config& conf):
+            InstantWeapon(controller, initialSpace, conf.getCowboyPistolScope(),
+                          conf.getCowboyPistolAmmo(), conf.getDamageShort(), conf.getNoDispersion(),
+                          conf.getCooldownMedium(), TypeProjectile::Bullet) {
+        std::cout << "Se crea la pistola cowboy" << std::endl;
     }
-    // void Use(Duck* shooter) generico
+    // a chequear
+    void BeCollected(TypeCollectable& typeOnHandRef) override {
+        typeOnHandRef = TypeCollectable::COWBOY_PISTOL;
+    }
 };
 
 #endif

@@ -14,10 +14,12 @@
 #include "ButtonsManager.h"
 #include "Camera.h"
 #include "ColorExtension.h"
+#include "ControlsScreen.h"
 #include "GUIManager.h"
 #include "Image.h"
 #include "LoadingScreen.h"
 #include "LobbyItemWidget.h"
+#include "PlayersCountSelection.h"
 #include "Rate.h"
 #include "SDLExtension.h"
 #include "Text.h"
@@ -51,47 +53,57 @@ private:
     Button refreshButton;
     Text refreshButtonText;
 
+    Button controlsButton;
+    Text controlsButtonText;
+
+    ControlsScreen controls;
+
+    PlayersCountSelection playersCountSelection;
 
     void OnCreatePressed() {
         AudioManager::GetInstance().PlayButtonSFX();
 
-        bool createSuccess;
-        client.CreateMatch();
-        LoadingScreen loading(cam, rate, [this, &createSuccess]() {
-            std::shared_ptr<ResultJoining> joinResult = nullptr;
-            if (client.TryRecvNetworkMsg(joinResult)) {
-                createSuccess = joinResult->eCode == 0;
-                return true;
-            }
-            return false;
-        });
-        loading.Run("Creating match");
+        playersCountSelection.Display([this](uint8_t playersCount) {
+            bool createSuccess;
+            client.CreateMatch(playersCount);
+            LoadingScreen loading(cam, rate, [this, &createSuccess]() {
+                std::shared_ptr<ResultJoining> joinResult = nullptr;
+                if (client.TryRecvNetworkMsg(joinResult)) {
+                    createSuccess = joinResult->eCode == 0;
+                    return true;
+                }
+                return false;
+            });
+            loading.Run("Creating match");
 
-        if (createSuccess) {
-            isOwner = true;
-            running = false;
-        }
+            if (createSuccess) {
+                isOwner = true;
+                running = false;
+            }
+        });
     }
 
     void OnJoinLobbyPressed(int id) {
         AudioManager::GetInstance().PlayButtonSFX();
 
-        bool joinSuccess;
-        client.SelectMatch(id);
-        LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
-            std::shared_ptr<ResultJoining> joinResult = nullptr;
-            if (client.TryRecvNetworkMsg(joinResult)) {
-                joinSuccess = joinResult->eCode == 0;
-                return true;
-            }
-            return false;
-        });
-        loading.Run("Joining match");
+        playersCountSelection.Display([this, id](uint8_t playersCount) {
+            bool joinSuccess;
+            client.SelectMatch(id, playersCount);
+            LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
+                std::shared_ptr<ResultJoining> joinResult = nullptr;
+                if (client.TryRecvNetworkMsg(joinResult)) {
+                    joinSuccess = joinResult->eCode == 0;
+                    return true;
+                }
+                return false;
+            });
+            loading.Run("Joining match");
 
-        if (joinSuccess) {
-            isOwner = false;
-            running = false;
-        }
+            if (joinSuccess) {
+                isOwner = false;
+                running = false;
+            }
+        });
     }
 
     void OnRefreshPressed() {
@@ -176,7 +188,22 @@ public:
             refreshButtonText("REFRESH", 20,
                               RectTransform(Vector2D(180, -240), Vector2D(250, 80),
                                             Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
-                              ColorExtension::White(), 5) {}
+                              ColorExtension::White(), 5),
+            controlsButton(
+                    "button_1.png",
+                    RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
+                                  Vector2D(0.5, 0.5)),
+                    [this]() {
+                        this->controls.SetActive(true);
+                        AudioManager::GetInstance().PlayButtonSFX();
+                    },
+                    Color(40, 40, 40), 4),
+            controlsButtonText("CONTROLS", 20,
+                               RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
+                                             Vector2D(0.5, 0.5)),
+                               ColorExtension::White(), 5) {
+        controls.SetActive(false);
+    }
 
     bool Render() {
         running = true;

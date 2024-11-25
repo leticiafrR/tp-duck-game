@@ -11,7 +11,6 @@
 #include "data/command.h"
 #include "data/dataMatch.h"
 #include "data/errorCodesJoinMatch.h"
-#include "model/types.h"
 #include "network/messageSender.h"
 
 #include "gamesHandler.h"
@@ -86,8 +85,7 @@ void Match::run() {
     try {
         auto playersData = assignSkins(config.getAvailableSkins());
         auto matchStartSender = std::make_shared<MatchStartSender>(
-                std::move(playersData), Vector2D(Size::DUCK, Size::DUCK));
-
+                std::move(playersData), Vector2D(config.getDuckSize(), config.getDuckSize()));
         broadcastMatchMssg(matchStartSender);
         GamesHandler gamesHandler(config, clientsQueues, playersPerClient, matchQueue, matchStatus,
                                   currentPlayers);

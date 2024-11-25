@@ -1,0 +1,37 @@
+theme: "FOREST"
+full_map_size:
+  x: 100
+  'y': 160
+weapons_spawn_points:
+  - {x: 0, y: -6}
+  - {x: -32, y: 10}
+players_spawn_points:
+  -  {x: -18, y: 12}
+  -  {x: 32, y: -8}
+plataforms:
+  - [ "plataform_one", "plataform_two", "plataform_three", "plataform_four", "plataform_five", "plataform_six", "plataform_seven", "plataform_eight"]
+plataform_one:
+  - {x: 0, y: -12, w: 24, h: 8, edges: ["RIGHT", "TOP", "BOTTOM"] }
+
+plataform_two:
+  - {x: -32, y: 0, w: 40, h: 16, edges: ["LEFT", "RIGHT", "TOP"]} 
+
+plataform_three:
+  - {x: -32,y: -12, w: 40,h: 8, edges: ["LEFT", "BOTTOM"]} 
+
+plataform_four:
+  - {x: 20, y: -8,w: 16, h: 8, edges: ["LEFT", "RIGHT", "TOP"]}
+
+plataform_five:
+  - { x: 20, y:  -20, w: 16, h: 16, edges: ["LEFT", "BOTTOM"] }
+
+plataform_six:
+  - {x: 32, y:  -20, w:  8, h: 16, edges : ["TOP", "BOTTOM"]}
+
+plataform_seven:
+  - {x:  40 , y: -20, w: 8, h: 16, edges: ["RIGHT", "BOTTOM"]}
+
+plataform_eight:
+  - {x:  40, y: -4, w: 8, h: 16, edges: ["RIGHT", "LEFT", "TOP"]}
+
+

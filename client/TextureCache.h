@@ -31,6 +31,10 @@ public:
     }
 
     void Clear() { cache.clear(); }
+    void ClearItem(string filename) {
+        if (cache.contains(filename))
+            cache.erase(filename);
+    }
 
     explicit TextureCache(Renderer& render): render(render) {}
 

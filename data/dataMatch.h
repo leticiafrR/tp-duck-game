@@ -13,13 +13,14 @@ struct DataMatch {
     uint16_t matchID;
     std::string creatorNickname;
 
+    DataMatch() = default;
+
     DataMatch(uint8_t _currentPlayers, uint8_t _maxPlayers, uint16_t _matchID,
               const std::string& _creatorNickname):
             currentPlayers(_currentPlayers),
             maxPlayers(_maxPlayers),
             matchID(_matchID),
             creatorNickname(_creatorNickname) {}
-    DataMatch() = default;
 };
 
 #endif

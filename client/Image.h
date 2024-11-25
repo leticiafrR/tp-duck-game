@@ -17,6 +17,7 @@ class Image: public GraphicUI {
 private:
     std::string filename = "";
     SDL2pp::Optional<Rect> srcRect = SDL2pp::NullOpt;
+    bool flip = false;
 
 public:
     explicit Image(const RectTransform& rect, Color color = Color(255, 255, 255),
@@ -39,9 +40,11 @@ public:
         if (filename.empty()) {
             cam.DrawGUI(rect, color);
         } else {
-            cam.DrawImageGUI(filename, rect, srcRect, color);
+            cam.DrawImageGUI(filename, rect, srcRect, color, flip);
         }
     }
+
+    void SetFlip(bool flip) { this->flip = flip; }
 };
 
 #endif

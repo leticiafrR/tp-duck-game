@@ -22,6 +22,11 @@ bool GraphicUI::GetVisible() { return visible; }
 void GraphicUI::SetCanTarget(bool canTarget) { this->canTarget = canTarget; }
 bool GraphicUI::GetCanTarget() { return canTarget; }
 
+void GraphicUI::SetActive(bool active) {
+    SetVisible(active);
+    SetCanTarget(active);
+}
+
 void GraphicUI::SetRectTransform(const RectTransform& rect) { this->rect = rect; }
 RectTransform& GraphicUI::GetRectTransform() { return rect; }
 

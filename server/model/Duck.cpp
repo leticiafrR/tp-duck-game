@@ -6,25 +6,26 @@
 #include "weapon/instant/LaserRifle.h"
 #include "weapon/instant/PistolaCowboy.h"
 
-#include "types.h"
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
-Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController):
-        DynamicObject(Speed::DUCK, Transform(initialPos, Vector2D(Size::DUCK, Size::DUCK)),
-                      Life::DUCK),
+Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController,
+           const Config& conf):
+        DynamicObject(conf.getDuckSpeed(),
+                      Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize())),
+                      conf.getDuckLife()),
         id(id),
         isShooting(false),
+        isLookingUp(false),
         isCrouched(false),
         isGrounded(true),
         isWounded(false),
-        isLookingUp(false),
-        body(mySpace, Mass::DUCK),
+        body(mySpace, conf.getDuckMass()),
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
         // itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
-        itemOnHand(new LaserRifle(projectilesController, mySpace)),
+        itemOnHand(new LaserRifle(projectilesController, mySpace, conf)),
         typeOnHand(TypeCollectable::LASER_RIFLE) {}
 
 void Duck::TriggerEvent() {
@@ -68,7 +69,7 @@ void Duck::StopShooting() { isShooting = false; }
 void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
-    if (isCrouched) {
+    if (!isCrouched) {
         isWounded = true;
         DynamicObject::HandleReceiveDamage(damage);
     }
@@ -86,12 +87,16 @@ void Duck::StopUseItem() {
     }
 }
 
+void Duck::ApplyRecoil(float intensity) {
+    body.ApplyForce(((myFlip == Flip::Left) ? Vector2D::Right() : Vector2D::Left()) * intensity);
+}
 
 void Duck::RegistListener(PlayerEventListener* listener) {
     l = listener;
     // on the first iteration, everything is new
     TriggerEvent();
 }
+
 bool Duck::HasWeaponOnHand() {
     return (itemOnHand &&
             !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));

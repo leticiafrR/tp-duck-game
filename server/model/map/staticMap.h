@@ -24,6 +24,7 @@ private:
     std::vector<Transform> plataforms;
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
+    std::vector<Vector2D> weaponsSpawnPoints;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -32,7 +33,7 @@ private:
     void loadPlatforms(const YAML::Node& config, const std::string& platformName);
 
 public:
-    StaticMap();
+    explicit StaticMap(const std::string& fileName);
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);
@@ -45,6 +46,8 @@ public:
     std::optional<Transform> CheckCollision(const Transform& dynamicT);
 
     std::vector<Vector2D> GetPlayersSpawnPoints();
+
+    std::vector<Vector2D> GetWeaponsSpawnPoints();
 
     GameSceneDto GetScene();
     ~StaticMap() {}

@@ -31,6 +31,8 @@ public:
     Vector2D GetAnchor() { return anchor; }
 
     void Move(Vector2D add) { t.Move(add); }
+    float GetAngle() { return t.GetAngle(); }
+    void SetAngle(float angle) { t.SetAngle(angle); }
 
     ~RectTransform() = default;
 };

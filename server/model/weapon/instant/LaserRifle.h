@@ -8,19 +8,26 @@ class LaserRifle: public InstantWeapon {
     // proyectiles
 
 public:
-    LaserRifle(ProjectilesController& controller, const Transform& initialSpace):
-            InstantWeapon(controller, initialSpace, Scope::LASER_RIFLE, Ammo::LASER_RIFLE,
-                          Damage::MEDIUM, DispersionRange::SHORT, Cooldown::BASIC,
-                          TypeProjectile::RayoLaser, ShootingInclination::LASER_RIFLE) {}
+    LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
+               const Config& conf):
+            InstantWeapon(controller, initialSpace, conf.getLaserRifleScope(),
+                          conf.getLaserRifleAmmo(), conf.getDamageMedium(),
+                          conf.getShortDispersion(), conf.getCooldownBasic(),
+                          TypeProjectile::RayoLaser, conf.getLaserRifleInclination()) {}
+
 
     void BeCollected(TypeCollectable& collectorTypeRef) override {
         collectorTypeRef = TypeCollectable::LASER_RIFLE;
     }
 
-    void Use(Duck* shooter) override {
+    bool Use(Duck* shooter) override {
         // genera disparos continuos
-        InstantWeapon::Use(shooter);
-        shooter->StartShooting();
+        if (InstantWeapon::Use(shooter)) {
+            shooter->StartShooting();
+            shooter->ApplyRecoil(10);
+            return true;
+        }
+        return false;
     }
 };
 

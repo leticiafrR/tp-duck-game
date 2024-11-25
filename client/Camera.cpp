@@ -43,10 +43,11 @@ void Camera::DrawGUI(RectTransform rect, Color color) {
 }
 
 void Camera::DrawImageGUI(const string& filename, RectTransform rect,
-                          SDL2pp::Optional<Rect> srcRect, Color color) {
+                          SDL2pp::Optional<Rect> srcRect, Color color, bool flip) {
     Texture& tex = textureCache.GetTexture(filename);
     tex.SetColorAndAlphaMod(color);
-    render.Copy(tex, srcRect, RectTransformToRenderRect(rect));
+    render.Copy(tex, srcRect, RectTransformToRenderRect(rect), -rect.GetAngle(), SDL2pp::NullOpt,
+                flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     tex.SetColorAndAlphaMod(Color(255, 255, 255, 255));  // Return texture color to normal
 }
 
@@ -68,7 +69,7 @@ void Camera::DrawText(const string& text, Font& font, RectTransform rectTransfor
 
     rectTransform.SetSize(targetSize);
     Rect rect = RectTransformToRenderRect(rectTransform);
-    render.Copy(text_sprite, SDL2pp::NullOpt, rect);
+    render.Copy(text_sprite, SDL2pp::NullOpt, rect, -rectTransform.GetAngle());
 }
 
 Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
@@ -88,3 +89,5 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
 
 
 void Camera::Render() { render.Present(); }
+
+void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }

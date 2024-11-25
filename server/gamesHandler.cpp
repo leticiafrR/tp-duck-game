@@ -84,7 +84,7 @@ void GamesHandler::playOneGame() {
         }
     });
     checkNumberPlayers();
-    currentGame.emplace(playersIDs, getRandomLevel());
+    currentGame.emplace(playersIDs, getRandomLevel(), config);
     broadcastGameMssg(std::make_shared<GameSceneSender>(std::move(currentGame->getSceneDto())));
     gameLoop();
     registerGameWinnerPoint();
