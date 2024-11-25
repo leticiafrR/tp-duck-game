@@ -74,6 +74,7 @@ void Config::setDispersion(const YAML::Node& config) {
     dispersions.emplace_back(config[NO_DISPERSION_STR].as<float>());
     dispersions.emplace_back(config[SHORT_STR].as<float>());
     dispersions.emplace_back(config[LONG_STR].as<float>());
+    dispersions.emplace_back(config[SUPER_DISPERSION].as<float>());
 }
 
 void Config::setWeaponsConfig() {
@@ -153,6 +154,7 @@ int Config::getPewPewLaserScope() const { return (int)weapons[PEW_PEW_LASER_INDE
 float Config::getNoDispersion() const { return dispersions[NONE_INDEX]; }
 float Config::getShortDispersion() const { return dispersions[SHORT_INDEX]; }
 float Config::getLongDispersion() const { return dispersions[LONG_INDEX]; }
+float Config::getSuperDispersion() const { return dispersions[SUPER_INDEX]; }
 // Cooldown
 float Config::getCooldownNone() const { return cooldown[NONE_INDEX]; }
 float Config::getCooldownShort() const { return cooldown[SHORT_INDEX]; }

@@ -35,7 +35,7 @@ private:
     void UpdateState();
     void UpdateWeapon(float deltaTime);
     bool HasWeaponOnHand();
-    void TriggerEvent();
+    void TriggerEvent(bool cuack = false);
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id,
@@ -54,6 +54,7 @@ public:
 
     void Crouch();
     void StopCrouch();
+    void Cuack();
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
@@ -68,6 +69,7 @@ public:
     const Flip& GetFlip() const;
     Vector2D GetLookVector();
     bool IsShooting() const;
+
 
     ~Duck() override = default;
     Duck(const Duck&) = delete;

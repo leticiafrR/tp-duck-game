@@ -1,6 +1,8 @@
 #ifndef INSTANT_PROJECTILE_H
 #define INSTANT_PROJECTILE_H
+#include <string>
 #include <unordered_map>
+#include <utility>
 
 #include "../Duck.h"
 #include "../event/InstantProjectileEventListener.h"
@@ -12,12 +14,26 @@
 
 enum TypeProjectile;
 class InstantProjectile: public Projectile {
-private:
+protected:
     Vector2D rayOrigin;
     Vector2D rayDirection;
     float rayLenght;
     uint8_t damage;
     InstantProjectileEventListener* l;
+
+    void CheckCollisionWithMap(const StaticMap& map) {
+        std::optional<std::pair<float, bool>> maybeInfoCollision =
+                map.CheckCollisionRay(rayOrigin, rayDirection, rayLenght);
+        if (maybeInfoCollision.has_value()) {
+            rayLenght = maybeInfoCollision.value().first;
+        }
+    }
+
+    void CheckCollisionWithDuck(Duck* duck) {
+        if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
+            duck->HandleReceiveDamage(damage);
+        }
+    }
 
 public:
     InstantProjectile(const Vector2D& shooterPos, const Vector2D& direction, float scope,
@@ -31,27 +47,22 @@ public:
 
     void RegistListener(InstantProjectileEventListener* listener) { l = listener; }
 
-    void CheckCollisionWithDuck(Duck* duck) {
-        if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
-            duck->HandleReceiveDamage(damage);
-        }
-    }
+    virtual void Update(const StaticMap& map,
+                        std::unordered_map<PlayerID_t, Duck*>& players) override {
 
-    void UpdateLenght(const StaticMap& map) {
-        std::optional<float> maybeNewLenght =
-                map.CheckCollisionRay(rayOrigin, rayDirection, rayLenght);
-        if (maybeNewLenght.has_value()) {
-            rayLenght = maybeNewLenght.value();
-        }
-    }
-
-    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override {
-        UpdateLenght(map);
+        CheckCollisionWithMap(map);
         for (const auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
         l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
         MarkAsDead();
+    }
+
+    std::string ToString() const {
+        std::string rayLenghtStr =
+                (std::ostringstream() << std::fixed << std::setprecision(2) << rayLenght).str();
+        return "Origen: " + rayOrigin.ToString() + "\nDirecciòn: " + rayDirection.ToString() +
+               "\nLARGO: " + rayLenghtStr + "\n\n";
     }
 };
 #endif

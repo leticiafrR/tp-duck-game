@@ -38,9 +38,9 @@ public:
 
     bool IsOnTheFloor(const Transform& dynamicT);
 
-    // retorna el nuevo largo para que colisione correctamente
-    std::optional<float> CheckCollisionRay(const Vector2D& rayOrigin, const Vector2D& rayDirection,
-                                           float rayLenght) const;
+    std::optional<std::pair<float, bool>> CheckCollisionRay(const Vector2D& rayOrigin,
+                                                            const Vector2D& rayDirection,
+                                                            float rayLenght) const;
 
 
     std::optional<Transform> CheckCollision(const Transform& dynamicT);

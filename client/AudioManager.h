@@ -16,14 +16,17 @@ using namespace SDL2pp;  // NOLINT
 
 class AudioManager {
 private:
+    const int MAX_CHANELS = 20;
     Mixer mixer;
-    AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {}
+    AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {
+        mixer.AllocateChannels(MAX_CHANELS);
+    }
 
     const unordered_map<TypeProjectile, string> bulletSFX = {
-            {TypeProjectile::Bullet, "bulletSFX.wav"},
-            {TypeProjectile::RayoLaser, "laserSFX.mp3"},
-            {TypeProjectile::GranadaFragment, ""},
-            {TypeProjectile::Banana, ""}};
+            {TypeProjectile::BULLET, "bulletSFX.wav"},
+            {TypeProjectile::LASER, "laserSFX.mp3"},
+            {TypeProjectile::GRANADA_FRAGMENT, ""},
+            {TypeProjectile::BANANA, ""}};
 
 
 public:
@@ -32,7 +35,7 @@ public:
         return Instance;
     }
 
-    void PlayShootSFX(TypeProjectile type = TypeProjectile::Bullet) { PlaySFX(bulletSFX.at(type)); }
+    void PlayShootSFX(TypeProjectile type = TypeProjectile::BULLET) { PlaySFX(bulletSFX.at(type)); }
     void PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
     void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 
@@ -40,6 +43,9 @@ public:
 
     void PlaySFX(const string& filename) {
         Chunk& audio = AudioCache::GetSFXData(filename);
+        if (mixer.IsChannelPlaying(-1) == MAX_CHANELS) {
+            return;
+        }
         mixer.PlayChannel(-1, audio, 0);
     }
 

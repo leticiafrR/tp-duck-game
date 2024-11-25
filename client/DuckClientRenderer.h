@@ -9,6 +9,7 @@
 
 #include "Animator.h"
 #include "AudioManager.h"
+#include "CameraController.h"
 #include "ColorExtension.h"
 #include "HandItemRenderer.h"
 #include "Object2D.h"
@@ -16,15 +17,14 @@
 
 class DuckClientRenderer {
 private:
-    const std::map<uint8_t, Color> SkinColors = {
-            {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
-            {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
-            {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
+    static const std::map<uint8_t, Color> SkinColors;
 
     Timer damagedTimer;
+    Timer cuackTimer;
     Color skinColor;
     std::string nickname;
     bool damaged = false;
+    bool cuack = false;
 
 public:
     CameraController& camController;
@@ -55,6 +55,7 @@ public:
         skinColor = spr.GetColor();
         camController.AddTransform(&spr.GetTransform());
     }
+    ~DuckClientRenderer() {}
 
     Color GetSkinColor() const { return skinColor; }
     std::string GetNickname() const { return nickname; }
@@ -69,6 +70,11 @@ public:
             anim.SetTarget("damaged");
             damagedTimer.Update(deltaTime);
         }
+
+        if (cuack) {
+            cuackTimer.Update(deltaTime);
+        }
+
         anim.Update(deltaTime);
 
         handItem.Update(target.flipping == Flip::Left, target.isLookingUp);
@@ -82,6 +88,13 @@ public:
     }
 
     Transform& GetTransform() { return spr.GetTransform(); }
+
+    void OnCuack() {
+        cuack = true;
+        cuackTimer = Timer(0.15f, [this]() { cuack = false; });
+        AudioManager::GetInstance().PlayDamagedSFX();
+        cuackTimer.Start();
+    }
 
     void OnDamaged() {
         damaged = true;
@@ -102,7 +115,16 @@ public:
         spr.SetColor(skinColor);
         handItem.SetVisible(false);
 
+        cuackTimer.Stop();
+
         camController.RemoveTransform(&spr.GetTransform());
+    }
+
+    string GetAnimAndCuack(string anim) {
+        if (cuack) {
+            return anim += "_cuack";
+        }
+        return anim;
     }
 
     void SetEventTarget(PlayerEvent newTarget) {
@@ -110,18 +132,23 @@ public:
         tLerp = 0;
         target = newTarget;
 
+        spr.SetFlip(target.flipping == Flip::Left);
+
+        if (target.cuacking)
+            OnCuack();
+
         switch (target.stateTransition) {
             case DuckState::IDLE:
-                anim.SetTarget("idle");
+                anim.SetTarget(GetAnimAndCuack("idle"));
                 break;
             case DuckState::RUNNING:
-                anim.SetTarget("run", false);
+                anim.SetTarget(GetAnimAndCuack("run"), false);
                 break;
             case DuckState::JUMPING:
-                anim.SetTarget("jumping");
+                anim.SetTarget(GetAnimAndCuack("jumping"));
                 break;
             case DuckState::FALLING:
-                anim.SetTarget("falling");
+                anim.SetTarget(GetAnimAndCuack("falling"));
                 break;
             case DuckState::WOUNDED:
                 OnDamaged();
@@ -135,13 +162,17 @@ public:
             default:
                 break;
         }
-        spr.SetFlip(target.flipping == Flip::Left);
 
         if (newTarget.isCrouched)
-            anim.SetTarget("crouched");
+            anim.SetTarget(GetAnimAndCuack("crouched"));
     }
 
-    ~DuckClientRenderer() {}
+    static Color GetColorById(uint8_t id) { return SkinColors.at(id); }
 };
+
+const std::map<uint8_t, Color> DuckClientRenderer::SkinColors = {
+        {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
+        {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
+        {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
 
 #endif

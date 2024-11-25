@@ -72,9 +72,9 @@ public:
         return Distance(*this, other) > tolerance;
     }
 
-    float GetMagnitude() { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
+    float GetMagnitude() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
 
-    Vector2D Normalized() {
+    Vector2D Normalized() const {
         float magnitude = GetMagnitude();
         if (magnitude == 0) {
             return Vector2D::Zero();
@@ -88,6 +88,12 @@ public:
         float oldY = y;
         x = oldX * std::cos(angleRadian) - oldY * std::sin(angleRadian);
         y = oldX * std::sin(angleRadian) + oldY * std::cos(angleRadian);
+    }
+
+    Vector2D ReflectAcross(const Vector2D& axis) const {
+        Vector2D normalizedAxis = axis.Normalized();
+        float projectionOnAxis = DotProduct(*this, normalizedAxis);
+        return (normalizedAxis * (2 * projectionOnAxis)) - *this;
     }
 
     std::string ToString() const {

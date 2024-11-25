@@ -19,7 +19,9 @@ enum class CommandCode : uint8_t {
     LookUp_KeyUp,
 
     Crouch_KeyDown,  // empezar a agacharse
-    Crouch_KeyUp
+    Crouch_KeyUp,
+
+    Cuack
 
 };
 // OJO FALTA QUE LOS PROTOCOLOS ENVIEN AHORA UN COMMAND ASÌ

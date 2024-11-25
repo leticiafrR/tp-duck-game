@@ -1,0 +1,142 @@
+theme: FOREST
+full_map_size:
+  x: 100
+  y: 160
+platforms:
+  - platform_0
+  - platform_1
+  - platform_2
+  - platform_3
+  - platform_4
+  - platform_5
+  - platform_6
+  - platform_7
+  - platform_8
+  - platform_9
+  - platform_10
+  - platform_11
+  - platform_12
+  - platform_13
+  - platform_14
+platform_0:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
+platform_1:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+platform_2:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - BOTTOM
+platform_3:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - LEFT
+platform_4:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - RIGHT
+platform_5:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+platform_6:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - LEFT
+platform_7:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - RIGHT
+platform_8:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - BOTTOM
+    - LEFT
+platform_9:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - BOTTOM
+    - RIGHT
+platform_10:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - LEFT
+    - RIGHT
+platform_11:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+platform_12:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - RIGHT
+platform_13:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - LEFT
+    - RIGHT
+platform_14:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - BOTTOM
+    - LEFT
+    - RIGHT

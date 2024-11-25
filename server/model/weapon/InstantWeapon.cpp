@@ -8,46 +8,44 @@ float InstantWeapon::RandomDisturbance() {
     return dist(generator);
 }
 
-InstantProjectile* InstantWeapon::Shoot(Duck* shooter) {
-    Vector2D direction = shooter->GetLookVector();
-    if (inclination != 0) {
-        if (shooter->GetFlip() == Flip::Left) {
-            direction.Rotate(-inclination);
-        } else {
-            direction.Rotate(inclination);
-        }
-    }
-    if (shooter->IsShooting() && dispersionRange != 0) {
-        direction += (Vector2D::GetOrthogonal(direction)) * RandomDisturbance();
-    }
-    return new InstantProjectile(shooter->GetTransform().GetPos(), direction.Normalized(), scope,
-                                 damage, typeProjectile, l);
-}
-
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
-                             TypeProjectile typeProjectile, float inclination,
-                             uint8_t projectilesPerShot):
+                             TypeProjectile typeProjectile, float inclination):
         Weapon(projectilesController, initialSpace, ammo, typeProjectile),
         scope(scope),
         damage(damage),
         dispersionRange(dispersionRange),
         cooldown(cooldown),
         cooldownTimer(0),
-        projectilesPerShot(projectilesPerShot),
         inclination(inclination),
         l(projectilesController.GetInstantProjectileListener()) {}
 
 
+Vector2D InstantWeapon::GetShootingDirection(Duck* shooter) {
+    Vector2D direction = shooter->GetLookVector();
+    if (inclination && shooter->GetFlip() == Flip::Left) {
+        direction.Rotate(-inclination);
+    } else if (inclination) {
+        direction.Rotate(inclination);
+    }
+
+    if (shooter->IsShooting() && dispersionRange != 0) {
+        direction += (Vector2D::GetOrthogonal(direction)) * RandomDisturbance();
+    }
+    return direction.Normalized();
+}
+
+void InstantWeapon::Shoot(Duck* shooter) {
+    InstantProjectile* projectile =
+            new InstantProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
+                                  scope, damage, typeProjectile, l);
+    projectilesController.RelaseProjectile(projectile);
+}
+
 bool InstantWeapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
-        for (int i = 0; i < projectilesPerShot; i++) {
-            InstantProjectile* projectile =
-                    Shoot(shooter);  // la logica de disparar debe dejar la inclinaciòn preparada
-                                     // para el siguiente disparo
-            projectilesController.RelaseProjectile(projectile);
-        }
+        Shoot(shooter);
         ammo--;
         cooldownTimer = 0;
         return true;

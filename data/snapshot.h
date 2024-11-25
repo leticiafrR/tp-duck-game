@@ -10,7 +10,7 @@
 #include "networkMsg.h"
 
 enum class Flip : uint8_t { Left = 1, Right };
-enum class TypeProjectile : uint8_t { RayoLaser, Bullet, Banana, GranadaFragment };
+enum class TypeProjectile : uint8_t { LASER, BULLET, BANANA, GRANADA_FRAGMENT };
 enum class DuckState : uint8_t {
     IDLE = 1,
     JUMPING,
@@ -20,7 +20,14 @@ enum class DuckState : uint8_t {
     DEAD,
     DEAD_BY_FALLING
 };
-enum class TypeCollectable : uint8_t { EMPTY, COWBOY_PISTOL, LASER_RIFLE, HELMET, ARMOR };
+enum class TypeCollectable : uint8_t {
+    EMPTY,
+    COWBOY_PISTOL,
+    LASER_RIFLE,
+    PEW_PEW_LASER,
+    HELMET,
+    ARMOR
+};
 
 struct PlayerEvent {
     Vector2D motion;
@@ -29,26 +36,20 @@ struct PlayerEvent {
     bool isLookingUp;
     TypeCollectable typeOnHand;
     bool isCrouched;
+    bool cuacking;
 
     PlayerEvent() = default;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
-                bool _isLookingUp):
-            motion(_motion),
-            stateTransition(_stateTransition),
-            flipping(_flipping),
-            isLookingUp(_isLookingUp),
-            typeOnHand(TypeCollectable::EMPTY),
-            isCrouched(false) {}
-
-    PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
-                bool _isLookingUp, TypeCollectable _typeOnHand, bool _isCrouched):
+                bool _isLookingUp, TypeCollectable _typeOnHand, bool _isCrouched,
+                bool _cuacking = false):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),
             isLookingUp(_isLookingUp),
             typeOnHand(_typeOnHand),
-            isCrouched(_isCrouched) {}
+            isCrouched(_isCrouched),
+            cuacking(_cuacking) {}
 };
 
 // enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};

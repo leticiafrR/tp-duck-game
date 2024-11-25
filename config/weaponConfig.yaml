@@ -23,6 +23,7 @@ dispersion:
   no_dispersion: 0
   long: 0.4
   short: 0.15
+  super: 9
 
 banana:
   scope: 10

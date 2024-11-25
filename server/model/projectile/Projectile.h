@@ -6,7 +6,7 @@
 
 #include "data/id.h"
 #include "data/snapshot.h"
-
+class ReboundsController;
 class StaticMap;
 class Duck;
 
