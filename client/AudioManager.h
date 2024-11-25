@@ -20,10 +20,10 @@ private:
     AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {}
 
     const unordered_map<TypeProjectile, string> bulletSFX = {
-            {TypeProjectile::Bullet, "bulletSFX.wav"},
-            {TypeProjectile::RayoLaser, "laserSFX.mp3"},
-            {TypeProjectile::GranadaFragment, ""},
-            {TypeProjectile::Banana, ""}};
+            {TypeProjectile::BULLET, "bulletSFX.wav"},
+            {TypeProjectile::LASER, "laserSFX.mp3"},
+            {TypeProjectile::GRANADA_FRAGMENT, ""},
+            {TypeProjectile::BANANA, ""}};
 
 
 public:
@@ -32,7 +32,7 @@ public:
         return Instance;
     }
 
-    void PlayShootSFX(TypeProjectile type = TypeProjectile::Bullet) { PlaySFX(bulletSFX.at(type)); }
+    void PlayShootSFX(TypeProjectile type = TypeProjectile::BULLET) { PlaySFX(bulletSFX.at(type)); }
     void PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
     void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 

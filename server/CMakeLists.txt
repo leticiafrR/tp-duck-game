@@ -8,6 +8,7 @@ target_sources(taller_server
     model/Game.cpp
     model/map/staticMap.cpp
     model/weapon/InstantWeapon.cpp
+    model/projectile/ProjectilesController.cpp
 
     #network
     network/sender.cpp

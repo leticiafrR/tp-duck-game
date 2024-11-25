@@ -4,6 +4,7 @@
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
 #include "weapon/instant/LaserRifle.h"
+#include "weapon/instant/PewPewLaser.h"
 #include "weapon/instant/PistolaCowboy.h"
 
 /*******************************************************************************************/
@@ -24,9 +25,11 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        // itemOnHand(new PistolaCowboy(projectilesController, mySpace)),
+        // itemOnHand(new PewPewLaser(projectilesController, mySpace, conf)),
+        //  itemOnHand(new PistolaCowboy(projectilesController, mySpace,conf)),
         itemOnHand(new LaserRifle(projectilesController, mySpace, conf)),
         typeOnHand(TypeCollectable::LASER_RIFLE) {}
+// typeOnHand(TypeCollectable::COWBOY_PISTOL) {}
 
 void Duck::TriggerEvent() {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,

@@ -40,9 +40,12 @@ public:
         return (tHit >= 0 && tHit <= length);
     }
 
-
-    static float RaycastDistance(const Vector2D& rayOrigin, const Vector2D& rayDirection,
-                                 float rayLenght, const Transform& candidateT) {
+    // returns the distancce that the ray reaches and a boolean indicating if there is a vertical
+    // collision with the candidate
+    static std::pair<float, bool> RaycastDistanceAndDirection(const Vector2D& rayOrigin,
+                                                              const Vector2D& rayDirection,
+                                                              float rayLenght,
+                                                              const Transform& candidateT) {
 
         Vector2D maxLimitisCandidate = candidateT.GetPos() + candidateT.GetSize() * 0.5f;
         Vector2D minLimitisCandidate = candidateT.GetPos() - candidateT.GetSize() * 0.5f;
@@ -86,10 +89,12 @@ public:
                 rayEndByY = rayOrigin + (rayDirection * rayLenght);
             }
         }
-
-        float minRayLenght = std::min((rayEndByX - rayOrigin).GetMagnitude(),
-                                      (rayEndByY - rayOrigin).GetMagnitude());
-        return minRayLenght;
+        float distanceFromVertical = (rayEndByY - rayOrigin).GetMagnitude();
+        float distanceFromHorizontal = (rayEndByX - rayOrigin).GetMagnitude();
+        if (distanceFromVertical < distanceFromHorizontal) {
+            return {distanceFromVertical, true};
+        }
+        return {distanceFromHorizontal, false};
     }
 
     static bool RectCollision(const Transform& a, const Transform& b) {

@@ -23,21 +23,25 @@ void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 StaticMap::StaticMap(const std::string& fileName) { SetTheLevel(fileName); }
 
 
-std::optional<float> StaticMap::CheckCollisionRay(const Vector2D& rayOrigin,
-                                                  const Vector2D& rayDirection,
-                                                  float rayLenght) const {
+std::optional<std::pair<float, bool>> StaticMap::CheckCollisionRay(const Vector2D& rayOrigin,
+                                                                   const Vector2D& rayDirection,
+                                                                   float rayLenght) const {
 
     auto min_it = std::min_element(
             grounds.begin(), grounds.end(),
             [&rayDirection, &rayOrigin, rayLenght](const GroundDto& a, const GroundDto& b) {
-                return Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, a.mySpace) <
-                       Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, b.mySpace);
+                return Collision::RaycastDistanceAndDirection(rayOrigin, rayDirection, rayLenght,
+                                                              a.mySpace)
+                               .first < Collision::RaycastDistanceAndDirection(
+                                                rayOrigin, rayDirection, rayLenght, b.mySpace)
+                                                .first;
             });
 
     if (min_it != grounds.end()) {
-        float min_distance =
-                Collision::RaycastDistance(rayOrigin, rayDirection, rayLenght, min_it->mySpace);
-        return ((min_distance == rayLenght) ? std::nullopt : std::optional<float>(min_distance));
+        std::pair<float, bool> infoRay = Collision::RaycastDistanceAndDirection(
+                rayOrigin, rayDirection, rayLenght, min_it->mySpace);
+        return ((infoRay.first == rayLenght) ? std::nullopt :
+                                               std::optional<std::pair<float, bool>>(infoRay));
     }
     return std::nullopt;
 }

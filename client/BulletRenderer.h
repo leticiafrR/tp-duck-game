@@ -14,12 +14,12 @@ using std::unordered_map;
 class BulletRenderer: public Object2D {
 private:
     const unordered_map<TypeProjectile, SpriteRendererData> bulletsDataMap = {
-            {TypeProjectile::Bullet, SpriteRendererData("machine_guns.png", "machine_guns.yaml",
+            {TypeProjectile::BULLET, SpriteRendererData("machine_guns.png", "machine_guns.yaml",
                                                         "machine_bullet", Vector2D(1, 1))},
-            {TypeProjectile::RayoLaser,
+            {TypeProjectile::LASER,
              SpriteRendererData("laser.png", "laser.yaml", "laser_ray", Vector2D(3, 1.5))},
-            {TypeProjectile::GranadaFragment, SpriteRendererData("", "", "")},
-            {TypeProjectile::Banana, SpriteRendererData("", "", "")}};
+            {TypeProjectile::GRANADA_FRAGMENT, SpriteRendererData("", "", "")},
+            {TypeProjectile::BANANA, SpriteRendererData("", "", "")}};
 
     Vector2D origin;
     Vector2D end;

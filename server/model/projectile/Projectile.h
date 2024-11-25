@@ -6,7 +6,7 @@
 
 #include "data/id.h"
 #include "data/snapshot.h"
-
+class ReboundsController;
 class StaticMap;
 class Duck;
 
@@ -21,6 +21,8 @@ public:
     explicit Projectile(TypeProjectile type): type(type), isDead(false) {}
     virtual ~Projectile() = default;
     virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) = 0;
+    //    virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>&
+    //    players,ReboundsController& reboundsController) = 0;
 };
 
 // class PhysicalProjectile: public Projectile{
