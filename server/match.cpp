@@ -37,8 +37,7 @@ void Match::loadDataIfAvailble(std::vector<DataMatch>& availableMatches) {
     }
 }
 
-// debe de actualizar ambos safemaps
-// DEBE ACTUALIZAR CURRENT PLAYERS
+
 std::shared_ptr<Queue<Command>> Match::logInClient(
         const ClientInfo& connectionInfo, Queue<std::shared_ptr<MessageSender>>* clientQueue,
         uint8_t& eCode) {
