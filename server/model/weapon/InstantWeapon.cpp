@@ -46,7 +46,6 @@ void InstantWeapon::Shoot(Duck* shooter) {
 bool InstantWeapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
         Shoot(shooter);
-        std::cout << "se disparò\n";
         ammo--;
         cooldownTimer = 0;
         return true;

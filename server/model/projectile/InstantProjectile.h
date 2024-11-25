@@ -1,5 +1,6 @@
 #ifndef INSTANT_PROJECTILE_H
 #define INSTANT_PROJECTILE_H
+#include <string>
 #include <unordered_map>
 #include <utility>
 
@@ -9,7 +10,7 @@
 #include "common/Vector2D.h"
 #include "data/snapshot.h"
 
-#include "ReboundController.h"
+#include "Projectile.h"
 
 enum TypeProjectile;
 class InstantProjectile: public Projectile {
@@ -49,14 +50,19 @@ public:
     virtual void Update(const StaticMap& map,
                         std::unordered_map<PlayerID_t, Duck*>& players) override {
 
-        // virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>&
-        // players,ReboundsController& reboundsController) override {
         CheckCollisionWithMap(map);
         for (const auto& pair: players) {
             CheckCollisionWithDuck(pair.second);
         }
         l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
         MarkAsDead();
+    }
+
+    std::string ToString() const {
+        std::string rayLenghtStr =
+                (std::ostringstream() << std::fixed << std::setprecision(2) << rayLenght).str();
+        return "Origen: " + rayOrigin.ToString() + "\nDirecciòn: " + rayDirection.ToString() +
+               "\nLARGO: " + rayLenghtStr + "\n\n";
     }
 };
 #endif

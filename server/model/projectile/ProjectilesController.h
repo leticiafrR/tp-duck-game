@@ -16,7 +16,7 @@ class ProjectilesController {
 private:
     std::vector<Projectile*> projectiles;
     InstantProjectileEventListener* instantProjectileListener;
-    // ReboundsController reboundsController;
+
 public:
     ProjectilesController();
 

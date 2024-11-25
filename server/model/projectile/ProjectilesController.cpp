@@ -16,10 +16,7 @@ void ProjectilesController::RelaseProjectile(Projectile* projectile) {
 
 void ProjectilesController::Update(const StaticMap& map,
                                    std::unordered_map<PlayerID_t, Duck*>& players) {
-    // lanzo los rebotes del tick pasado y limpio
-
     for (auto projectile: projectiles) {
-        // projectile->Update(map, players,reboundsController);
         projectile->Update(map, players);
     }
     ReapDead();
