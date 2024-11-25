@@ -36,33 +36,25 @@ void Match::loadDataIfAvailble(std::vector<DataMatch>& availableMatches) {
     }
 }
 
-
 std::shared_ptr<Queue<Command>> Match::logInClient(
         const ClientInfo& connectionInfo, Queue<std::shared_ptr<MessageSender>>* clientQueue,
         uint8_t& eCode) {
-
     if (matchStatus != WAITING_PLAYERS) {
         eCode = E_CODE::ALREADY_STARTED;
-        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-        //           << " a la match " << matchHost << " pero ya inciò\n";
         return nullptr;
     }
     if ((config.getMaxPlayers() - currentPlayers) == 0) {
         eCode = E_CODE::NOT_ENOUGH_SPOTS;
-        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-        //           << " a la match " << matchHost << " pero no habian suficientes spots\n";
         return nullptr;
     }
     clientsQueues.tryInsert(connectionInfo.connectionId, clientQueue);
     playersPerClient.tryInsert(connectionInfo.connectionId, connectionInfo);
     currentPlayers += connectionInfo.playersPerConnection;
-    // std::cout << "se logear la conexiòn " << connectionInfo.connectionId << " a la match "
-    //           << matchHost << "! se retronò al monitor el puntero a la queue de esta match\n";
-
     return matchQueue;
 }
 
 void Match::logOutClient(uint16_t connectionID) {
+    // std::cout << "      [Match:"<<matchHost<<"]: is loging ou the client "<< connectionID<< "\n";
     clientsQueues.tryErase(connectionID);
 
     ClientInfo playersInClient;
@@ -77,9 +69,12 @@ void Match::logOutClient(uint16_t connectionID) {
     }
     currentPlayers -= playersInClient.playersPerConnection;
     playersPerClient.tryErase(connectionID);
+    // std::cout << "      [Match:"<<matchHost<<"]: has loged out the client "<< connectionID<<
+    // "\n";
 }
 
 void Match::run() {
+    // std::cout << "The match has been started\n";
     _hadStarted = true;
     matchStatus = MATCH_ON_COURSE;
     try {
@@ -95,6 +90,8 @@ void Match::run() {
         }
 
         auto winner = gamesHandler.whoWon();
+        // std::cout << "Terminando la partida por ganar por default o naturalmente, el ganador es
+        // "<<winner <<". \n";
         setEndOfMatch(winner);
 
     } catch (const ClosedQueue& q) {
@@ -109,9 +106,7 @@ void Match::setEndOfMatch(PlayerID_t winner) {
         matchStatus = ENDED;
         matchQueue->close();
         if (clientsQueues.size() != 0) {
-
             auto messageSender = std::make_shared<MatchExitSender>(winner);
-
             clientsQueues.applyToValues(
                     [&messageSender](Queue<std::shared_ptr<MessageSender>>* clientQueue) {
                         clientQueue->try_push(messageSender);
