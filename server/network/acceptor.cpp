@@ -12,7 +12,6 @@ void AcceptorThread::run() {
     try {
         acceptLoop();
     } catch (const LibError& e) {
-
     } catch (const std::exception& e) {
         std::cerr << "Exception in the Aceptor thread: " << e.what() << std::endl;
     } catch (...) {
@@ -21,7 +20,10 @@ void AcceptorThread::run() {
     matchesMonitor.forceEndAllMatches();
     matchesMonitor.reapEndedMatches();
     killAllClients();
-    reapDeadClients();
+
+    for (auto& client: clients) {
+        client->join();
+    }
 }
 
 void AcceptorThread::acceptLoop() {
@@ -41,6 +43,9 @@ void AcceptorThread::acceptLoop() {
 }
 
 void AcceptorThread::reapDeadClients() {
+    std::cout << "   [ACEPTOR] Antes de recoger los hilos de los clientes  muertos habian "
+              << clients.size() << "\n";
+
     clients.remove_if([](std::unique_ptr<SenderThread>& client) {
         if (!client->is_alive()) {
             client->join();
@@ -48,6 +53,8 @@ void AcceptorThread::reapDeadClients() {
         }
         return false;
     });
+    std::cout << "   [ACEPTOR] Se recogieron los hilos de los clientes  muertos, quedan "
+              << clients.size() << "\n";
 }
 
 void AcceptorThread::killAllClients() {
