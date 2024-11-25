@@ -1,6 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <memory>
+
 #include "network/acceptor.h"
 
 #include "config.h"
@@ -10,7 +12,7 @@ class Server {
 private:
     Config config;
     MatchesMonitor matches;
-    AcceptorThread acceptor;
+    std::unique_ptr<AcceptorThread> acceptor;
 
 public:
     Server();

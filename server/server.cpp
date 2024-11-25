@@ -5,7 +5,10 @@
 #define PORT "8080"
 #define QUIT "q"
 
-Server::Server(): config(), matches(config), acceptor(PORT, config) { acceptor.start(); }
+Server::Server():
+        config(), matches(config), acceptor(std::make_unique<AcceptorThread>(PORT, config)) {
+    acceptor->start();
+}
 
 void Server::keepServing() {
     std::string in;
@@ -15,6 +18,6 @@ void Server::keepServing() {
 }
 
 void Server::closeServing() {
-    acceptor.forceClosure();
-    acceptor.join();
+    acceptor->forceClosure();
+    acceptor->join();
 }
