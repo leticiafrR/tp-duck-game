@@ -31,7 +31,8 @@ private:
 public:
     BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed = 105):
             origin(origin), end(end), speed(speed), alive(true) {
-        renderData = bulletsDataMap.at(type);
+        renderData = bulletsDataMap.contains(type) ? bulletsDataMap.at(type) :
+                                                     bulletsDataMap.at(TypeProjectile::BULLET);
         SetFileName(renderData.imageFile);
         SetSourceRect(renderData.GetSourceRect());
         SetTransform(Transform(origin, renderData.size, renderData.angle));

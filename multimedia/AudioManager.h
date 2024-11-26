@@ -37,7 +37,10 @@ public:
         return Instance;
     }
 
-    void PlayShootSFX(TypeProjectile type = TypeProjectile::BULLET) { PlaySFX(bulletSFX.at(type)); }
+    void PlayShootSFX(TypeProjectile type = TypeProjectile::BULLET) {
+        PlaySFX(bulletSFX.contains(type) ? bulletSFX.at(type) :
+                                           bulletSFX.at(TypeProjectile::BULLET));
+    }
     void PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
     void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 

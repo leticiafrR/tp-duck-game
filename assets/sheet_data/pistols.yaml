@@ -1,2 +1,4 @@
 cowboy_pistol:
   - { x: 1, y: 20, w: 22, h: 11 }
+dueling_pistol:
+  - { x: 1, y: 187, w: 32, h: 32 }
