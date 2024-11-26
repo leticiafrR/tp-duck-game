@@ -25,7 +25,7 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
         itemOnHand(nullptr),
-        typeOnHand(TypeCollectable::LASER_RIFLE) {}
+        typeOnHand(TypeCollectable::EMPTY) {}
 
 void Duck::TriggerEvent(bool cuack) {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
@@ -180,6 +180,8 @@ void Duck::TryCollect(CollectablesController& c) {
 void Duck::TryDrop(CollectablesController& c) {
     if (itemOnHand) {
         c.Drop(itemOnHand, mySpace.GetPos());
+        itemOnHand = nullptr;
+        typeOnHand = TypeCollectable::EMPTY;
         std::cout << "[duck]: efectivamente soltado\n";
     }
 }

@@ -14,6 +14,7 @@ public:
 
     void BeCollected(TypeCollectable& collectorTypeRef) override {
         collectorTypeRef = TypeCollectable::PEW_PEW_LASER;
+        std::cout << "[pewpew] recogiste una pewpew GRRRR\n";
     }
 
     void Shoot(Duck* shooter) override {
