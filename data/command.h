@@ -18,7 +18,7 @@ enum class CommandCode : uint8_t {
     LookUp_KeyDown,
     LookUp_KeyUp,
 
-    Crouch_KeyDown,  // empezar a agacharse
+    Crouch_KeyDown,
     Crouch_KeyUp,
 
     Cuack,
@@ -26,11 +26,10 @@ enum class CommandCode : uint8_t {
     CollectItem,
     DropItem
 };
-// OJO FALTA QUE LOS PROTOCOLOS ENVIEN AHORA UN COMMAND ASÌ
+
 struct Command {
     CommandCode code;
-    uint8_t indexLocalPlayer;  // 0 hasta  n-1
-    // will  be seted by the server
+    uint8_t indexLocalPlayer;
     PlayerID_t playerId;
     explicit Command(CommandCode _code, uint8_t _indexLocalPlayer, PlayerID_t _playerID = 0):
             code(_code), indexLocalPlayer(_indexLocalPlayer), playerId(_playerID) {}
