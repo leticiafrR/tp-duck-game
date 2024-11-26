@@ -63,16 +63,17 @@ Si ya estás en el directorio build, simplemente ejecuta:
 * A continuación se irán repitiendo games hasta que haya un jugador ganador de toda la partida según el criterio establecido por la cátedra.
 
 ## Requerimientos faltantes  a fecha 23/11/24
-
-* Falta incluir en el modelo del mundo en el juego las cajas y los spawn places para las armas/armaduras/cascos (items colectables), por lo cual los patos no pueden recoger/dejar items de/en el mundo del juego, entonces inicialmente ya tienen una arma en la mano (pistola cowboy).
-* Falta las funcionalidades de tirarse al suelo y aletear. 
-
-* Falta mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante.
-
-* No se incluyó nada relativo al editor de niveles, cheats ni Unit tests.
+1. Los spawn places para las armas/armaduras/cascos (items colectables)
+2. Fisical weapons
+3. Habilidad de los patos para recoger/dejar items de/en el mundo del juego.
+4. Los tres archivos de documentación(técnica, de usuario, etc).
+5. El cierre ordenado del cliente frente a la desconexión del  servidor.
+6. No se incluyó nada relativo al editor de niveles,
+7. El cierre ordenado del cliente frente a la desconexión del  servidor.
+8. Falta poder aletear.
+9. Falta incluir en el modelo del mundo en el juego las cajas
+10. cheats.
+11. unit tests.
 
 ## ¿Qué sabemos de antemano que está mal?
-* El cierre ordenado del sevridor.
-* El cierre ordenado del cliente frente a la desconexión del  servidor.
-* Frente a la desconexión de un jugador partície de una partida ya iniciada no se está sacando del modelo al duck del mismo.
 
