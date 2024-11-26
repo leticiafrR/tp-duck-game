@@ -18,7 +18,6 @@
 #define MAX_COMMANDS 100
 #define NO_WINNER_FORCED_END 0
 
-// OJO:ya no sirve de mucho el tope de clientsQueues. NO INDICA UN LIMITE REAL,
 Match::Match(const Config& config, uint16_t matchHost):
         matchStatus(WAITING_PLAYERS),
         matchHost(matchHost),
@@ -53,10 +52,14 @@ std::shared_ptr<Queue<Command>> Match::logInClient(
     return matchQueue;
 }
 
+
 void Match::logOutClient(uint16_t connectionID) {
-    // std::cout << "      [Match:"<<matchHost<<"]: is loging ou the client "<< connectionID<< "\n";
+    clientsQueues.applyToValue(
+            connectionID,
+            [](Queue<std::shared_ptr<MessageSender>>* quiterQueue) { quiterQueue->close(); });
     clientsQueues.tryErase(connectionID);
 
+    // taking out of the model all the players (ducks) conected through that client
     ClientInfo playersInClient;
     playersPerClient.get(connectionID, playersInClient);
 
@@ -67,14 +70,12 @@ void Match::logOutClient(uint16_t connectionID) {
             matchQueue->push(quit);
         }
     }
+
     currentPlayers -= playersInClient.playersPerConnection;
     playersPerClient.tryErase(connectionID);
-    // std::cout << "      [Match:"<<matchHost<<"]: has loged out the client "<< connectionID<<
-    // "\n";
 }
 
 void Match::run() {
-    // std::cout << "The match has been started\n";
     _hadStarted = true;
     matchStatus = MATCH_ON_COURSE;
     try {
@@ -84,16 +85,11 @@ void Match::run() {
         broadcastMatchMssg(matchStartSender);
         GamesHandler gamesHandler(config, clientsQueues, playersPerClient, matchQueue, matchStatus,
                                   currentPlayers);
-
         while (matchStatus == MATCH_ON_COURSE) {
             gamesHandler.playGroupOfGames();
         }
-
         auto winner = gamesHandler.whoWon();
-        // std::cout << "Terminando la partida por ganar por default o naturalmente, el ganador es
-        // "<<winner <<". \n";
         setEndOfMatch(winner);
-
     } catch (const ClosedQueue& q) {
     } catch (const RunOutOfPlayers& r) {}
 }
@@ -169,10 +165,12 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
     return assignation;
 }
 
-// si al menos un jugador màs puede entrar a la partida
 bool Match::isAvailable() {
     return matchStatus == WAITING_PLAYERS && (config.getMaxPlayers() - currentPlayers) > 0;
 }
+
 bool Match::readyToStart() { return currentPlayers >= config.getMinPlayers(); }
+
 bool Match::isOver() { return matchStatus == ENDED; }
+
 bool Match::hadStarted() { return _hadStarted; }
