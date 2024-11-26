@@ -1,5 +1,6 @@
 #include "Duck.h"
 
+#include "collectable/CollectablesController.h"
 #include "common/Collision.h"
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
@@ -9,8 +10,7 @@
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
-Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& projectilesController,
-           const Config& conf):
+Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         DynamicObject(conf.getDuckSpeed(),
                       Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize())),
                       conf.getDuckLife()),
@@ -24,9 +24,8 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, ProjectilesController& pro
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
-        // itemOnHand(new LaserRifle(projectilesController, mySpace, conf)),
-        itemOnHand(new DuelingPistol(projectilesController, mySpace, conf)),
-        typeOnHand(TypeCollectable::COWBOY_PISTOL) {}
+        itemOnHand(nullptr),
+        typeOnHand(TypeCollectable::LASER_RIFLE) {}
 
 void Duck::TriggerEvent(bool cuack) {
     l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
@@ -166,6 +165,22 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     if (isGrounded) {
         body.ResetGravity();
         CheckCollisionWithMap(map);
+        // std::cout << "pos grounded y con collisiones resueltas: "<<
+        // mySpace.GetPos().ToString()<<std::endl;
+    }
+}
+
+void Duck::TryCollect(CollectablesController& c) {
+    std::cout << "you'll try to collect an item\n";
+    if (!itemOnHand) {
+        itemOnHand = c.PickCollectable(mySpace, typeOnHand);
+        std::cout << "[duck]: collected!\n";
+    }
+}
+void Duck::TryDrop(CollectablesController& c) {
+    if (itemOnHand) {
+        c.Drop(itemOnHand, mySpace.GetPos());
+        std::cout << "[duck]: efectivamente soltado\n";
     }
 }
 

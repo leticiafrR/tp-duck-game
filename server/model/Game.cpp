@@ -4,11 +4,15 @@
 
 GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName,
                      const Config& conf):
-        livePlayers(playersIds.size()), map(sceneName) {
-    eventsManager.SendInstantProjectileListener(p);
-    std::cout << "welcom to " << sceneName << std::endl;
+        livePlayers(playersIds.size()),
+        map(sceneName),
+        projectilesController(),
+        collectablesController(projectilesController, conf, map.GetWeaponsSpawnPoints()) {
+    eventsManager.SendInstantProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
+    collectablesController.SayHello();
+    collectablesController.ReleasePewPew();
 }
 
 GameWorld::~GameWorld() {
@@ -21,12 +25,14 @@ GameWorld::~GameWorld() {
 void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const Config& conf) {
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
-        players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], p, conf);
+        players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], conf);
+        std::cout << "Duck [" << playersIds[i] << "] spwaned on " << (spawnPoints[i]).ToString()
+                  << std::endl;
     }
 }
 
 void GameWorld::Update(float deltaTime) {
-    p.Update(map, players);
+    projectilesController.Update(map, players);
     for (auto& pair: players) {
         pair.second->Update(map, deltaTime);
     }
@@ -92,6 +98,12 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
         case CommandCode::Cuack:
             player->Cuack();
             break;
+        case CommandCode::CollectItem:
+            player->TryCollect(collectablesController);
+            break;
+        case CommandCode::DropItem:
+            player->TryDrop(collectablesController);
+            break;
         default:
             break;
     }
@@ -101,6 +113,6 @@ GameSceneDto GameWorld::getSceneDto() { return map.GetScene(); }
 
 Snapshot GameWorld::GetSnapshot() { return eventsManager.GetSnapshot(IsOver()); }
 
-PlayerID_t GameWorld::WhoWon() { return players.begin()->first; }
+PlayerID_t GameWorld::WhoWon() { return ((players.size() > 0) ? players.begin()->first : 0); }
 
 bool GameWorld::IsOver() { return livePlayers <= 1; }

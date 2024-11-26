@@ -10,6 +10,7 @@ target_sources(taller_server
     model/weapon/InstantWeapon.cpp
     model/projectile/ProjectilesController.cpp
     model/projectile/BounceInstantProjectile.cpp
+    model/collectable/CollectablesController.cpp
 
     #network
     network/sender.cpp
@@ -38,7 +39,7 @@ target_sources(taller_server
     model/event/PlayerEventListener.h
     model/event/InstantProjectileEventListener.h
     model/Equipment.h
-    # model/collectable/CollectablesController.h
+    model/collectable/CollectablesController.h
     # model/collectable/Protection.h
     model/collectable/Collectable.h
     model/weapon/Weapon.h

@@ -4,55 +4,51 @@
 #include <algorithm>
 #include <vector>
 
+#include "server/config.h"
+#include "server/model/projectile/ProjectilesController.h"
+#include "server/model/weapon/instant/PewPewLaser.h"
+
 #include "Collectable.h"
-
-
 class Transform;
 
 class CollectablesController {
 private:
-    std::vector<Collectable*> collectables;
-    /*Spawner spawner; administra spawnplaces, desde que una es*/
-
+    std::vector<Vector2D> weaponSpawnPoints;
+    ProjectilesController& projectilesController;
+    // std::vector<Collectable*> collectables;
+    Collectable* unicCollectable;
+    const Config& conf;
+    // CreateWeapons(const std::vector<Vector2D>& weaponsSpawnPoints, Config& conf){
+    //     for (auto& point: weaponSpawnPoints) {
+    //         //PewPewLaser* weapon = new PewPewLaser(projectilesController,
+    //         Transform(point,Vector2D(conf)),conf); collectables.push_back(weapon);
+    //     }
+    // }
 public:
+    // explicit CollectablesController(ProjectilesController&
+    // projectilesController,std::vector<Vector2D> weaponSpawnPoints ):
+    //         projectilesController(projectilesController), unicCollectable(new
+    //         PewPewLaser(projectilesController,Transform())){}
+    explicit CollectablesController(ProjectilesController& projectilesController,
+                                    const Config& conf,
+                                    const std::vector<Vector2D>& weaponSpawnPoints);
+    void ReleasePewPew();
+
+
+    void SayHello();
+
+
+    // CollectablesController(ProjectilesController& projectilesController,const
+    // std::vector<Vector2D>& weaponsSpawnPoints):projectilesController(projectilesController){
+    //     CreateWeapons(weaponsSpawnPoints);
+    // }
+
     Collectable* PickCollectable(const Transform& collectorSpace,
                                  TypeCollectable& collectorTyperRef);
     void Drop(Collectable* obj, const Vector2D& position);
-    /*void Respawn(); faltante*/
+    // /*void Respawn(); faltante*/
     ~CollectablesController();
 };
 
-
-/**********************************  METHODS  ***********************************************/
-
-Collectable* CollectablesController::PickCollectable(const Transform& collectorSpace,
-                                                     TypeCollectable& collectorType) {
-    auto it = std::find_if(collectables.begin(), collectables.end(),
-                           [&collectorSpace](Collectable* obj) {
-                               return Collision::RectCollision(obj->GetTransform(), collectorSpace);
-                           });
-
-    if (it != collectables.end()) {
-        (*it)->BeCollected(collectorType);
-        Collectable* collectedObj = *it;
-        collectables.erase(it);
-        // here should call to respawner()
-        return collectedObj;
-    }
-    return nullptr;
-}
-
-/*Hay dos posibles mètodos para agregar un collectable al mapa:Drop o Respawn*/
-void CollectablesController::Drop(Collectable* obj, const Vector2D& position) {
-    obj->BeDropped(position);
-    collectables.push_back(obj);
-}
-
-CollectablesController::~CollectablesController() {
-    for (Collectable* obj: collectables) {
-        delete obj;
-    }
-    collectables.clear();
-}
 
 #endif

@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "collectable/CollectablesController.h"
 #include "data/command.h"
 #include "event/EventsManager.h"
 #include "map/staticMap.h"
@@ -21,7 +22,8 @@ private:
     StaticMap map;
     std::unordered_map<PlayerID_t, Duck*> players;
     EventsManager eventsManager;
-    ProjectilesController p;
+    ProjectilesController projectilesController;
+    CollectablesController collectablesController;
     void ReapDead();
     void Testing(const Vector2D& posToTest);
     void CreatePlayers(const std::vector<PlayerID_t>& playersIds, const Config& conf);

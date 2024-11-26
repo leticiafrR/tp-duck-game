@@ -3,10 +3,10 @@ full_map_size:
   x: 100
   y: 160
 weapons_spawn_points:
-  - x: 0
-    y: -6
-  - x: -32 
+  - x: -18
     y: 10
+  - x: 32
+    y: -10
 players_spawn_points:
   - x: -18 
     y: 12

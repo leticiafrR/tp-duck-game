@@ -9,6 +9,7 @@
 #include "Equipment.h"
 #include "MotionHandler.h"
 class ProjectilesController;
+class CollectablesController;
 
 class Duck: public DynamicObject {
 private:
@@ -38,8 +39,7 @@ private:
     void TriggerEvent(bool cuack = false);
 
 public:
-    explicit Duck(const Vector2D& initialPos, PlayerID_t id,
-                  ProjectilesController& projectilesController, const Config& conf);
+    explicit Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf);
     void TryMoveLeft();
     void TryMoveRight();
     void StopMoveRight();
@@ -51,10 +51,13 @@ public:
     void StopShooting();
     void LookUp();
     void StopLookUp();
-
     void Crouch();
     void StopCrouch();
+
     void Cuack();
+
+    void TryCollect(CollectablesController& c);
+    void TryDrop(CollectablesController& c);
 
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
