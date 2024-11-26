@@ -3,7 +3,8 @@
 #include <memory>
 
 #define FIRST_PLAYER_ID 1
-#define PRINT_NEW_CONNECTION() std::cout << "New user connected!" << std::endl;
+#define PRINT_NEW_CONNECTION(connectionID) \
+    std::cout << "New user ID: " << (connectionID) << "!" << std::endl;
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), matchesMonitor(config) {}
@@ -19,8 +20,7 @@ void AcceptorThread::run() {
     }
     matchesMonitor.forceEndAllMatches();
     matchesMonitor.reapEndedMatches();
-    killAllClients();
-
+    killClients();
     for (auto& client: clients) {
         client->join();
     }
@@ -28,10 +28,9 @@ void AcceptorThread::run() {
 
 void AcceptorThread::acceptLoop() {
     uint16_t connectionId = FIRST_PLAYER_ID;
-
     while (_keep_running) {
         Socket peer = skt.accept();
-        PRINT_NEW_CONNECTION();
+        PRINT_NEW_CONNECTION(connectionId);
         clients.emplace_back(std::make_unique<SenderThread>(
                 std::move(peer), std::ref(matchesMonitor), connectionId));
         clients.back()->start();
@@ -43,9 +42,6 @@ void AcceptorThread::acceptLoop() {
 }
 
 void AcceptorThread::reapDeadClients() {
-    std::cout << "   [ACEPTOR] Antes de recoger los hilos de los clientes  muertos habian "
-              << clients.size() << "\n";
-
     clients.remove_if([](std::unique_ptr<SenderThread>& client) {
         if (!client->is_alive()) {
             client->join();
@@ -53,11 +49,9 @@ void AcceptorThread::reapDeadClients() {
         }
         return false;
     });
-    std::cout << "   [ACEPTOR] Se recogieron los hilos de los clientes  muertos, quedan "
-              << clients.size() << "\n";
 }
 
-void AcceptorThread::killAllClients() {
+void AcceptorThread::killClients() {
     for (auto& client: clients) {
         client->kill();
     }

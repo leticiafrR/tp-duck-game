@@ -13,7 +13,6 @@
 #include "serverProtocol.h"
 
 #define MAX_MESSAGES 250
-
 class MessageSender;
 
 class SenderThread: public Thread {
@@ -36,8 +35,6 @@ public:
     void run() override;
 
     void kill();
-
-    ~SenderThread() override;
 };
 
 #endif

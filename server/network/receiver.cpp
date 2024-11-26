@@ -28,13 +28,13 @@ void ReceiverThread::run() {
         matches.logOutClient(matchID, connectionId);
     } catch (const LibError& e) {
         matches.logOutClient(matchID, connectionId);
-
     } catch (const ClosedQueue& q) {
-        std::cout << "[RECEIVER: " << connectionId << "] the match has closed its queue\n";
     } catch (const std::exception& e) {
         std::cerr << "Exception in the receiver thread: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
                   << connectionId << "\n";
     }
+
+    std::cout << "[RECEIVER: " << connectionId << "] has oficially ended\n";
 }

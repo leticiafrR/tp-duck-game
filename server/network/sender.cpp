@@ -27,7 +27,6 @@ void SenderThread::run() {
     receiver.start();
     sendLoop();
     receiver.join();
-    std::cout << "The client " << connectionId << "is dead (recogible)\n";
 }
 
 void SenderThread::sendLoop() {
@@ -52,5 +51,3 @@ void SenderThread::kill() {
         protocol.endConnection();
     }
 }
-
-SenderThread::~SenderThread() {}

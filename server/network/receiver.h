@@ -24,6 +24,7 @@ private:
     uint8_t playersPerConnection;
     ServerProtocol& protocol;
 
+
 public:
     explicit ReceiverThread(MatchesMonitor& matches, std::shared_ptr<Queue<Command>> matchQueue,
                             uint16_t matchID, uint16_t clientID, uint8_t playersPerConnection,
