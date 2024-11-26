@@ -25,7 +25,7 @@ private:
     const unordered_map<TypeProjectile, string> bulletSFX = {
             {TypeProjectile::BULLET, "bulletSFX.wav"},
             {TypeProjectile::LASER, "laserSFX.mp3"},
-            {TypeProjectile::GRANADA_FRAGMENT, ""},
+            {TypeProjectile::FRAGMENT, ""},
             {TypeProjectile::BANANA, ""}};
 
 

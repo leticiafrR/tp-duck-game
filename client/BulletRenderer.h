@@ -18,7 +18,7 @@ private:
                                                         "machine_bullet", Vector2D(1, 1))},
             {TypeProjectile::LASER,
              SpriteRendererData("laser.png", "laser.yaml", "laser_ray", Vector2D(3, 1.5))},
-            {TypeProjectile::GRANADA_FRAGMENT, SpriteRendererData("", "", "")},
+            {TypeProjectile::FRAGMENT, SpriteRendererData("", "", "")},
             {TypeProjectile::BANANA, SpriteRendererData("", "", "")}};
 
     Vector2D origin;

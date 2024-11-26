@@ -9,7 +9,7 @@ public:
             InstantWeapon(controller, initialSpace, conf.getPewPewLaserScope(),
                           conf.getPewPewLaserAmmo(), conf.getDamageShort(), conf.getNoDispersion(),
                           conf.getCooldownBasic(), TypeProjectile::LASER,
-                          conf.getSuperDispersion()) {}
+                          conf.getHiperDispersion()) {}
 
 
     void BeCollected(TypeCollectable& collectorTypeRef) override {

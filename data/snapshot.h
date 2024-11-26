@@ -10,7 +10,7 @@
 #include "networkMsg.h"
 
 enum class Flip : uint8_t { Left = 1, Right };
-enum class TypeProjectile : uint8_t { LASER, BULLET, BANANA, GRANADA_FRAGMENT };
+enum class TypeProjectile : uint8_t { LASER, BULLET, BANANA, FRAGMENT };
 enum class DuckState : uint8_t {
     IDLE = 1,
     JUMPING,
@@ -25,6 +25,11 @@ enum class TypeCollectable : uint8_t {
     COWBOY_PISTOL,
     LASER_RIFLE,
     PEW_PEW_LASER,
+    SHOTGUN,
+    SNIPER,
+    DUELING_PISTOL,
+    AK47,
+    MAGNUM,
     HELMET,
     ARMOR
 };
@@ -51,16 +56,6 @@ struct PlayerEvent {
             isCrouched(_isCrouched),
             cuacking(_cuacking) {}
 };
-
-// enum class DuckState : uint8_t { IDLE = 1, JUMPING, FALLING, RUNNING, DEAD};
-// enum class DamageState : uint8_t {NO_DAMAGE,BULLET};
-
-// struct PlayerEvent {
-//     Vector2D motion;
-//     DuckState stateTransition;
-//     Flip flipping;
-//     DamageState damageState
-// };
 
 struct InstantProjectileEventDto {
     TypeProjectile type;

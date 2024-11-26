@@ -21,8 +21,10 @@ enum class CommandCode : uint8_t {
     Crouch_KeyDown,  // empezar a agacharse
     Crouch_KeyUp,
 
-    Cuack
+    Cuack,
 
+    CollectItem,
+    DropItem
 };
 // OJO FALTA QUE LOS PROTOCOLOS ENVIEN AHORA UN COMMAND ASÌ
 struct Command {

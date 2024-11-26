@@ -13,7 +13,7 @@ class InstantWeapon: public Weapon {
 protected:
     const float scope;
     const uint8_t damage;
-    const float dispersionRange;
+    float dispersionRange;
     const float cooldown;
     float cooldownTimer;
     float inclination;

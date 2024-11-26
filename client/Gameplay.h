@@ -134,6 +134,14 @@ private:
                             std::cout << "C KeyDown\n";
                             client.TrySendRequest(CommandCode::Cuack);
                             break;
+                        case SDLK_e:
+                            std::cout << "E KeyDown\n";
+                            client.TrySendRequest(CommandCode::CollectItem);
+                            break;
+                        case SDLK_g:
+                            std::cout << "G KeyDown\n";
+                            client.TrySendRequest(CommandCode::DropItem);
+                            break;
                     }
 
                     if (!players.contains(
@@ -165,9 +173,17 @@ private:
                             std::cout << "Down Arrow KeyDown\n";
                             client.TrySendRequest(CommandCode::Crouch_KeyDown, 1);
                             break;
-                        case SDLK_KP_6:
-                            std::cout << "Numpad 6 KeyDown\n";
+                        case SDLK_KP_1:
+                            std::cout << "Numpad 1 KeyDown\n";
                             client.TrySendRequest(CommandCode::Cuack, 1);
+                            break;
+                        case SDLK_KP_5:
+                            std::cout << "Numpad 6 KeyDown\n";
+                            client.TrySendRequest(CommandCode::CollectItem, 1);
+                            break;
+                        case SDLK_KP_6:
+                            std::cout << "Numpad 5 KeyDown\n";
+                            client.TrySendRequest(CommandCode::DropItem, 1);
                             break;
                     }
                 } break;
