@@ -2,10 +2,10 @@
 #define GAMEPLAY_H
 
 #include <list>
-#include <map>
 #include <memory>
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "common/playerIdentifier.h"
@@ -20,14 +20,15 @@
 
 #include "BulletRenderer.h"
 #include "CameraController.h"
+#include "CollectableRenderer.h"
 #include "DuckClientRenderer.h"
 #include "GameplayGUI.h"
 #include "ShowColorsScreen.h"
 
 using std::list;
-using std::map;
 using std::set;
 using std::shared_ptr;
+using std::unordered_map;
 using std::vector;
 
 class Gameplay {
@@ -41,6 +42,7 @@ private:
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
     vector<MapBlock2D> mapBlocks;
     list<BulletRenderer> bullets;
+    unordered_map<CollectableID_t, CollectableRenderer> collectables;
 
     GameplayGUI gui;
 
@@ -85,6 +87,12 @@ private:
 
     void BulletsReapDead() {
         bullets.remove_if([](BulletRenderer c) { return !c.IsAlive(); });
+    }
+
+    void DespawnCollectable(CollectableID_t id) { collectables.erase(id); }
+    void SpawnCollectable(CollectableSpawnEventDto collectableData) {
+        collectables.emplace(collectableData.id,
+                             CollectableRenderer(collectableData.type, collectableData.position));
     }
 
     void TakeInput() {
@@ -262,6 +270,14 @@ private:
             for (const auto& it: snapshot->updates) {
                 players[it.first]->SetEventTarget(it.second);
             }
+
+            for (const auto& it: snapshot->collectableSpawns) {
+                SpawnCollectable(it);
+            }
+            for (const auto& it: snapshot->collectableDespawns) {
+                DespawnCollectable(it);
+            }
+
             // Check if last snapshot...
             if (snapshot->gameOver) {
                 OnLastSnapshot();
