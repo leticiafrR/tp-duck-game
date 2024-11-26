@@ -18,7 +18,7 @@ using SDL2pp::Texture;
 using std::string;
 
 class Object2D {
-private:
+protected:
     string filename;
     SDL2pp::Optional<Rect> sourceRect;
 

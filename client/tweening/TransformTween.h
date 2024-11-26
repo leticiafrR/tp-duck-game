@@ -19,6 +19,12 @@ private:
     bool changed = false;
 
 public:
+    explicit TransformTween(Transform& t):
+            Tween(1.0f, []() {}),
+            transform(t),
+            startSize(transform.GetSize()),
+            targetSize(transform.GetSize()) {}
+
     TransformTween(
             Transform& transform, Vector2D targetSize, float duration,
             OnCompleteCallback onComplete = []() {}):
@@ -26,6 +32,13 @@ public:
             transform(transform),
             startSize(transform.GetSize()),
             targetSize(targetSize) {}
+
+    void SetTarget(
+            Vector2D targetSize, float duration, OnCompleteCallback onComplete = []() {}) {
+        this->targetSize = targetSize;
+        this->duration = duration;
+        this->onComplete = onComplete;
+    }
 
     void OnInitLoop() override {
         switch (loopType) {
