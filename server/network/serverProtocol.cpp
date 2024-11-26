@@ -142,7 +142,8 @@ Command ServerProtocol::receiveCommand() {
 void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(SNAPSHOT);
     assistant.sendBoolean(snapshot.gameOver);
-    // sending the cont of the map player ID and position vector
+
+    // sending updates
     assistant.sendNumber((uint8_t)snapshot.updates.size());
     for (auto it = snapshot.updates.begin(); it != snapshot.updates.end(); ++it) {
         // playerID
@@ -154,15 +155,29 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendBoolean(it->second.isLookingUp);
         assistant.sendNumber((uint8_t)it->second.typeOnHand);
         assistant.sendBoolean(it->second.isCrouched);
+        assistant.sendBoolean(it->second.cuacking);
     }
+    // raycastsEvents
     uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
     assistant.sendNumber(numberProjectiles);
-
     for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
-        // assistant.sendFloat(it->speed);
         assistant.sendNumber((uint8_t)it->type);
         assistant.sendVector2D(it->origin);
         assistant.sendVector2D(it->end);
+    }
+    // collectableDespawns
+    uint8_t numberDespawns = (uint8_t)snapshot.collectableDespawns.size();
+    assistant.sendNumber(numberDespawns);
+    for (int i = 0; i < numberDespawns; i++) {
+        assistant.sendNumber(snapshot.collectableDespawns[i]);
+    }
+    // collectableSpawns
+    uint8_t numberSpawns = (uint8_t)snapshot.collectableSpawns.size();
+    assistant.sendNumber(numberDespawns);
+    for (int i = 0; i < numberSpawns; i++) {
+        assistant.sendNumber(snapshot.collectableSpawns[i].id);
+        assistant.sendVector2D(snapshot.collectableSpawns[i].position);
+        assistant.sendNumber((uint8_t)snapshot.collectableSpawns[i].type);
     }
 }
 

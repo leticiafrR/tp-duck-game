@@ -158,10 +158,11 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
 }
 
 Snapshot ClientProtocol::receiveGameUpdateDto() {
-    bool gameOver = assistant.receiveBooelan();
-    // receiving the cont of the map player ID and position vector
+    bool _gameOver = assistant.receiveBooelan();
+
+    // receiving updates
     uint8_t numberUpdates = assistant.receiveNumberOneByte();
-    std::unordered_map<PlayerID_t, PlayerEvent> updates((size_t)numberUpdates);
+    std::unordered_map<PlayerID_t, PlayerEvent> _updates((size_t)numberUpdates);
     for (uint8_t i = 0; i < numberUpdates; i++) {
         // playerID
         auto ID = assistant.receiveNumberFourBytes();
@@ -172,20 +173,38 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto lookingUp = assistant.receiveBooelan();
         auto typeOnHand = (TypeCollectable)assistant.receiveNumberOneByte();
         auto isCrouched = assistant.receiveBooelan();
+        auto cuacking = assistant.receiveBooelan();
         // building PlayerEvent
-        updates[ID] = PlayerEvent{evMotion, evState, evFlip, lookingUp, typeOnHand, isCrouched};
+        _updates[ID] =
+                PlayerEvent{evMotion, evState, evFlip, lookingUp, typeOnHand, isCrouched, cuacking};
     }
-
+    // receiving raycastsEvents
     uint8_t numberProjectile = assistant.receiveNumberOneByte();
-    std::vector<InstantProjectileEventDto> projectiles((size_t)numberProjectile);
+    std::vector<InstantProjectileEventDto> _raycastsEvents((size_t)numberProjectile);
     for (uint8_t i = 0; i < numberProjectile; i++) {
         auto type = (TypeProjectile)assistant.receiveNumberOneByte();
         auto origin = assistant.receiveVector2D();
         auto end = assistant.receiveVector2D();
-        projectiles[i] = InstantProjectileEventDto{type, origin, end};
+        _raycastsEvents[i] = InstantProjectileEventDto{type, origin, end};
+    }
+    // receiving collectableDespawns
+    uint8_t numberDespawns = assistant.receiveNumberOneByte();
+    std::vector<CollectableID_t> _collectableDespawns((size_t)numberDespawns);
+    for (uint8_t i = 0; i < numberProjectile; i++) {
+        _collectableDespawns[i] = assistant.receiveNumberFourBytes();
     }
 
-    return Snapshot(gameOver, updates, projectiles);
+    // receiving collectableSpawns
+    uint8_t numberSpawns = assistant.receiveNumberOneByte();
+    std::vector<CollectableSpawnEventDto> _collectableSpawns((size_t)numberSpawns);
+    for (uint8_t i = 0; i < numberProjectile; i++) {
+        CollectableID_t id = assistant.receiveNumberFourBytes();
+        auto position = assistant.receiveVector2D();
+        TypeCollectable type = (TypeCollectable)assistant.receiveNumberOneByte();
+        _collectableSpawns[i] = CollectableSpawnEventDto{id, position, type};
+    }
+
+    return Snapshot(_gameOver, _updates, _raycastsEvents, _collectableDespawns, _collectableSpawns);
 }
 
 bool ClientProtocol::receiveFinalGroupGame() {
