@@ -67,6 +67,22 @@ struct InstantProjectileEventDto {
             type(type), origin(origin), end(end) {}
 };
 
+struct CollectableDespawnEventDto {
+    CollectableID_t id;
+    explicit CollectableDespawnEventDto(CollectableID_t _id): id(_id) {}
+    CollectableDespawnEventDto() = default;
+};
+
+struct CollectableSpawnEventDto {
+    CollectableID_t id;
+    Vector2D position;
+    TypeCollectable type;
+
+    CollectableSpawnEventDto(CollectableID_t _id, const Vector2D& _position, TypeCollectable _type):
+            id(_id), position(_position), type(_type) {}
+    CollectableSpawnEventDto() = default;
+};
+
 struct Snapshot: public NetworkMsg {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
