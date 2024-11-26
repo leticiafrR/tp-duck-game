@@ -9,12 +9,12 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
+#include "Definitions.h"
+
 using SDL2pp::Rect;
 using std::map;
 using std::string;
 using std::vector;
-
-#define SHEET_DATA_PATH "../client/assets/sheet_data/"
 
 class SheetDataCache {
 private:

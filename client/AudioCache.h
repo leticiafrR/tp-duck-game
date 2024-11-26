@@ -9,12 +9,12 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
+#include "Definitions.h"
+
 using namespace SDL2pp;  // NOLINT
 using std::map;
 using std::string;
 using std::vector;
-
-#define AUDIO_PATH "../client/assets/audio/"
 
 class AudioCache {
 private:

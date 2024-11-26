@@ -9,12 +9,12 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
+#include "Definitions.h"
+
 using namespace SDL2pp;  // NOLINT
 using std::map;
 using std::string;
 using std::vector;
-
-#define FONT_PATH "../client/assets/fonts/"
 
 class FontCache {
 private:
@@ -31,9 +31,6 @@ public:
         if (it != cache.end()) {
             return it->second;
         }
-
-        // Font font(FONT_PATH + filename, fontSize);
-        // cache[key] = std::move(font);
 
         cache.emplace(key, Font(FONT_PATH + filename, fontSize));
         return cache.at(key);

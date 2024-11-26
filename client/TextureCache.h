@@ -6,12 +6,12 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "Definitions.h"
+
 using SDL2pp::Renderer;
 using SDL2pp::Texture;
 using std::map;
 using std::string;
-
-#define TEXTURE_PATH "../client/assets/sprites/"
 
 class TextureCache {
 private:

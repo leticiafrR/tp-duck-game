@@ -3,8 +3,12 @@
 
 #include <functional>
 
-using Callback = std::function<void()>;
+#define TEXTURE_PATH "../assets/sprites/"
+#define SHEET_DATA_PATH "../assets/sheet_data/"
+#define FONT_PATH "../assets/fonts/"
+#define AUDIO_PATH "../assets/audio/"
 
+using Callback = std::function<void()>;
 template <typename T>
 using Function = std::function<T()>;
 template <typename T>
