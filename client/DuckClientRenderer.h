@@ -165,6 +165,8 @@ public:
 
         if (newTarget.isCrouched)
             anim.SetTarget(GetAnimAndCuack("crouched"));
+
+        handItem.SetItem(target.typeOnHand);
     }
 
     static Color GetColorById(uint8_t id) { return SkinColors.at(id); }
