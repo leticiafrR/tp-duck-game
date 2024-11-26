@@ -24,20 +24,10 @@ public:
     FontCache() = delete;
     ~FontCache() = delete;
 
-    static Font& GetData(const string& filename, int fontSize) {
-        string key = filename + "_" + std::to_string(fontSize);
+    static Font& GetData(const string& filename, int fontSize);
 
-        auto it = cache.find(key);
-        if (it != cache.end()) {
-            return it->second;
-        }
-
-        cache.emplace(key, Font(FONT_PATH + filename, fontSize));
-        return cache.at(key);
-    }
-
-    static void Clear() { cache.clear(); }
+    static void Clear();
 };
-map<string, Font> FontCache::cache;
+
 
 #endif
