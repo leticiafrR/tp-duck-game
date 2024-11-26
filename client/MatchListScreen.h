@@ -32,7 +32,6 @@ using std::vector;
 class MatchListScreen {
 private:
     Camera& cam;
-    Rate rate;
     Client& client;
     list<LobbyItemWidget> widgets;
 
@@ -66,7 +65,7 @@ private:
         playersCountSelection.Display([this](uint8_t playersCount) {
             bool createSuccess;
             client.CreateMatch(playersCount);
-            LoadingScreen loading(cam, rate, [this, &createSuccess]() {
+            LoadingScreen loading(cam, [this, &createSuccess]() {
                 std::shared_ptr<ResultJoining> joinResult = nullptr;
                 if (client.TryRecvNetworkMsg(joinResult)) {
                     createSuccess = joinResult->eCode == 0;
@@ -89,7 +88,7 @@ private:
         playersCountSelection.Display([this, id](uint8_t playersCount) {
             bool joinSuccess;
             client.SelectMatch(id, playersCount);
-            LoadingScreen loading(cam, rate, [this, &joinSuccess]() {
+            LoadingScreen loading(cam, [this, &joinSuccess]() {
                 std::shared_ptr<ResultJoining> joinResult = nullptr;
                 if (client.TryRecvNetworkMsg(joinResult)) {
                     joinSuccess = joinResult->eCode == 0;
@@ -115,7 +114,7 @@ private:
     }
 
     void WaitRefresh() {
-        LoadingScreen loading(cam, rate, [this]() {
+        LoadingScreen loading(cam, [this]() {
             std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
             if (client.TryRecvNetworkMsg(lobbyListResult)) {
                 LoadWidgetList(lobbyListResult->matches);
@@ -156,9 +155,8 @@ private:
     }
 
 public:
-    MatchListScreen(Camera& c, const Rate& r, Client& cl):
+    MatchListScreen(Camera& c, Client& cl):
             cam(c),
-            rate(r),
             client(cl),
             header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
                                  Vector2D(0.5, 1)),
@@ -222,7 +220,7 @@ public:
                         break;
                     case SDL_MOUSEWHEEL:
                         Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                        UpdateWidgetListPosition(wheelDir * rate.GetDeltaTime() * 2500);
+                        UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
                         break;
                 }
 
@@ -230,10 +228,10 @@ public:
             }
 
             GUIManager::GetInstance().Draw(cam);
-            TweenManager::GetInstance().Update(rate.GetDeltaTime());
+            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
             cam.Render();
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
 
         return isOwner;

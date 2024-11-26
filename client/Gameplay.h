@@ -36,7 +36,6 @@ private:
     Client& client;
     Camera& cam;
     CameraController camController;
-    Rate rate;
     Object2D mapBg;
 
     vector<PlayerData> playersData;
@@ -280,13 +279,13 @@ private:
         }
 
         for (auto& it: bullets) {
-            it.Update(rate.GetDeltaTime());
+            it.Update(cam.GetRateDeltatime());
             it.Draw(cam);
         }
 
         for (const auto& it: players) {
             auto data = it.second;
-            data->Update(rate.GetDeltaTime());
+            data->Update(cam.GetRateDeltatime());
             data->Draw(cam);
         }
     }
@@ -312,12 +311,11 @@ private:
     }
 
 public:
-    Gameplay(Client& cl, Camera& c, const Rate& r, MatchStartDto matchData, GameSceneDto mapData,
+    Gameplay(Client& cl, Camera& c, MatchStartDto matchData, GameSceneDto mapData,
              Snapshot firstSnapshot):
             client(cl),
             cam(c),
             camController(c),
-            rate(r),
             mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))) {
         InitPlayers(matchData, firstSnapshot);
         InitMap(mapData);
@@ -337,7 +335,7 @@ public:
         camController.Reset();
 
         if (isInitial) {
-            ShowColorsScreen(cam, rate, players).Run([this]() { DrawGameWorld(); });
+            ShowColorsScreen(cam, players).Run([this]() { DrawGameWorld(); });
         }
 
         while (running) {
@@ -346,8 +344,8 @@ public:
             TakeInput();
             TakeSnapshots([&fadePanelTween]() { fadePanelTween.Play(); });
 
-            camController.Update(rate.GetDeltaTime());
-            TweenManager::GetInstance().Update(rate.GetDeltaTime());
+            camController.Update(cam.GetRateDeltatime());
+            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
             BulletsReapDead();
             DrawGameWorld();
@@ -355,7 +353,7 @@ public:
 
             cam.Render();
 
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
     }
 

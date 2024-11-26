@@ -1,7 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera(Renderer render, float size):
-        render(std::move(render)), textureCache(this->render), size(size) {}
+#include "Rate.h"
+
+Camera::Camera(Renderer render, float size, Rate rate):
+        render(std::move(render)), textureCache(this->render), size(size), rate(rate) {}
 
 Camera::~Camera() { textureCache.Clear(); }
 
@@ -86,7 +88,6 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
     return Rect(screenX - (rectSize.x) * rectT.GetPivot().x,
                 screenY - ((rectSize.y) - rectSize.y * rectT.GetPivot().y), rectSize.x, rectSize.y);
 }
-
 
 void Camera::Render() { render.Present(); }
 

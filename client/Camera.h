@@ -12,6 +12,7 @@
 #include "common/Transform.h"
 #include "common/Vector2D.h"
 
+#include "Rate.h"
 #include "RectTransform.h"
 #include "TextureCache.h"
 
@@ -25,9 +26,10 @@ private:
     Vector2D position;
 
     float size;
+    Rate rate;
 
 public:
-    Camera(Renderer render, float size);
+    Camera(Renderer render, float size, Rate rate);
     void Clean() { render.Clear(); }
     void Render();
     void SetPos(Vector2D position) { this->position = position; }
@@ -49,6 +51,10 @@ public:
     Rect RectTransformToRenderRect(RectTransform& rectTransform);
 
     void ClearCacheItem(const string& filename);
+
+    float GetRateDeltatime() { return rate.GetDeltaTime(); }
+
+    float GetRateMiliseconds() { return rate.GetMiliseconds(); }
 };
 
 #endif

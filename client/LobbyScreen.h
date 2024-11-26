@@ -19,7 +19,6 @@ using std::shared_ptr;
 class LobbyScreen {
 private:
     Camera& cam;
-    Rate rate;
     Client& client;
     bool isOwner;
 
@@ -27,8 +26,8 @@ private:
     bool waitingToStart = false;
 
 public:
-    LobbyScreen(Camera& cam, const Rate& rate, Client& client, bool isOwner):
-            cam(cam), rate(rate), client(client), isOwner(isOwner) {}
+    LobbyScreen(Camera& cam, Client& client, bool isOwner):
+            cam(cam), client(client), isOwner(isOwner) {}
 
     template <typename NetworkMsgDerivedClass>
     bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concretPtr) {
@@ -53,7 +52,7 @@ public:
                     bool startSuccess;
                     startButton.SetInteractable(false);
                     std::cout << "Start match!\n";
-                    LoadingScreen loading(cam, rate, [this, &startSuccess]() {
+                    LoadingScreen loading(cam, [this, &startSuccess]() {
                         std::shared_ptr<ResultStartingMatch> startResult = nullptr;
                         if (GetServerMsg(client, startResult)) {
                             startSuccess = startResult->success;
@@ -111,10 +110,10 @@ public:
             }
 
             GUIManager::GetInstance().Draw(cam);
-            TweenManager::GetInstance().Update(rate.GetDeltaTime());
+            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
             cam.Render();
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
         return nullptr;
     }

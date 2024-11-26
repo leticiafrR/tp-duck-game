@@ -22,7 +22,6 @@ private:
     const int MAX_NAME_SIZE = 12;
 
     Camera& cam;
-    Rate rate;
 
     Image bgImage;
     Image logoImage;
@@ -81,9 +80,8 @@ private:
     }
 
 public:
-    MenuScreen(Camera& c, const Rate& r):
+    explicit MenuScreen(Camera& c):
             cam(c),
-            rate(r),
             bgImage("duck_game_bg.jpg", RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
             logoImage("duck_game_logo.png", RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
             inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),
@@ -136,10 +134,10 @@ public:
             buttonText.SetVisible(nicknameInput.size() != 0);
 
             GUIManager::GetInstance().Draw(cam);
-            TweenManager::GetInstance().Update(rate.GetDeltaTime());
+            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
             cam.Render();
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
 
         return nicknameInput;

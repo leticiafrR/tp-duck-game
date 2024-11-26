@@ -41,7 +41,6 @@ public:
 class ShowColorsScreen {
 private:
     Camera& cam;
-    Rate rate;
 
     map<PlayerID_t, shared_ptr<DuckClientRenderer>>& playersData;
     Image bg;
@@ -49,10 +48,8 @@ private:
     vector<shared_ptr<DuckColorItemGUI>> ducksGUI;
 
 public:
-    ShowColorsScreen(Camera& cam, const Rate& rate,
-                     map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks):
+    ShowColorsScreen(Camera& cam, map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks):
             cam(cam),
-            rate(rate),
             playersData(ducks),
             bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
                ColorExtension::Black().SetAlpha(180)) {
@@ -88,12 +85,12 @@ public:
 
             drawBack();
 
-            timer.Update(rate.GetDeltaTime());
-            TweenManager::GetInstance().Update(rate.GetDeltaTime());
+            timer.Update(cam.GetRateDeltatime());
+            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
             GUIManager::GetInstance().Draw(cam);
 
             cam.Render();
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
     }
 

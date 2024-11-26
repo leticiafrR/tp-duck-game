@@ -13,12 +13,10 @@
 class LoadingScreen {
 private:
     Camera& cam;
-    Rate rate;
     Function<bool> endFunction;
 
 public:
-    LoadingScreen(Camera& cam, const Rate& rate, Function<bool> endFunction):
-            cam(cam), rate(rate), endFunction(endFunction) {}
+    LoadingScreen(Camera& cam, Function<bool> endFunction): cam(cam), endFunction(endFunction) {}
 
     void Run(const string& text = "", bool lockerOnly = false) {
         Image bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black(),
@@ -49,7 +47,7 @@ public:
 
             GUIManager::GetInstance().Draw(cam);
             cam.Render();
-            SDL_Delay(rate.GetMiliseconds());
+            SDL_Delay(cam.GetRateMiliseconds());
         }
     }
 

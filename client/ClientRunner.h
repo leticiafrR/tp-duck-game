@@ -31,11 +31,10 @@ using std::vector;
 class ClientRunner {
 private:
     Camera cam;
-    Rate rate;
 
     PlayerData LoadWinner(Client& client, vector<PlayerData> players) {
         PlayerID_t winnerId;
-        LoadingScreen(cam, rate, [&client, &winnerId]() {
+        LoadingScreen(cam, [&client, &winnerId]() {
             shared_ptr<FinalWinner> msg;
 
             if (client.TryRecvNetworkMsg(msg)) {
@@ -47,15 +46,12 @@ private:
         auto it = std::find_if(players.begin(), players.end(),
                                [&winnerId](PlayerData p) { return p.playerID == winnerId; });
         return *it;
-        // LoadingScreen(cam, rate, [&client, &winnerId]() {
-        //     return false;
-        // }).Run(it != players.end() ? "The winner is: " + it->nickname : "There is no winner");
     }
 
     void LoadFinalGroup(Client& client, bool& isFinalGroup) {
         std::cout << "Waiting for final group"
                   << "\n";
-        LoadingScreen loadingFinalGroup(cam, rate, [&isFinalGroup, &client]() {
+        LoadingScreen loadingFinalGroup(cam, [&isFinalGroup, &client]() {
             shared_ptr<FinalGroupGame> finalGroupData;
 
             if (client.TryRecvNetworkMsg(finalGroupData)) {
@@ -71,7 +67,7 @@ private:
 
     void LoadRoundResults(Client& client, bool& matchEnded,
                           unordered_map<PlayerID_t, int>& results) {
-        LoadingScreen matchEndedScreen(cam, rate, [&client, &matchEnded, &results]() {
+        LoadingScreen matchEndedScreen(cam, [&client, &matchEnded, &results]() {
             shared_ptr<GamesRecountDto> recountData;
             if (client.TryRecvNetworkMsg(recountData)) {
                 matchEnded = recountData->matchEnded;
@@ -87,7 +83,7 @@ private:
         shared_ptr<GameSceneDto> mapData = nullptr;
         shared_ptr<Snapshot> firstSnapshot = nullptr;
 
-        LoadingScreen laodRoundScreen(cam, rate, [&client, &mapData, &firstSnapshot]() {
+        LoadingScreen laodRoundScreen(cam, [&client, &mapData, &firstSnapshot]() {
             if (!mapData)
                 client.TryRecvNetworkMsg(mapData);
             if (mapData && !firstSnapshot)
@@ -96,31 +92,31 @@ private:
         });
 
         laodRoundScreen.Run("LOADING...");
-        Gameplay(client, cam, rate, matchData, *mapData, *firstSnapshot).Run(isInitial);
+        Gameplay(client, cam, matchData, *mapData, *firstSnapshot).Run(isInitial);
     }
 
     void ErrorScreen(const string& text) {
-        LoadingScreen(cam, rate, []() { return false; }).Run(text);
+        LoadingScreen(cam, []() { return false; }).Run(text);
     }
 
     void ShowResultsScreen(std::optional<PlayerData> winner, const vector<PlayerData>& players,
                            const unordered_map<PlayerID_t, int>& gameResults) {
 
-        GameStatusScreen(cam, rate, players, gameResults, winner).Run();
+        GameStatusScreen(cam, players, gameResults, winner).Run();
     }
 
 public:
-    ClientRunner(Renderer& render, int fps): cam(std::move(render), 70), rate(fps) {}
+    ClientRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
     ~ClientRunner() = default;
 
     void Run() {
         try {
-            string nickname = MenuScreen(cam, rate).Render();
+            string nickname = MenuScreen(cam).Render();
 
             Client client("8080", "localhost", nickname);
-            bool isOwner = MatchListScreen(cam, rate, client).Render();
+            bool isOwner = MatchListScreen(cam, client).Render();
 
-            MatchStartDto matchData = *(LobbyScreen(cam, rate, client, isOwner).Render());
+            MatchStartDto matchData = *(LobbyScreen(cam, client, isOwner).Render());
 
             AudioManager::GetInstance().PlayGameMusic();
             bool matchEnded = false;
