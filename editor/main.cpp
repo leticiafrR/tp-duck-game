@@ -6,6 +6,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "Menu.h"
 #include "constants.h"
 #include "constantsEditor.h"
 #include "mapEditor.h"
@@ -152,5 +153,7 @@ int main() {
     // BasicGrounds();
     // std::vector<std::pair<std::string,GroundDto>> grounds= ReadBasicPlataforms();
     // PrintBasicGrounds(grounds);
+    Menu men;
+    men.run();
     return 0;
 }

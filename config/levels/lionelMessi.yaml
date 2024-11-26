@@ -1,0 +1,37 @@
+theme: FOREST
+full_map_size:
+  x: 100
+  y: 160
+platforms:
+  - platform_0
+  - platform_1
+players_spawn_points:
+  - x: 0
+    y: 8
+  - x: 3
+    y: 8
+weapons_spawn_points:
+  - x: 0
+    y: 8
+  - x: 3
+    y: 8
+platform_0:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
+platform_1:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:
+    - TOP
+    - BOTTOM
+    - LEFT
+    - RIGHT
