@@ -18,7 +18,6 @@
 #define MAX_COMMANDS 100
 #define NO_WINNER_FORCED_END 0
 
-// OJO:ya no sirve de mucho el tope de clientsQueues. NO INDICA UN LIMITE REAL,
 Match::Match(const Config& config, uint16_t matchHost):
         matchStatus(WAITING_PLAYERS),
         matchHost(matchHost),
@@ -36,36 +35,31 @@ void Match::loadDataIfAvailble(std::vector<DataMatch>& availableMatches) {
     }
 }
 
-// debe de actualizar ambos safemaps
-// DEBE ACTUALIZAR CURRENT PLAYERS
 std::shared_ptr<Queue<Command>> Match::logInClient(
         const ClientInfo& connectionInfo, Queue<std::shared_ptr<MessageSender>>* clientQueue,
         uint8_t& eCode) {
-
     if (matchStatus != WAITING_PLAYERS) {
         eCode = E_CODE::ALREADY_STARTED;
-        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-        //           << " a la match " << matchHost << " pero ya inciò\n";
         return nullptr;
     }
     if ((config.getMaxPlayers() - currentPlayers) == 0) {
         eCode = E_CODE::NOT_ENOUGH_SPOTS;
-        // std::cout << "se intentò logear la conexiòn " << connectionInfo.connectionId
-        //           << " a la match " << matchHost << " pero no habian suficientes spots\n";
         return nullptr;
     }
     clientsQueues.tryInsert(connectionInfo.connectionId, clientQueue);
     playersPerClient.tryInsert(connectionInfo.connectionId, connectionInfo);
     currentPlayers += connectionInfo.playersPerConnection;
-    // std::cout << "se logear la conexiòn " << connectionInfo.connectionId << " a la match "
-    //           << matchHost << "! se retronò al monitor el puntero a la queue de esta match\n";
-
     return matchQueue;
 }
 
+
 void Match::logOutClient(uint16_t connectionID) {
+    clientsQueues.applyToValue(
+            connectionID,
+            [](Queue<std::shared_ptr<MessageSender>>* quiterQueue) { quiterQueue->close(); });
     clientsQueues.tryErase(connectionID);
 
+    // taking out of the model all the players (ducks) conected through that client
     ClientInfo playersInClient;
     playersPerClient.get(connectionID, playersInClient);
 
@@ -76,6 +70,7 @@ void Match::logOutClient(uint16_t connectionID) {
             matchQueue->push(quit);
         }
     }
+
     currentPlayers -= playersInClient.playersPerConnection;
     playersPerClient.tryErase(connectionID);
 }
@@ -90,14 +85,11 @@ void Match::run() {
         broadcastMatchMssg(matchStartSender);
         GamesHandler gamesHandler(config, clientsQueues, playersPerClient, matchQueue, matchStatus,
                                   currentPlayers);
-
         while (matchStatus == MATCH_ON_COURSE) {
             gamesHandler.playGroupOfGames();
         }
-
         auto winner = gamesHandler.whoWon();
         setEndOfMatch(winner);
-
     } catch (const ClosedQueue& q) {
     } catch (const RunOutOfPlayers& r) {}
 }
@@ -110,9 +102,7 @@ void Match::setEndOfMatch(PlayerID_t winner) {
         matchStatus = ENDED;
         matchQueue->close();
         if (clientsQueues.size() != 0) {
-
             auto messageSender = std::make_shared<MatchExitSender>(winner);
-
             clientsQueues.applyToValues(
                     [&messageSender](Queue<std::shared_ptr<MessageSender>>* clientQueue) {
                         clientQueue->try_push(messageSender);
@@ -175,10 +165,12 @@ std::vector<PlayerData> Match::assignSkins(int numberSkins) {
     return assignation;
 }
 
-// si al menos un jugador màs puede entrar a la partida
 bool Match::isAvailable() {
     return matchStatus == WAITING_PLAYERS && (config.getMaxPlayers() - currentPlayers) > 0;
 }
+
 bool Match::readyToStart() { return currentPlayers >= config.getMinPlayers(); }
+
 bool Match::isOver() { return matchStatus == ENDED; }
+
 bool Match::hadStarted() { return _hadStarted; }

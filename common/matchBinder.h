@@ -14,11 +14,6 @@
 
 #include "queue.h"
 
-#define PRINT_MATCH_SELECTION(selection, connectionId)                                             \
-    std::cout << "[ServerBinding]: Conection [" << (int)(connectionId) << "] tried to: "           \
-              << ((selection) == (connectionId) ? "create a new match" : "join an existing match") \
-              << "\n ";
-
 #define REFRESH 0
 #define NOT_ASSIGNED 0
 
@@ -49,15 +44,8 @@ public:
             } else {
                 auto msg = protocol.receiveResultJoining();
                 msgQueue.push(msg);
-
-                // std::cout << "[Client Binder]: result of joining/creating match received "
-                //              "successfully: "
-                //           << (msg->eCode == 0 ? "In the match!" : "couldnt join the match!")
-                //           << " \n";
                 if (msg->eCode == 0)
                     break;
-                // else
-                //     std::cout << "  Error code at joining match: " << msg->eCode << "\n";
             }
         }
 
@@ -66,10 +54,6 @@ public:
             protocol.sendStartMatchIntention();
             auto msg = protocol.receiveResultStarting();
             msgQueue.push(msg);
-            // std::cout << (msg->success ?
-            //                       "Starting the match!" :
-            //                       "Not enough players! You will have to wait for more players")
-            //           << "\n";
             if (msg->success)
                 break;
         }
@@ -80,43 +64,33 @@ public:
                                uint16_t connectionId, uint8_t& playersPerConnection,
                                ServerProtocol& protocol,
                                std::shared_ptr<Queue<Command>>& matchQueue) {
-        // std::cout<<"BINDER: entrando al binding para el cliente: "<< connectionId<<"\n";
 
         uint16_t retMatchID = REFRESH;
         ClientInfo clientInfo;
         try {
             auto _baseNickname = protocol.receiveNickName();
-            // std::cout<< "Binder: received the base nickname: "<< _baseNickname <<"\n";
             clientInfo.baseNickname = _baseNickname;
             clientInfo.connectionId = connectionId;
 
             protocol.sendLocalId(connectionId);
-            // std::cout << "BINDER:se piden las av matches al monitor\n";
             auto avMatches = matches.getAvailableMatches();
-            // std::cout << "BINDER: se obtuvieron las av matches del monitor\n";
             protocol.sendAvailableMatches(avMatches);
 
 
             while (retMatchID == REFRESH) {
-
                 MatchSelection selection = protocol.receiveMatchSelection();
                 if (selection.matchSelection == REFRESH) {
                     protocol.sendAvailableMatches(matches.getAvailableMatches());
                 } else {
-                    // PRINT_MATCH_SELECTION(selection.matchSelection, connectionId)
                     clientInfo.playersPerConnection = selection.playersPerConection;
                     uint8_t eCode = 0;
                     std::shared_ptr<Queue<Command>> returnQueue = matches.tryJoinMatch(
                             selection.matchSelection, clientQueue, clientInfo, eCode);
-
-                    if (eCode == 0) {  // success!
+                    if (eCode == 0) {
                         // setting the target values received:
                         playersPerConnection = selection.playersPerConection;
                         matchQueue = returnQueue;
-
                         retMatchID = selection.matchSelection;
-                    } else {
-                        clientInfo.playersPerConnection = 0;
                     }
                     protocol.sendResultOfJoining(eCode);
                 }
@@ -126,22 +100,20 @@ public:
                 bool matchStarted = false;
                 while (!matchStarted) {
                     protocol.receiveStartMatchIntention();
-
                     matchStarted = matches.tryStartMatch(retMatchID);
-                    // std::cout << "Match [ID: " << retMatchID << "] starting result: "
-                    //           << (matchStarted ? "Succes!" : "Failure! (Not enough players)")
-                    //           << "\n";
                     protocol.sendStartMatchResult(matchStarted);
                 }
             }
             return retMatchID;
         } catch (const LibError& err) {
-            if (retMatchID != REFRESH)
+            if (retMatchID == connectionId) {
                 matches.forceEndMatch(retMatchID);
+            }
 
         } catch (const ConnectionFailed& err) {
-            if (retMatchID != REFRESH)
+            if (retMatchID == connectionId) {
                 matches.forceEndMatch(retMatchID);
+            }
         } catch (const std::exception& e) {
             std::cerr << "ERROR at ServerBind to the client " << connectionId << ": " << e.what()
                       << std::endl;
@@ -149,7 +121,7 @@ public:
             std::cout << "Error. There was an unknown exception in the sender thread while "
                          "making the match bindng.\n";
         }
-        // invalid match ID
+        // no-existing match ID
         return 0;
     }
 

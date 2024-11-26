@@ -28,7 +28,7 @@ private:
     Socket& skt;
     bool wasClosed = false;
 
-    void checkShipping(int cantBytes);
+    void checkShipping(int cantBytes, const std::string& when);
 
 public:
     explicit ProtocolAssistant(Socket& skt);

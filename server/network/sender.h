@@ -13,7 +13,6 @@
 #include "serverProtocol.h"
 
 #define MAX_MESSAGES 250
-
 class MessageSender;
 
 class SenderThread: public Thread {
@@ -28,7 +27,7 @@ private:
 
     std::atomic<bool> _joinedAMatch = false;
 
-    void sendLoop(uint16_t matchID);
+    void sendLoop();
 
 public:
     explicit SenderThread(Socket&& sktPeer, MatchesMonitor& matches, uint16_t connectionId);
@@ -36,8 +35,6 @@ public:
     void run() override;
 
     void kill();
-
-    ~SenderThread() override;
 };
 
 #endif

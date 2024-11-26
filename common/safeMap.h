@@ -100,6 +100,15 @@ public:
         }
     }
 
+    bool applyToValue(const K& key, const std::function<void(V&)>& func) {
+        std::unique_lock<std::shared_mutex> lck(rw_mtx);
+        if (map.find(key) != map.end()) {
+            func(map[key]);
+            return true;
+        }
+        return false;
+    }
+
     int size() {
         std::shared_lock<std::shared_mutex> lck(rw_mtx);
         int n = map.size();

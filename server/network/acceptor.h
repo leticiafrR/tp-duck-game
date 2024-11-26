@@ -17,11 +17,7 @@ private:
 
     void reapDeadClients();
 
-    /* This method first kills the clients (that havent joined a match), then it forces the end of
-     * the matches and this will make sure to kill the communication threads of their participants.
-     * Once donde this the only thing left if joining the threads of all the clients
-     * and also the match*/
-    void killAllClients();
+    void killClients();
 
 public:
     explicit AcceptorThread(const char* servname, Config& config);
