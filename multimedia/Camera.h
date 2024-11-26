@@ -55,6 +55,8 @@ public:
     float GetRateDeltatime() { return rate.GetDeltaTime(); }
 
     float GetRateMiliseconds() { return rate.GetMiliseconds(); }
+
+    void Delay() { SDL_Delay(GetRateMiliseconds()); }
 };
 
 #endif
