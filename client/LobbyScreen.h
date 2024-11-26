@@ -3,16 +3,15 @@
 #include <memory>
 
 #include "data/networkMsg.h"
+#include "multimedia/ButtonsManager.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Text.h"
 #include "network/Client.h"
 #include "tweening/TweenManager.h"
 
-#include "ButtonsManager.h"
-#include "Camera.h"
-#include "ColorExtension.h"
-#include "GUIManager.h"
 #include "LoadingScreen.h"
-#include "Rate.h"
-#include "Text.h"
 
 using std::shared_ptr;
 

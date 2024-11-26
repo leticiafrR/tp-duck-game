@@ -6,6 +6,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "data/snapshot.h"
+
 #include "AudioCache.h"
 #include "Camera.h"
 #include "GraphicUI.h"

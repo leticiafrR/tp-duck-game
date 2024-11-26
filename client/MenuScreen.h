@@ -3,17 +3,16 @@
 
 #include <string>
 
+#include "multimedia/Button.h"
+#include "multimedia/ButtonsManager.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Text.h"
 #include "tweening/TransformTween.h"
 #include "tweening/TweenManager.h"
 
-#include "Button.h"
-#include "ButtonsManager.h"
-#include "Camera.h"
-#include "ColorExtension.h"
-#include "GUIManager.h"
-#include "Rate.h"
 #include "SDLExtension.h"
-#include "Text.h"
 
 using std::string;
 

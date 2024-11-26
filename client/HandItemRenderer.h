@@ -8,9 +8,9 @@
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
+#include "multimedia/Object2D.h"
+#include "multimedia/SheetDataCache.h"
 
-#include "Object2D.h"
-#include "SheetDataCache.h"
 #include "SpriteRendererData.h"
 
 using std::string;

@@ -5,10 +5,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "Camera.h"
-#include "ColorExtension.h"
-#include "Image.h"
-#include "Text.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Image.h"
+#include "multimedia/Text.h"
 
 using std::make_shared;
 using std::shared_ptr;

@@ -1,12 +1,7 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
-    SheetDataCache.cpp
-    GraphicUI.cpp
     tweening/Tween.cpp
-    Object2D.cpp
-    Button.cpp
-    Camera.cpp
     main.cpp
     network/ClientProtocol.cpp
 
@@ -16,27 +11,10 @@ target_sources(taller_client
     tweening/TransformTween.h
     tweening/Tween.h
     tweening/TweenManager.h
-    Definitions.h
     SDLExtension.h
-    RectTransform.h
     Timer.h
-    GraphicUI.h
-    Image.h
-    Text.h
-    Button.h
-    Object2D.h
-    Camera.h
     CameraController.h
     Animator.h
-    TextureCache.h
-    FontCache.h
-    AudioCache.h
-    AudioManager.h
-    SheetDataCache.h
-    MapBlock2D.h
-    ColorExtension.h
-    GUIManager.h
-    ButtonsManager.h
     MenuScreen.h
     LoadingScreen.h
     MatchListScreen.h
@@ -44,7 +22,6 @@ target_sources(taller_client
     LobbyItemWidget.h
     Gameplay.h
     ClientRunner.h
-    Rate.h
     ShowColorsScreen.h
     DuckClientRenderer.h
 

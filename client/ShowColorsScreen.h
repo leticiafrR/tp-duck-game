@@ -4,14 +4,14 @@
 #include <memory>
 #include <vector>
 
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Definitions.h"
+#include "multimedia/Image.h"
+#include "multimedia/Text.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
-#include "ColorExtension.h"
-#include "Definitions.h"
 #include "DuckClientRenderer.h"
-#include "Image.h"
-#include "Text.h"
 #include "Timer.h"
 
 using std::make_shared;

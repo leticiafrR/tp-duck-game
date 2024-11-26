@@ -9,20 +9,19 @@
 #include <vector>
 
 #include "common/playerIdentifier.h"
+#include "multimedia/Definitions.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Image.h"
+#include "multimedia/MapBlock2D.h"
+#include "multimedia/Object2D.h"
 #include "network/Client.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
 #include "BulletRenderer.h"
 #include "CameraController.h"
-#include "Definitions.h"
 #include "DuckClientRenderer.h"
-#include "GUIManager.h"
 #include "GameplayGUI.h"
-#include "Image.h"
-#include "MapBlock2D.h"
-#include "Object2D.h"
-#include "Rate.h"
 #include "ShowColorsScreen.h"
 
 using std::list;

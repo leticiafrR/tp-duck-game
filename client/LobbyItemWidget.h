@@ -2,11 +2,11 @@
 #define LOBBY_ITEM_WIDGET_H
 #include <string>
 
-#include "Button.h"
-#include "ColorExtension.h"
-#include "Definitions.h"
-#include "Image.h"
-#include "Text.h"
+#include "multimedia/Button.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Definitions.h"
+#include "multimedia/Image.h"
+#include "multimedia/Text.h"
 
 using std::string;
 

@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "SheetDataCache.h"
+#include "multimedia/SheetDataCache.h"
 using std::string;
 
 class SpriteRendererData {

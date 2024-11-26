@@ -6,13 +6,13 @@
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
+#include "multimedia/AudioManager.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Object2D.h"
 
 #include "Animator.h"
-#include "AudioManager.h"
 #include "CameraController.h"
-#include "ColorExtension.h"
 #include "HandItemRenderer.h"
-#include "Object2D.h"
 #include "Timer.h"
 
 class DuckClientRenderer {

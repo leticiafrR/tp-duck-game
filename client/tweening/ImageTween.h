@@ -6,8 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../ColorExtension.h"
-#include "../Image.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Image.h"
 
 #include "Tween.h"
 

@@ -9,8 +9,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "Object2D.h"
-#include "SheetDataCache.h"
+#include "multimedia/Object2D.h"
+#include "multimedia/SheetDataCache.h"
 
 using SDL2pp::Rect;
 

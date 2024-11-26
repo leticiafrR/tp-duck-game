@@ -7,22 +7,21 @@
 #include <vector>
 
 #include "data/networkMsg.h"
+#include "multimedia/Button.h"
+#include "multimedia/ButtonsManager.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Image.h"
+#include "multimedia/Text.h"
 #include "tweening/ImageTween.h"
 #include "tweening/TweenManager.h"
 
-#include "Button.h"
-#include "ButtonsManager.h"
-#include "Camera.h"
-#include "ColorExtension.h"
 #include "ControlsScreen.h"
-#include "GUIManager.h"
-#include "Image.h"
 #include "LoadingScreen.h"
 #include "LobbyItemWidget.h"
 #include "PlayersCountSelection.h"
-#include "Rate.h"
 #include "SDLExtension.h"
-#include "Text.h"
 
 using std::list;
 using std::shared_ptr;

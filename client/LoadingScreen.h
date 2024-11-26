@@ -3,12 +3,11 @@
 
 #include <string>
 
-#include "Camera.h"
-#include "ColorExtension.h"
-#include "Definitions.h"
-#include "GUIManager.h"
-#include "Rate.h"
-#include "Text.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/Definitions.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Text.h"
 
 class LoadingScreen {
 private:

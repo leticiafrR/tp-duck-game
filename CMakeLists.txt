@@ -30,20 +30,24 @@ message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 # Define target: lib common between client, server and editor programs
 # HEY TODO XXX: change the name to something that you like
 add_library(taller_common STATIC)
+add_library(taller_multimedia STATIC)
 
 # add the source files that make the lib
 # HEY!! TODO XXX: add more subfolders here
 add_subdirectory(common/)
+add_subdirectory(multimedia/)
 
 
 # set compiler warnings to the targets
 include(cmake/CompilerWarnings.cmake)
 set_project_warnings(taller_common ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
+set_project_warnings(taller_multimedia ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
 # Say where the headers will be found required by library target
 # Make this PUBLIC so any dependant linking lib will inherit this
 # location (so our dependants will not have to explicitly request this)
 target_include_directories(taller_common PUBLIC .)
+target_include_directories(taller_multimedia PUBLIC .)
 
 include(FetchContent)
 
@@ -89,6 +93,10 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
 
 endif()
 
+# Add this for common to use sdl and yaml
+add_dependencies(taller_multimedia SDL2pp::SDL2pp yaml-cpp)
+target_link_libraries(taller_multimedia SDL2pp::SDL2pp yaml-cpp)
+
 # Program section
 # ---------------
 if(TALLER_CLIENT)
@@ -96,7 +104,7 @@ if(TALLER_CLIENT)
     add_executable(taller_client)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_client taller_common SDL2pp::SDL2pp yaml-cpp)
+    add_dependencies(taller_client taller_common taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -108,7 +116,7 @@ if(TALLER_CLIENT)
     target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp yaml-cpp)
+    target_link_libraries(taller_client taller_common taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 endif()
 
 if(TALLER_SERVER)
@@ -133,7 +141,7 @@ if(TALLER_EDITOR)
     add_executable(taller_editor)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp)
+    add_dependencies(taller_editor taller_common taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -145,7 +153,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp yaml-cpp)
+    target_link_libraries(taller_editor taller_common taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 endif()
 
 

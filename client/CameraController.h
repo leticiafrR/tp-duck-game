@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <list>
 
-#include "Camera.h"
+#include "multimedia/Camera.h"
 
 class CameraController {
 private:

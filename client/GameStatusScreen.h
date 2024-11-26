@@ -8,16 +8,15 @@
 #include <vector>
 
 #include "data/dataTransferObjects.h"
+#include "multimedia/Button.h"
+#include "multimedia/ButtonsManager.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
+#include "multimedia/GUIManager.h"
+#include "multimedia/Text.h"
 
-#include "Button.h"
-#include "ButtonsManager.h"
-#include "Camera.h"
-#include "ColorExtension.h"
 #include "DuckClientRenderer.h"
-#include "GUIManager.h"
-#include "Rate.h"
 #include "ShowColorsScreen.h"
-#include "Text.h"
 #include "Timer.h"
 
 using std::make_shared;

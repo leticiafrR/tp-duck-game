@@ -11,17 +11,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "multimedia/AudioManager.h"
+#include "multimedia/Camera.h"
 #include "network/Client.h"
 
-#include "AudioManager.h"
-#include "Camera.h"
 #include "GameStatusScreen.h"
 #include "Gameplay.h"
 #include "LoadingScreen.h"
 #include "LobbyScreen.h"
 #include "MatchListScreen.h"
 #include "MenuScreen.h"
-#include "Rate.h"
 
 using std::shared_ptr;
 using std::string;

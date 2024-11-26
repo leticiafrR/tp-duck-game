@@ -4,9 +4,9 @@
 #include <unordered_map>
 
 #include "common/Transform.h"
+#include "multimedia/Camera.h"
+#include "multimedia/Object2D.h"
 
-#include "Camera.h"
-#include "Object2D.h"
 #include "SpriteRendererData.h"
 
 using std::unordered_map;

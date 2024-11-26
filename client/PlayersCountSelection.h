@@ -1,10 +1,10 @@
 #ifndef PLAYERS_COUNT_SELECTION_H
 #define PLAYERS_COUNT_SELECTION_H
 
-#include "AudioManager.h"
-#include "Button.h"
-#include "Definitions.h"
-#include "Text.h"
+#include "multimedia/AudioManager.h"
+#include "multimedia/Button.h"
+#include "multimedia/Definitions.h"
+#include "multimedia/Text.h"
 
 class PlayersCountSelection {
 private:
