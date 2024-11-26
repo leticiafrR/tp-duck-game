@@ -41,6 +41,7 @@ public:
         PlaySFX(bulletSFX.contains(type) ? bulletSFX.at(type) :
                                            bulletSFX.at(TypeProjectile::BULLET));
     }
+    void PlayCuackSFX() { PlaySFX("cuackSFX.mp3"); }
     void PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
     void PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
 
