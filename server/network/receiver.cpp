@@ -35,6 +35,4 @@ void ReceiverThread::run() {
         std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
                   << connectionId << "\n";
     }
-
-    std::cout << "[RECEIVER: " << connectionId << "] has oficially ended\n";
 }

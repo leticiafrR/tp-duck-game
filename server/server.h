@@ -15,7 +15,7 @@ private:
     std::unique_ptr<AcceptorThread> acceptor;
 
 public:
-    Server();
+    explicit Server(const char* port);
     void keepServing();
     void closeServing();
 
