@@ -166,6 +166,55 @@ public:
         if (newTarget.isCrouched)
             anim.SetTarget(GetAnimAndCuack("crouched"));
 
+        switch (target.typeOnHand) {
+            case TypeCollectable::AK47:
+                std::cout << "AK47"
+                          << "\n";
+                break;
+            case TypeCollectable::ARMOR:
+                std::cout << "ARMOR"
+                          << "\n";
+                break;
+            case TypeCollectable::COWBOY_PISTOL:
+                std::cout << "COWBOY_PISTOL"
+                          << "\n";
+                break;
+            case TypeCollectable::DUELING_PISTOL:
+                std::cout << "DUELING_PISTOL"
+                          << "\n";
+                break;
+            case TypeCollectable::EMPTY:
+                std::cout << "EMPTY"
+                          << "\n";
+                break;
+            case TypeCollectable::HELMET:
+                std::cout << "HELMET"
+                          << "\n";
+                break;
+            case TypeCollectable::LASER_RIFLE:
+                std::cout << "LASER_RIFLE"
+                          << "\n";
+                break;
+            case TypeCollectable::MAGNUM:
+                std::cout << "MAGNUM"
+                          << "\n";
+                break;
+            case TypeCollectable::PEW_PEW_LASER:
+                std::cout << "PEW_PEW_LASER"
+                          << "\n";
+                break;
+            case TypeCollectable::SHOTGUN:
+                std::cout << "SHOTGUN"
+                          << "\n";
+                break;
+            case TypeCollectable::SNIPER:
+                std::cout << "SNIPER"
+                          << "\n";
+                break;
+            default:
+                break;
+        }
+
         handItem.SetItem(target.typeOnHand);
     }
 

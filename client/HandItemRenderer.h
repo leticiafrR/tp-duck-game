@@ -58,6 +58,10 @@ public:
     HandItemRenderer(Transform& playerT, TypeCollectable type): playerT(playerT) { SetItem(type); }
 
     void SetItem(TypeCollectable type) {
+        if (!itemsMap.contains(type)) {
+            std::cout << "item not recognized\n";
+            return;
+        }
         itemData = itemsMap.at(type);
         SetFileName(itemData.imageFile);
         SetSourceRect(itemData.GetSourceRect());
