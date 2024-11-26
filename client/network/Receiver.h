@@ -54,6 +54,8 @@ public:
             std::cerr << "ERROR: An unkown error was catched at receiving a message from the server"
                       << std::endl;
         }
+
+        msgQueue.close();
     }
 
     void kill() {
