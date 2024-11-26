@@ -67,11 +67,6 @@ struct InstantProjectileEventDto {
             type(type), origin(origin), end(end) {}
 };
 
-struct CollectableDespawnEventDto {
-    CollectableID_t id;
-    explicit CollectableDespawnEventDto(CollectableID_t _id): id(_id) {}
-    CollectableDespawnEventDto() = default;
-};
 
 struct CollectableSpawnEventDto {
     CollectableID_t id;
@@ -87,10 +82,26 @@ struct Snapshot: public NetworkMsg {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
     std::vector<InstantProjectileEventDto> raycastsEvents;
+    std::vector<CollectableID_t> collectableDespawns;
+    std::vector<CollectableSpawnEventDto> collectableSpawns;
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
-             std::vector<InstantProjectileEventDto>& raycastsEvents):
-            gameOver(gameOver), updates(updates), raycastsEvents(raycastsEvents) {}
+             const std::vector<InstantProjectileEventDto>& raycastsEvents):
+            gameOver(gameOver),
+            updates(updates),
+            raycastsEvents(raycastsEvents),
+            collectableDespawns(),
+            collectableSpawns() {}
+
+    Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
+             const std::vector<InstantProjectileEventDto>& raycastsEvents,
+             const std::vector<CollectableID_t>& collectableDespawns,
+             const std::vector<CollectableSpawnEventDto>& collectableSpawns):
+            gameOver(gameOver),
+            updates(updates),
+            raycastsEvents(raycastsEvents),
+            collectableDespawns(collectableDespawns),
+            collectableSpawns(collectableSpawns) {}
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates):
             gameOver(gameOver), updates(updates) {}
