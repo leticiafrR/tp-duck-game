@@ -6,6 +6,12 @@ target_sources(taller_common
     resolvererror.cpp
     socket.cpp
     protocolAssistant.cpp
+
+    Vector2D.cpp
+    Collision.cpp
+    Transform.cpp
+    RigidBody.cpp
+
     PUBLIC
     # .h files
     liberror.h
@@ -14,13 +20,14 @@ target_sources(taller_common
     socket.h
     queue.h
     thread.h
-    Vector2D.h
-    Collision.h
-    Transform.h
-    RigidBody.h
     safeMap.h
     timeManager.h
     protocolAssistant.h
     matchBinder.h
     playerIdentifier.h
+
+    Vector2D.h
+    Collision.h
+    Transform.h
+    RigidBody.h
     )
