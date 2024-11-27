@@ -2,6 +2,7 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     tweening/Tween.cpp
+
     main.cpp
     network/ClientProtocol.cpp
 
@@ -25,7 +26,7 @@ target_sources(taller_client
     screens/MatchListScreen.h
     screens/LobbyScreen.h
     screens/LobbyItemWidget.h
-    screens/ConstrolsScreen.h
+    screens/ControlsScreen.h
     screens/GameStatusScreen.h
     screens/PlayersCountSelection.h
     screens/ShowColorsScreen.h
