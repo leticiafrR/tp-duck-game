@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "client/rendering/SpriteRendererData.h"
+#include "data/snapshot.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Image.h"

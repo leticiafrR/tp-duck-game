@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+#include "client/tweening/ImageTween.h"
+#include "client/tweening/TweenManager.h"
+#include "client/utils/SDLExtension.h"
 #include "data/networkMsg.h"
 #include "multimedia/Button.h"
 #include "multimedia/ButtonsManager.h"
@@ -14,14 +17,11 @@
 #include "multimedia/GUIManager.h"
 #include "multimedia/Image.h"
 #include "multimedia/Text.h"
-#include "tweening/ImageTween.h"
-#include "tweening/TweenManager.h"
 
 #include "ControlsScreen.h"
 #include "LoadingScreen.h"
 #include "LobbyItemWidget.h"
 #include "PlayersCountSelection.h"
-#include "SDLExtension.h"
 
 using std::list;
 using std::shared_ptr;

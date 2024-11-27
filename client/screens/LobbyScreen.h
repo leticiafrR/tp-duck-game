@@ -2,14 +2,14 @@
 #define LOBBY_SCREEN_H
 #include <memory>
 
+#include "client/network/Client.h"
+#include "client/tweening/TweenManager.h"
 #include "data/networkMsg.h"
 #include "multimedia/ButtonsManager.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/GUIManager.h"
 #include "multimedia/Text.h"
-#include "network/Client.h"
-#include "tweening/TweenManager.h"
 
 #include "LoadingScreen.h"
 

@@ -4,15 +4,15 @@
 #include <memory>
 #include <vector>
 
+#include "client/rendering/DuckClientRenderer.h"
+#include "client/tweening/ImageTween.h"
+#include "client/tweening/TweenManager.h"
+#include "client/utils/Timer.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
+#include "multimedia/GUIManager.h"
 #include "multimedia/Image.h"
 #include "multimedia/Text.h"
-#include "tweening/ImageTween.h"
-#include "tweening/TweenManager.h"
-
-#include "DuckClientRenderer.h"
-#include "Timer.h"
 
 using std::make_shared;
 using std::shared_ptr;
