@@ -4,12 +4,16 @@ target_sources(taller_editor
     main.cpp
     mapEditor.cpp
     MenuScreen.cpp
-    LevelsScreen.cpp
-    LevelWidget.cpp
+    editLevel/LevelsScreen.cpp
+    editLevel/LevelWidget.cpp
+    createLevel/setLevelName.cpp
+    EditorRunner.cpp
     PUBLIC
     # .h files
     mapEditor.h
-    LevelsScreen.h
+    editLevel/LevelsScreen.h
     MenuScreen.h
-    LevelWidget.h
+    editLevel/LevelWidget.h
+    createLevel/setLevelName.h 
+    EditorRunner.h
     )

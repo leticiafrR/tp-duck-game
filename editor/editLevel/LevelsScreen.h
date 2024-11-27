@@ -7,30 +7,31 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "editor/constantsEditor.h"
 #include "multimedia/Button.h"
 #include "multimedia/GUIManager.h"
 #include "multimedia/Text.h"
 
 #include "LevelWidget.h"
 #include "constants.h"
-#include "constantsEditor.h"
 
 using std::list;
-
+using std::string;
 
 class LevelsScreen {
 private:
     Camera& cam;
     list<LevelWidget> widgets;
 
-    void OnSelectLevelPressed(const std::string& name);
-
+    // string OnSelectLevelPressed(const std::string& name);
+    string selectedLvl;
+    bool running = true;
     void ReadAvaiableLevels();
 
 public:
     explicit LevelsScreen(Camera& cam);
 
-    std::string Render(const string& text = "", bool lockerOnly = false);
+    string Render(bool lockerOnly = false);
 };
 
 #endif

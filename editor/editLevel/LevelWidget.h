@@ -2,13 +2,12 @@
 #define LEVEL_WIDGET_H
 #include <string>
 
+#include "editor/constantsEditor.h"
 #include "multimedia/Button.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
 #include "multimedia/Image.h"
 #include "multimedia/Text.h"
-
-#include "constantsEditor.h"
 using std::string;
 
 class LevelWidget {

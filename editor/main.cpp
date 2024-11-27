@@ -6,6 +6,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "EditorRunner.h"
 #include "MenuScreen.h"
 #include "constants.h"
 #include "constantsEditor.h"
@@ -172,7 +173,7 @@ int main() {
     // Create a camera with render, 70 camera size(zoom), and 60fps for framerate
     // The Size(zoom) can be update in runtime with cam.SetSize(float)
     Camera cam(std::move(render), 70, Rate(60));
-    MenuScreen men(cam);
-    men.run();
+    EditorRunner editor;
+    editor.run(cam);
     return 0;
 }
