@@ -190,14 +190,14 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     // receiving collectableDespawns
     uint8_t numberDespawns = assistant.receiveNumberOneByte();
     std::vector<CollectableID_t> _collectableDespawns((size_t)numberDespawns);
-    for (uint8_t i = 0; i < numberProjectile; i++) {
+    for (uint8_t i = 0; i < numberDespawns; i++) {
         _collectableDespawns[i] = assistant.receiveNumberFourBytes();
     }
 
     // receiving collectableSpawns
     uint8_t numberSpawns = assistant.receiveNumberOneByte();
     std::vector<CollectableSpawnEventDto> _collectableSpawns((size_t)numberSpawns);
-    for (uint8_t i = 0; i < numberProjectile; i++) {
+    for (uint8_t i = 0; i < numberSpawns; i++) {
         CollectableID_t id = assistant.receiveNumberFourBytes();
         auto position = assistant.receiveVector2D();
         TypeCollectable type = (TypeCollectable)assistant.receiveNumberOneByte();
