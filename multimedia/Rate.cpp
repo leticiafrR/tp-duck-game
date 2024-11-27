@@ -8,10 +8,7 @@ float Rate::GetTargetDeltaTime() const { return 1.0f / target; }
 
 void Rate::Init() { lastTick = SDL_GetTicks(); }
 
-float Rate::GetDeltaTime() const {
-    std::cout << deltaTime << "\n";
-    return deltaTime;
-}
+float Rate::GetDeltaTime() const { return deltaTime; }
 
 // Drop & rest
 void Rate::Delay() {

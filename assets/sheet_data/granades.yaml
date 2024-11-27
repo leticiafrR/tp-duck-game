@@ -1,0 +1,10 @@
+granade:
+  - { x: 1, y: 21, w: 16, h: 16 }
+granade_unlock:
+  - { x: 17, y: 21, w: 16, h: 16 }
+
+banana:
+  - { x: 1, y: 51, w: 16, h: 16 }
+banana_floor:
+  - { x: 1, y: 67, w: 16, h: 16 }
+
