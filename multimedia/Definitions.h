@@ -3,10 +3,10 @@
 
 #include <functional>
 
-#define TEXTURE_PATH "../assets/sprites/"
-#define SHEET_DATA_PATH "../assets/sheet_data/"
-#define FONT_PATH "../assets/fonts/"
-#define AUDIO_PATH "../assets/audio/"
+#define TEXTURE_PATH "/var/duckGame_g6/assets/sprites/"
+#define SHEET_DATA_PATH "/var/duckGame_g6/assets/sheet_data/"
+#define FONT_PATH "/var/duckGame_g6/assets/fonts/"
+#define AUDIO_PATH "/var/duckGame_g6/assets/audio/"
 
 using Callback = std::function<void()>;
 template <typename T>

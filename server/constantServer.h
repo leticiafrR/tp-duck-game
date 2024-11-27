@@ -88,7 +88,7 @@ const int HIPER_INDEX = 4;
 
 
 /***********************************PATHS**************************************** */
-const std::string WEAPONS_PATH = "../config/weaponConfig.yaml";
-const std::string MATCH_PATH = "../config/matchConfig.yaml";
-const std::string DUCK_PATH = "../config/duckConfig.yaml";
+const std::string WEAPONS_PATH = "/etc/duckGame_g6/weaponConfig.yaml";
+const std::string MATCH_PATH = "/etc/duckGame_g6/matchConfig.yaml";
+const std::string DUCK_PATH = "/etc/duckGame_g6/duckConfig.yaml";
 #endif
