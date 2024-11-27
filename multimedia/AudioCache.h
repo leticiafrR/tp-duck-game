@@ -25,32 +25,10 @@ public:
     AudioCache() = delete;
     ~AudioCache() = delete;
 
-    static Chunk& GetSFXData(const string& filename) {
-        auto it = sfxCache.find(filename);
-        if (it != sfxCache.end()) {
-            return it->second;
-        }
+    static Chunk& GetSFXData(const string& filename);
+    static Music& GetMusicData(const string& filename);
 
-        sfxCache.emplace(filename, Chunk(AUDIO_PATH + filename));
-        return sfxCache.at(filename);
-    }
-
-    static Music& GetMusicData(const string& filename) {
-        auto it = musicCache.find(filename);
-        if (it != musicCache.end()) {
-            return it->second;
-        }
-
-        musicCache.emplace(filename, Music(AUDIO_PATH + filename));
-        return musicCache.at(filename);
-    }
-
-    static void Clear() {
-        sfxCache.clear();
-        musicCache.clear();
-    }
+    static void Clear();
 };
-map<string, Chunk> AudioCache::sfxCache;
-map<string, Music> AudioCache::musicCache;
 
 #endif

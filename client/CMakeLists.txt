@@ -3,6 +3,17 @@ target_sources(taller_client
     # .cpp files
     tweening/Tween.cpp
 
+    gameplay/CameraController.cpp
+    gameplay/Animator.cpp
+    gameplay/Gameplay.cpp
+    gameplay/GameplayGUI.cpp
+
+    #rendering/SpriteRendererData.cpp
+    rendering/DuckClientRenderer.cpp
+    #rendering/BulletRenderer.cpp
+    #rendering/CollectableRenderer.cpp
+    #rendering/HandItemRenderer.cpp
+
     main.cpp
     network/ClientProtocol.cpp
 
