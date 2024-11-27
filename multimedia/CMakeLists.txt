@@ -5,6 +5,7 @@ target_sources(taller_multimedia
     Camera.cpp
     GraphicUI.cpp
     SheetDataCache.cpp
+    FontCache.cpp
     
     PUBLIC
     # .h files

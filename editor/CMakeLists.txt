@@ -3,7 +3,13 @@ target_sources(taller_editor
     # .cpp files
     main.cpp
     mapEditor.cpp
+    MenuScreen.cpp
+    LevelsScreen.cpp
+    LevelWidget.cpp
     PUBLIC
     # .h files
     mapEditor.h
+    LevelsScreen.h
+    MenuScreen.h
+    LevelWidget.h
     )

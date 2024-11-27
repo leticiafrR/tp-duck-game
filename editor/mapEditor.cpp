@@ -38,7 +38,7 @@ void MapEditor::AddFileName(const std::string& _fileName) {
 void MapEditor::AddAPlataform(const float& x, const float& y, const float& w, const float& h,
                               const std::vector<std::string>& edges) {
 
-    if (w >= MINIMUN_SIZE || h >= MINIMUN_SIZE) {
+    if (w >= MINIMUN_SIZE && h >= MINIMUN_SIZE) {
         YAML::Node platform = YAML::Node(YAML::NodeType::Map);
         platform[X_STR] = x;
         platform[Y_STR] = y;

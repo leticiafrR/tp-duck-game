@@ -62,17 +62,23 @@ Si ya estás en el directorio build, simplemente ejecuta:
   * Espaciadora: Saltar.
 * A continuación se irán repitiendo games hasta que haya un jugador ganador de toda la partida según el criterio establecido por la cátedra.
 
-## Requerimientos faltantes  a fecha 23/11/24
+## Requerimientos faltantes  a fecha 26/11/24
+1. Los spawn places para las armas/armaduras/cascos (items colectables)
+2. Fisical weapons
+3. Habilidad de los patos para recoger/dejar items de/en el mundo del juego.
+4. Implementar las últimas correcciones que nos hizo (
+   * separar codigo de archivos .h,
+   * no incluir código en constructores,
+   * instalador debe hacer que se pueda correr el juego desde cualquier parte,
+   * organizar en carpetas los archivos,
+   * volver a métodos de los hilos de comunicación las partes de binding
+6. Los tres archivos de documentación(técnica, de usuario, etc).
+7. El cierre ordenado del cliente frente a la desconexión del  servidor.
+8. No se incluyó nada relativo al editor de niveles,
+9. El cierre ordenado del cliente frente a la desconexión del  servidor.
+10. Falta poder aletear.
+11. Falta incluir en el modelo del mundo en el juego las cajas
+12. cheats.
+13. unit tests.
 
-* Falta incluir en el modelo del mundo en el juego las cajas y los spawn places para las armas/armaduras/cascos (items colectables), por lo cual los patos no pueden recoger/dejar items de/en el mundo del juego, entonces inicialmente ya tienen una arma en la mano (pistola cowboy).
-* Falta las funcionalidades de tirarse al suelo y aletear. 
-
-* Falta mostrar entre cada grupo de games un marcador con las rondas ganadas por cada participante.
-
-* No se incluyó nada relativo al editor de niveles, cheats ni Unit tests.
-
-## ¿Qué sabemos de antemano que está mal?
-* El cierre ordenado del sevridor.
-* El cierre ordenado del cliente frente a la desconexión del  servidor.
-* Frente a la desconexión de un jugador partície de una partida ya iniciada no se está sacando del modelo al duck del mismo.
 

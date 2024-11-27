@@ -173,9 +173,9 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     }
     // collectableSpawns
     uint8_t numberSpawns = (uint8_t)snapshot.collectableSpawns.size();
-    assistant.sendNumber(numberDespawns);
+    assistant.sendNumber(numberSpawns);
     for (int i = 0; i < numberSpawns; i++) {
-        assistant.sendNumber(snapshot.collectableSpawns[i].id);
+        assistant.sendNumber((uint32_t)snapshot.collectableSpawns[i].id);
         assistant.sendVector2D(snapshot.collectableSpawns[i].position);
         assistant.sendNumber((uint8_t)snapshot.collectableSpawns[i].type);
     }

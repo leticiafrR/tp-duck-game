@@ -90,9 +90,18 @@ public:
     Transform& GetTransform() { return spr.GetTransform(); }
 
     void OnCuack() {
+        AudioManager::GetInstance().PlayCuackSFX();
         cuack = true;
-        cuackTimer = Timer(0.15f, [this]() { cuack = false; });
-        AudioManager::GetInstance().PlayDamagedSFX();
+        cuackTimer = Timer(0.2f, [this]() {
+            cuack = false;
+
+            string currentAnim = anim.GetTarget();
+            size_t pos = currentAnim.find("_cuack");
+            if (pos != std::string::npos) {
+                currentAnim.erase(pos);
+                anim.SetTarget(currentAnim);
+            }
+        });
         cuackTimer.Start();
     }
 
