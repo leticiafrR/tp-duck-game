@@ -3,6 +3,7 @@
 #include "../Duck.h"
 #include "../collectable/CollectablesController.h"
 #include "../projectile/ProjectilesController.h"
+
 EventsManager::EventsManager():
         playerListener(playerEvents),
         instantProjectileListener(instantProjectileEvents),

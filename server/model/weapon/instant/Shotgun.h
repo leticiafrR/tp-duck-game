@@ -10,33 +10,10 @@ private:
     bool ammoLoaded;
 
 public:
-    Shotgun(ProjectilesController& controller, const Transform& initialSpace, const Config& conf):
-            InstantWeapon(controller, initialSpace, conf.getShotgunScope(),
-                          AMMO_WITH_RELOAD(conf.getShotgunAmmo()), conf.getDamageShort(),
-                          conf.getLongDispersion(), conf.getCooldownBasic(),
-                          TypeProjectile::BULLET),
-            ammoLoaded(true) {}
-
-
-    void BeCollected(TypeCollectable& collectorTypeRef) override {
-        collectorTypeRef = TypeCollectable::SHOTGUN;
-    }
-
-    void Shoot(Duck* shooter) override {
-        if (ammoLoaded) {
-            shooter->StartShooting();
-            for (int i = 0; i < 6; i++) {
-                InstantProjectile* projectile = new InstantProjectile(
-                        shooter->GetTransform().GetPos(), GetShootingDirection(shooter), scope,
-                        damage, typeProjectile, l);
-                projectilesController.RelaseProjectile(projectile);
-            }
-            ammoLoaded = false;
-        } else {
-            ammoLoaded = true;
-        }
-    }
-    TypeCollectable GetTypeCollectable() override { return TypeCollectable::SHOTGUN; }
+    Shotgun(ProjectilesController& controller, const Transform& initialSpace, const Config& conf);
+    void BeCollected(TypeCollectable& collectorTypeRef) override;
+    void Shoot(Duck* shooter) override;
+    TypeCollectable GetTypeCollectable() override;
     ~Shotgun() = default;
 };
 

@@ -11,17 +11,9 @@ private:
 
 public:
     CollectableEventListener(std::vector<CollectableID_t>& despawnEvents,
-                             std::vector<CollectableSpawnEventDto>& spawnEvents):
-            despawnEvents(despawnEvents), spawnEvents(spawnEvents) {}
-
-    void DespawnEvent(CollectableID_t idDespawned) {
-        despawnEvents.push_back(idDespawned);
-        // std::cout << "[DespawnEvent] Desaparaciòn detectada del id "<< idDespawned<< std::endl;
-    }
-    void SpawnEvent(const CollectableSpawnEventDto& e) {
-        spawnEvents.push_back(e);
-        // std::cout << "[spawnEvent] aparaciòn detectada del id "<< e.id<<std::endl;
-    }
+                             std::vector<CollectableSpawnEventDto>& spawnEvents);
+    void DespawnEvent(CollectableID_t idDespawned);
+    void SpawnEvent(const CollectableSpawnEventDto& e);
 };
 
 #endif

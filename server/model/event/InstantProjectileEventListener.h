@@ -11,13 +11,9 @@ private:
     std::vector<InstantProjectileEventDto>& events;
 
 public:
-    explicit InstantProjectileEventListener(std::vector<InstantProjectileEventDto>& events):
-            events(events) {}
-
+    explicit InstantProjectileEventListener(std::vector<InstantProjectileEventDto>& events);
     void NewInstantProjectileEvent(TypeProjectile type, const Vector2D& origin,
-                                   const Vector2D& end) {
-        events.emplace_back(type, origin, end);
-    }
+                                   const Vector2D& end);
 };
 
 #endif

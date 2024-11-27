@@ -2,25 +2,12 @@
 #define DUELING_PISTOL_H
 #include "../InstantWeapon.h"
 class DuelingPistol: public InstantWeapon {
-
 public:
     DuelingPistol(ProjectilesController& controller, const Transform& initialSpace,
-                  const Config& conf):
-            InstantWeapon(controller, initialSpace, conf.getDuelingPistolScope(),
-                          conf.getDuelingPistolAmmo(), conf.getDamageLong(),
-                          conf.getSuperDispersion(), conf.getCooldownBasic(),
-                          TypeProjectile::BULLET) {}
-
-
-    void BeCollected(TypeCollectable& collectorTypeRef) override {
-        collectorTypeRef = TypeCollectable::DUELING_PISTOL;
-    }
-
-    bool Use(Duck* shooter) override {
-        shooter->StartShooting();
-        return InstantWeapon::Use(shooter);
-    }
-    TypeCollectable GetTypeCollectable() override { return TypeCollectable::DUELING_PISTOL; }
+                  const Config& conf);
+    void BeCollected(TypeCollectable& collectorTypeRef) override;
+    bool Use(Duck* shooter) override;
+    TypeCollectable GetTypeCollectable() override;
 };
 
 #endif

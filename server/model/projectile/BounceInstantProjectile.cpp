@@ -1,5 +1,7 @@
 #include "BounceInstantProjectile.h"
 
+#include "../Duck.h"
+
 BounceInstantProjectile::BounceInstantProjectile(const Vector2D& origin, const Vector2D& direction,
                                                  float scope, uint8_t damage, TypeProjectile type,
                                                  InstantProjectileEventListener* l):

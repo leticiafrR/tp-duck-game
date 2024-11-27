@@ -23,8 +23,4 @@ public:
     virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) = 0;
 };
 
-// class PhysicalProjectile: public Projectile{
-//     //bananas y granadas
-// };
-
 #endif

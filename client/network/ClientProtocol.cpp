@@ -199,7 +199,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     uint8_t numberSpawns = assistant.receiveNumberOneByte();
     if (numberSpawns != 0) {
         std::cout << "[ClientProtocol]:Server has send us " << (int)numberSpawns
-                << "  number of spawn dtos\n";
+                  << "  number of spawn dtos\n";
     }
 
     std::vector<CollectableSpawnEventDto> _collectableSpawns((size_t)numberSpawns);

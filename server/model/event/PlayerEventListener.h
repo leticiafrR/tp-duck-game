@@ -10,10 +10,8 @@ private:
     std::unordered_map<PlayerID_t, PlayerEvent>& events;
 
 public:
-    explicit PlayerEventListener(std::unordered_map<PlayerID_t, PlayerEvent>& events):
-            events(events) {}
-
-    void NewPlayerEvent(PlayerID_t sourceID, PlayerEvent event) { events[sourceID] = event; }
+    explicit PlayerEventListener(std::unordered_map<PlayerID_t, PlayerEvent>& events);
+    void NewPlayerEvent(PlayerID_t sourceID, PlayerEvent event);
 };
 
 #endif

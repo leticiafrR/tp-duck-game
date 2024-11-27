@@ -1,4 +1,3 @@
-
 #ifndef BOUNCE_INSTANT_PROJECTILE_H
 #define BOUNCE_INSTANT_PROJECTILE_H
 #include <cmath>

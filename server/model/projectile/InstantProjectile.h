@@ -4,15 +4,15 @@
 #include <unordered_map>
 #include <utility>
 
-#include "../Duck.h"
 #include "../event/InstantProjectileEventListener.h"
 #include "../map/staticMap.h"
 #include "common/Vector2D.h"
-#include "data/snapshot.h"
 
 #include "Projectile.h"
 
 enum TypeProjectile;
+class Duck;
+
 class InstantProjectile: public Projectile {
 protected:
     Vector2D rayOrigin;
@@ -21,48 +21,15 @@ protected:
     uint8_t damage;
     InstantProjectileEventListener* l;
 
-    void CheckCollisionWithMap(const StaticMap& map) {
-        std::optional<std::pair<float, bool>> maybeInfoCollision =
-                map.CheckCollisionRay(rayOrigin, rayDirection, rayLenght);
-        if (maybeInfoCollision.has_value()) {
-            rayLenght = maybeInfoCollision.value().first;
-        }
-    }
-
-    void CheckCollisionWithDuck(Duck* duck) {
-        if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
-            duck->HandleReceiveDamage(damage);
-        }
-    }
+    void CheckCollisionWithMap(const StaticMap& map);
+    void CheckCollisionWithDuck(Duck* duck);
 
 public:
     InstantProjectile(const Vector2D& shooterPos, const Vector2D& direction, float scope,
-                      uint8_t damage, TypeProjectile type, InstantProjectileEventListener* l):
-            Projectile(type),
-            rayOrigin(shooterPos),
-            rayDirection(direction),
-            rayLenght(scope),
-            damage(damage),
-            l(l) {}
+                      uint8_t damage, TypeProjectile type, InstantProjectileEventListener* l);
 
-    void RegistListener(InstantProjectileEventListener* listener) { l = listener; }
-
+    void RegistListener(InstantProjectileEventListener* listener);
     virtual void Update(const StaticMap& map,
-                        std::unordered_map<PlayerID_t, Duck*>& players) override {
-
-        CheckCollisionWithMap(map);
-        for (const auto& pair: players) {
-            CheckCollisionWithDuck(pair.second);
-        }
-        l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
-        MarkAsDead();
-    }
-
-    std::string ToString() const {
-        std::string rayLenghtStr =
-                (std::ostringstream() << std::fixed << std::setprecision(2) << rayLenght).str();
-        return "Origen: " + rayOrigin.ToString() + "\nDirecciòn: " + rayDirection.ToString() +
-               "\nLARGO: " + rayLenghtStr + "\n\n";
-    }
+                        std::unordered_map<PlayerID_t, Duck*>& players) override;
 };
 #endif
