@@ -8,11 +8,11 @@ target_sources(taller_client
     gameplay/Gameplay.cpp
     gameplay/GameplayGUI.cpp
 
-    #rendering/SpriteRendererData.cpp
+    rendering/SpriteRendererData.cpp
     rendering/DuckClientRenderer.cpp
-    #rendering/BulletRenderer.cpp
-    #rendering/CollectableRenderer.cpp
-    #rendering/HandItemRenderer.cpp
+    rendering/BulletRenderer.cpp
+    rendering/CollectableRenderer.cpp
+    rendering/HandItemRenderer.cpp
 
     main.cpp
     network/ClientProtocol.cpp
