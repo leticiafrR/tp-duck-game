@@ -26,18 +26,18 @@ void LevelsScreen::OnSelectLevelPressed(const std::string& name) {
 
 void LevelsScreen::ReadAvaiableLevels() {
     std::cout << "Read avaible" << std::endl;
-    YAML::Node config = YAML::LoadFile("../config/availableLevelsPath.yaml");
-    auto platformsList = config[PLATFORMS_STR];
+    YAML::Node config = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
+    auto platformsList = config[AVAILABLE_LEVELS_STR];
     std::vector<std::string> allPlatformsNames;
     widgets.clear();
     Vector2D initialPos(0, -400);
     int moveDelta = 130;
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
-        for (char c: (RELATIVE_LEVEL_PATH + YAML_FILE)) {
+        /*for (char c: (RELATIVE_LEVEL_PATH + YAML_FILE)) {
             platformName.erase(std::remove(platformName.begin(), platformName.end(), c),
-                               platformName.end());
-        }
+                               platformName.end());        }*/
+        std::cout << platformName << std::endl;
         allPlatformsNames.emplace_back(platformName);
     }
 
