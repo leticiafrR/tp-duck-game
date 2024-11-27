@@ -27,7 +27,6 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
         itemOnHand(nullptr),
-        // itemOnHand(new Shotgun(p, mySpace, conf)),
         typeOnHand(TypeCollectable::EMPTY) {}
 
 void Duck::TriggerEvent(bool cuack) {
@@ -177,6 +176,7 @@ void Duck::TryCollect(CollectablesController& c) {
     std::cout << "you'll try to collect an item\n";
     if (!itemOnHand) {
         itemOnHand = c.PickCollectable(mySpace, typeOnHand);
+        TriggerEvent();
         std::cout << "[duck]: collected!\n";
     }
 }
@@ -185,6 +185,7 @@ void Duck::TryDrop(CollectablesController& c) {
         c.Drop(itemOnHand, mySpace.GetPos());
         itemOnHand = nullptr;
         typeOnHand = TypeCollectable::EMPTY;
+        TriggerEvent();
         std::cout << "[duck]: efectivamente soltado\n";
     }
 }
