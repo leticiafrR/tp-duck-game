@@ -24,7 +24,6 @@ target_sources(taller_client
     tweening/Tween.h
     tweening/TweenManager.h
 
-    utils/SDLExtension.h
     utils/Timer.h
 
     gameplay/CameraController.h

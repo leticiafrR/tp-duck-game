@@ -1,7 +1,7 @@
 #include "setLevelName.h"
 
-#include "client/SDLExtension.h"
 #include "editor/constantsEditor.h"
+#include "multimedia/KeyboardExtension.h"
 
 #include "constants.h"
 void SetLevelName::TakeInput() {

@@ -8,7 +8,8 @@ target_sources(taller_multimedia
     Object2D.cpp
     AudioCache.cpp
     FontCache.cpp
-    
+    KeyboardExtension.cpp
+
     PUBLIC
     # .h files
     AudioCache.h
@@ -17,6 +18,7 @@ target_sources(taller_multimedia
     ButtonsManager.h
     Camera.h
     ColorExtension.h
+    KeyboardExtension.h
     Definitions.h
     FontCache.h
     GraphicUI.h
@@ -29,5 +31,5 @@ target_sources(taller_multimedia
     SheetDataCache.h
     Text.h
     TextureCache.h
-
+    SDLExtendion.h
     )

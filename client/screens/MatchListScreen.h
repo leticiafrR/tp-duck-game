@@ -8,7 +8,6 @@
 
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
-#include "client/utils/SDLExtension.h"
 #include "data/networkMsg.h"
 #include "multimedia/Button.h"
 #include "multimedia/ButtonsManager.h"

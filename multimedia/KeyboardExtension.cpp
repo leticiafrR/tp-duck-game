@@ -1,21 +1,4 @@
-#ifndef SDL_EXTENSION_H
-#define SDL_EXTENSION_H
-
-#include <unordered_set>
-
-#include <SDL2/SDL.h>
-#include <SDL2pp/SDL2pp.hh>
-class SDLExtension {
-private:
-    static std::unordered_set<SDL_Keycode> SpecialKeys;
-    static std::unordered_set<SDL_Keycode> AlphaNumericKeys;
-
-public:
-    static bool IsSpecialKey(SDL_Keycode key) { return SpecialKeys.find(key) != SpecialKeys.end(); }
-    static bool IsAlphaNumeric(SDL_Keycode key) {
-        return AlphaNumericKeys.find(key) != AlphaNumericKeys.end();
-    }
-};
+#include "KeyboardExtension.h"
 
 std::unordered_set<SDL_Keycode> SDLExtension::AlphaNumericKeys = {
         SDLK_q, SDLK_w, SDLK_e, SDLK_r, SDLK_t, SDLK_y, SDLK_u, SDLK_i, SDLK_o,
@@ -32,4 +15,10 @@ std::unordered_set<SDL_Keycode> SDLExtension::SpecialKeys = {
         SDLK_KP_3,      SDLK_KP_4,     SDLK_KP_5,      SDLK_KP_6,      SDLK_KP_7,
         SDLK_KP_8,      SDLK_KP_9,     SDLK_KP_PLUS,   SDLK_KP_MINUS,  SDLK_KP_MULTIPLY,
         SDLK_KP_DIVIDE, SDLK_KP_ENTER, SDLK_KP_PERIOD, SDLK_KP_EQUALS, SDLK_NUMLOCKCLEAR};
-#endif
+
+bool SDLExtension::IsSpecialKey(SDL_Keycode key) {
+    return SpecialKeys.find(key) != SpecialKeys.end();
+}
+bool SDLExtension::IsAlphaNumeric(SDL_Keycode key) {
+    return AlphaNumericKeys.find(key) != AlphaNumericKeys.end();
+}
