@@ -6,7 +6,7 @@ CollectableSpawner::CollectableSpawner(const Vector2D& pos,
                                        ProjectilesController& projectilesController,
                                        const Config& conf):
         timeToRespawn(3),
-        timer(0),
+        timer(std::make_shared<float>(0)),
         spawnPlace(pos, Vector2D(COLLECTABLE_SIZE, COLLECTABLE_SIZE)),
         projectilesController(projectilesController),
         conf(conf) {}
@@ -46,9 +46,9 @@ Collectable* CollectableSpawner::GetCollectable(TypeCollectable type) {
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {
-    if (timer < timeToRespawn && timer + deltaTime >= timeToRespawn) {
+    if ((*timer) < timeToRespawn && (*timer) + deltaTime >= timeToRespawn) {
         Collectable* obj = GetCollectable(GetRandomTypeCollectable());
-        collectables.SpawnCollectable(obj, &timer);
+        collectables.SpawnCollectable(obj, timer);
     }
-    timer += deltaTime;
+    (*timer) += deltaTime;
 }

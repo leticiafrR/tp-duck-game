@@ -1,6 +1,7 @@
 #ifndef COLLECTABLE_SPAWNER_H
 #define COLLECTABLE_SPAWNER_H
 #include <ctime>
+#include <memory>
 #include <random>
 
 #include "common/Vector2D.h"
@@ -11,7 +12,7 @@ class Collectables;
 class CollectableSpawner {
 private:
     const float timeToRespawn;
-    float timer;
+    std::shared_ptr<float> timer;
     const Transform spawnPlace;
     ProjectilesController& projectilesController;
     const Config& conf;
@@ -23,9 +24,6 @@ public:
     CollectableSpawner(const Vector2D& pos, ProjectilesController& projectilesController,
                        const Config& conf);
     void Update(float deltaTime, Collectables& collectables);
-
-    // CollectableSpawner(CollectableSpawner&&) = delete;
-    // CollectableSpawner& operator=(CollectableSpawner&&) = delete;
 };
 
 #endif

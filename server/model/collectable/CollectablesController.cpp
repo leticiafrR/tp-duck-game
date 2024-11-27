@@ -16,7 +16,7 @@ Collectable* CollectablesController::TryCollect(const Transform& collectorSpace,
 
 void CollectablesController::Drop(Collectable* obj, const Vector2D& position) {
     obj->BeDropped(position);
-    collectables.SpawnCollectable(obj, nullptr);
+    collectables.SpawnCollectable(obj);
 }
 
 void CollectablesController::RegisterListener(CollectableEventListener* collectableListener) {

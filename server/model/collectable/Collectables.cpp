@@ -11,7 +11,7 @@ void Collectables::DespawnCollectable(CollectableID_t idDespawn) {
     listener->DespawnEvent(idDespawn);
 }
 
-void Collectables::SpawnCollectable(Collectable* obj, float* sourceTimer) {
+void Collectables::SpawnCollectable(Collectable* obj, std::shared_ptr<float> sourceTimer) {
 
     collectablesWrapps[unicID] = CollectableWrapper(obj, sourceTimer);
     listener->SpawnEvent(CollectableSpawnEventDto(unicID, obj->GetTransform().GetPos(),
