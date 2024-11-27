@@ -3,7 +3,9 @@
 
 #include <functional>
 
-using OnCompleteCallback = std::function<void()>;
+#include "multimedia/Definitions.h"
+
+using OnCompleteCallback = Callback;
 
 enum class LoopType { Restart, Yoyo };
 

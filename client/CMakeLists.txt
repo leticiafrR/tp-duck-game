@@ -1,7 +1,12 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
+    tweening/ImageTween.cpp
+    tweening/TransformTween.cpp
     tweening/Tween.cpp
+    tweening/TweenManager.cpp
+
+    utils/Timer.cpp
 
     gameplay/CameraController.cpp
     gameplay/Animator.cpp
@@ -13,6 +18,16 @@ target_sources(taller_client
     rendering/BulletRenderer.cpp
     rendering/CollectableRenderer.cpp
     rendering/HandItemRenderer.cpp
+
+    screens/MenuScreen.cpp
+    screens/LoadingScreen.cpp
+    screens/MatchListScreen.cpp
+    screens/LobbyScreen.cpp
+    screens/LobbyItemWidget.cpp
+    screens/ControlsScreen.cpp
+    screens/GameStatusScreen.cpp
+    screens/PlayersCountSelection.cpp
+    screens/ShowColorsScreen.cpp
 
     main.cpp
     network/ClientProtocol.cpp

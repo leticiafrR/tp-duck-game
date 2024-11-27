@@ -5,6 +5,7 @@
 #include "client/network/Client.h"
 #include "client/tweening/TweenManager.h"
 #include "data/networkMsg.h"
+#include "multimedia/AudioManager.h"
 #include "multimedia/ButtonsManager.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
@@ -25,99 +26,11 @@ private:
     bool waitingToStart = false;
 
 public:
-    LobbyScreen(Camera& cam, Client& client, bool isOwner):
-            cam(cam), client(client), isOwner(isOwner) {}
+    LobbyScreen(Camera& cam, Client& client, bool isOwner);
 
-    template <typename NetworkMsgDerivedClass>
-    bool GetServerMsg(Client& client, std::shared_ptr<NetworkMsgDerivedClass>& concretPtr) {
-        shared_ptr<NetworkMsg> msg;
-        if (client.TryRecvNetworkMsg(msg)) {
-            concretPtr = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
-            return true;
-        }
-        return false;
-    }
+    ~LobbyScreen();
 
-    std::shared_ptr<MatchStartDto> Render() {
-        running = true;
-        Button startButton(
-                "button_1.png",
-                RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this, &startButton]() {
-                    AudioManager::GetInstance().PlayButtonSFX();
-
-                    client.StartMatch();
-                    bool startSuccess;
-                    startButton.SetInteractable(false);
-                    std::cout << "Start match!\n";
-                    LoadingScreen loading(cam, [this, &startSuccess]() {
-                        std::shared_ptr<ResultStartingMatch> startResult = nullptr;
-                        if (GetServerMsg(client, startResult)) {
-                            startSuccess = startResult->success;
-                            return true;
-                        }
-                        return false;
-                    });
-                    loading.Run("Waiting for server", true);
-
-                    if (!startSuccess) {
-                        startButton.SetInteractable(true);
-                    } else {
-                        waitingToStart = true;
-                    }
-                },
-                Color(40, 40, 40), 4);
-
-        Text startButtonText("START", 20,
-                             RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                                           Vector2D(0.5, 0.5)),
-                             ColorExtension::White(), 5);
-
-        Text waitingTest("Waiting the host to start the match", 45,
-                         RectTransform(Vector2D(0, 0), Vector2D(800, 150), Vector2D(0.5, 0.5),
-                                       Vector2D(0.5, 0.5)),
-                         ColorExtension::White(), 5);
-
-        if (!isOwner) {
-            waitingToStart = true;
-            startButton.SetVisible(false);
-            startButtonText.SetVisible(false);
-        }
-
-        waitingTest.SetVisible(!isOwner);
-
-        while (running) {
-            cam.Clean();
-            SDL_Event event;
-
-            while (SDL_PollEvent(&event)) {
-                switch (event.type) {
-                    case SDL_QUIT:
-                        exit(0);
-                        break;
-                }
-
-                ButtonsManager::GetInstance().HandleEvent(event, cam);
-            }
-
-            if (waitingToStart) {
-                std::shared_ptr<MatchStartDto> matchStart = nullptr;
-                if (GetServerMsg(client, matchStart)) {
-                    return matchStart;
-                }
-            }
-
-            GUIManager::GetInstance().Draw(cam);
-            TweenManager::GetInstance().Update(cam.GetRateDeltatime());
-
-            cam.Render();
-            SDL_Delay(cam.GetRateMiliseconds());
-        }
-        return nullptr;
-    }
-
-    ~LobbyScreen() = default;
+    std::shared_ptr<MatchStartDto> Render();
 };
 
 #endif

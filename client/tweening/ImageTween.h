@@ -19,19 +19,13 @@ private:
 
 public:
     ImageTween(
-            Image& img, Color targetColor, float duration, OnCompleteCallback onComplete = []() {}):
-            Tween(duration, onComplete),
-            img(img),
-            startColor(img.GetColor()),
-            targetColor(targetColor) {}
+            Image& img, Color targetColor, float duration, OnCompleteCallback onComplete = []() {});
 
-    void OnInitLoop() override {}
+    void OnInitLoop() override;
 
-    void DoTween(float t) override {
-        img.SetColor(ColorExtension::Lerp(startColor, targetColor, t));
-    }
+    void DoTween(float t) override;
 
-    ~ImageTween() = default;
+    ~ImageTween();
 };
 
 #endif

@@ -3,34 +3,27 @@
 
 #include <functional>
 
-using OnTimerCallback = std::function<void()>;
+#include "multimedia/Definitions.h"
 
 class Timer {
 private:
     float duration;
-    OnTimerCallback onTime;
+    Callback onTime;
     float timer;
     bool running;
 
 public:
-    Timer(): duration(0), timer(0), running(false) {}
-    Timer(float duration, OnTimerCallback onTime):
-            duration(duration), onTime(onTime), timer(duration), running(false) {}
-    ~Timer() = default;
+    Timer();
 
-    void Start() { running = true; }
+    Timer(float duration, Callback onTime);
 
-    void Stop() { running = false; }
+    ~Timer();
 
-    void Update(float deltaTime) {
-        if (!running)
-            return;
-        timer -= deltaTime;
-        if (timer <= 0) {
-            onTime();
-            running = false;
-        }
-    }
+    void Start();
+
+    void Stop();
+
+    void Update(float deltaTime);
 };
 
 #endif
