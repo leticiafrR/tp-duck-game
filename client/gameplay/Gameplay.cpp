@@ -312,6 +312,8 @@ void Gameplay::Run(bool isInitial) {
         ShowColorsScreen(cam, players).Run([this]() { DrawGameWorld(); });
     }
 
+    cam.InitRate();
+
     while (running) {
         cam.Clean();
 
@@ -327,6 +329,8 @@ void Gameplay::Run(bool isInitial) {
 
         cam.Render();
 
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
+
+        // SDL_Delay(cam.GetRateMiliseconds());
     }
 }

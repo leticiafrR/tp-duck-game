@@ -44,6 +44,7 @@ string LevelsScreen::Render(bool lockerOnly) {
              ColorExtension::White(), 0);
 
     bg.SetVisible(!lockerOnly);
+    cam.InitRate();
     while (running) {
         cam.Clean();
         SDL_Event event;
@@ -62,7 +63,7 @@ string LevelsScreen::Render(bool lockerOnly) {
 
         GUIManager::GetInstance().Draw(cam);
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
     return selectedLvl;
 }

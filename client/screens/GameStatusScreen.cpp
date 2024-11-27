@@ -63,6 +63,7 @@ void GameStatusScreen::Run() {
     if (!btnBack.GetVisible()) {
         timer.Start();
     }
+    cam.InitRate();
 
     while (running) {
         cam.Clean();
@@ -80,6 +81,6 @@ void GameStatusScreen::Run() {
         timer.Update(cam.GetRateDeltatime());
         GUIManager::GetInstance().Draw(cam);
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 }

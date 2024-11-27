@@ -87,6 +87,7 @@ string SetLevelName::Render() {
     // textTween.SetLoops(-1, LoopType::Yoyo);
     // btnTween.Play();
     // textTween.Play();
+    cam.InitRate();
 
     while (running) {
         cam.Clean();
@@ -103,7 +104,7 @@ string SetLevelName::Render() {
         // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 
     return nicknameInput;

@@ -54,6 +54,8 @@ std::shared_ptr<MatchStartDto> LobbyScreen::Render() {
 
     waitingTest.SetVisible(!isOwner);
 
+    cam.InitRate();
+
     while (running) {
         cam.Clean();
         SDL_Event event;
@@ -79,7 +81,7 @@ std::shared_ptr<MatchStartDto> LobbyScreen::Render() {
         TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
     return nullptr;
 }

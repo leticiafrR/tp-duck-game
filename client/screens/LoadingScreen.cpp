@@ -15,6 +15,8 @@ void LoadingScreen::Run(const string& text, bool lockerOnly) {
     bg.SetVisible(!lockerOnly);
     bg.SetVisible(!lockerOnly);
 
+    cam.InitRate();
+
     while (true) {
         cam.Clean();
         SDL_Event event;
@@ -33,6 +35,6 @@ void LoadingScreen::Run(const string& text, bool lockerOnly) {
 
         GUIManager::GetInstance().Draw(cam);
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 }

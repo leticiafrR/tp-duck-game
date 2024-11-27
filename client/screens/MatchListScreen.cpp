@@ -151,6 +151,8 @@ bool MatchListScreen::Render() {
     // Get the first available lobbies
     WaitRefresh();
 
+    cam.InitRate();
+
     while (running) {
         cam.Clean();
         SDL_Event event;
@@ -173,7 +175,7 @@ bool MatchListScreen::Render() {
         TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 
     return isOwner;

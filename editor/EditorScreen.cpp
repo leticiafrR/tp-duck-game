@@ -71,6 +71,7 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
     }
 }
 bool EditorScreen::Render() {
+    cam.InitRate();
 
     while (running) {
         cam.Clean();
@@ -94,7 +95,7 @@ bool EditorScreen::Render() {
         // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 
     return true;

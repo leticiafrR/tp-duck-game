@@ -15,11 +15,9 @@ Vector2D Camera::GetPos() { return position; }
 void Camera::SetSize(float size) { this->size = size; }
 float Camera::GetSize() { return this->size; }
 
+void Camera::InitRate() { rate.Init(); }
+void Camera::Delay() { rate.Delay(); }
 float Camera::GetRateDeltatime() { return rate.GetDeltaTime(); }
-
-float Camera::GetRateMiliseconds() { return rate.GetMiliseconds(); }
-
-void Camera::Delay() { SDL_Delay(GetRateMiliseconds()); }
 
 void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }
 

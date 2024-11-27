@@ -39,9 +39,8 @@ public:
     void SetSize(float size);
     float GetSize();
 
-
+    void InitRate();
     float GetRateDeltatime();
-    float GetRateMiliseconds();
     void Delay();
 
     void ClearCacheItem(const string& filename);

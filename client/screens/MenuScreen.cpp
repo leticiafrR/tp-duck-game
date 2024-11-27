@@ -88,6 +88,8 @@ string MenuScreen::Render() {
     btnTween.Play();
     textTween.Play();
 
+    cam.InitRate();
+
     while (running) {
         cam.Clean();
 
@@ -103,7 +105,7 @@ string MenuScreen::Render() {
         TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
-        SDL_Delay(cam.GetRateMiliseconds());
+        cam.Delay();
     }
 
     return nicknameInput;

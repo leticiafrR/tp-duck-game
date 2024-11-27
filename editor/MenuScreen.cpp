@@ -41,6 +41,7 @@ MenuScreen::~MenuScreen() {
     cam.ClearCacheItem(DUCK_GAME_LOGO.c_str());
 }
 bool MenuScreen::run() {
+    cam.InitRate();
 
     while (running) {
         SDL_Event event;
