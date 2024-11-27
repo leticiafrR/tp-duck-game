@@ -32,6 +32,7 @@ public:
     explicit LevelsScreen(Camera& cam);
 
     string Render(bool lockerOnly = false);
+    ~LevelsScreen();
 };
 
 #endif

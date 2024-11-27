@@ -14,87 +14,6 @@
 
 const int WEIGHT_SCREEN = 940;
 const int HIGH_SCREEN = 940;
-// Se encarga de crear o guardar los cambios y vectortear el nombre del nivel en la lista
-void NewFile() {
-    MapEditor editor;
-
-    editor.AddFileName("lionelMessi");
-
-    editor.AddPlayerSpawnPoint(0, 8);
-    editor.AddPlayerSpawnPoint(3, 8);
-    std::vector<std::string> edges = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
-    editor.AddAPlataform(0, 0, 8, 8, edges);
-    editor.AddAPlataform(2, 2, 2, 2, edges);
-    editor.AddAPlataform(0, 0, 8, 8, edges);
-    // editor.AddAPlataform(0, 0, 8, 8, t);
-    // editor.AddAPlataform(0, 0, 8, 8, b);
-    // editor.AddAPlataform(0, 0, 8, 8, l);
-    // editor.AddAPlataform(0, 0, 8, 8, r);
-    // editor.AddAPlataform(0, 0, 8, 8, tb);
-    // editor.AddAPlataform(0, 0, 8, 8, tl);
-    // editor.AddAPlataform(0, 0, 8, 8, tr);
-    // editor.AddAPlataform(0, 0, 8, 8, bl);
-    // editor.AddAPlataform(0, 0, 8, 8, br);
-    // editor.AddAPlataform(0, 0, 8, 8, lr);
-    // editor.AddAPlataform(0, 0, 8, 8, tbl);
-    // editor.AddAPlataform(0, 0, 8, 8, tbr);
-    // editor.AddAPlataform(0, 0, 8, 8, tlr);
-    // editor.AddAPlataform(0, 0, 8, 8, blr);
-    editor.SaveChanges();
-}
-
-void EditFile() {
-    MapEditor editor("../config/levels/pepeArgento.yaml");
-
-    editor.AddPlayerSpawnPoint(1, 1);
-    editor.AddPlayerSpawnPoint(0, 0);
-    std::vector<std::string> edges = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
-    editor.AddAPlataform(3, 3, 3, 3, edges);
-    editor.AddAPlataform(4, 4, 4, 4, edges);
-    editor.ModificateAPlataform("platform_0", 8, 8, 8, 8, edges);
-    editor.DeleteAPlataform("platform_1");
-
-    editor.SaveChanges();
-}
-
-void BasicGrounds() {
-    MapEditor editor;
-    editor.AddFileName("bascisGrounds");
-
-    std::vector<std::string> all = {"TOP", "BOTTOM", "LEFT", "RIGHT"};
-    std::vector<std::string> t = {"TOP"};
-    std::vector<std::string> b = {"BOTTOM"};
-    std::vector<std::string> l = {"LEFT"};
-    std::vector<std::string> r = {"RIGHT"};
-    std::vector<std::string> tb = {"TOP", "BOTTOM"};
-    std::vector<std::string> tl = {"TOP", "LEFT"};
-    std::vector<std::string> tr = {"TOP", "RIGHT"};
-    std::vector<std::string> bl = {"BOTTOM", "LEFT"};
-    std::vector<std::string> br = {"BOTTOM", "RIGHT"};
-    std::vector<std::string> lr = {"LEFT", "RIGHT"};
-    std::vector<std::string> tbl = {"TOP", "BOTTOM", "LEFT"};
-    std::vector<std::string> tbr = {"TOP", "BOTTOM", "RIGHT"};
-    std::vector<std::string> tlr = {"TOP", "LEFT", "RIGHT"};
-    std::vector<std::string> blr = {"BOTTOM", "LEFT", "RIGHT"};
-
-    editor.AddAPlataform(0, 0, 8, 8, all);
-    editor.AddAPlataform(0, 0, 8, 8, t);
-    editor.AddAPlataform(0, 0, 8, 8, b);
-    editor.AddAPlataform(0, 0, 8, 8, l);
-    editor.AddAPlataform(0, 0, 8, 8, r);
-    editor.AddAPlataform(0, 0, 8, 8, tb);
-    editor.AddAPlataform(0, 0, 8, 8, tl);
-    editor.AddAPlataform(0, 0, 8, 8, tr);
-    editor.AddAPlataform(0, 0, 8, 8, bl);
-    editor.AddAPlataform(0, 0, 8, 8, br);
-    editor.AddAPlataform(0, 0, 8, 8, lr);
-    editor.AddAPlataform(0, 0, 8, 8, tbl);
-    editor.AddAPlataform(0, 0, 8, 8, tbr);
-    editor.AddAPlataform(0, 0, 8, 8, tlr);
-    editor.AddAPlataform(0, 0, 8, 8, blr);
-
-    editor.SaveChanges();
-}
 
 GroundDto loadPlatforms(const YAML::Node& config, const std::string& platformName) {
 
@@ -141,21 +60,8 @@ std::vector<std::pair<std::string, GroundDto>> ReadBasicPlataforms() {
     return grounds;
 }
 
-void PrintBasicGrounds(std::vector<std::pair<std::string, GroundDto>> gr) {
-    for (const auto& it: gr) {
-        Transform t = it.second.mySpace;
-        Vector2D p = t.GetPos();
-        Vector2D s = t.GetSize();
-        std::cout << "Name: " << it.first << "\nx: " << p.x << ", y: " << p.y << "\nweight: " << s.x
-                  << " ,high: " << s.y << std::endl;
-    }
-}
 int main() {
-    // NewFile();
-    // EditFile();
-    // BasicGrounds();
     // std::vector<std::pair<std::string,GroundDto>> grounds= ReadBasicPlataforms();
-    // PrintBasicGrounds(grounds);
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDLMixer sdlMixer(MIX_INIT_MP3 | MIX_INIT_OGG);
     // AudioManager::GetInstance();
@@ -172,8 +78,7 @@ int main() {
 
     // Create a camera with render, 70 camera size(zoom), and 60fps for framerate
     // The Size(zoom) can be update in runtime with cam.SetSize(float)
-    Camera cam(std::move(render), 70, Rate(60));
-    EditorRunner editor;
-    editor.run(cam);
+    EditorRunner editor(render, 60);
+    editor.run();
     return 0;
 }

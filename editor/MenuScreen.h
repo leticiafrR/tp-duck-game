@@ -24,5 +24,6 @@ class MenuScreen {
 public:
     explicit MenuScreen(Camera& cam);
     bool run();
+    ~MenuScreen();
 };
 #endif

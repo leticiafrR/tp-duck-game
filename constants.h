@@ -46,4 +46,6 @@ const string BUTTON_IMAGE_PATH = "button_0.png";
 const string DUCK_BACKGROUND = "duck_game_bg.jpg";
 const string DUCK_GAME_LOGO = "duck_game_logo.png";
 const string BUTTON_1_IMAGE = "button_1.png";
+const string BLOCK_MAP = "tile_set.png";
+const string BLOCK_MAP_YAML = "tile_set.yaml";
 #endif

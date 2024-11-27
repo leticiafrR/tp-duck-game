@@ -21,6 +21,8 @@ void MapBlock2D::SetBorders(bool left, bool right, bool top, bool bottom) {
     borderBottom = bottom;
 }
 
+Transform& MapBlock2D::GetTransform() { return transform; }
+
 void MapBlock2D::Draw(Camera& cam) {
 
     int n = transform.GetSize().x / tileSize;

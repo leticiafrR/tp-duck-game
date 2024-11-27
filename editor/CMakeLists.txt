@@ -8,6 +8,8 @@ target_sources(taller_editor
     editLevel/LevelWidget.cpp
     createLevel/setLevelName.cpp
     EditorRunner.cpp
+    PlatformOptionWidget.cpp
+    EditorScreen.cpp
     PUBLIC
     # .h files
     mapEditor.h
@@ -16,4 +18,6 @@ target_sources(taller_editor
     editLevel/LevelWidget.h
     createLevel/setLevelName.h 
     EditorRunner.h
+    PlatformOptionWidget.h
+    EditorScreen.h
     )

@@ -32,6 +32,11 @@ void LevelsScreen::ReadAvaiableLevels() {
 }
 
 LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() {}
+LevelsScreen::~LevelsScreen() {
+    cam.ClearCacheItem(DUCK_BACKGROUND.c_str());
+    // cam.ClearCacheItem("duck_game_logo.png");
+}
+
 
 string LevelsScreen::Render(bool lockerOnly) {
     ReadAvaiableLevels();

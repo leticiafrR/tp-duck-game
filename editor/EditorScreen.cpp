@@ -1,0 +1,101 @@
+#include "EditorScreen.h"
+
+#include "client/tweening/TweenManager.h"
+
+#include "constants.h"
+
+GroundDto EditorScreen::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
+
+    auto plats = config[platformName];
+
+    float x = 0, y = 0, w = 0, h = 0;
+    for (auto fl: plats) {
+        std::string key = fl.first.as<std::string>();
+        auto value = fl.second;
+        if (key == X_STR) {
+            x = value.as<float>();
+        } else if (key == Y_STR) {
+            y = value.as<float>();
+        } else if (key == WEIGHT_STR) {
+            w = value.as<float>();
+        } else if (key == HIGH_STR) {
+            h = value.as<float>();
+        }
+    }
+    std::set<VISIBLE_EDGES> edges;
+    for (auto edge: plats[EDGES_STR]) {
+        std::string edgeStr = edge.as<std::string>();
+        if (edgeStr == LEFT_STR)
+            edges.insert(LEFT);
+        else if (edgeStr == RIGHT_STR)
+            edges.insert(RIGHT);
+        else if (edgeStr == TOP_STR)
+            edges.insert(TOP);
+        else if (edgeStr == BOTTOM_STR)
+            edges.insert(BOTTOM);
+    }
+    return GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges);
+}
+
+vector<GroundDto> EditorScreen::ReadBasicPlataforms() {
+    std::vector<GroundDto> grounds;
+    YAML::Node config = YAML::LoadFile(OPTIONS_BLOCKS);
+    auto platformsList = config[PLATFORMS_STR];
+    for (std::size_t i = 0; i < platformsList.size(); ++i) {
+        grounds.emplace_back(loadPlatforms(config, platformsList[i].as<string>()));
+    }
+    return grounds;
+}
+
+EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
+        cam(cam),
+        writer(w),
+        saveButton(
+                "button_1.png",
+                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+                              Vector2D(0.5, 0.5)),
+                [this]() { running = false; }, Color(40, 40, 40), 4),
+        saveButtonText("SAVE", 20,
+                       RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+                                     Vector2D(0.5, 0.5)),
+                       ColorExtension::White(), 5) {
+
+    vector<GroundDto> groundBlocks = ReadBasicPlataforms();
+    Vector2D initialPos(0, -400);
+    int moveDelta = 130;
+
+    for (size_t i = 0; i < groundBlocks.size(); i++) {
+        basicsPlatform.emplace_back(groundBlocks[i],
+                                    [this](vector<string> edges) { edgesSelected = edges; });
+        basicsPlatform.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
+    }
+}
+bool EditorScreen::Render() {
+
+    while (running) {
+        cam.Clean();
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    exit(0);
+                    break;
+                    /*case SDL_MOUSEWHEEL:
+                        Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+                        UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+                        break;*/
+            }
+
+            ButtonsManager::GetInstance().HandleEvent(event, cam);
+        }
+
+        GUIManager::GetInstance().Draw(cam);
+        // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
+
+        cam.Render();
+        SDL_Delay(cam.GetRateMiliseconds());
+    }
+
+    return true;
+}

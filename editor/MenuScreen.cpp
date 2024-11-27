@@ -36,16 +36,10 @@ MenuScreen::MenuScreen(Camera& cam):
                     ColorExtension::White(), 1),
         option(true) {}
 
-/*void MenuScreen::RenderLvlName(){
-    SetLevelName newLvl(cam);
-    option= newLvl.Render();
-    running = false;
+MenuScreen::~MenuScreen() {
+    cam.ClearCacheItem(DUCK_BACKGROUND.c_str());
+    cam.ClearCacheItem(DUCK_GAME_LOGO.c_str());
 }
-void MenuScreen::RenderListLevels() {
-    // bool joinSuccess = false;
-    bool =false
-    running = false;
-}*/
 bool MenuScreen::run() {
 
     while (running) {

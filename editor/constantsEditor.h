@@ -13,4 +13,6 @@ const std::string EDIT_LABEL = "Edit a level";
 
 const std::string SELECT_STR = "Select";
 const std::string ENTER_LVL_NAME = "Write the level name";
+
+const std::string OPTIONS_BLOCKS = "../config/basicsGrounds.yaml";
 #endif

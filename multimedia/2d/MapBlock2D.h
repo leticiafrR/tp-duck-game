@@ -36,6 +36,7 @@ public:
     void SetBottomBorder(bool value);
     void SetLeftBorder(bool value);
     void SetRightBorder(bool value);
+    Transform& GetTransform();
 
     void SetBorders(bool left, bool right, bool top, bool bottom);
 
