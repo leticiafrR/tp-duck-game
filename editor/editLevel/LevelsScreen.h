@@ -8,9 +8,9 @@
 #include <yaml-cpp/yaml.h>
 
 #include "editor/constantsEditor.h"
-#include "multimedia/Button.h"
-#include "multimedia/GUIManager.h"
-#include "multimedia/Text.h"
+#include "multimedia/gui/Button.h"
+#include "multimedia/gui/GUIManager.h"
+#include "multimedia/gui/Text.h"
 
 #include "LevelWidget.h"
 #include "constants.h"

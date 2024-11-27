@@ -6,8 +6,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "Camera.h"
-#include "Definitions.h"
+#include "multimedia/Camera.h"
+#include "multimedia/Definitions.h"
+
 #include "Image.h"
 #include "RectTransform.h"
 

@@ -7,7 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "multimedia/ColorExtension.h"
-#include "multimedia/Image.h"
+#include "multimedia/gui/Image.h"
 
 #include "Tween.h"
 

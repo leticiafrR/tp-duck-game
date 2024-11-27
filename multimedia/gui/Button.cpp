@@ -1,7 +1,8 @@
 #include "Button.h"
 
+#include "multimedia/ColorExtension.h"
+
 #include "ButtonsManager.h"
-#include "ColorExtension.h"
 #include "GUIManager.h"
 
 Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder):

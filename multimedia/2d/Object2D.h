@@ -8,9 +8,8 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common/Transform.h"
-
-#include "Camera.h"
-#include "ColorExtension.h"
+#include "multimedia/Camera.h"
+#include "multimedia/ColorExtension.h"
 
 using SDL2pp::Color;
 using SDL2pp::Rect;

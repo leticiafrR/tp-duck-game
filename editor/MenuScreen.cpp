@@ -3,7 +3,7 @@
 #include "createLevel/setLevelName.h"
 #include "editLevel/LevelsScreen.h"
 #include "editor/constantsEditor.h"
-#include "multimedia/ButtonsManager.h"
+#include "multimedia/gui/ButtonsManager.h"
 
 const int WEIGHT_SCREEN = 940;
 const int HIGH_SCREEN = 940;

@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "multimedia/AudioManager.h"
-#include "multimedia/Button.h"
-#include "multimedia/Image.h"
-#include "multimedia/Text.h"
+#include "multimedia/audio/AudioManager.h"
+#include "multimedia/gui/Button.h"
+#include "multimedia/gui/Image.h"
+#include "multimedia/gui/Text.h"
 
 using std::make_shared;
 using std::shared_ptr;

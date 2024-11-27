@@ -5,14 +5,14 @@
 
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
-#include "multimedia/AudioManager.h"
-#include "multimedia/Button.h"
-#include "multimedia/ButtonsManager.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
-#include "multimedia/GUIManager.h"
 #include "multimedia/KeyboardExtension.h"
-#include "multimedia/Text.h"
+#include "multimedia/audio/AudioManager.h"
+#include "multimedia/gui/Button.h"
+#include "multimedia/gui/ButtonsManager.h"
+#include "multimedia/gui/GUIManager.h"
+#include "multimedia/gui/Text.h"
 
 using std::string;
 

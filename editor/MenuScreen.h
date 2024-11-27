@@ -2,10 +2,10 @@
 #define MENUSCREEN_H
 #include <string>
 
-#include "multimedia/Button.h"
 #include "multimedia/Camera.h"
-#include "multimedia/Image.h"
-#include "multimedia/Text.h"
+#include "multimedia/gui/Button.h"
+#include "multimedia/gui/Image.h"
+#include "multimedia/gui/Text.h"
 
 using std::string;
 class MenuScreen {

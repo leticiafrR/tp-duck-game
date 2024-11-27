@@ -6,9 +6,9 @@
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
-#include "multimedia/GUIManager.h"
-#include "multimedia/Image.h"
-#include "multimedia/Text.h"
+#include "multimedia/gui/GUIManager.h"
+#include "multimedia/gui/Image.h"
+#include "multimedia/gui/Text.h"
 
 class LoadingScreen {
 private:

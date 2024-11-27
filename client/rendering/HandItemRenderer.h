@@ -8,8 +8,8 @@
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
-#include "multimedia/Object2D.h"
-#include "multimedia/SheetDataCache.h"
+#include "multimedia/2d/Object2D.h"
+#include "multimedia/cache/SheetDataCache.h"
 
 #include "SpriteRendererData.h"
 

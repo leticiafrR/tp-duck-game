@@ -1,6 +1,6 @@
 #include "LevelsScreen.h"
 
-#include "multimedia/ButtonsManager.h"
+#include "multimedia/gui/ButtonsManager.h"
 
 /*string LevelsScreen::OnSelectLevelPressed(const std::string& name) {
     // AudioManager::GetInstance().PlayButtonSFX();

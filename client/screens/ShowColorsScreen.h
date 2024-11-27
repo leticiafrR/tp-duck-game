@@ -10,9 +10,9 @@
 #include "client/utils/Timer.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
-#include "multimedia/GUIManager.h"
-#include "multimedia/Image.h"
-#include "multimedia/Text.h"
+#include "multimedia/gui/GUIManager.h"
+#include "multimedia/gui/Image.h"
+#include "multimedia/gui/Text.h"
 
 using std::make_shared;
 using std::shared_ptr;

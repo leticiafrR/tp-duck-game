@@ -9,7 +9,7 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
-#include "Definitions.h"
+#include "multimedia/Definitions.h"
 
 using namespace SDL2pp;  // NOLINT
 using std::map;

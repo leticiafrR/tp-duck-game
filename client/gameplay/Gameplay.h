@@ -18,11 +18,11 @@
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
 #include "common/playerIdentifier.h"
+#include "multimedia/2d/MapBlock2D.h"
+#include "multimedia/2d/Object2D.h"
 #include "multimedia/Definitions.h"
-#include "multimedia/GUIManager.h"
-#include "multimedia/Image.h"
-#include "multimedia/MapBlock2D.h"
-#include "multimedia/Object2D.h"
+#include "multimedia/gui/GUIManager.h"
+#include "multimedia/gui/Image.h"
 
 using std::list;
 using std::set;

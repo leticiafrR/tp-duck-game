@@ -1,35 +1,52 @@
 target_sources(taller_multimedia
     PRIVATE
     # .cpp files
-    Button.cpp
     Camera.cpp
-    GraphicUI.cpp
-    SheetDataCache.cpp
-    Object2D.cpp
-    AudioCache.cpp
-    FontCache.cpp
+    Rate.cpp
     KeyboardExtension.cpp
+    ColorExtension.cpp
+
+    2d/Object2D.cpp
+    2d/MapBlock2D.cpp
+
+    audio/AudioManager.cpp
+    
+    gui/RectTransform.cpp
+    gui/GraphicUI.cpp
+    gui/Text.cpp
+    gui/Image.cpp
+    gui/Button.cpp
+    gui/GUIManager.cpp
+    gui/ButtonsManager.cpp
+
+    cache/TextureCache.cpp
+    cache/AudioCache.cpp
+    cache/FontCache.cpp
+    cache/SheetDataCache.cpp
 
     PUBLIC
     # .h files
-    AudioCache.h
-    AudioManager.h
-    Button.h
-    ButtonsManager.h
     Camera.h
-    ColorExtension.h
-    KeyboardExtension.h
-    Definitions.h
-    FontCache.h
-    GraphicUI.h
-    GUIManager.h
-    Image.h
-    MapBlock2D.h
-    Object2D.h
     Rate.h
-    RectTransform.h
-    SheetDataCache.h
-    Text.h
-    TextureCache.h
-    SDLExtendion.h
+    Definitions.h
+    KeyboardExtension.h
+    ColorExtension.h
+    
+    2d/Object2D.h
+    2d/MapBlock2D.h
+    
+    audio/AudioManager.h
+    
+    gui/RectTransform.h
+    gui/GraphicUI.h
+    gui/Text.h
+    gui/Image.h
+    gui/Button.h
+    gui/GUIManager.h
+    gui/ButtonsManager.h
+
+    cache/TextureCache.h
+    cache/AudioCache.h
+    cache/FontCache.h
+    cache/SheetDataCache.h
     )

@@ -5,8 +5,8 @@
 
 #include "common/Transform.h"
 #include "data/snapshot.h"
+#include "multimedia/2d/Object2D.h"
 #include "multimedia/Camera.h"
-#include "multimedia/Object2D.h"
 
 #include "SpriteRendererData.h"
 

@@ -7,6 +7,22 @@ Camera::Camera(Renderer render, float size, Rate rate):
 
 Camera::~Camera() { textureCache.Clear(); }
 
+void Camera::Clean() { render.Clear(); }
+void Camera::Render() { render.Present(); }
+
+void Camera::SetPos(Vector2D position) { this->position = position; }
+Vector2D Camera::GetPos() { return position; }
+void Camera::SetSize(float size) { this->size = size; }
+float Camera::GetSize() { return this->size; }
+
+float Camera::GetRateDeltatime() { return rate.GetDeltaTime(); }
+
+float Camera::GetRateMiliseconds() { return rate.GetMiliseconds(); }
+
+void Camera::Delay() { SDL_Delay(GetRateMiliseconds()); }
+
+void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }
+
 void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                          const Transform& transform, int flip) {
     Vector2D sprSize = transform.GetSize();
@@ -15,9 +31,7 @@ void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRe
     int screenWidth = render.GetOutputWidth();
     int screenHeight = render.GetOutputHeight();
 
-    // float screenScale = Vector2D(screenWidth, screenHeight).GetMagnitude() / size;
-
-    // Mantiene completamente la relación de aspecto
+    // Keeps aspect ratio
     float screenScale = std::min(static_cast<float>(screenWidth) / size,
                                  static_cast<float>(screenHeight) / size);
 
@@ -88,7 +102,3 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
     return Rect(screenX - (rectSize.x) * rectT.GetPivot().x,
                 screenY - ((rectSize.y) - rectSize.y * rectT.GetPivot().y), rectSize.x, rectSize.y);
 }
-
-void Camera::Render() { render.Present(); }
-
-void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }

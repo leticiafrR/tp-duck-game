@@ -1,5 +1,7 @@
 #include "FontCache.h"
 
+map<string, Font> FontCache::cache;
+
 Font& FontCache::GetData(const string& filename, int fontSize) {
     string key = filename + "_" + std::to_string(fontSize);
 
@@ -13,5 +15,3 @@ Font& FontCache::GetData(const string& filename, int fontSize) {
 }
 
 void FontCache::Clear() { cache.clear(); }
-
-map<string, Font> FontCache::cache;

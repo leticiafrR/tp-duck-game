@@ -11,9 +11,9 @@
 #include "common/Transform.h"
 #include "data/dataTransferObjects.h"
 #include "data/snapshot.h"
-#include "multimedia/AudioManager.h"
+#include "multimedia/2d/Object2D.h"
 #include "multimedia/ColorExtension.h"
-#include "multimedia/Object2D.h"
+#include "multimedia/audio/AudioManager.h"
 
 class DuckClientRenderer {
 private:

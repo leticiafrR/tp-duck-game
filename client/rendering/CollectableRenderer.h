@@ -5,7 +5,7 @@
 
 #include "client/tweening/TransformTween.h"
 #include "data/snapshot.h"
-#include "multimedia/Object2D.h"
+#include "multimedia/2d/Object2D.h"
 
 #include "SpriteRendererData.h"
 

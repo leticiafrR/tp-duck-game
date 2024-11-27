@@ -6,12 +6,12 @@ private:
     int target;
 
 public:
-    explicit Rate(int target): target(target) {}
-    ~Rate() = default;
+    explicit Rate(int target);
+    ~Rate();
 
-    float GetDeltaTime() const { return 1.0f / target; }
+    float GetDeltaTime() const;
 
-    float GetMiliseconds() const { return 1000.0f / target; }
+    float GetMiliseconds() const;
 };
 
 #endif

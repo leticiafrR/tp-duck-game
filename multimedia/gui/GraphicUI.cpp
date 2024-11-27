@@ -1,6 +1,7 @@
 #include "GraphicUI.h"
 
-#include "Camera.h"
+#include "multimedia/Camera.h"
+
 #include "GUIManager.h"
 
 GraphicUI::GraphicUI(const RectTransform& rect, Color color, int layerOrder):
