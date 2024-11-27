@@ -184,11 +184,11 @@ private:
                             client.TrySendRequest(CommandCode::Cuack, 1);
                             break;
                         case SDLK_KP_5:
-                            std::cout << "Numpad 6 KeyDown\n";
+                            std::cout << "Numpad 5 KeyDown\n";
                             client.TrySendRequest(CommandCode::CollectItem, 1);
                             break;
                         case SDLK_KP_6:
-                            std::cout << "Numpad 5 KeyDown\n";
+                            std::cout << "Numpad 6 KeyDown\n";
                             client.TrySendRequest(CommandCode::DropItem, 1);
                             break;
                     }
@@ -272,9 +272,11 @@ private:
             }
 
             for (const auto& it: snapshot->collectableSpawns) {
+                std::cout << "Collectable spawn\n";
                 SpawnCollectable(it);
             }
             for (const auto& it: snapshot->collectableDespawns) {
+                std::cout << "Despawn spawn\n";
                 DespawnCollectable(it);
             }
 

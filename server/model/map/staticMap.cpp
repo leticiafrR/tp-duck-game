@@ -127,8 +127,8 @@ void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platf
 }
 
 
-void StaticMap::SetTheLevel(const std::string& filePath) {
-    YAML::Node config = YAML::LoadFile(filePath);
+void StaticMap::SetTheLevel(const std::string& lvelName) {
+    YAML::Node config = YAML::LoadFile(RELATIVE_LEVEL_PATH + lvelName + YAML_FILE);
     theme = config[THEME_STR].as<std::string>();
     size_t xSize = config[FULL_MAP_STR][X_STR].as<size_t>();
     size.emplace_back(xSize);
