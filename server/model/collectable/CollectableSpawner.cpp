@@ -18,22 +18,22 @@ TypeCollectable CollectableSpawner::GetRandomTypeCollectable() {
     return static_cast<TypeCollectable>(randomIndex);
 }
 
-Collectable* CollectableSpawner::GetCollectable(TypeCollectable type) {
+std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable type) {
     switch (type) {
         case TypeCollectable::DUELING_PISTOL:
-            return new DuelingPistol(projectilesController, spawnPlace, conf);
+            return std::make_shared<DuelingPistol>(projectilesController, spawnPlace, conf);
             break;
         case TypeCollectable::LASER_RIFLE:
-            return new LaserRifle(projectilesController, spawnPlace, conf);
+            return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
             break;
         case TypeCollectable::PEW_PEW_LASER:
-            return new PewPewLaser(projectilesController, spawnPlace, conf);
+            return std::make_shared<PewPewLaser>(projectilesController, spawnPlace, conf);
             break;
         case TypeCollectable::COWBOY_PISTOL:
-            return new PistolaCowboy(projectilesController, spawnPlace, conf);
+            return std::make_shared<PistolaCowboy>(projectilesController, spawnPlace, conf);
             break;
         case TypeCollectable::SHOTGUN:
-            return new Shotgun(projectilesController, spawnPlace, conf);
+            return std::make_shared<Shotgun>(projectilesController, spawnPlace, conf);
             break;
         // case TypeCollectable::ARMOR:
         //     return new a(projectilesController, spawnPlace,conf);
@@ -42,12 +42,12 @@ Collectable* CollectableSpawner::GetCollectable(TypeCollectable type) {
             break;
     }
     std::cout << "selecciòn aun no implementada :(. Mientras tanto una pew pew\n";
-    return new PewPewLaser(projectilesController, spawnPlace, conf);
+    return std::make_shared<PewPewLaser>(projectilesController, spawnPlace, conf);
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {
     if ((*timer) < timeToRespawn && (*timer) + deltaTime >= timeToRespawn) {
-        Collectable* obj = GetCollectable(GetRandomTypeCollectable());
+        std::shared_ptr<Collectable> obj = GetCollectable(GetRandomTypeCollectable());
         collectables.SpawnCollectable(obj, timer);
     }
     (*timer) += deltaTime;

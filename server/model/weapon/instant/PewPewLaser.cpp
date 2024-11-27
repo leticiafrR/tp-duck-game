@@ -1,9 +1,12 @@
 #include "PewPewLaser.h"
+#define CUSTOM_DAMAGE(x) ((x) / 9)
+
 PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
                          const Config& conf):
         InstantWeapon(controller, initialSpace, conf.getPewPewLaserScope(),
-                      conf.getPewPewLaserAmmo(), conf.getDamageShort(), conf.getNoDispersion(),
-                      conf.getCooldownBasic(), TypeProjectile::LASER, conf.getHiperDispersion()) {}
+                      conf.getPewPewLaserAmmo(), CUSTOM_DAMAGE(conf.getDamageShort()),
+                      conf.getNoDispersion(), conf.getCooldownBasic(), TypeProjectile::LASER,
+                      conf.getHiperDispersion()) {}
 
 
 void PewPewLaser::BeCollected(TypeCollectable& collectorTypeRef) {

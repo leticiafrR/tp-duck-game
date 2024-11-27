@@ -1,6 +1,6 @@
 #include "CollectableWrapper.h"
 
-CollectableWrapper::CollectableWrapper(Collectable* collectable,
+CollectableWrapper::CollectableWrapper(std::shared_ptr<Collectable> collectable,
                                        std::shared_ptr<float> sourceTimer):
         sourceTimer(sourceTimer), collectable(collectable) {}
 
@@ -15,4 +15,4 @@ void CollectableWrapper::BeCollected(TypeCollectable& itemInHandRef) {
 }
 const Transform& CollectableWrapper::GetTransform() const { return collectable->GetTransform(); }
 
-Collectable* CollectableWrapper::GetCollectable() { return collectable; }
+std::shared_ptr<Collectable> CollectableWrapper::GetCollectable() { return collectable; }

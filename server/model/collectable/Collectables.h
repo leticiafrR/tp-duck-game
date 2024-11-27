@@ -11,17 +11,20 @@ class Collectables {
 private:
     CollectableEventListener* listener;
     CollectableID_t unicID;
-    std::unordered_map<CollectableID_t, CollectableWrapper> collectablesWrapps;
+    std::unordered_map<CollectableID_t, CollectableWrapper>
+            collectablesWrapps;  // agregar liberacion de memoria del collectable en el destructor
+                                 // del wrapper
 
 public:
     Collectables();
     void ResgisterListener(CollectableEventListener* l);
 
     void DespawnCollectable(CollectableID_t idDespawn);
-    void SpawnCollectable(Collectable* obj,
+    void SpawnCollectable(std::shared_ptr<Collectable> obj,
                           std::shared_ptr<float> sourceTimer = std::shared_ptr<float>());
 
-
-    Collectable* PickCollectable(const Transform& collectorSpace, TypeCollectable& collectorType);
+    std::shared_ptr<Collectable> PickCollectable(const Transform& collectorSpace,
+                                                 TypeCollectable& collectorType);
+    void Reapdead();
 };
 #endif

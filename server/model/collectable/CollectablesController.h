@@ -2,6 +2,7 @@
 #define COLLECTABLES_CONTROLLER_H
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "Collectables.h"
@@ -15,13 +16,14 @@ class Config;
 class CollectablesController {
 private:
     Collectables collectables;
-    CollectablesSpawner collectablesSnpawner;
+    CollectablesSpawner collectablesSpawner;
 
 public:
     explicit CollectablesController(ProjectilesController& projectilesController,
                                     const Config& conf, const std::vector<Vector2D>& positions);
-    Collectable* TryCollect(const Transform& collectorSpace, TypeCollectable& collectorTyperRef);
-    void Drop(Collectable* obj, const Vector2D& position);
+    std::shared_ptr<Collectable> TryCollect(const Transform& collectorSpace,
+                                            TypeCollectable& collectorTyperRef);
+    void Drop(std::shared_ptr<Collectable> obj, const Vector2D& position);
     void RegisterListener(CollectableEventListener* collectableListener);
     void Update(float deltaTime);
 };

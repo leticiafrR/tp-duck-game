@@ -7,15 +7,16 @@
 class CollectableWrapper {
 private:
     std::shared_ptr<float> sourceTimer;
-    Collectable* collectable;
+    std::shared_ptr<Collectable> collectable;
 
 public:
     CollectableWrapper() = default;
-    CollectableWrapper(Collectable* collectable, std::shared_ptr<float> sourceTimer);
+    CollectableWrapper(std::shared_ptr<Collectable> collectable,
+                       std::shared_ptr<float> sourceTimer);
     void BeCollected(TypeCollectable& itemInHandRef);
     const Transform& GetTransform() const;
 
-    Collectable* GetCollectable();
+    std::shared_ptr<Collectable> GetCollectable();
 };
 
 #endif

@@ -7,14 +7,14 @@
 CollectablesController::CollectablesController(ProjectilesController& projectilesController,
                                                const Config& conf,
                                                const std::vector<Vector2D>& positions):
-        collectablesSnpawner(positions, projectilesController, conf) {}
+        collectablesSpawner(positions, projectilesController, conf) {}
 
-Collectable* CollectablesController::TryCollect(const Transform& collectorSpace,
-                                                TypeCollectable& collectorType) {
+std::shared_ptr<Collectable> CollectablesController::TryCollect(const Transform& collectorSpace,
+                                                                TypeCollectable& collectorType) {
     return collectables.PickCollectable(collectorSpace, collectorType);
 }
 
-void CollectablesController::Drop(Collectable* obj, const Vector2D& position) {
+void CollectablesController::Drop(std::shared_ptr<Collectable> obj, const Vector2D& position) {
     obj->BeDropped(position);
     collectables.SpawnCollectable(obj);
 }
@@ -24,5 +24,5 @@ void CollectablesController::RegisterListener(CollectableEventListener* collecta
 }
 
 void CollectablesController::Update(float deltaTime) {
-    collectablesSnpawner.Update(deltaTime, collectables);
+    collectablesSpawner.Update(deltaTime, collectables);
 }

@@ -167,8 +167,6 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
     if (isGrounded) {
         body.ResetGravity();
         CheckCollisionWithMap(map);
-        // std::cout << "pos grounded y con collisiones resueltas: "<<
-        // mySpace.GetPos().ToString()<<std::endl;
     }
 }
 
@@ -182,8 +180,10 @@ void Duck::TryCollect(CollectablesController& c) {
 }
 void Duck::TryDrop(CollectablesController& c) {
     if (itemOnHand && isGrounded) {
-        c.Drop(itemOnHand, mySpace.GetPos());
-        itemOnHand = nullptr;
+        if (itemOnHand->StillReusable()) {
+            c.Drop(itemOnHand, mySpace.GetPos());
+        }
+        itemOnHand.reset();
         typeOnHand = TypeCollectable::EMPTY;
         TriggerEvent();
         std::cout << "[duck]: efectivamente soltado\n";
@@ -225,9 +225,4 @@ void Duck::HandleOutOfBounds(float displacement) {
 
 void Duck::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);
-}
-Duck::~Duck() {
-    if (itemOnHand) {
-        delete itemOnHand;
-    }
 }

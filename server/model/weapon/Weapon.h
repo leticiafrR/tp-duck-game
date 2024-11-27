@@ -27,6 +27,7 @@ public:
     virtual void Update(float deltaTime) override = 0;
     virtual ~Weapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
+    bool StillReusable() override { return ammo > 0; }
 };
 
 /*de esta derivan:

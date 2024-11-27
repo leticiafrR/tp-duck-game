@@ -26,6 +26,7 @@ public:
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;
     const Transform& GetTransform() const { return mySpace; }
+    virtual bool StillReusable() = 0;
 };
 
 

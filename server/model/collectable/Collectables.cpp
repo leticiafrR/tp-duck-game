@@ -11,7 +11,8 @@ void Collectables::DespawnCollectable(CollectableID_t idDespawn) {
     listener->DespawnEvent(idDespawn);
 }
 
-void Collectables::SpawnCollectable(Collectable* obj, std::shared_ptr<float> sourceTimer) {
+void Collectables::SpawnCollectable(std::shared_ptr<Collectable> obj,
+                                    std::shared_ptr<float> sourceTimer) {
 
     collectablesWrapps[unicID] = CollectableWrapper(obj, sourceTimer);
     listener->SpawnEvent(CollectableSpawnEventDto(unicID, obj->GetTransform().GetPos(),
@@ -19,9 +20,8 @@ void Collectables::SpawnCollectable(Collectable* obj, std::shared_ptr<float> sou
     unicID++;
 }
 
-
-Collectable* Collectables::PickCollectable(const Transform& collectorSpace,
-                                           TypeCollectable& collectorType) {
+std::shared_ptr<Collectable> Collectables::PickCollectable(const Transform& collectorSpace,
+                                                           TypeCollectable& collectorType) {
     auto it = std::find_if(
             collectablesWrapps.begin(), collectablesWrapps.end(), [&collectorSpace](auto& pair) {
                 return Collision::RectCollision(pair.second.GetTransform(), collectorSpace);
@@ -30,9 +30,22 @@ Collectable* Collectables::PickCollectable(const Transform& collectorSpace,
 
     if (it != collectablesWrapps.end()) {
         (*it).second.BeCollected(collectorType);
-        Collectable* obj = (*it).second.GetCollectable();
+        std::shared_ptr<Collectable> obj = (*it).second.GetCollectable();
         DespawnCollectable((*it).first);
         return obj;
     }
-    return nullptr;
+    return std::shared_ptr<Collectable>();
+}
+
+void Collectables::Reapdead() {
+    // for (auto it = collectablesWrapps.begin(); it !=collectablesWrapps.end();) {
+    //     if (it->second.) {
+    //         std::cout << "muriò el jugador con ID: [" << it->first << "]\n";
+    //         delete it->second;
+    //         it = players.erase(it);
+    //         livePlayers--;
+    //     } else {
+    //         ++it;
+    //     }
+    // }
 }

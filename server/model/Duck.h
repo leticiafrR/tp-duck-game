@@ -1,5 +1,7 @@
 #ifndef DUCK_H
 #define DUCK_H
+#include <memory>
+
 #include "collectable/Collectable.h"
 #include "common/RigidBody.h"
 #include "event/PlayerEventListener.h"
@@ -27,7 +29,7 @@ private:
     PlayerEventListener* l;
     Flip myFlip;
     DuckState myState;
-    Collectable* itemOnHand;
+    std::shared_ptr<Collectable> itemOnHand;
     TypeCollectable typeOnHand;
     Equipment protectiveEquipment;
 
@@ -73,8 +75,6 @@ public:
     Vector2D GetLookVector();
     bool IsShooting() const;
 
-
-    ~Duck() override;
     Duck(const Duck&) = delete;
     Duck& operator=(const Duck&) = delete;
 };
