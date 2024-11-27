@@ -16,7 +16,7 @@ jobs:
     - uses: actions/setup-python@v2
     
     - name: Dar permisos de ejecución al instalador de dependencias
-      run: chmod +x scripts/install_depedencies.sh
+      run: chmod +x scripts/install_dependencies.sh
       
     - name: instalar dependencias necesarias SDL
       run: ./scripts/install_dependencies.sh
