@@ -11,19 +11,32 @@ target_sources(taller_client
     tweening/TransformTween.h
     tweening/Tween.h
     tweening/TweenManager.h
-    SDLExtension.h
-    Timer.h
-    CameraController.h
-    Animator.h
-    MenuScreen.h
-    LoadingScreen.h
-    MatchListScreen.h
-    LobbyScreen.h
-    LobbyItemWidget.h
-    Gameplay.h
+
+    utils/SDLExtension.h
+    utils/Timer.h
+
+    gameplay/CameraController.h
+    gameplay/Animator.h
+    gameplay/Gameplay.h
+    gameplay/GameplayGUI.h
+
+    screens/MenuScreen.h
+    screens/LoadingScreen.h
+    screens/MatchListScreen.h
+    screens/LobbyScreen.h
+    screens/LobbyItemWidget.h
+    screens/ConstrolsScreen.h
+    screens/GameStatusScreen.h
+    screens/PlayersCountSelection.h
+    screens/ShowColorsScreen.h
+
+    rendering/SpriteRendererData.h
+    rendering/DuckClientRenderer.h
+    rendering/BulletRenderer.h
+    rendering/CollectableRenderer.h
+    rendering/HandItemRenderer.h
+
     ClientRunner.h
-    ShowColorsScreen.h
-    DuckClientRenderer.h
 
     network/ClientProtocol.h
     network/Client.h

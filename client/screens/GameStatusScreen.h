@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "client/rendering/DuckClientRenderer.h"
+#include "client/utils/Timer.h"
 #include "data/dataTransferObjects.h"
 #include "multimedia/Button.h"
 #include "multimedia/ButtonsManager.h"
@@ -15,9 +17,7 @@
 #include "multimedia/GUIManager.h"
 #include "multimedia/Text.h"
 
-#include "DuckClientRenderer.h"
 #include "ShowColorsScreen.h"
-#include "Timer.h"
 
 using std::make_shared;
 using std::shared_ptr;

@@ -4,16 +4,15 @@
 #include <map>
 #include <string>
 
+#include "client/gameplay/Animator.h"
+#include "client/gameplay/CameraController.h"
+#include "client/rendering/HandItemRenderer.h"
+#include "client/utils/Timer.h"
 #include "common/Transform.h"
 #include "data/snapshot.h"
 #include "multimedia/AudioManager.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Object2D.h"
-
-#include "Animator.h"
-#include "CameraController.h"
-#include "HandItemRenderer.h"
-#include "Timer.h"
 
 class DuckClientRenderer {
 private:

@@ -8,22 +8,21 @@
 #include <unordered_map>
 #include <vector>
 
+#include "client/gameplay/CameraController.h"
+#include "client/gameplay/GameplayGUI.h"
+#include "client/network/Client.h"
+#include "client/rendering/BulletRenderer.h"
+#include "client/rendering/CollectableRenderer.h"
+#include "client/rendering/DuckClientRenderer.h"
+#include "client/screens/ShowColorsScreen.h"
+#include "client/tweening/ImageTween.h"
+#include "client/tweening/TweenManager.h"
 #include "common/playerIdentifier.h"
 #include "multimedia/Definitions.h"
 #include "multimedia/GUIManager.h"
 #include "multimedia/Image.h"
 #include "multimedia/MapBlock2D.h"
 #include "multimedia/Object2D.h"
-#include "network/Client.h"
-#include "tweening/ImageTween.h"
-#include "tweening/TweenManager.h"
-
-#include "BulletRenderer.h"
-#include "CameraController.h"
-#include "CollectableRenderer.h"
-#include "DuckClientRenderer.h"
-#include "GameplayGUI.h"
-#include "ShowColorsScreen.h"
 
 using std::list;
 using std::set;

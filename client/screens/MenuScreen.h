@@ -3,16 +3,15 @@
 
 #include <string>
 
+#include "client/tweening/TransformTween.h"
+#include "client/tweening/TweenManager.h"
+#include "client/utils/SDLExtension.h"
 #include "multimedia/Button.h"
 #include "multimedia/ButtonsManager.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/GUIManager.h"
 #include "multimedia/Text.h"
-#include "tweening/TransformTween.h"
-#include "tweening/TweenManager.h"
-
-#include "SDLExtension.h"
 
 using std::string;
 
