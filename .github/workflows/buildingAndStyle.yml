@@ -19,7 +19,7 @@ jobs:
       run: chmod +x scripts/install_depedencies.sh
       
     - name: instalar dependencias necesarias SDL
-      run: ./scripts/install_depedencies.sh
+      run: ./scripts/install_dependencies.sh
 
     - name: Verify installation of packages
       run: |
