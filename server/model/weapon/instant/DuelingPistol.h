@@ -20,6 +20,7 @@ public:
         shooter->StartShooting();
         return InstantWeapon::Use(shooter);
     }
+    TypeCollectable GetTypeCollectable() override { return TypeCollectable::DUELING_PISTOL; }
 };
 
 #endif

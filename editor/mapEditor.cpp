@@ -10,8 +10,11 @@ MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounte
     config[FULL_MAP_STR][Y_STR] = 160;
     config[PLATFORMS_STR] = YAML::Node(YAML::NodeType::Sequence);
 }
-MapEditor::MapEditor(const std::string& filePath):
-        config(YAML::LoadFile(filePath)), platformsCounter(0), filePath(filePath) {
+MapEditor::MapEditor(const std::string& _fileName):
+        config(YAML::LoadFile(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE)),
+        platformsCounter(0),
+        fileName(_fileName),
+        filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE) {
     if (config[PLATFORMS_STR] && config[PLATFORMS_STR].IsSequence()) {
         platformsCounter = config[PLATFORMS_STR].size();
     } else {
@@ -26,14 +29,15 @@ void MapEditor::SaveChanges() {
             availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
     auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
     if (it == availableLevels.end()) {
-        availableLevels.emplace_back(filePath);
+        availableLevels.emplace_back(fileName);
         availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
         std::ofstream fout2(AVAILABLE_LEVELS_PATH);
         fout2 << availableConfig;
     }
 }
 void MapEditor::AddFileName(const std::string& _fileName) {
-    filePath = RELATIVE_LEVEL_PATH + _fileName + YAML_FILE;
+    fileName = _fileName;
+    filePath = RELATIVE_LEVEL_PATH + fileName + YAML_FILE;
 }
 void MapEditor::AddAPlataform(const float& x, const float& y, const float& w, const float& h,
                               const std::vector<std::string>& edges) {

@@ -16,11 +16,12 @@ class MapEditor {
 private:
     YAML::Node config;
     int platformsCounter;
+    std::string fileName;
     std::string filePath;
 
 public:
     MapEditor();
-    explicit MapEditor(const std::string& filePath);
+    explicit MapEditor(const std::string& fileName);
 
     void AddFileName(const std::string& fileName);
     void AddAPlataform(const float& x, const float& y, const float& w, const float& h,

@@ -11,8 +11,9 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
     eventsManager.SendInstantProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
-    collectablesController.SayHello();
-    collectablesController.ReleasePewPew();
+    eventsManager.SendCollectableListener(collectablesController);
+    collectablesController.SpawnInitialWeapons();
+    // collectablesController.ReleasePewPew();
 }
 
 GameWorld::~GameWorld() {

@@ -2,47 +2,36 @@
 #define COLLECTABLES_CONTROLLER_H
 
 #include <algorithm>
+#include <unordered_map>
 #include <vector>
 
 #include "server/config.h"
+#include "server/model/event/CollectableEventListener.h"
 #include "server/model/projectile/ProjectilesController.h"
-#include "server/model/weapon/instant/PewPewLaser.h"
 
 #include "Collectable.h"
 class Transform;
 
 class CollectablesController {
 private:
+    CollectableID_t unicID;
     std::vector<Vector2D> weaponSpawnPoints;
-    ProjectilesController& projectilesController;
-    // std::vector<Collectable*> collectables;
-    Collectable* unicCollectable;
+    std::unordered_map<CollectableID_t, Collectable*> collectables;
+
     const Config& conf;
-    // CreateWeapons(const std::vector<Vector2D>& weaponsSpawnPoints, Config& conf){
-    //     for (auto& point: weaponSpawnPoints) {
-    //         //PewPewLaser* weapon = new PewPewLaser(projectilesController,
-    //         Transform(point,Vector2D(conf)),conf); collectables.push_back(weapon);
-    //     }
-    // }
+    ProjectilesController& projectilesController;
+
+    CollectableEventListener* listener;
+
+    void SpawnCollectable(Collectable* obj);
+    Collectable* DespawnCollectable(CollectableID_t idDespawn);
+
 public:
-    // explicit CollectablesController(ProjectilesController&
-    // projectilesController,std::vector<Vector2D> weaponSpawnPoints ):
-    //         projectilesController(projectilesController), unicCollectable(new
-    //         PewPewLaser(projectilesController,Transform())){}
     explicit CollectablesController(ProjectilesController& projectilesController,
                                     const Config& conf,
                                     const std::vector<Vector2D>& weaponSpawnPoints);
-    void ReleasePewPew();
-
-
-    void SayHello();
-
-
-    // CollectablesController(ProjectilesController& projectilesController,const
-    // std::vector<Vector2D>& weaponsSpawnPoints):projectilesController(projectilesController){
-    //     CreateWeapons(weaponsSpawnPoints);
-    // }
-
+    void SpawnInitialWeapons();
+    void RegisterListener(CollectableEventListener* collectableListener);
     Collectable* PickCollectable(const Transform& collectorSpace,
                                  TypeCollectable& collectorTyperRef);
     void Drop(Collectable* obj, const Vector2D& position);

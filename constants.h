@@ -26,6 +26,9 @@ const std::string RIGHT_STR = "RIGHT";
 const std::string BOTTOM_STR = "BOTTOM";
 const std::string TOP_STR = "TOP";
 
+const std::string RELATIVE_LEVEL_PATH = "../config/levels/";
+const std::string YAML_FILE = ".yaml";
+
 /**************************************CONFIG YAML****************************************/
 const std::string AVAILABLE_LEVELS_STR = "available_levels";
 const std::string MAX_PLAYERS_STR = "max_players";
@@ -33,5 +36,5 @@ const std::string MIN_PLAYERS_STR = "min_players";
 const std::string GAMES_TO_WIN_STR = "game_to_win_match";
 const std::string GAMES_IN_GROUP = "games_in_group";
 
-const std::string AVAILABLE_LEVELS_PATH = "../config/availableLevelsPath.yaml";
+const std::string AVAILABLE_LEVELS_PATH = "../config/availableLevels.yaml";
 #endif

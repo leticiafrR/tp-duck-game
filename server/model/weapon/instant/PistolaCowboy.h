@@ -19,6 +19,8 @@ public:
     void BeCollected(TypeCollectable& typeOnHandRef) override {
         typeOnHandRef = TypeCollectable::COWBOY_PISTOL;
     }
+
+    TypeCollectable GetTypeCollectable() override { return TypeCollectable::COWBOY_PISTOL; }
 };
 
 #endif

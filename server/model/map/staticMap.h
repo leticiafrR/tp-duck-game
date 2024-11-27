@@ -33,7 +33,7 @@ private:
     void loadPlatforms(const YAML::Node& config, const std::string& platformName);
 
 public:
-    explicit StaticMap(const std::string& fileName);
+    explicit StaticMap(const std::string& lvlName);
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
     bool IsOnTheFloor(const Transform& dynamicT);

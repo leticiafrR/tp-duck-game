@@ -28,6 +28,7 @@ public:
         }
         inclination = originalInclination;
     }
+    TypeCollectable GetTypeCollectable() override { return TypeCollectable::PEW_PEW_LASER; }
 };
 
 
