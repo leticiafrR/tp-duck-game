@@ -71,7 +71,6 @@ bool BounceInstantProjectile::CheckCollision(const StaticMap& map,
     return true;
 }
 
-
 void BounceInstantProjectile::Update(const StaticMap& map,
                                      std::unordered_map<PlayerID_t, Duck*>& players) {
     if (!CheckCollision(map, players)) {

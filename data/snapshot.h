@@ -31,7 +31,8 @@ enum class TypeCollectable : uint8_t {
     AK47,
     MAGNUM,
     HELMET,
-    ARMOR
+    ARMOR,
+    __typesCount  // always at the end
 };
 
 struct PlayerEvent {

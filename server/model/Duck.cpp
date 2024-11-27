@@ -175,13 +175,13 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
 void Duck::TryCollect(CollectablesController& c) {
     std::cout << "you'll try to collect an item\n";
     if (!itemOnHand) {
-        itemOnHand = c.PickCollectable(mySpace, typeOnHand);
+        itemOnHand = c.TryCollect(mySpace, typeOnHand);
         TriggerEvent();
         std::cout << "[duck]: collected!\n";
     }
 }
 void Duck::TryDrop(CollectablesController& c) {
-    if (itemOnHand) {
+    if (itemOnHand && isGrounded) {
         c.Drop(itemOnHand, mySpace.GetPos());
         itemOnHand = nullptr;
         typeOnHand = TypeCollectable::EMPTY;
@@ -225,4 +225,9 @@ void Duck::HandleOutOfBounds(float displacement) {
 
 void Duck::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);
+}
+Duck::~Duck() {
+    if (itemOnHand) {
+        delete itemOnHand;
+    }
 }

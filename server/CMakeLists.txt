@@ -23,6 +23,11 @@ target_sources(taller_server
     model/projectile/ProjectilesController.cpp
     model/projectile/InstantProjectile.cpp
     model/projectile/BounceInstantProjectile.cpp
+
+    model/collectable/CollectableWrapper.cpp
+    model/collectable/CollectableSpawner.cpp
+    model/collectable/Collectables.cpp
+    model/collectable/CollectablesSpawner.cpp
     model/collectable/CollectablesController.cpp
 
     #network
@@ -70,6 +75,13 @@ target_sources(taller_server
     model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
     model/projectile/BounceInstantProjectile.h
+
+    model/collectable/CollectableWrapper.h
+    model/collectable/Collectable.h
+    model/collectable/CollectableSpawner.h
+    model/collectable/Collectables.h
+    model/collectable/CollectablesSpawner.h
+    model/collectable/CollectablesController.h
 
     network/serverProtocol.h
     network/messageSender.h

@@ -16,15 +16,16 @@ public:
     explicit Collectable(const Transform& initialSpace): mySpace(initialSpace) {}
     virtual ~Collectable() = default;
 
-    const Transform& GetTransform() const { return mySpace; }
+
     void BeDropped(const Vector2D& position) { mySpace.SetPos(position); }
 
-
-    virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual bool Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;
     virtual void Update(float deltaTime) = 0;
+
+    virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;
+    const Transform& GetTransform() const { return mySpace; }
 };
 
 

@@ -7,10 +7,8 @@ CollectableEventListener::CollectableEventListener(
 
 void CollectableEventListener::DespawnEvent(CollectableID_t idDespawned) {
     despawnEvents.push_back(idDespawned);
-    // std::cout << "[DespawnEvent] Desaparaciòn detectada del id "<< idDespawned<< std::endl;
 }
 
 void CollectableEventListener::SpawnEvent(const CollectableSpawnEventDto& e) {
     spawnEvents.push_back(e);
-    // std::cout << "[spawnEvent] aparaciòn detectada del id "<< e.id<<std::endl;
 }

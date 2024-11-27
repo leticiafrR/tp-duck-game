@@ -74,7 +74,7 @@ public:
     bool IsShooting() const;
 
 
-    ~Duck() override = default;
+    ~Duck() override;
     Duck(const Duck&) = delete;
     Duck& operator=(const Duck&) = delete;
 };
