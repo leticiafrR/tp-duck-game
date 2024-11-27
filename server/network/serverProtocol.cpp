@@ -138,14 +138,9 @@ Command ServerProtocol::receiveCommand() {
     }
     throw BrokenProtocol();
 }
-
-void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
-    assistant.sendNumber(SNAPSHOT);
-    assistant.sendBoolean(snapshot.gameOver);
-
-    // sending updates
-    assistant.sendNumber((uint8_t)snapshot.updates.size());
-    for (auto it = snapshot.updates.begin(); it != snapshot.updates.end(); ++it) {
+void ServerProtocol::sendPlayerUpdates(const std::unordered_map<PlayerID_t, PlayerEvent>& updates) {
+    assistant.sendNumber((uint8_t)updates.size());
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
         // playerID
         assistant.sendNumber(it->first);
         // PlayerEvent
@@ -157,28 +152,45 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
         assistant.sendBoolean(it->second.isCrouched);
         assistant.sendBoolean(it->second.cuacking);
     }
-    // raycastsEvents
-    uint8_t numberProjectiles = (uint8_t)snapshot.raycastsEvents.size();
+}
+void ServerProtocol::sendRaycastsEvents(
+        const std::vector<InstantProjectileEventDto>& raycastsEvents) {
+    uint8_t numberProjectiles = (uint8_t)raycastsEvents.size();
     assistant.sendNumber(numberProjectiles);
-    for (auto it = snapshot.raycastsEvents.begin(); it != snapshot.raycastsEvents.end(); ++it) {
+    for (auto it = raycastsEvents.begin(); it != raycastsEvents.end(); ++it) {
         assistant.sendNumber((uint8_t)it->type);
         assistant.sendVector2D(it->origin);
         assistant.sendVector2D(it->end);
     }
-    // collectableDespawns
-    uint8_t numberDespawns = (uint8_t)snapshot.collectableDespawns.size();
+}
+void ServerProtocol::sendCollectableDespawns(
+        const std::vector<CollectableID_t>& collectableDespawns) {
+    uint8_t numberDespawns = (uint8_t)collectableDespawns.size();
     assistant.sendNumber(numberDespawns);
-    for (int i = 0; i < numberDespawns; i++) {
-        assistant.sendNumber(snapshot.collectableDespawns[i]);
+    for (auto it = collectableDespawns.begin(); it != collectableDespawns.end(); ++it) {
+        assistant.sendNumber((uint32_t)*it);
     }
-    // collectableSpawns
-    uint8_t numberSpawns = (uint8_t)snapshot.collectableSpawns.size();
+}
+void ServerProtocol::sendCollectableSpawns(
+        const std::vector<CollectableSpawnEventDto>& collectableSpawns) {
+    uint8_t numberSpawns = (uint8_t)collectableSpawns.size();
+    std::cout << "Servidor enviando " << numberSpawns << " spawnings";
     assistant.sendNumber(numberSpawns);
-    for (int i = 0; i < numberSpawns; i++) {
-        assistant.sendNumber((uint32_t)snapshot.collectableSpawns[i].id);
-        assistant.sendVector2D(snapshot.collectableSpawns[i].position);
-        assistant.sendNumber((uint8_t)snapshot.collectableSpawns[i].type);
+    for (auto it = collectableSpawns.begin(); it != collectableSpawns.end(); ++it) {
+        assistant.sendNumber((uint32_t)it->id);
+        assistant.sendVector2D(it->position);
+        assistant.sendNumber((uint8_t)it->type);
     }
+}
+
+void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
+    assistant.sendNumber(SNAPSHOT);
+    assistant.sendBoolean(snapshot.gameOver);
+
+    sendPlayerUpdates(snapshot.updates);
+    sendRaycastsEvents(snapshot.raycastsEvents);
+    sendCollectableDespawns(snapshot.collectableDespawns);
+    sendCollectableSpawns(snapshot.collectableSpawns);
 }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {

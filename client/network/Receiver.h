@@ -58,6 +58,10 @@ public:
         msgQueue.close();
     }
 
+
+    // supongo que deberìa estar para cuando el cliente cierra la app antes de que termine la
+    // partida NOTA: jamas se usa, entoces jamas se joinea. el  sender ¿QUièn y donde se hace  el
+    // join eplicito alreceiver=?
     void kill() {
         sender.kill();
         if (sender.is_alive()) {

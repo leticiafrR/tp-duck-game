@@ -4,6 +4,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -23,6 +24,10 @@ private:
     ProtocolAssistant assistant;
     V_BTTM_TOP encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>&);
     V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
+    void sendPlayerUpdates(const std::unordered_map<PlayerID_t, PlayerEvent>& updates);
+    void sendRaycastsEvents(const std::vector<InstantProjectileEventDto>& raycastsEvents);
+    void sendCollectableDespawns(const std::vector<CollectableID_t>& collectableDespawns);
+    void sendCollectableSpawns(const std::vector<CollectableSpawnEventDto>& collectableSpawns);
 
 public:
     explicit ServerProtocol(Socket&& skt);

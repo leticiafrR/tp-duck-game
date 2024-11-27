@@ -187,6 +187,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto end = assistant.receiveVector2D();
         _raycastsEvents[i] = InstantProjectileEventDto{type, origin, end};
     }
+
     // receiving collectableDespawns
     uint8_t numberDespawns = assistant.receiveNumberOneByte();
     std::vector<CollectableID_t> _collectableDespawns((size_t)numberDespawns);
@@ -196,6 +197,9 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
 
     // receiving collectableSpawns
     uint8_t numberSpawns = assistant.receiveNumberOneByte();
+    std::cout << "[ClientProtocol]:Server has send us " << numberSpawns
+              << "  number of spawn dtos\n";
+
     std::vector<CollectableSpawnEventDto> _collectableSpawns((size_t)numberSpawns);
     for (uint8_t i = 0; i < numberSpawns; i++) {
         CollectableID_t id = assistant.receiveNumberFourBytes();

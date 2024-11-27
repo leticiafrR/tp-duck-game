@@ -68,6 +68,7 @@ public:
         return false;
     }
 
+    // no creo que esto estè bien
     ~Client() {
         // receiver->kill();
         receiver->stop();
