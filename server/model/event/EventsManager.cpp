@@ -11,6 +11,9 @@ EventsManager::EventsManager():
 Snapshot EventsManager::GetSnapshot(bool gameOver) {
     Snapshot s(gameOver, playerEvents, instantProjectileEvents, collectableDespawnEvents,
                collectableSpawnEvents);
+    if (collectableDespawnEvents.size() > 0 || collectableSpawnEvents.size() > 0) {
+        std::cout << "confirmaciòn de que al pedir una snapshot hay algo en un container\n";
+    }
     playerEvents.clear();
     instantProjectileEvents.clear();
     collectableDespawnEvents.clear();

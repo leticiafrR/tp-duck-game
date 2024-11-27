@@ -24,6 +24,7 @@ private:
     CollectableEventListener* listener;
 
     void SpawnCollectable(Collectable* obj);
+    Collectable* DespawnCollectable(CollectableID_t idDespawn);
 
 public:
     explicit CollectablesController(ProjectilesController& projectilesController,

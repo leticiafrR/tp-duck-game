@@ -21,13 +21,18 @@ Collectable* CollectablesController::PickCollectable(const Transform& collectorS
 
     if (it != collectables.end()) {
         (*it).second->BeCollected(collectorType);
-        Collectable* collectedObj = (*it).second;
-        collectables.erase(it->first);
-        // here should call to respawner()
-        return collectedObj;
+        return DespawnCollectable((*it).first);
     }
     return nullptr;
 }
+
+Collectable* CollectablesController::DespawnCollectable(CollectableID_t idDespawn) {
+    Collectable* obj = collectables[idDespawn];
+    collectables.erase(idDespawn);
+    listener->DespawnEvent(idDespawn);
+    return obj;
+}
+
 
 void CollectablesController::SpawnCollectable(Collectable* obj) {
     collectables[unicID] = obj;
@@ -54,6 +59,7 @@ void CollectablesController::SpawnInitialWeapons() {
         Collectable* obj = new PistolaCowboy(
                 projectilesController,
                 Transform(p, Vector2D(conf.getDuckSize(), conf.getDuckSize())), conf);
+        std::cout << "[CollectablesController::SpawnInitialWeapons] se crea una pistola\n";
         SpawnCollectable(obj);
     }
 }
