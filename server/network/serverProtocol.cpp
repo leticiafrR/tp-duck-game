@@ -174,7 +174,6 @@ void ServerProtocol::sendCollectableDespawns(
 void ServerProtocol::sendCollectableSpawns(
         const std::vector<CollectableSpawnEventDto>& collectableSpawns) {
     uint8_t numberSpawns = (uint8_t)collectableSpawns.size();
-    std::cout << "Servidor enviando " << numberSpawns << " spawnings";
     assistant.sendNumber(numberSpawns);
     for (auto it = collectableSpawns.begin(); it != collectableSpawns.end(); ++it) {
         assistant.sendNumber((uint32_t)it->id);

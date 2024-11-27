@@ -32,18 +32,12 @@ private:
 public:
     explicit ServerProtocol(Socket&& skt);
 
-    /* Receives through the socket  the player's name. If the connection with the client has been
-     * detected lost it throws an exeption*/
     std::string receiveNickName();
 
     void sendLocalId(uint16_t connectionId);
 
-    // 0 if client wants to refresh the availableMatches
-    // the ID of the client itself it wants to create its own
     MatchSelection receiveMatchSelection();
 
-    /* Send the result of trying to joing the match. If the connection with the client has been
-     * detected lost it throws an exeption*/
     void sendResultOfJoining(uint8_t eCode);
 
     void sendAvailableMatches(const std::vector<DataMatch>& matches);
@@ -74,7 +68,6 @@ public:
     /* Sends a boolean indicating of this is the final game of the current group of games*/
     void sendGameEndingStatus(bool finalGroupGame);
 
-    // RECOUNT OF GAMES
     void sendGamesRecount(const GamesRecountDto& gamesRecount);
 
     // END OF A MATCH
