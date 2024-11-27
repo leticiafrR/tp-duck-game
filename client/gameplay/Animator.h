@@ -25,43 +25,17 @@ private:
     float updateTimer;
 
 public:
-    Animator(Object2D& spr, const std::string& filename, const std::string& target, int targetFPS):
-            sprite(spr), animations(std::move(SheetDataCache::GetData(filename))) {
-        frameIndex = 0;
-        this->target = target;
+    Animator(Object2D& spr, const std::string& filename, const std::string& target, int targetFPS);
 
-        animFrameTime = 1.0f / targetFPS;
-        updateTimer = animFrameTime;
-    }
+    ~Animator();
 
-    ~Animator() = default;
+    void Update(float deltaTime);
 
-    void Update(float deltaTime) {
-        // std::cout <<  frameIndex << "\n";
+    Rect GetTargetRect();
 
-        updateTimer -= deltaTime;
-        if (updateTimer <= 0) {
-            updateTimer = animFrameTime;
-            frameIndex += 1;
-            frameIndex = (frameIndex % animations[target].size());
-        }
-        // std::cout <<  sprite.GetFileName() << "\n";
-        sprite.SetSourceRect(GetTargetRect());
-    }
+    void SetTarget(const std::string& target, bool reset_index = true);
 
-    Rect GetTargetRect() { return animations[target][frameIndex]; }
-
-    void SetTarget(const std::string& target, bool reset_index = true) {
-        if (!animations.contains(target))
-            return;
-        this->target = target;
-        if (reset_index) {
-            updateTimer = animFrameTime;
-            frameIndex = 0;
-        }
-    }
-
-    std::string GetTarget() { return target; }
+    std::string GetTarget();
 };
 
 #endif
