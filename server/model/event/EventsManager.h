@@ -8,25 +8,34 @@
 #include "data/id.h"
 #include "data/snapshot.h"
 
+#include "CollectableEventListener.h"
 #include "InstantProjectileEventListener.h"
 #include "PlayerEventListener.h"
 
 class Duck;
 class ProjectilesController;
+class CollectablesController;
 
 class EventsManager {
 private:
     std::unordered_map<PlayerID_t, PlayerEvent> playerEvents;
     std::vector<InstantProjectileEventDto> instantProjectileEvents;
+    std::vector<CollectableID_t> collectableDespawnEvents;
+    std::vector<CollectableSpawnEventDto> collectableSpawnEvents;
+
 
     PlayerEventListener playerListener;
     InstantProjectileEventListener instantProjectileListener;
+    CollectableEventListener collectableListener;
 
 public:
     EventsManager();
+
     void SendPlayersListeners(const std::unordered_map<PlayerID_t, Duck*>& players);
     void SendInstantProjectileListener(ProjectilesController& projectilesController);
+    void SendCollectableListener(CollectablesController& collectableContoller);
     Snapshot GetSnapshot(bool gameOver);
+
 
     EventsManager(const EventsManager&) = delete;
     EventsManager& operator=(const EventsManager&) = delete;

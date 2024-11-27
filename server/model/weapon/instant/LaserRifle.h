@@ -31,6 +31,7 @@ public:
         }
         return false;
     }
+    TypeCollectable GetTypeCollectable() override { return TypeCollectable::LASER_RIFLE; }
 };
 
 #endif

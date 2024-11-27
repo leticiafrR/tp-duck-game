@@ -5,6 +5,8 @@
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
 #include "weapon/instant/DuelingPistol.h"
+#include "weapon/instant/PewPewLaser.h"
+#include "weapon/instant/PistolaCowboy.h"
 #include "weapon/instant/Shotgun.h"
 
 /*******************************************************************************************/
@@ -25,6 +27,7 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
         itemOnHand(nullptr),
+        // itemOnHand(new Shotgun(p, mySpace, conf)),
         typeOnHand(TypeCollectable::EMPTY) {}
 
 void Duck::TriggerEvent(bool cuack) {

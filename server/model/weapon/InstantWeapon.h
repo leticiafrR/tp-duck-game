@@ -33,6 +33,7 @@ public:
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;  // por el momento solo se usa para el cooldown
     virtual ~InstantWeapon() = default;
+    virtual TypeCollectable GetTypeCollectable() override = 0;
 };
 
 #endif

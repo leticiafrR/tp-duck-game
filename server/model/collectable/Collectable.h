@@ -1,8 +1,11 @@
 #ifndef COLLECTABLE_H
 #define COLLECTABLE_H
+#include <vector>
+
 #include "common/Transform.h"
 #include "data/snapshot.h"
 
+class CollectableEventListener;
 class Duck;
 
 class Collectable {
@@ -21,6 +24,7 @@ public:
     virtual bool Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;
     virtual void Update(float deltaTime) = 0;
+    virtual TypeCollectable GetTypeCollectable() = 0;
 };
 
 

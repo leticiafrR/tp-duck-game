@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 
-#include "common/Transform.h"
 #include "data/snapshot.h"
 
 class PlayerEventListener {

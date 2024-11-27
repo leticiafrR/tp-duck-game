@@ -1,85 +1,66 @@
 #include "CollectablesController.h"
 
-void CollectablesController::ReleasePewPew() {
-    if (!unicCollectable) {
-        unicCollectable =
-                new PewPewLaser(projectilesController,
-                                Transform(*weaponSpawnPoints.begin(),
-                                          Vector2D(conf.getDuckSize(), conf.getDuckSize())),
-                                conf);
-    }
-}
-
+#include "server/model/weapon/instant/PistolaCowboy.h"
 CollectablesController::CollectablesController(ProjectilesController& projectilesController,
                                                const Config& conf,
                                                const std::vector<Vector2D>& weaponSpawnPoints):
+        unicID(0),
         weaponSpawnPoints(weaponSpawnPoints),
+        conf(conf),
         projectilesController(projectilesController),
-        unicCollectable(nullptr),
-        conf(conf) {
+        listener(nullptr) {
     std::cout << "was created a pewpewlaser on " << (*weaponSpawnPoints.begin()).ToString() << "\n";
 }
-
-void CollectablesController::SayHello() { std::cout << "hola\n"; }
-
-
-CollectablesController::~CollectablesController() {
-    if (unicCollectable) {
-        delete unicCollectable;
-    }
-}
-
 
 Collectable* CollectablesController::PickCollectable(const Transform& collectorSpace,
                                                      TypeCollectable& collectorType) {
     std::cout << "se intenta pickear un collectable\n";
-    if (unicCollectable &&
-        Collision::RectCollision(unicCollectable->GetTransform(), collectorSpace)) {
-        unicCollectable->BeCollected(collectorType);
-        Collectable* collected = unicCollectable;
-        unicCollectable = nullptr;
-        std::cout << "se recogiò la pewpew\n";
-        return collected;
+    auto it = std::find_if(collectables.begin(), collectables.end(), [&collectorSpace](auto& pair) {
+        return Collision::RectCollision(pair.second->GetTransform(), collectorSpace);
+    });
+
+    if (it != collectables.end()) {
+        (*it).second->BeCollected(collectorType);
+        Collectable* collectedObj = (*it).second;
+        collectables.erase(it->first);
+        // here should call to respawner()
+        return collectedObj;
     }
     return nullptr;
 }
 
+void CollectablesController::SpawnCollectable(Collectable* obj) {
+    collectables[unicID] = obj;
+    listener->SpawnEvent(CollectableSpawnEventDto(unicID, obj->GetTransform().GetPos(),
+                                                  obj->GetTypeCollectable()));
+    unicID++;
+}
+
+/*Hay dos posibles mètodos para agregar un collectable al mapa:Drop o Respawn*/
 void CollectablesController::Drop(Collectable* obj, const Vector2D& position) {
     obj->BeDropped(position);
-    if (!unicCollectable) {
-        unicCollectable = obj;
-        std::cout << "[drop controlller] se logra posicionar de vuelta en la pos "
-                  << position.ToString() << std::endl;
+    SpawnCollectable(obj);
+    std::cout << "[drop controlller] se logra posicionar en la pos " << position.ToString()
+              << std::endl;
+}
+
+void CollectablesController::RegisterListener(CollectableEventListener* collectableListener) {
+    listener = collectableListener;
+}
+
+
+void CollectablesController::SpawnInitialWeapons() {
+    for (auto& p: weaponSpawnPoints) {
+        Collectable* obj = new PistolaCowboy(
+                projectilesController,
+                Transform(p, Vector2D(conf.getDuckSize(), conf.getDuckSize())), conf);
+        SpawnCollectable(obj);
     }
 }
 
-// Collectable* CollectablesController::PickCollectable(const Transform& collectorSpace,
-//                                                      TypeCollectable& collectorType) {
-//     auto it = std::find_if(collectables.begin(), collectables.end(),
-//                            [&collectorSpace](Collectable* obj) {
-//                                return Collision::RectCollision(obj->GetTransform(),
-//                                collectorSpace);
-//                            });
-
-//     if (it != collectables.end()) {
-//         (*it)->BeCollected(collectorType);
-//         Collectable* collectedObj = *it;
-//         collectables.erase(it);
-//         // here should call to respawner()
-//         return collectedObj;
-//     }
-//     return nullptr;
-// }
-
-/*Hay dos posibles mètodos para agregar un collectable al mapa:Drop o Respawn*/
-// void CollectablesController::Drop(Collectable* obj, const Vector2D& position) {
-//     obj->BeDropped(position);
-//     collectables.push_back(obj);
-// }
-
-// CollectablesController::~CollectablesController() {
-//     for (Collectable* obj: collectables) {
-//         delete obj;
-//     }
-//     collectables.clear();
-// }
+CollectablesController::~CollectablesController() {
+    for (auto pair: collectables) {
+        delete pair.second;
+    }
+    collectables.clear();
+}

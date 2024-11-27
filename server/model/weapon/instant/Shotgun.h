@@ -14,7 +14,7 @@ public:
             InstantWeapon(controller, initialSpace, conf.getShotgunScope(),
                           AMMO_WITH_RELOAD(conf.getShotgunAmmo()), conf.getDamageShort(),
                           conf.getLongDispersion(), conf.getCooldownBasic(),
-                          TypeProjectile::FRAGMENT),
+                          TypeProjectile::BULLET),
             ammoLoaded(true) {}
 
 
@@ -36,6 +36,7 @@ public:
             ammoLoaded = true;
         }
     }
+    TypeCollectable GetTypeCollectable() override { return TypeCollectable::SHOTGUN; }
     ~Shotgun() = default;
 };
 
