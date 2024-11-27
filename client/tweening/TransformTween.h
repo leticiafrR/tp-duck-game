@@ -19,66 +19,20 @@ private:
     bool changed = false;
 
 public:
-    explicit TransformTween(Transform& t):
-            Tween(1.0f, []() {}),
-            transform(t),
-            startSize(transform.GetSize()),
-            targetSize(transform.GetSize()) {}
+    explicit TransformTween(Transform& t);
 
     TransformTween(
             Transform& transform, Vector2D targetSize, float duration,
-            OnCompleteCallback onComplete = []() {}):
-            Tween(duration, onComplete),
-            transform(transform),
-            startSize(transform.GetSize()),
-            targetSize(targetSize) {}
+            OnCompleteCallback onComplete = []() {});
 
     void SetTarget(
-            Vector2D targetSize, float duration, OnCompleteCallback onComplete = []() {}) {
-        this->targetSize = targetSize;
-        this->duration = duration;
-        this->onComplete = onComplete;
-    }
+            Vector2D targetSize, float duration, OnCompleteCallback onComplete = []() {});
 
-    void OnInitLoop() override {
-        switch (loopType) {
-            case LoopType::Restart:
-                transform.SetSize(startSize);
-                break;
-            case LoopType::Yoyo:
-                changed = false;
-                Vector2D tmp = startSize;
-                startSize = targetSize;
-                targetSize = tmp;
-                break;
-        }
-    }
+    void OnInitLoop() override;
 
-    void DoTween(float t) override {
-        switch (loopType) {
-            case LoopType::Restart:
+    void DoTween(float t) override;
 
-                break;
-            case LoopType::Yoyo:
-
-                if (t >= 0.5f && !changed) {
-                    changed = true;
-                    Vector2D tmp = startSize;
-                    startSize = targetSize;
-                    targetSize = tmp;
-                }
-                if (!changed)
-                    t = InverseLerp(0.0f, 0.5f, t);
-                else
-                    t = InverseLerp(0.5f, 1.0f, t);
-                break;
-            default:
-                break;
-        }
-        transform.SetSize(Vector2D::Lerp(startSize, targetSize, t));
-    }
-
-    ~TransformTween() = default;
+    ~TransformTween();
 };
 
 #endif

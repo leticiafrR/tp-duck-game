@@ -1,18 +1,33 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
+    tweening/ImageTween.cpp
+    tweening/TransformTween.cpp
     tweening/Tween.cpp
+    tweening/TweenManager.cpp
+
+    utils/Timer.cpp
 
     gameplay/CameraController.cpp
     gameplay/Animator.cpp
     gameplay/Gameplay.cpp
     gameplay/GameplayGUI.cpp
 
-    #rendering/SpriteRendererData.cpp
+    rendering/SpriteRendererData.cpp
     rendering/DuckClientRenderer.cpp
-    #rendering/BulletRenderer.cpp
-    #rendering/CollectableRenderer.cpp
-    #rendering/HandItemRenderer.cpp
+    rendering/BulletRenderer.cpp
+    rendering/CollectableRenderer.cpp
+    rendering/HandItemRenderer.cpp
+
+    screens/MenuScreen.cpp
+    screens/LoadingScreen.cpp
+    screens/MatchListScreen.cpp
+    screens/LobbyScreen.cpp
+    screens/LobbyItemWidget.cpp
+    screens/ControlsScreen.cpp
+    screens/GameStatusScreen.cpp
+    screens/PlayersCountSelection.cpp
+    screens/ShowColorsScreen.cpp
 
     main.cpp
     network/ClientProtocol.cpp
@@ -24,7 +39,6 @@ target_sources(taller_client
     tweening/Tween.h
     tweening/TweenManager.h
 
-    utils/SDLExtension.h
     utils/Timer.h
 
     gameplay/CameraController.h

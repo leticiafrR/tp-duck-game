@@ -12,8 +12,8 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "gameplay/Gameplay.h"
-#include "multimedia/AudioManager.h"
 #include "multimedia/Camera.h"
+#include "multimedia/audio/AudioManager.h"
 #include "network/Client.h"
 #include "screens/GameStatusScreen.h"
 #include "screens/LoadingScreen.h"

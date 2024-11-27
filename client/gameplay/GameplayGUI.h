@@ -9,8 +9,8 @@
 #include "data/snapshot.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
-#include "multimedia/Image.h"
-#include "multimedia/Text.h"
+#include "multimedia/gui/Image.h"
+#include "multimedia/gui/Text.h"
 
 using std::make_shared;
 using std::shared_ptr;

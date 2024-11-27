@@ -5,7 +5,7 @@
 
 #include "client/tweening/TransformTween.h"
 #include "data/snapshot.h"
-#include "multimedia/Object2D.h"
+#include "multimedia/2d/Object2D.h"
 
 #include "SpriteRendererData.h"
 
@@ -34,27 +34,11 @@ private:
     TransformTween sizeTween;
 
 public:
-    CollectableRenderer(TypeCollectable type, Vector2D position): sizeTween(transform) {
-        SetItem(type, position);
-    }
+    CollectableRenderer(TypeCollectable type, Vector2D position);
 
-    void SetItem(TypeCollectable type, Vector2D position) {
-        if (!itemsMap.contains(type)) {
-            std::cout << "collectable item not recognized\n";
-            return;
-        }
-        SpriteRendererData itemData = itemsMap.at(type);
-        SetFileName(itemData.imageFile);
-        SetSourceRect(itemData.GetSourceRect());
+    void SetItem(TypeCollectable type, Vector2D position);
 
-        SetTransform(Transform(position, itemData.size, itemData.angle));
-
-        sizeTween.SetTarget(transform.GetSize() * 1.12f, 0.6f);
-    }
-
-    // void Update(float deltaTime) {}
-
-    ~CollectableRenderer() = default;
+    ~CollectableRenderer();
 };
 
 #endif

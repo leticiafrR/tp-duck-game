@@ -13,37 +13,26 @@ private:
 
 public:
     explicit Transform(Vector2D position = Vector2D::Zero(), Vector2D size = Vector2D::Zero(),
-                       float angle = 0) {
-        SetPos(position);
-        SetSize(size);
-        SetAngle(angle);
-    }
+                       float angle = 0);
 
-    void SetPos(Vector2D pos) { this->position = pos; }
-    void SetSize(Vector2D size) { this->size = size; }
-    void SetAngle(float angle) { this->angle = angle; }
-    void Move(Vector2D add) { this->position += add; }
-    void Rotate(float add) { this->angle += add; }
+    ~Transform();
 
-    Vector2D GetPos() const { return this->position; }
-    Vector2D GetSize() const { return this->size; }
-    float GetAngle() const { return this->angle; }
+    void SetPos(Vector2D pos);
+    void SetSize(Vector2D size);
+    void SetAngle(float angle);
+    void Move(Vector2D add);
+    void Rotate(float add);
 
-    Vector2D Min() const { return position - size / 2; }
-    Vector2D Max() const { return position + size / 2; }
+    Vector2D GetPos() const;
+    Vector2D GetSize() const;
+    float GetAngle() const;
 
-    void LookAt(Vector2D target, Vector2D worldUp = Vector2D::Right(), float offset = 0) {
-        angle = Vector2D::AngleBetween((target - position), worldUp);
-        angle += offset;
-        if (target.y - position.y < 0)
-            angle = 360.0 - angle;
-    }
+    Vector2D Min() const;
+    Vector2D Max() const;
 
-    std::string ToString() {
-        return "Position: " + position.ToString() + " - Size: " + size.ToString();
-    }
+    void LookAt(Vector2D target, Vector2D worldUp = Vector2D::Right(), float offset = 0);
 
-    ~Transform() = default;
+    std::string ToString();
 };
 
 #endif

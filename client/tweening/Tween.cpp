@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "TweenManager.h"
-Tween::Tween(float duration, OnCompleteCallback onComplete):
+Tween::Tween(float duration, Callback onComplete):
         duration(duration), timming(duration), onComplete(onComplete), alive(true), started(false) {
     TweenManager::GetInstance().AddTween(this);
 }

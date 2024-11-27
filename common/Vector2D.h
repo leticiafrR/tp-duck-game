@@ -10,123 +10,55 @@
 class Vector2D {
 private:
 public:
-    static float Distance(Vector2D a, Vector2D b) { return (a - b).GetMagnitude(); }
+    static float Distance(Vector2D a, Vector2D b);
+    static Vector2D Zero();
 
-    static Vector2D Zero() { return Vector2D(0, 0); }
-
-    static Vector2D Right() { return Vector2D(1, 0); }
-    static Vector2D Left() { return Vector2D(-1, 0); }
-    static Vector2D Up() { return Vector2D(0, 1); }
-    static Vector2D Down() { return Vector2D(0, -1); }
+    static Vector2D Right();
+    static Vector2D Left();
+    static Vector2D Up();
+    static Vector2D Down();
 
     // Lineal Interpolation
-    static Vector2D Lerp(const Vector2D& start, const Vector2D& end, float t) {
-        t = std::clamp(t, 0.0f, 1.0f);
-        return start + (end - start) * t;
-    }
+    static Vector2D Lerp(const Vector2D& start, const Vector2D& end, float t);
 
     static Vector2D MoveTowards(const Vector2D& current, const Vector2D& target,
-                                float maxDistanceDelta) {
-        Vector2D dir = target - current;
-        float dist = dir.GetMagnitude();
+                                float maxDistanceDelta);
 
-        if (dist <= maxDistanceDelta || dist == 0) {
-            return target;
-        } else {
-            Vector2D normalizedDirection = dir.Normalized();
-            return current + normalizedDirection * maxDistanceDelta;
-        }
-    }
+    static Vector2D GetOrthogonal(const Vector2D& v);
 
-    static Vector2D GetOrthogonal(const Vector2D& v) { return Vector2D(-v.y, v.x); }
+    static float DotProduct(Vector2D a, Vector2D b);
 
-    static float DotProduct(Vector2D a, Vector2D b) { return a.x * b.x + a.y * b.y; }
-
-    static float AngleBetween(Vector2D a, Vector2D b) {
-        float magnitudeA = a.GetMagnitude();
-        float magnitudeB = b.GetMagnitude();
-
-        if (magnitudeA == 0 || magnitudeB == 0)
-            return 0;
-
-        float cos = DotProduct(a, b) / (magnitudeA * magnitudeB);
-        cos = std::clamp(cos, -1.0f, 1.0f);
-
-        return std::acos(cos) * 180.0f / M_PI;
-    }
+    static float AngleBetween(Vector2D a, Vector2D b);
 
     float x;
     float y;
-    Vector2D(float x, float y) {
-        this->x = x;
-        this->y = y;
-    }
-    Vector2D() {
-        x = 0;
-        y = 0;
-    }
 
-    ~Vector2D() = default;
+    Vector2D(float x, float y);
+    Vector2D();
 
-    bool IsFarFrom(const Vector2D& other, float tolerance = 0.001) const {
-        return Distance(*this, other) > tolerance;
-    }
+    ~Vector2D();
 
-    float GetMagnitude() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
+    bool IsFarFrom(const Vector2D& other, float tolerance = 0.001) const;
 
-    Vector2D Normalized() const {
-        float magnitude = GetMagnitude();
-        if (magnitude == 0) {
-            return Vector2D::Zero();
-        }
-        return Vector2D(x / magnitude, y / magnitude);
-    }
+    float GetMagnitude() const;
 
-    void Rotate(float angle) {
-        float angleRadian = angle * M_PI / 180.0f;
-        float oldX = x;
-        float oldY = y;
-        x = oldX * std::cos(angleRadian) - oldY * std::sin(angleRadian);
-        y = oldX * std::sin(angleRadian) + oldY * std::cos(angleRadian);
-    }
+    Vector2D Normalized() const;
 
-    Vector2D ReflectAcross(const Vector2D& axis) const {
-        Vector2D normalizedAxis = axis.Normalized();
-        float projectionOnAxis = DotProduct(*this, normalizedAxis);
-        return (normalizedAxis * (2 * projectionOnAxis)) - *this;
-    }
+    void Rotate(float angle);
 
-    std::string ToString() const {
-        std::string xStr = (std::ostringstream() << std::fixed << std::setprecision(2) << x).str();
-        std::string yStr = (std::ostringstream() << std::fixed << std::setprecision(2) << y).str();
-        return "(" + xStr + ", " + yStr + ")";
-    }
+    Vector2D ReflectAcross(const Vector2D& axis) const;
 
-    Vector2D& operator+=(const Vector2D& other) {
-        this->x += other.x;
-        this->y += other.y;
-        return *this;
-    }
+    std::string ToString() const;
 
-    Vector2D& operator*=(const float& other) {
-        this->x *= other;
-        this->y *= other;
-        return *this;
-    }
+    Vector2D& operator+=(const Vector2D& other);
 
-    Vector2D operator*(const float& other) const {
-        return Vector2D(this->x * other, this->y * other);
-    }
-    Vector2D operator/(const float& other) const {
-        return Vector2D(this->x / other, this->y / other);
-    }
+    Vector2D& operator*=(const float& other);
 
-    Vector2D operator+(const Vector2D& other) const {
-        return Vector2D(this->x + other.x, this->y + other.y);
-    }
-    Vector2D operator-(const Vector2D& other) const {
-        return Vector2D(this->x - other.x, this->y - other.y);
-    }
+    Vector2D operator*(const float& other) const;
+    Vector2D operator/(const float& other) const;
+
+    Vector2D operator+(const Vector2D& other) const;
+    Vector2D operator-(const Vector2D& other) const;
 };
 
 #endif

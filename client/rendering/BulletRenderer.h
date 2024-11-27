@@ -4,8 +4,9 @@
 #include <unordered_map>
 
 #include "common/Transform.h"
+#include "data/snapshot.h"
+#include "multimedia/2d/Object2D.h"
 #include "multimedia/Camera.h"
-#include "multimedia/Object2D.h"
 
 #include "SpriteRendererData.h"
 
@@ -29,28 +30,11 @@ private:
     SpriteRendererData renderData;
 
 public:
-    BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed = 105):
-            origin(origin), end(end), speed(speed), alive(true) {
-        renderData = bulletsDataMap.contains(type) ? bulletsDataMap.at(type) :
-                                                     bulletsDataMap.at(TypeProjectile::BULLET);
-        SetFileName(renderData.imageFile);
-        SetSourceRect(renderData.GetSourceRect());
-        SetTransform(Transform(origin, renderData.size, renderData.angle));
-        GetTransform().LookAt(end, Vector2D::Right(), renderData.angle);
-    }
+    BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed = 105);
+    ~BulletRenderer();
+    void Update(float deltaTime);
 
-    void Update(float deltaTime) {
-        Vector2D dir = (end - origin).Normalized();
-        GetTransform().Move(dir * speed * deltaTime);
-        if (Vector2D::Distance(GetTransform().GetPos(), origin) >= (end - origin).GetMagnitude()) {
-            alive = false;
-            SetVisible(false);
-        }
-    }
-
-    bool IsAlive() { return alive; }
-
-    ~BulletRenderer() = default;
+    bool IsAlive();
 };
 
 #endif
