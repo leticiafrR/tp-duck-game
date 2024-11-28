@@ -231,6 +231,7 @@ void Duck::HandleCollisionWithMap(const Transform& mapT) {
 
 void Duck::TryEquip(TypeCollectable typeProtection) {
     if (equipment.TryEquip(typeProtection)) {
+        std::cout << "something was equipp (helmet or armor)\n";
         itemOnHand.reset();
         TriggerEvent();
     }
