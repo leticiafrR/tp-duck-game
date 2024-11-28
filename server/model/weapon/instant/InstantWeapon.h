@@ -3,11 +3,10 @@
 
 #include <random>
 
-#include "../projectile/InstantProjectile.h"
+#include "../Weapon.h"
 #include "server/config.h"
+#include "server/model/projectile/InstantProjectile.h"
 #include "server/model/types.h"
-
-#include "Weapon.h"
 
 class InstantWeapon: public Weapon {
 protected:
@@ -30,6 +29,7 @@ public:
                   float inclination = ShootingInclination::BASIC_NO_INCLINATION);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
+    void BeDropped(const Vector2D& duckPosition) override;
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;  // por el momento solo se usa para el cooldown
     virtual ~InstantWeapon() = default;

@@ -58,3 +58,7 @@ void InstantWeapon::Update(float deltaTime) {
         cooldownTimer += deltaTime;
     }
 }
+
+void InstantWeapon::BeDropped(const Vector2D& duckPosition) {
+    Collectable::BeDropped(duckPosition);
+}

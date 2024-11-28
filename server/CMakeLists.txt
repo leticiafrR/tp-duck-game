@@ -12,7 +12,7 @@ target_sources(taller_server
     model/Duck.cpp
     model/Game.cpp
     model/map/staticMap.cpp
-    model/weapon/InstantWeapon.cpp
+    model/weapon/instant/InstantWeapon.cpp
 
     model/weapon/instant/PistolaCowboy.cpp
     model/weapon/instant/DuelingPistol.cpp
@@ -64,7 +64,7 @@ target_sources(taller_server
     # model/collectable/Protection.h
     model/collectable/Collectable.h
     model/weapon/Weapon.h
-    model/weapon/InstantWeapon.h
+    model/weapon/instant/InstantWeapon.h
     model/weapon/instant/PistolaCowboy.h
     model/weapon/instant/DuelingPistol.h
     model/weapon/instant/LaserRifle.h
@@ -82,6 +82,8 @@ target_sources(taller_server
     model/collectable/Collectables.h
     model/collectable/CollectablesSpawner.h
     model/collectable/CollectablesController.h
+    model/collectable/Armor.h
+    model/collectable/Helmet.h
 
     network/serverProtocol.h
     network/messageSender.h

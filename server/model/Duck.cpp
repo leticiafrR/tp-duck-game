@@ -30,8 +30,9 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         typeOnHand(TypeCollectable::EMPTY) {}
 
 void Duck::TriggerEvent(bool cuack) {
-    l->NewPlayerEvent(id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand,
-                                      isCrouched, cuack));
+    l->NewPlayerEvent(
+            id, PlayerEvent(mySpace.GetPos(), myState, myFlip, isLookingUp, typeOnHand, isCrouched,
+                            cuack, equipment.HasArmor(), equipment.HasHelmet()));
 }
 
 void Duck::Cuack() { TriggerEvent(true); }
@@ -73,8 +74,12 @@ void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
     if (!isCrouched) {
-        isWounded = true;
-        DynamicObject::HandleReceiveDamage(damage);
+        if (!equipment.AbsorbDamage()) {
+            isWounded = true;
+            DynamicObject::HandleReceiveDamage(damage);
+        } else {
+            TriggerEvent();
+        }
     }
 }
 
@@ -171,11 +176,9 @@ void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
 }
 
 void Duck::TryCollect(CollectablesController& c) {
-    std::cout << "you'll try to collect an item\n";
     if (!itemOnHand) {
         itemOnHand = c.TryCollect(mySpace, typeOnHand);
         TriggerEvent();
-        std::cout << "[duck]: collected!\n";
     }
 }
 void Duck::TryDrop(CollectablesController& c) {
@@ -186,7 +189,6 @@ void Duck::TryDrop(CollectablesController& c) {
         itemOnHand.reset();
         typeOnHand = TypeCollectable::EMPTY;
         TriggerEvent();
-        std::cout << "[duck]: efectivamente soltado\n";
     }
 }
 
@@ -225,4 +227,11 @@ void Duck::HandleOutOfBounds(float displacement) {
 
 void Duck::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);
+}
+
+void Duck::TryEquip(TypeCollectable typeProtection) {
+    if (equipment.TryEquip(typeProtection)) {
+        itemOnHand.reset();
+        TriggerEvent();
+    }
 }

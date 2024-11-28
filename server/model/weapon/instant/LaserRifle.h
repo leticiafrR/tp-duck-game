@@ -1,6 +1,6 @@
 #ifndef LASER_RIFLE_H
 #define LASER_RIFLE_H
-#include "../InstantWeapon.h"
+#include "InstantWeapon.h"
 
 class LaserRifle: public InstantWeapon {
 public:

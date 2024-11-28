@@ -6,10 +6,11 @@ class Equipment {
 private:
     TypeCollectable armor;
     TypeCollectable helmet;
-    // const Config& conf;
 
 public:
     Equipment(): armor(TypeCollectable::EMPTY), helmet(TypeCollectable::EMPTY) {}
+    bool HasArmor() { return (armor != TypeCollectable::EMPTY); }
+    bool HasHelmet() { return (helmet != TypeCollectable::EMPTY); }
     bool TryEquip(TypeCollectable& item) {
 
         if (item == TypeCollectable::ARMOR && !HasArmor()) {
@@ -24,7 +25,15 @@ public:
         }
         return false;
     }
-    bool HasArmor() { return (armor != TypeCollectable::EMPTY); }
-    bool HasHelmet() { return (helmet != TypeCollectable::EMPTY); }
+    bool AbsorbDamage() {
+        if (HasHelmet()) {
+            helmet = TypeCollectable::EMPTY;
+        } else if (HasArmor()) {
+            armor = TypeCollectable::EMPTY;
+        } else {
+            return true;
+        }
+        return false;
+    }
 };
 #endif

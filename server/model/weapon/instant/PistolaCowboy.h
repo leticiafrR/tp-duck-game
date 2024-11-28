@@ -1,6 +1,6 @@
 #ifndef PISTOLA_COWBOY_H
 #define PISTOLA_COWBOY_H
-#include "../InstantWeapon.h"
+#include "InstantWeapon.h"
 
 class PistolaCowboy: public InstantWeapon {
 public:

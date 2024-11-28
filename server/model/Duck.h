@@ -31,7 +31,7 @@ private:
     DuckState myState;
     std::shared_ptr<Collectable> itemOnHand;
     TypeCollectable typeOnHand;
-    Equipment protectiveEquipment;
+    Equipment equipment;
 
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     DuckState GetLowerPriorityState();
@@ -57,6 +57,8 @@ public:
     void StopCrouch();
 
     void Cuack();
+
+    void TryEquip(TypeCollectable typeProtection);
 
     void TryCollect(CollectablesController& c);
     void TryDrop(CollectablesController& c);

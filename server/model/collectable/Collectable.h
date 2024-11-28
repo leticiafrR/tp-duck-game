@@ -17,7 +17,7 @@ public:
     virtual ~Collectable() = default;
 
 
-    void BeDropped(const Vector2D& position) { mySpace.SetPos(position); }
+    virtual void BeDropped(const Vector2D& duckPosition) { mySpace.SetPos(duckPosition); }
 
     virtual bool Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;

@@ -63,10 +63,10 @@ Si ya estás en el directorio build, simplemente ejecuta:
 * A continuación se irán repitiendo games hasta que haya un jugador ganador de toda la partida según el criterio establecido por la cátedra.
 
 ## Requerimientos faltantes  a fecha 26/11/24
-1. Los spawn places para las armas/armaduras/cascos (items colectables)
+1. ~Los spawn places para las armas/armaduras/cascos (items colectables)~
 2. Fisical weapons
-3. Habilidad de los patos para recoger/dejar items de/en el mundo del juego.
-4. Implementar las últimas correcciones que nos hizo (
+3. ~Habilidad de los patos para recoger/dejar items de/en el mundo del juego.~
+4. Implementar las últimas correcciones que nos hizo
    * separar codigo de archivos .h,
    * no incluir código en constructores,
    * instalador debe hacer que se pueda correr el juego desde cualquier parte,

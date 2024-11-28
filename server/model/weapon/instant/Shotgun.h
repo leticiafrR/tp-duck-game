@@ -1,6 +1,6 @@
 #ifndef SHOTGUN_H
 #define SHOTGUN_H
-#include "../InstantWeapon.h"
+#include "InstantWeapon.h"
 
 #define AMMO_WITH_RELOAD(x) ((x)*2)
 

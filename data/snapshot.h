@@ -43,19 +43,23 @@ struct PlayerEvent {
     TypeCollectable typeOnHand;
     bool isCrouched;
     bool cuacking;
+    bool hasArmor;
+    bool hasHelmet;
 
     PlayerEvent() = default;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
                 bool _isLookingUp, TypeCollectable _typeOnHand, bool _isCrouched,
-                bool _cuacking = false):
+                bool _cuacking = false, bool _hasArmor = false, bool _hasHelmet = false):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),
             isLookingUp(_isLookingUp),
             typeOnHand(_typeOnHand),
             isCrouched(_isCrouched),
-            cuacking(_cuacking) {}
+            cuacking(_cuacking),
+            hasArmor(_hasArmor),
+            hasHelmet(_hasHelmet) {}
 };
 
 struct InstantProjectileEventDto {
