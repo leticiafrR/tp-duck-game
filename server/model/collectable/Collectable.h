@@ -7,6 +7,7 @@
 
 class CollectableEventListener;
 class Duck;
+class StaticMap;
 
 class Collectable {
 protected:
@@ -17,11 +18,11 @@ public:
     virtual ~Collectable() = default;
 
 
-    virtual void BeDropped(const Vector2D& duckPosition) { mySpace.SetPos(duckPosition); }
+    virtual void BeDropped(const Vector2D& duckPosition, const Vector2D& direction) = 0;
 
     virtual bool Use(Duck* user) = 0;
     virtual void StopUse(Duck* user) = 0;
-    virtual void Update(float deltaTime) = 0;
+    virtual void Update(float deltaTime, StaticMap& map) = 0;
 
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;

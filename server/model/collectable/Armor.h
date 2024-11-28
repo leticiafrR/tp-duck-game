@@ -14,10 +14,13 @@ public:
         return true;
     }
 
-    void StopUse(Duck* /*parameter*/) override {}
-    void Update(float /*parameter*/) override {}
+    void StopUse(Duck* /*user*/) override {}
+    void Update(float /*deltaTime*/, StaticMap& /*map*/) override {}
     bool StillReusable() override { return true; }
     TypeCollectable GetTypeCollectable() override { return TypeCollectable::ARMOR; }
+    void BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) override {
+        mySpace.SetPos(duckPosition);
+    }
 };
 
 #endif
