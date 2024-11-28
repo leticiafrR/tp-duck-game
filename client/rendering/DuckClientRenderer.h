@@ -15,6 +15,8 @@
 #include "multimedia/ColorExtension.h"
 #include "multimedia/audio/AudioManager.h"
 
+#include "ChestplateRenderer.h"
+
 class DuckClientRenderer {
 private:
     static const std::map<uint8_t, Color> SkinColors;
@@ -38,6 +40,8 @@ public:
 
     HandItemRenderer handItem;
 
+    ChestplateRenderer chestplate;
+
     DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
                        CameraController& camController);
     ~DuckClientRenderer();
@@ -59,7 +63,9 @@ public:
 
     void OnDead();
 
-    string GetAnimAndCuack(string anim);
+    void SetTargetAnimation(const string& animTarget, bool resetIndex = true);
+
+    string GetAnimAndCuack(string animTarget);
     void SetEventTarget(PlayerEvent newTarget);
 };
 

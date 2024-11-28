@@ -31,6 +31,8 @@ public:
 
     void Update(float deltaTime);
 
+    bool TargetExists(const std::string& target);
+
     Rect GetTargetRect();
 
     void SetTarget(const std::string& target, bool reset_index = true);
