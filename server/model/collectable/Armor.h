@@ -8,6 +8,7 @@ public:
     explicit Armor(Transform initialSpace): Collectable(initialSpace) {}
     void BeCollected(TypeCollectable& collectorTypeRef) override {
         collectorTypeRef = TypeCollectable::ARMOR;
+        std::cout << "armor collected\n";
     }
     bool Use(Duck* user) override {
         user->TryEquip(TypeCollectable::ARMOR);

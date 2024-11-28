@@ -35,14 +35,16 @@ std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable 
         case TypeCollectable::SHOTGUN:
             return std::make_shared<Shotgun>(projectilesController, spawnPlace, conf);
             break;
-        // case TypeCollectable::ARMOR:
-        //     return new a(projectilesController, spawnPlace,conf);
-        //     break;
+        case TypeCollectable::ARMOR:
+            std::cout << "AMOR SPAWNED\n";
+            return std::make_shared<Armor>(spawnPlace);
+            break;
         default:
             break;
     }
-    std::cout << "selecciòn aun no implementada :(. Mientras tanto una pew pew\n";
-    return std::make_shared<PewPewLaser>(projectilesController, spawnPlace, conf);
+    std::cout << "AMOR SPAWNED\n";
+    // return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
+    return std::make_shared<Armor>(spawnPlace);
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {
