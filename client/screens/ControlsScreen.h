@@ -1,24 +1,24 @@
 #ifndef CONTROLS_SCREEN_H
 #define CONTROLS_SCREEN_H
 
+#include <list>
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "multimedia/audio/AudioManager.h"
 #include "multimedia/gui/Button.h"
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
 
+using std::list;
 using std::make_shared;
 using std::shared_ptr;
 using std::string;
-using std::vector;
 
 class KeyItemGUI {
 private:
-    shared_ptr<Image> imgBg;
-    shared_ptr<Text> txtKey;
+    Image imgBg;
+    Text txtKey;
 
 public:
     KeyItemGUI(const string& key, Vector2D pos, Vector2D size = Vector2D(60, 60),
@@ -35,9 +35,9 @@ private:
     Image imgBg;
     Button btnBack;
 
-    vector<shared_ptr<Text>> texts;
+    list<Text> texts;
 
-    vector<KeyItemGUI> playerKeys;
+    list<KeyItemGUI> playerKeys;
 
     void InitTexts();
 
