@@ -174,9 +174,11 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto typeOnHand = (TypeCollectable)assistant.receiveNumberOneByte();
         auto isCrouched = assistant.receiveBooelan();
         auto cuacking = assistant.receiveBooelan();
+        auto hasArmor = assistant.receiveBooelan();
+        auto hasHelmet = assistant.receiveBooelan();
         // building PlayerEvent
-        _updates[ID] =
-                PlayerEvent{evMotion, evState, evFlip, lookingUp, typeOnHand, isCrouched, cuacking};
+        _updates[ID] = PlayerEvent{evMotion,   evState,  evFlip,   lookingUp, typeOnHand,
+                                   isCrouched, cuacking, hasArmor, hasHelmet};
     }
     // receiving raycastsEvents
     uint8_t numberProjectile = assistant.receiveNumberOneByte();

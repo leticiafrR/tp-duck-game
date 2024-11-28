@@ -151,6 +151,8 @@ void ServerProtocol::sendPlayerUpdates(const std::unordered_map<PlayerID_t, Play
         assistant.sendNumber((uint8_t)it->second.typeOnHand);
         assistant.sendBoolean(it->second.isCrouched);
         assistant.sendBoolean(it->second.cuacking);
+        assistant.sendBoolean(it->second.hasArmor);
+        assistant.sendBoolean(it->second.hasHelmet);
     }
 }
 void ServerProtocol::sendRaycastsEvents(
