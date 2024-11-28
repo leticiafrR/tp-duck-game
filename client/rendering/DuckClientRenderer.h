@@ -4,16 +4,11 @@
 #include <map>
 #include <string>
 
-#include "client/gameplay/Animator.h"
+#include "client/Framework.h"
 #include "client/gameplay/CameraController.h"
 #include "client/rendering/HandItemRenderer.h"
-#include "client/utils/Timer.h"
-#include "common/Transform.h"
 #include "data/dataTransferObjects.h"
 #include "data/snapshot.h"
-#include "multimedia/2d/Object2D.h"
-#include "multimedia/ColorExtension.h"
-#include "multimedia/audio/AudioManager.h"
 
 #include "ChestplateRenderer.h"
 

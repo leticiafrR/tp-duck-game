@@ -28,8 +28,10 @@ private:
              SpriteRendererData("laser.png", "laser.yaml", "laser_rifle", Vector2D(4, 4), -45)},
             {TypeCollectable::SHOTGUN,
              SpriteRendererData("shotguns.png", "shotguns.yaml", "shotgun", Vector2D(4, 4))},
-            {TypeCollectable::ARMOR, SpriteRendererData("", "", "")},
-            {TypeCollectable::HELMET, SpriteRendererData("", "", "")}};
+            {TypeCollectable::ARMOR,
+             SpriteRendererData("defense.png", "defense.yaml", "chest", Vector2D(2, 2))},
+            {TypeCollectable::HELMET,
+             SpriteRendererData("defense.png", "defense.yaml", "helmet", Vector2D(2, 2))}};
 
     TransformTween sizeTween;
 

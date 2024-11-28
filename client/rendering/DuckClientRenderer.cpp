@@ -15,7 +15,7 @@ DuckClientRenderer::DuckClientRenderer(const Transform& transform, PlayerData da
         fromPos(transform.GetPos()),
         target(initialEvent),
         handItem(spr.GetTransform(), initialEvent.typeOnHand),
-        chestplate(spr.GetTransform(), spr.GetTransform(), 22) {
+        chestplate(spr.GetTransform(), 22) {
 
     spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
@@ -56,6 +56,7 @@ void DuckClientRenderer::Update(float deltaTime) {
 
 void DuckClientRenderer::Draw(Camera& cam) {
     spr.Draw(cam);
+    chestplate.Draw(cam);
     handItem.Draw(cam);
 }
 
@@ -148,7 +149,7 @@ void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
     if (newTarget.isCrouched)
         SetTargetAnimation("crouched");
 
-    chestplate.SetVisible(newTarget.hasArmor);
+    chestplate.SetVisible(target.hasArmor);
 
     handItem.SetItem(target.typeOnHand);
 }

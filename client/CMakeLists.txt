@@ -7,9 +7,10 @@ target_sources(taller_client
     tweening/TweenManager.cpp
 
     utils/Timer.cpp
+    utils/Animator.cpp
+    utils/TransformFollow.cpp
 
     gameplay/CameraController.cpp
-    gameplay/Animator.cpp
     gameplay/Gameplay.cpp
     gameplay/GameplayGUI.cpp
 
@@ -35,15 +36,18 @@ target_sources(taller_client
 
     PUBLIC
     # .h files
+    Framework.h
+
     tweening/ImageTween.h
     tweening/TransformTween.h
     tweening/Tween.h
     tweening/TweenManager.h
 
     utils/Timer.h
+    utils/Animator.h
+    utils/TransformFollow.h
 
     gameplay/CameraController.h
-    gameplay/Animator.h
     gameplay/Gameplay.h
     gameplay/GameplayGUI.h
 

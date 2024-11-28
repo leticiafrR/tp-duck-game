@@ -3,8 +3,7 @@
 
 #include <string>
 
-#include "client/gameplay/Animator.h"
-#include "multimedia/2d/Object2D.h"
+#include "client/Framework.h"
 
 using std::string;
 
@@ -14,7 +13,7 @@ private:
     Animator anim;
 
 public:
-    ChestplateRenderer(Transform& playerT, Transform transform, int targetFPS);
+    ChestplateRenderer(Transform& playerT, int targetFPS);
 
     void SetAnimTarget(string animTarget, bool resetIndex = true);
 
