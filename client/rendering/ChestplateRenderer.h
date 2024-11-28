@@ -17,7 +17,7 @@ public:
 
     void SetAnimTarget(string animTarget, bool resetIndex = true);
 
-    void Update(float deltaTime);
+    void Update(float deltaTime, bool flip);
 
     ~ChestplateRenderer();
 };

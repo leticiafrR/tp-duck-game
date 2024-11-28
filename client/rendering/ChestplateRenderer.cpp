@@ -17,7 +17,8 @@ void ChestplateRenderer::SetAnimTarget(string animTarget, bool resetIndex) {
 
 ChestplateRenderer::~ChestplateRenderer() = default;
 
-void ChestplateRenderer::Update(float deltaTime) {
+void ChestplateRenderer::Update(float deltaTime, bool flip) {
     transform.SetPos(playerT.GetPos() + Vector2D::Down() * 0.2f);
+    SetFlip(flip);
     anim.Update(deltaTime);
 }

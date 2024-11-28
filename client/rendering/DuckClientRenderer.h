@@ -12,7 +12,7 @@
 
 #include "ChestplateRenderer.h"
 
-class DuckClientRenderer {
+class DuckClientRenderer: public Object2D {
 private:
     static const std::map<uint8_t, Color> SkinColors;
 
@@ -25,7 +25,6 @@ private:
 
 public:
     CameraController& camController;
-    Object2D spr;
     Animator anim;
 
     Vector2D fromPos;
@@ -48,7 +47,7 @@ public:
 
     void Update(float deltaTime);
 
-    void Draw(Camera& cam);
+    void Draw(Camera& cam) override;
 
     Transform& GetTransform();
 
