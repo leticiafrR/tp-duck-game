@@ -15,7 +15,8 @@ DuckClientRenderer::DuckClientRenderer(const Transform& transform, PlayerData da
         fromPos(transform.GetPos()),
         target(initialEvent),
         handItem(this->transform, initialEvent.typeOnHand),
-        chestplate(this->transform, 22) {
+        chestplate(this->transform, 22),
+        helmet(this->transform) {
 
     this->transform.SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
@@ -37,7 +38,6 @@ void DuckClientRenderer::Update(float deltaTime) {
     transform.SetPos(pos);
 
     if (damaged) {
-        // anim.SetTarget("damaged");
         SetTargetAnimation("damaged");
         damagedTimer.Update(deltaTime);
     }
@@ -48,6 +48,7 @@ void DuckClientRenderer::Update(float deltaTime) {
 
     anim.Update(deltaTime);
     chestplate.Update(deltaTime, GetFlip());
+    helmet.Update(GetFlip(), target.isCrouched);
 
     handItem.Update(GetFlip(), target.isLookingUp);
 
@@ -57,6 +58,7 @@ void DuckClientRenderer::Update(float deltaTime) {
 void DuckClientRenderer::Draw(Camera& cam) {
     Object2D::Draw(cam);
     chestplate.Draw(cam);
+    helmet.Draw(cam);
     handItem.Draw(cam);
 }
 
@@ -70,7 +72,6 @@ void DuckClientRenderer::OnCuack() {
         size_t pos = currentAnim.find("_cuack");
         if (pos != std::string::npos) {
             currentAnim.erase(pos);
-            // anim.SetTarget(currentAnim);
             SetTargetAnimation(currentAnim);
         }
     });
@@ -148,6 +149,7 @@ void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
         SetTargetAnimation("crouched");
 
     chestplate.SetVisible(target.hasArmor);
+    helmet.SetVisible(target.hasHelmet);
 
     handItem.SetItem(target.typeOnHand);
 }

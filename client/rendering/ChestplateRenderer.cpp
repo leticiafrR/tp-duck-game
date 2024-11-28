@@ -4,7 +4,7 @@ ChestplateRenderer::ChestplateRenderer(Transform& playerT, int targetFPS):
         Object2D("defense.png", playerT),
         playerT(playerT),
         anim(*this, "defense.yaml", "chest_equiped_idle", targetFPS) {
-    transform.SetSize(transform.GetSize() * 1.2f);
+    transform.SetSize(transform.GetSize() * 1.3f);
 }
 
 void ChestplateRenderer::SetAnimTarget(string animTarget, bool resetIndex) {

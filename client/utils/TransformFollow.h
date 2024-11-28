@@ -13,6 +13,8 @@ public:
     TransformFollow(Transform& followerT, Transform& targetT, Vector2D offset = Vector2D::Zero());
     ~TransformFollow();
 
+    void SetOffset(Vector2D offset);
+
     void Follow();
 };
 

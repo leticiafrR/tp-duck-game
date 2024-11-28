@@ -20,6 +20,7 @@ target_sources(taller_client
     rendering/CollectableRenderer.cpp
     rendering/HandItemRenderer.cpp
     rendering/ChestplateRenderer.cpp
+    rendering/HelmetRenderer.cpp
 
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
@@ -67,6 +68,7 @@ target_sources(taller_client
     rendering/CollectableRenderer.h
     rendering/HandItemRenderer.h
     rendering/ChestplateRenderer.h
+    rendering/HelmetRenderer.h
 
     ClientRunner.h
 

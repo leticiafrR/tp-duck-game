@@ -11,6 +11,7 @@
 #include "data/snapshot.h"
 
 #include "ChestplateRenderer.h"
+#include "HelmetRenderer.h"
 
 class DuckClientRenderer: public Object2D {
 private:
@@ -35,6 +36,7 @@ public:
     HandItemRenderer handItem;
 
     ChestplateRenderer chestplate;
+    HelmetRenderer helmet;
 
     DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
                        CameraController& camController);

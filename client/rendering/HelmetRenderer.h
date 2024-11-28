@@ -3,7 +3,8 @@
 
 #include <string>
 
-#include "Framework.h"
+#include "client/Framework.h"
+#include "multimedia/cache/SheetDataCache.h"
 
 using std::string;
 
@@ -14,7 +15,7 @@ private:
 public:
     explicit HelmetRenderer(Transform& playerT);
 
-    void Update();
+    void Update(bool flip, bool crouched);
 
     ~HelmetRenderer();
 };

@@ -1,3 +1,6 @@
+#ifndef FRAMEWORK_H
+#define FRAMEWORK_H
+
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/Tween.h"
@@ -14,3 +17,5 @@
 #include "multimedia/KeyboardExtension.h"
 #include "multimedia/Rate.h"
 #include "multimedia/audio/AudioManager.h"
+
+#endif
