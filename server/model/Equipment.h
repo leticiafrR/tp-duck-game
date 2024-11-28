@@ -31,9 +31,9 @@ public:
         } else if (HasArmor()) {
             armor = TypeCollectable::EMPTY;
         } else {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 };
 #endif
