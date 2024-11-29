@@ -25,13 +25,13 @@ public:
     MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
                const Transform& transform, float tileSize);
 
-    virtual ~MapBlock2D();
+    ~MapBlock2D();
 
     Transform& GetTransform();
 
     void SetBorders(bool left, bool right, bool top, bool bottom);
 
-    virtual void Draw(Camera& cam);
+    void Draw(Camera& cam);
 };
 
 #endif
