@@ -48,5 +48,10 @@ const string DUCK_GAME_LOGO = "duck_game_logo.png";
 const string BUTTON_1_IMAGE = "button_1.png";
 const string BLOCK_MAP = "tile_set.png";
 const string BLOCK_MAP_YAML = "tile_set.yaml";
-const string FOREST_BACKGROUND = "bg_forest.png";
+
+const string TILE_KEY = "tile";
+const string FOREST_KEY = "FOREST";
+const string TILE_DATA_KEY = "tile_data";
+const string AVAILABLE_THEMES_PATH = "themes.yaml";
+const string BACKGROUND_KEY = "bg";
 #endif

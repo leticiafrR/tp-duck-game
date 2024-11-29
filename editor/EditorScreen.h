@@ -8,6 +8,7 @@
 
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
+#include "editWorld/GameWorld.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/KeyboardExtension.h"
@@ -38,6 +39,7 @@ private:
     void UpdateWidgetListPosition(Vector2D movement);
     float currentY = 0;
     float scrollSize = 0;
+    GameWorld gameMap;
 
 public:
     explicit EditorScreen(Camera& cam, MapEditor& writer);

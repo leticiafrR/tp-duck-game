@@ -26,6 +26,8 @@ target_sources(taller_multimedia
     cache/FontCache.cpp
     cache/SheetDataCache.cpp
 
+    ThemeInfo.cpp
+
     PUBLIC
     # .h files
     Camera.h
@@ -53,4 +55,6 @@ target_sources(taller_multimedia
     cache/AudioCache.h
     cache/FontCache.h
     cache/SheetDataCache.h
+
+    ThemeInfo.h
     )

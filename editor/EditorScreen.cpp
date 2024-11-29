@@ -59,7 +59,8 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
         saveButtonText(SAVE_LABEL.c_str(), 20,
                        RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
                                      Vector2D(0.5, 0.5)),
-                       ColorExtension::White(), 5) {
+                       ColorExtension::White(), 5),
+        gameMap(cam, w.GetGameScene()) {
 
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
     Vector2D initialPos(-20, -150);
@@ -89,7 +90,7 @@ void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
 
 bool EditorScreen::Render() {
     cam.InitRate();
-
+    GameWorld(cam, writer.GetGameScene()).Run();
     while (running) {
         cam.Clean();
         SDL_Event event;
