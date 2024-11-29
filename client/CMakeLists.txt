@@ -36,6 +36,8 @@ target_sources(taller_client
     main.cpp
     
     network/ClientProtocol.cpp
+    network/Receiver.cpp
+    network/Sender.cpp
 
     PUBLIC
     # .h files

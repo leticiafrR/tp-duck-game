@@ -4,35 +4,41 @@
 #include "common/playerIdentifier.h"
 #include "data/command.h"
 
+#define CLIENT_DISCONNECTED_THREAD_KILLED \
+    "Communication thread killed when it was identified that the client was disconnected"
+#define MATCH_OVER_KILLED_PARTICIPANTS                                                           \
+    "Communication thread killed when identified client was communicating with a already ended " \
+    "match"
+
 ReceiverThread::ReceiverThread(MatchesMonitor& matches, std::shared_ptr<Queue<Command>> matchQueue,
-                               uint16_t matchID, uint16_t connectionId,
-                               uint8_t playersPerConnection, ServerProtocol& protocol):
+                               const MatchSelection& matchSelection, uint16_t connectionId,
+                               ServerProtocol& protocol):
         matches(matches),
         matchQueue(matchQueue),
-        matchID(matchID),
+        matchSelection(matchSelection),
         connectionId(connectionId),
-        playersPerConnection(playersPerConnection),
         protocol(protocol) {}
 
 void ReceiverThread::run() {
     try {
         while (_keep_running) {
             Command cmmd = protocol.receiveCommand();
-            if (cmmd.indexLocalPlayer < playersPerConnection) {
+            if (cmmd.indexLocalPlayer < matchSelection.playersPerConection) {
                 cmmd.playerId =
                         PlayerIdentifier::GeneratePlayerID(connectionId, cmmd.indexLocalPlayer);
                 matchQueue->push(cmmd);
             }
         }
-    } catch (const ConnectionFailed& c) {
-        matches.logOutClient(matchID, connectionId);
-    } catch (const LibError& e) {
-        matches.logOutClient(matchID, connectionId);
     } catch (const ClosedQueue& q) {
+        std::cerr << "[Receiver Thread " << connectionId << "]: " << MATCH_OVER_KILLED_PARTICIPANTS
+                  << std::endl;
+        return;
+    } catch (const ConnectionFailed& c) {
+        std::cerr << "[Receiver Thread " << connectionId
+                  << "]: " << CLIENT_DISCONNECTED_THREAD_KILLED << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "Exception in the receiver thread: " << e.what() << std::endl;
-    } catch (...) {
-        std::cerr << "ERROR: An unkown error was catched at the receiveLoop of the client with ID :"
-                  << connectionId << "\n";
+        std::cerr << "[Receiver Thread " << connectionId << "]: Exception caught :" << e.what()
+                  << std::endl;
     }
+    matches.logOutClient(matchSelection.matchSelection, connectionId);
 }

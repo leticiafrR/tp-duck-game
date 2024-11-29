@@ -23,7 +23,6 @@ target_sources(taller_common
     safeMap.h
     timeManager.h
     protocolAssistant.h
-    matchBinder.h
     playerIdentifier.h
 
     Vector2D.h
