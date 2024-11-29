@@ -20,6 +20,7 @@ target_sources(taller_server
     model/weapon/instant/PewPewLaser.cpp
     model/weapon/instant/Shotgun.cpp
 
+    model/projectile/Projectile.cpp
     model/projectile/ProjectilesController.cpp
     model/projectile/instant/InstantProjectile.cpp
     model/projectile/instant/BounceInstantProjectile.cpp

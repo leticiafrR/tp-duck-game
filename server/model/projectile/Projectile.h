@@ -16,9 +16,9 @@ protected:
     bool isDead;
 
 public:
-    void MarkAsDead() { isDead = true; }
-    bool IsDead() { return isDead; }
-    explicit Projectile(TypeProjectile type): type(type), isDead(false) {}
+    void MarkAsDead();
+    bool IsDead();
+    explicit Projectile(TypeProjectile type);
     virtual ~Projectile() = default;
     virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) = 0;
 };
