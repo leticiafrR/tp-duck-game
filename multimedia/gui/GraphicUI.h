@@ -41,6 +41,7 @@ public:
 
     Transform& GetTransform();
     Vector2D GetSize();
+    Vector2D GetPos();
 
     void SetColor(Color color);
     Color GetColor();

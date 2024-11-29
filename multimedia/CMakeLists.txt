@@ -8,6 +8,7 @@ target_sources(taller_multimedia
 
     2d/Object2D.cpp
     2d/MapBlock2D.cpp
+    2d/MapBlockRenderData.cpp
 
     audio/AudioManager.cpp
     
@@ -18,6 +19,7 @@ target_sources(taller_multimedia
     gui/Button.cpp
     gui/GUIManager.cpp
     gui/ButtonsManager.cpp
+    gui/MapBlockGUI.cpp
 
     cache/TextureCache.cpp
     cache/AudioCache.cpp
@@ -34,6 +36,7 @@ target_sources(taller_multimedia
     
     2d/Object2D.h
     2d/MapBlock2D.h
+    2d/MapBlockRenderData.h
     
     audio/AudioManager.h
     
@@ -44,6 +47,7 @@ target_sources(taller_multimedia
     gui/Button.h
     gui/GUIManager.h
     gui/ButtonsManager.h
+    gui/MapBlockGUI.h
 
     cache/TextureCache.h
     cache/AudioCache.h
