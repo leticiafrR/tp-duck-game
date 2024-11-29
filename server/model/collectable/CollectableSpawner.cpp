@@ -36,15 +36,17 @@ std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable 
             return std::make_shared<Shotgun>(projectilesController, spawnPlace, conf);
             break;
         case TypeCollectable::ARMOR:
-            std::cout << "AMOR SPAWNED\n";
             return std::make_shared<Armor>(spawnPlace);
+            break;
+        case TypeCollectable::HELMET:
+            return std::make_shared<Helmet>(spawnPlace);
             break;
         default:
             break;
     }
-    std::cout << "AMOR SPAWNED\n";
+    return std::make_shared<Helmet>(spawnPlace);
     // return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
-    return std::make_shared<Armor>(spawnPlace);
+    // return std::make_shared<Armor>(spawnPlace);
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {
