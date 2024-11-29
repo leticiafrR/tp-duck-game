@@ -12,18 +12,16 @@ using std::string;
 EditorRunner::EditorRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
 void EditorRunner::run() {
     bool option = MenuScreen(cam).run();
-
-    string lvlName;
     if (option) {
         SetLevelName newLvl(cam);
-        lvlName = newLvl.Render();
+        writeArchive.AddFileName(newLvl.Render());
     } else {
         LevelsScreen listLvls(cam);
-        lvlName = listLvls.Render();
+        writeArchive = MapEditor(listLvls.Render());
     }
-    std::cout << lvlName << std::endl;
-    MapEditor writeArchive(lvlName);
+
     EditorScreen runner(cam, writeArchive);
     bool b = runner.Render();
     std::cout << b << std::endl;
+    writeArchive.SaveChanges();
 }

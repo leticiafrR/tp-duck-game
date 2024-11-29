@@ -1,9 +1,11 @@
 #include "mapEditor.h"
 
+#include <filesystem>
 #include <set>
 
 #include "common/Transform.h"
 #include "common/Vector2D.h"
+
 MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0) {
     config[THEME_STR] = "FOREST";
     config[FULL_MAP_STR][X_STR] = 100;
@@ -15,6 +17,7 @@ MapEditor::MapEditor(const std::string& _fileName):
         platformsCounter(0),
         fileName(_fileName),
         filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE) {
+
     if (config[PLATFORMS_STR] && config[PLATFORMS_STR].IsSequence()) {
         platformsCounter = config[PLATFORMS_STR].size();
     } else {

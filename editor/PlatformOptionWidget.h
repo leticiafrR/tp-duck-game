@@ -25,7 +25,7 @@ public:
     explicit PlatformOptionWidget(GroundDto& info, CallbackParam<vector<string>> onSelect);
 
     ~PlatformOptionWidget() = default;
-
+    void DrawOption(Camera& cam);
     void MoveContent(Vector2D movement);
 };
 #endif
