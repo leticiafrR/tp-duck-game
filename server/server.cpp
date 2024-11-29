@@ -4,12 +4,11 @@
 
 #define QUIT "q"
 
-Server::Server(const char* port):
-        config(), matches(config), acceptor(std::make_unique<AcceptorThread>(port, config)) {
-    acceptor->start();
-}
+Server::Server(): config(), matches(config) {}
 
-void Server::keepServing() {
+void Server::startServing(const char* port) {
+    acceptor = std::make_unique<AcceptorThread>(port, config);
+    acceptor->start();
     std::string in;
     do {
         std::cin >> in;

@@ -14,7 +14,7 @@ if [[ $EUID -ne 0 ]]; then
    echo "Este script debe ejecutarse como root. Usa 'sudo'." >&2
    exit 1
 fi
-
+# # DISCOMMENT TO THE FINAL RELEASE
 # print_colored_message $GREEN "[DUCK GAME INSTALLER] Installing dependencies..."
 # chmod +x scripts/install_dependencies.sh
 # ./scripts/install_dependencies.sh
