@@ -19,11 +19,11 @@ class MenuScreen {
     bool running = true;
     void RenderListLevels();
     void RenderLvlName();
-    bool option;
+    int option;
 
 public:
     explicit MenuScreen(Camera& cam);
-    bool run();
+    int run();
     ~MenuScreen();
 };
 #endif

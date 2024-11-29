@@ -11,7 +11,7 @@
 #include "constants.h"
 #include "constantsEditor.h"
 #include "mapEditor.h"
-
+// using namespace SDL2pp;
 const int WEIGHT_SCREEN = 940;
 const int HIGH_SCREEN = 940;
 int main() {

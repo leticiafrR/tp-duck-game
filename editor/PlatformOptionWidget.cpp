@@ -3,10 +3,13 @@
 #include "constants.h"
 
 PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<vector<string>> onSelect):
-        obj(BLOCK_MAP, BLOCK_MAP_YAML, info.mySpace, 4),
+        obj(BLOCK_MAP, BLOCK_MAP_YAML,
+            RectTransform(Transform(info.mySpace.GetPos() * 10, info.mySpace.GetSize() * 10, 0),
+                          Vector2D(0.35, 1)),
+            40),
         btn(
                 BUTTON_1_IMAGE,
-                RectTransform(Transform(Vector2D(280, 0), Vector2D(100, 20)), Vector2D(0, 1)),
+                RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
                 [this]() {
                     std::cout << "Boton presionado " << std::endl;
                     this->onSelectClicked(this->edges);
@@ -14,7 +17,7 @@ PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<vector
                 Color(40, 40, 40), 1),
         selectLevelText(
                 SELECT_STR.c_str(), 30,
-                RectTransform(Transform(Vector2D(280, 0), Vector2D(100, 20)), Vector2D(0, 1)),
+                RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
                 ColorExtension::White(), 2),
         onSelectClicked(onSelect) {
     bool left = false, right = false, top = false, bottom = false;
@@ -44,12 +47,11 @@ PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<vector
 void PlatformOptionWidget::DrawOption(Camera& cam) { obj.Draw(cam); }
 
 
-void PlatformOptionWidget::MoveContent(Vector2D movement, Vector2D movObj) {
+void PlatformOptionWidget::MoveContent(Vector2D movement /*,Vector2D moveOb*/) {
 
     btn.GetRectTransform().Move(movement);
     selectLevelText.GetRectTransform().Move(movement);
-    std::cout << btn.GetRectTransform().GetTransform().ToString() << std::endl;
-    Transform& t = obj.GetTransform();
-    t.SetPos(movObj);
-    std::cout << obj.GetTransform().GetPos().x << " " << obj.GetTransform().GetPos().y << std::endl;
+    std::cout << "BOTON: " << btn.GetRectTransform().GetTransform().ToString() << std::endl;
+    obj.GetRectTransform().Move(movement);
+    std::cout << "IMAGE: " << obj.GetRectTransform().GetTransform().ToString() << std::endl;
 }

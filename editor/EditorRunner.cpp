@@ -11,8 +11,10 @@ using std::string;
 
 EditorRunner::EditorRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
 void EditorRunner::run() {
-    bool option = MenuScreen(cam).run();
-    if (option) {
+    int option = MenuScreen(cam).run();
+    if (option == QUIT) {
+        return;
+    } else if (option == CREATE_LVL) {
         SetLevelName newLvl(cam);
         writeArchive.AddFileName(newLvl.Render());
     } else {

@@ -59,20 +59,19 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
         saveButtonText(SAVE_LABEL.c_str(), 20,
                        RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
                                      Vector2D(0.5, 0.5)),
-                       ColorExtension::White(), 5),
-        gameMap(cam, w.GetGameScene()) {
+                       ColorExtension::White(), 5)
+/*gameMap(cam, w.GetGameScene())*/ {
 
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
-    Vector2D initialPos(-20, -150);
-    Vector2D initialObj(-30, 22);
-    int moveDelta = 40;
-    int moveDelta2 = 10;
+    Vector2D initialPos(-200, -100);
+    Vector2D initialObj(-200, 300);
+    int moveDelta = 100;
     for (size_t i = 0; i < groundBlocks.size(); i++) {
         basicsPlatform.emplace_back(groundBlocks[i],
                                     [this](vector<string> edges) { edgesSelected = edges; });
         Vector2D movement = Vector2D::Down() * i * moveDelta + initialPos;
-        Vector2D movObj = Vector2D::Down() * i * moveDelta2 + initialObj;
-        basicsPlatform.back().MoveContent(movement, movObj);
+        Vector2D moveObj = Vector2D::Down() * i * moveDelta + initialObj;
+        basicsPlatform.back().MoveContent(movement /*,moveObj*/);
         basicsPlatform.back().DrawOption(cam);
     }
     scrollSize = 400 + groundBlocks.size() * 130;
@@ -84,13 +83,13 @@ void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
     }
     currentY += movement.y;
     for (auto& widget: basicsPlatform) {
-        widget.MoveContent(movement, movement);
+        widget.MoveContent(movement /* ,movement*/);
     }
 }
 
 bool EditorScreen::Render() {
     cam.InitRate();
-    GameWorld(cam, writer.GetGameScene()).Run();
+    // GameWorld(cam, writer.GetGameScene()).Run();
     while (running) {
         cam.Clean();
         SDL_Event event;

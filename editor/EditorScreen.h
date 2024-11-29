@@ -39,7 +39,7 @@ private:
     void UpdateWidgetListPosition(Vector2D movement);
     float currentY = 0;
     float scrollSize = 0;
-    GameWorld gameMap;
+    // GameWorld gameMap;
 
 public:
     explicit EditorScreen(Camera& cam, MapEditor& writer);
