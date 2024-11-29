@@ -20,7 +20,7 @@ public:
     void BeDropped(const Vector2D& duckPosition);
     virtual bool Use(Duck* user);
     virtual void StopUse(Duck* user) = 0;
-    virtual void Update(float deltaTime, StaticMap& map) = 0;
+    virtual void Update(float deltaTime) = 0;
 
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;

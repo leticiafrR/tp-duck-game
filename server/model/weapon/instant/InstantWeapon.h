@@ -30,7 +30,7 @@ public:
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
     virtual bool Use(Duck* shooter) override;
-    void Update(float deltaTime, StaticMap& /*map*/) override;
+    void Update(float deltaTime) override;
     virtual ~InstantWeapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
 };

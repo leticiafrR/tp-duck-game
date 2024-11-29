@@ -12,7 +12,7 @@ public:
     }
 
     void StopUse(Duck* /*parameter*/) override {}
-    void Update(float /*deltaTime*/, StaticMap& /*map*/) override {}
+    void Update(float /*deltaTime*/) override {}
     TypeCollectable GetTypeCollectable() override { return TypeCollectable::HELMET; }
 };
 

@@ -24,7 +24,7 @@ public:
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
     virtual bool Use(Duck* shooter) override = 0;
     virtual void StopUse(Duck* shooter) override { shooter->StopShooting(); }
-    virtual void Update(float deltaTime, StaticMap& map) override = 0;
+    virtual void Update(float deltaTime) override = 0;
     virtual ~Weapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
     bool StillReusable() override { return ammo > 0; }

@@ -110,9 +110,9 @@ bool Duck::HasWeaponOnHand() {
             !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));
 }
 
-void Duck::UpdateWeapon(StaticMap& map, float deltaTime) {
+void Duck::UpdateWeapon(float deltaTime) {
     if (HasWeaponOnHand()) {
-        itemOnHand->Update(deltaTime, map);
+        itemOnHand->Update(deltaTime);
         if (isShooting) {
             itemOnHand->Use(this);
         }
@@ -131,7 +131,7 @@ void Duck::Update(StaticMap& map, float deltaTime) {
     Vector2D initialPos = mySpace.GetPos();
 
     UpdatePosition(map, deltaTime);
-    UpdateWeapon(map, deltaTime);
+    UpdateWeapon(deltaTime);
     UpdateState();
     UpdateListener(initialState, initialPos);
 }

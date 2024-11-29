@@ -51,7 +51,7 @@ bool InstantWeapon::Use(Duck* shooter) {
     return false;
 }
 
-void InstantWeapon::Update(float deltaTime, StaticMap& /*map*/) {
+void InstantWeapon::Update(float deltaTime) {
     if (cooldownTimer <= cooldown) {
         cooldownTimer += deltaTime;
     }
