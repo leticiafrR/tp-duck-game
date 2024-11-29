@@ -62,30 +62,39 @@ void Gameplay::TakeInput() {
 
                 switch (keyEvent.keysym.sym) {
                     case SDLK_a:
+                        std::cout << "A KeyDown\n";
                         client.TrySendRequest(CommandCode::MoveLeft_KeyDown);
                         break;
                     case SDLK_d:
+                        std::cout << "D KeyDown\n";
                         client.TrySendRequest(CommandCode::MoveRight_KeyDown);
                         break;
                     case SDLK_SPACE:
+                        std::cout << "Space KeyDown\n";
                         client.TrySendRequest(CommandCode::Jump);
                         break;
                     case SDLK_f:
+                        std::cout << "F KeyDown\n";
                         client.TrySendRequest(CommandCode::UseItem_KeyDown);
                         break;
                     case SDLK_w:
+                        std::cout << "W KeyDown\n";
                         client.TrySendRequest(CommandCode::LookUp_KeyDown);
                         break;
                     case SDLK_s:
+                        std::cout << "S KeyDown\n";
                         client.TrySendRequest(CommandCode::Crouch_KeyDown);
                         break;
                     case SDLK_c:
+                        std::cout << "C KeyDown\n";
                         client.TrySendRequest(CommandCode::Cuack);
                         break;
                     case SDLK_e:
+                        std::cout << "E KeyDown\n";
                         client.TrySendRequest(CommandCode::CollectItem);
                         break;
                     case SDLK_g:
+                        std::cout << "G KeyDown\n";
                         client.TrySendRequest(CommandCode::DropItem);
                         break;
                 }
@@ -95,30 +104,39 @@ void Gameplay::TakeInput() {
                 switch (keyEvent.keysym.sym) {
 
                     case SDLK_LEFT:
+                        std::cout << "Left Arrow KeyDown\n";
                         client.TrySendRequest(CommandCode::MoveLeft_KeyDown, 1);
                         break;
                     case SDLK_RIGHT:
+                        std::cout << "Right Arrow KeyDown\n";
                         client.TrySendRequest(CommandCode::MoveRight_KeyDown, 1);
                         break;
                     case SDLK_RSHIFT:
+                        std::cout << "R-Shift KeyDown\n";
                         client.TrySendRequest(CommandCode::Jump, 1);
                         break;
                     case SDLK_j:
+                        std::cout << "J KeyDown\n";
                         client.TrySendRequest(CommandCode::UseItem_KeyDown, 1);
                         break;
                     case SDLK_UP:
+                        std::cout << "Up Arrow KeyDown\n";
                         client.TrySendRequest(CommandCode::LookUp_KeyDown, 1);
                         break;
                     case SDLK_DOWN:
+                        std::cout << "Down Arrow KeyDown\n";
                         client.TrySendRequest(CommandCode::Crouch_KeyDown, 1);
                         break;
                     case SDLK_o:
+                        std::cout << "O KeyDown\n";
                         client.TrySendRequest(CommandCode::Cuack, 1);
                         break;
                     case SDLK_k:
+                        std::cout << "K KeyDown\n";
                         client.TrySendRequest(CommandCode::CollectItem, 1);
                         break;
                     case SDLK_l:
+                        std::cout << "L KeyDown\n";
                         client.TrySendRequest(CommandCode::DropItem, 1);
                         break;
                 }
@@ -165,8 +183,8 @@ void Gameplay::TakeInput() {
                         std::cout << "Right Arrow KeyUp\n";
                         client.TrySendRequest(CommandCode::MoveRight_KeyUp, 1);
                         break;
-                    case SDLK_KP_3:
-                        std::cout << "Numpad 3 KeyUp\n";
+                    case SDLK_j:
+                        std::cout << "J KeyUp\n";
                         client.TrySendRequest(CommandCode::UseItem_KeyUp, 1);
                         break;
                     case SDLK_UP:
