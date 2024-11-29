@@ -21,8 +21,8 @@ target_sources(taller_server
     model/weapon/instant/Shotgun.cpp
 
     model/projectile/ProjectilesController.cpp
-    model/projectile/InstantProjectile.cpp
-    model/projectile/BounceInstantProjectile.cpp
+    model/projectile/instant/InstantProjectile.cpp
+    model/projectile/instant/BounceInstantProjectile.cpp
 
     model/collectable/Collectable.cpp
     model/collectable/CollectableWrapper.cpp
@@ -70,10 +70,10 @@ target_sources(taller_server
     model/weapon/instant/PewPewLaser.h
     model/weapon/instant/Shotgun.h
 
-    model/projectile/InstantProjectile.h
+    model/projectile/instant/InstantProjectile.h
     model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
-    model/projectile/BounceInstantProjectile.h
+    model/projectile/instant/BounceInstantProjectile.h
 
     model/collectable/CollectableWrapper.h
     model/collectable/Collectable.h

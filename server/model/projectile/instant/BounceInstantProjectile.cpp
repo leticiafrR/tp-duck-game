@@ -1,6 +1,8 @@
 #include "BounceInstantProjectile.h"
 
-#include "../Duck.h"
+#include "../../Duck.h"
+#include "common/Collision.h"
+#include "server/model/map/staticMap.h"
 
 BounceInstantProjectile::BounceInstantProjectile(const Vector2D& origin, const Vector2D& direction,
                                                  float scope, uint8_t damage, TypeProjectile type,

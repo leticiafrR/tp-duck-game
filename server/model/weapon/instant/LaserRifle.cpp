@@ -1,6 +1,6 @@
 #include "LaserRifle.h"
 
-#include "server/model/projectile/BounceInstantProjectile.h"
+#include "server/model/projectile/instant/BounceInstantProjectile.h"
 
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):

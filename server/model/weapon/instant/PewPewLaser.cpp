@@ -1,4 +1,6 @@
 #include "PewPewLaser.h"
+
+#include "server/model/projectile/instant/InstantProjectile.h"
 #define CUSTOM_DAMAGE(x) ((x) / 9)
 
 PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,

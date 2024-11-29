@@ -5,7 +5,6 @@
 
 #include "../Weapon.h"
 #include "server/config.h"
-#include "server/model/projectile/InstantProjectile.h"
 #include "server/model/types.h"
 
 class InstantWeapon: public Weapon {

@@ -1,17 +1,14 @@
 #ifndef INSTANT_PROJECTILE_H
-#define INSTANT_PROJECTILE_H
-#include <string>
 #include <unordered_map>
 #include <utility>
 
-#include "../event/InstantProjectileEventListener.h"
-#include "../map/staticMap.h"
+#include "../Projectile.h"
 #include "common/Vector2D.h"
-
-#include "Projectile.h"
+#include "server/model/event/InstantProjectileEventListener.h"
 
 enum TypeProjectile;
 class Duck;
+class StaticMap;
 
 class InstantProjectile: public Projectile {
 protected:

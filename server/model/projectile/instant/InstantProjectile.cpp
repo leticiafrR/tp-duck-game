@@ -1,7 +1,8 @@
 #include "InstantProjectile.h"
 
-#include "../Duck.h"
+#include "../../Duck.h"
 #include "data/snapshot.h"
+#include "server/model/map/staticMap.h"
 
 InstantProjectile::InstantProjectile(const Vector2D& shooterPos, const Vector2D& direction,
                                      float scope, uint8_t damage, TypeProjectile type,
