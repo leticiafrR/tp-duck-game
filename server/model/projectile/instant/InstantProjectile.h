@@ -1,4 +1,5 @@
 #ifndef INSTANT_PROJECTILE_H
+#define INSTANT_PROJECTILE_H
 #include <unordered_map>
 #include <utility>
 
