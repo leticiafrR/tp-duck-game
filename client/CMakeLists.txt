@@ -22,6 +22,7 @@ target_sources(taller_client
     rendering/ChestplateRenderer.cpp
     rendering/HelmetRenderer.cpp
 
+    screens/BaseScreen.cpp
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
     screens/MatchListScreen.cpp
@@ -34,7 +35,7 @@ target_sources(taller_client
 
     ClientRunner.cpp
     main.cpp
-    
+
     network/ClientProtocol.cpp
 
     PUBLIC
@@ -54,6 +55,7 @@ target_sources(taller_client
     gameplay/Gameplay.h
     gameplay/GameplayGUI.h
 
+    screens/BaseScreen.h
     screens/MenuScreen.h
     screens/LoadingScreen.h
     screens/MatchListScreen.h

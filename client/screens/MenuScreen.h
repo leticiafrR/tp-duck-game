@@ -14,13 +14,13 @@
 #include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Text.h"
 
+#include "BaseScreen.h"
+
 using std::string;
 
-class MenuScreen {
+class MenuScreen: public BaseScreen {
 private:
     const int MAX_NAME_SIZE = 12;
-
-    Camera& cam;
 
     Image bgImage;
     Image logoImage;
@@ -34,10 +34,14 @@ private:
     Button startButton;
     Text buttonText;
 
-    bool running = true;
     string nicknameInput = "";
 
-    void TakeInput();
+    TransformTween btnTween;
+    TransformTween textTween;
+
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
 
 public:
     explicit MenuScreen(Camera& c);
