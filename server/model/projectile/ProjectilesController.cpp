@@ -1,42 +1,42 @@
 #include "ProjectilesController.h"
 
-ProjectilesController::ProjectilesController(): instantProjectileListener(nullptr) {}
-
 InstantProjectileEventListener* ProjectilesController::GetInstantProjectileListener() {
-    return instantProjectileListener;
+    return instantProjectiles.GetInstantProjectileListener();
 }
-
 void ProjectilesController::RegisterListener(InstantProjectileEventListener* listener) {
-    instantProjectileListener = listener;
+    instantProjectiles.RegisterListener(listener);
 }
-
 void ProjectilesController::RelaseInstantProjectile(InstantProjectile* projectile) {
-    instantProjectiles.push_back(projectile);
+    instantProjectiles.RelaseProjectile(projectile);
 }
 
 void ProjectilesController::Update(const StaticMap& map,
-                                   std::unordered_map<PlayerID_t, Duck*>& players) {
-    for (auto projectile: instantProjectiles) {
-        projectile->Update(map, players);
+                                   std::unordered_map<PlayerID_t, Duck*>& players,
+                                   float deltaTime) {
+    instantProjectiles.Update(map, players);
+    if (deltaTime == 0) {
+        std::cout << "holi\n";
     }
-    ReapDead();
+    // los throwables usan el delta
 }
 
-void ProjectilesController::ReapDead() {
-    auto deleter =
-            std::remove_if(instantProjectiles.begin(), instantProjectiles.end(), [](Projectile* p) {
-                if (p->IsDead()) {
-                    delete p;
-                    return true;
-                }
-                return false;
-            });
-    instantProjectiles.erase(deleter, instantProjectiles.end());
-}
 
-ProjectilesController::~ProjectilesController() {
-    for (Projectile* p: instantProjectiles) {
-        delete p;
-    }
-    instantProjectiles.clear();
-}
+// ProjectilesController::ProjectilesController(): unicThrowableID(0){}
+
+// void ProjectilesController::RelaseThrowableProjectile(ThrowableProjectile* projectile){
+//     throwableProjectiles[unicThrowableID] = projectile;
+//     unicThrowableID++;
+// }
+
+// void ProjectilesController::Update(const StaticMap& map,
+//                                    std::unordered_map<PlayerID_t, Duck*>& players,float
+//                                    deltaTime) {
+//     for (auto projectile: instantProjectiles) {
+//         projectile->Update(map, players);
+//     }
+//     for (auto& pair :throwableProjectiles ){
+//         pair.second->Update(map,deltaTime);
+//     }
+
+//     ReapDead();
+// }

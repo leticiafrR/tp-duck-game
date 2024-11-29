@@ -36,7 +36,7 @@ public:
     explicit StaticMap(const std::string& lvlName);
     std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
 
-    bool IsOnTheFloor(const Transform& dynamicT);
+    bool IsOnTheFloor(const Transform& dynamicT) const;
 
     std::optional<std::pair<float, bool>> CheckCollisionRay(const Vector2D& rayOrigin,
                                                             const Vector2D& rayDirection,

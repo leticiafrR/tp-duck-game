@@ -47,7 +47,7 @@ std::optional<std::pair<float, bool>> StaticMap::CheckCollisionRay(const Vector2
 }
 
 
-bool StaticMap::IsOnTheFloor(const Transform& dynamicT) {
+bool StaticMap::IsOnTheFloor(const Transform& dynamicT) const {
     Vector2D dir = Vector2D::Down();
     float len = (dynamicT.GetSize().y) / HALF;
     float margen = (80 * len / 100);
