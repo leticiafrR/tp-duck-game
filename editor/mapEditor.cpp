@@ -7,7 +7,7 @@
 #include "common/Vector2D.h"
 
 MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0) {
-    config[THEME_STR] = "FOREST";
+    config[THEME_STR] = FOREST_BACKGROUND;
     config[FULL_MAP_STR][X_STR] = 100;
     config[FULL_MAP_STR][Y_STR] = 160;
     config[PLATFORMS_STR] = YAML::Node(YAML::NodeType::Sequence);
@@ -156,3 +156,4 @@ std::vector<GroundDto> MapEditor::GetPlataforms() {
     }
     return grounds;
 }
+GameSceneDto MapEditor::GetGameScene() { return GameSceneDto(THEME_STR, GetPlataforms()); }

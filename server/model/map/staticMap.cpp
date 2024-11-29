@@ -15,7 +15,7 @@ enum : int { L, R, B, T };
 
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
 
-GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, plataforms, grounds); }
+GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, grounds); }
 
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
@@ -125,7 +125,6 @@ void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platf
     }
     AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
 }
-
 
 void StaticMap::SetTheLevel(const std::string& lvelName) {
     YAML::Node config = YAML::LoadFile(RELATIVE_LEVEL_PATH + lvelName + YAML_FILE);

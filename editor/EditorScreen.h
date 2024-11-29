@@ -19,21 +19,25 @@
 
 #include "PlatformOptionWidget.h"
 #include "mapEditor.h"
-// se debe poder agregar una plataforma (obtiene tamanos y aristas), y escribe en la posicion que
-// se indica
+// se debe poder agregar una plataforma (obtiene aristas), y escribe en la posicion que
+// se indica el boton del tablero
 
+using std::list;
 using std::vector;
 class EditorScreen {
 private:
     Camera& cam;
     MapEditor& writer;
-    vector<PlatformOptionWidget> basicsPlatform;
+    list<PlatformOptionWidget> basicsPlatform;
     GroundDto loadPlatforms(const YAML::Node& config, const std::string& platformName);
     vector<GroundDto> ReadBasicPlataforms();
     bool running = true;
     Button saveButton;
     Text saveButtonText;
     vector<string> edgesSelected;
+    void UpdateWidgetListPosition(Vector2D movement);
+    float currentY = 0;
+    float scrollSize = 0;
 
 public:
     explicit EditorScreen(Camera& cam, MapEditor& writer);

@@ -119,14 +119,6 @@ MatchStartDto ClientProtocol::receiveMachStartDto() {
 GameSceneDto ClientProtocol::receiveGameSceneDto() {
     auto theme = assistant.receiveString();
 
-    auto numberPlatforms = assistant.receiveNumberOneByte();
-    std::vector<Transform> platforms(numberPlatforms);
-    for (uint8_t i = 0; i < numberPlatforms; i++) {
-        Vector2D size = assistant.receiveVector2D();
-        Vector2D pos = assistant.receiveVector2D();
-        platforms[i] = Transform(pos, size);
-    }
-
     auto numberGroundB = assistant.receiveNumberOneByte();
     std::vector<GroundDto> groundBlocks(numberGroundB);
     for (uint8_t i = 0; i < numberGroundB; i++) {
@@ -154,7 +146,7 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
         // building the GroundDto
         groundBlocks[i] = GroundDto{std::move(transform), std::move(edges)};
     }
-    return GameSceneDto{theme, platforms, groundBlocks};
+    return GameSceneDto{theme, groundBlocks};
 }
 
 Snapshot ClientProtocol::receiveGameUpdateDto() {

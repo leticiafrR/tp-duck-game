@@ -38,6 +38,7 @@ public:
                               const std::vector<std::string>& edges);
     void DeleteAPlataform(const std::string& plataformName);
     std::vector<GroundDto> GetPlataforms();
+    GameSceneDto GetGameScene();
     // faltan implementar
 };
 #endif

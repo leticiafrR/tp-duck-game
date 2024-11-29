@@ -19,7 +19,7 @@ platforms:
   - platform_13
   - platform_14
 platform_0:
-  x: 940
+  x: 0
   y: 0
   w: 8
   h: 8
@@ -140,3 +140,9 @@ platform_14:
     - BOTTOM
     - LEFT
     - RIGHT
+platform_15:
+  x: 0
+  y: 0
+  w: 8
+  h: 8
+  edges:

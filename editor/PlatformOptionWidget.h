@@ -26,6 +26,6 @@ public:
 
     ~PlatformOptionWidget() = default;
     void DrawOption(Camera& cam);
-    void MoveContent(Vector2D movement);
+    void MoveContent(Vector2D movement, Vector2D movObj);
 };
 #endif
