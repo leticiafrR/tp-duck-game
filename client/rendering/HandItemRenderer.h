@@ -55,8 +55,10 @@ private:
             {TypeCollectable::SHOTGUN,
              HendItemRenderData("shotguns.png", "shotguns.yaml", "shotgun", Vector2D(0, -0.4f),
                                 Vector2D(4, 4))},
-            {TypeCollectable::ARMOR, HendItemRenderData("", "", "")},
-            {TypeCollectable::HELMET, HendItemRenderData("", "", "")}};
+            {TypeCollectable::ARMOR, HendItemRenderData("defense.png", "defense.yaml", "chest",
+                                                        Vector2D(0, -0.4f), Vector2D(2, 2))},
+            {TypeCollectable::HELMET, HendItemRenderData("defense.png", "defense.yaml", "helmet",
+                                                         Vector2D(0, -0.4f), Vector2D(2, 2))}};
 
     Transform& playerT;
     HendItemRenderData itemData;

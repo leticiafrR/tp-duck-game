@@ -36,7 +36,7 @@ private:
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     DuckState GetLowerPriorityState();
     void UpdateState();
-    void UpdateWeapon(float deltaTime);
+    void UpdateWeapon(StaticMap& map, float deltaTime);
     bool HasWeaponOnHand();
     void TriggerEvent(bool cuack = false);
 

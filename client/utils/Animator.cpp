@@ -25,7 +25,7 @@ void Animator::Update(float deltaTime) {
 Rect Animator::GetTargetRect() { return animations[target][frameIndex]; }
 
 void Animator::SetTarget(const std::string& target, bool reset_index) {
-    if (!animations.contains(target))
+    if (!TargetExists(target))
         return;
     this->target = target;
     if (reset_index) {
@@ -33,5 +33,7 @@ void Animator::SetTarget(const std::string& target, bool reset_index) {
         frameIndex = 0;
     }
 }
+
+bool Animator::TargetExists(const std::string& target) { return animations.contains(target); }
 
 std::string Animator::GetTarget() { return target; }

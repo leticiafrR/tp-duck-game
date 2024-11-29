@@ -1,13 +1,5 @@
 #include "InstantWeapon.h"
 
-
-float InstantWeapon::RandomDisturbance() {
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> dist(-dispersionRange, dispersionRange);
-    return dist(generator);
-}
-
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
@@ -21,6 +13,12 @@ InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
         inclination(inclination),
         l(projectilesController.GetInstantProjectileListener()) {}
 
+float InstantWeapon::RandomDisturbance() {
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_real_distribution<float> dist(-dispersionRange, dispersionRange);
+    return dist(generator);
+}
 
 Vector2D InstantWeapon::GetShootingDirection(Duck* shooter) {
     Vector2D direction = shooter->GetLookVector();
@@ -53,12 +51,12 @@ bool InstantWeapon::Use(Duck* shooter) {
     return false;
 }
 
-void InstantWeapon::Update(float deltaTime) {
+void InstantWeapon::Update(float deltaTime, StaticMap& /*map*/) {
     if (cooldownTimer <= cooldown) {
         cooldownTimer += deltaTime;
     }
 }
 
-void InstantWeapon::BeDropped(const Vector2D& duckPosition) {
-    Collectable::BeDropped(duckPosition);
+void InstantWeapon::BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) {
+    mySpace.SetPos(duckPosition);
 }

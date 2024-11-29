@@ -110,9 +110,9 @@ bool Duck::HasWeaponOnHand() {
             !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));
 }
 
-void Duck::UpdateWeapon(float deltaTime) {
+void Duck::UpdateWeapon(StaticMap& map, float deltaTime) {
     if (HasWeaponOnHand()) {
-        itemOnHand->Update(deltaTime);
+        itemOnHand->Update(deltaTime, map);
         if (isShooting) {
             itemOnHand->Use(this);
         }
@@ -131,7 +131,7 @@ void Duck::Update(StaticMap& map, float deltaTime) {
     Vector2D initialPos = mySpace.GetPos();
 
     UpdatePosition(map, deltaTime);
-    UpdateWeapon(deltaTime);
+    UpdateWeapon(map, deltaTime);
     UpdateState();
     UpdateListener(initialState, initialPos);
 }
@@ -184,7 +184,7 @@ void Duck::TryCollect(CollectablesController& c) {
 void Duck::TryDrop(CollectablesController& c) {
     if (itemOnHand && isGrounded) {
         if (itemOnHand->StillReusable()) {
-            c.Drop(itemOnHand, mySpace.GetPos());
+            c.Drop(itemOnHand, mySpace.GetPos(), GetLookVector());
         }
         itemOnHand.reset();
         typeOnHand = TypeCollectable::EMPTY;
@@ -231,6 +231,7 @@ void Duck::HandleCollisionWithMap(const Transform& mapT) {
 
 void Duck::TryEquip(TypeCollectable typeProtection) {
     if (equipment.TryEquip(typeProtection)) {
+        std::cout << "something was equipp (helmet or armor)\n";
         itemOnHand.reset();
         TriggerEvent();
     }

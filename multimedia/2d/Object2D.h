@@ -31,7 +31,7 @@ protected:
 public:
     Object2D();
     Object2D(const std::string& filename, const Transform& transform,
-             Color color = Color(255, 255, 255));
+             Color color = Color(255, 255, 255, 255));
 
     void SetColor(Color color);
     Color GetColor();
@@ -50,7 +50,7 @@ public:
 
     int GetFlipSDL();
 
-    void Draw(Camera& cam);
+    virtual void Draw(Camera& cam);
 
     void SetVisible(bool visible);
 

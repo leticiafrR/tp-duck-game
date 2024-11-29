@@ -9,20 +9,22 @@ Color DuckClientRenderer::GetColorById(uint8_t id) { return SkinColors.at(id); }
 
 DuckClientRenderer::DuckClientRenderer(const Transform& transform, PlayerData data,
                                        PlayerEvent initialEvent, CameraController& camController):
+        Object2D("base_duck.png", transform),
         camController(camController),
-        spr("base_duck.png", transform),
-        anim(this->spr, "duck.yaml", "idle", 22),
+        anim(*this, "duck.yaml", "idle", 22),
         fromPos(transform.GetPos()),
         target(initialEvent),
-        handItem(spr.GetTransform(), initialEvent.typeOnHand) {
+        handItem(this->transform, initialEvent.typeOnHand),
+        chestplate(this->transform, 22),
+        helmet(this->transform) {
 
-    spr.GetTransform().SetSize(transform.GetSize() * 1.4);  // Size rendering offset
+    this->transform.SetSize(transform.GetSize() * 1.4);  // Size rendering offset
 
     SetEventTarget(target);
-    spr.SetColor(SkinColors.at(data.playerSkin));
+    skinColor = SkinColors.at(data.playerSkin);
+    SetColor(skinColor);
     nickname = data.nickname;
-    skinColor = spr.GetColor();
-    camController.AddTransform(&spr.GetTransform());
+    camController.AddTransform(&this->transform);
 }
 DuckClientRenderer::~DuckClientRenderer() = default;
 
@@ -33,10 +35,10 @@ void DuckClientRenderer::Update(float deltaTime) {
     tLerp += deltaTime * 13;
 
     Vector2D pos = Vector2D::Lerp(fromPos, target.motion, tLerp);
-    spr.GetTransform().SetPos(pos);
+    transform.SetPos(pos);
 
     if (damaged) {
-        anim.SetTarget("damaged");
+        SetTargetAnimation("damaged");
         damagedTimer.Update(deltaTime);
     }
 
@@ -45,18 +47,20 @@ void DuckClientRenderer::Update(float deltaTime) {
     }
 
     anim.Update(deltaTime);
+    chestplate.Update(deltaTime, GetFlip());
+    helmet.Update(GetFlip(), target.isCrouched);
 
-    handItem.Update(target.flipping == Flip::Left, target.isLookingUp);
+    handItem.Update(GetFlip(), target.isLookingUp);
 
     handItem.SetVisible(!target.isCrouched && target.stateTransition != DuckState::DEAD);
 }
 
 void DuckClientRenderer::Draw(Camera& cam) {
-    spr.Draw(cam);
+    Object2D::Draw(cam);
+    chestplate.Draw(cam);
+    helmet.Draw(cam);
     handItem.Draw(cam);
 }
-
-Transform& DuckClientRenderer::GetTransform() { return spr.GetTransform(); }
 
 void DuckClientRenderer::OnCuack() {
     AudioManager::GetInstance().PlayCuackSFX();
@@ -68,7 +72,7 @@ void DuckClientRenderer::OnCuack() {
         size_t pos = currentAnim.find("_cuack");
         if (pos != std::string::npos) {
             currentAnim.erase(pos);
-            anim.SetTarget(currentAnim);
+            SetTargetAnimation(currentAnim);
         }
     });
     cuackTimer.Start();
@@ -76,11 +80,11 @@ void DuckClientRenderer::OnCuack() {
 
 void DuckClientRenderer::OnDamaged() {
     damaged = true;
-    spr.SetColor(Color(230, 40, 40));
+    SetColor(Color(230, 40, 40));
     damagedTimer = Timer(0.15f, [this]() {
         damaged = false;
-        anim.SetTarget("idle");
-        spr.SetColor(skinColor);
+        SetTargetAnimation("idle");
+        SetColor(skinColor);
     });
     AudioManager::GetInstance().PlayDamagedSFX();
     damagedTimer.Start();
@@ -90,43 +94,43 @@ void DuckClientRenderer::OnDead() {
     damaged = false;
     anim.SetTarget("dead");
     damagedTimer.Stop();
-    spr.SetColor(skinColor);
+    SetColor(skinColor);
     handItem.SetVisible(false);
 
     cuackTimer.Stop();
 
-    camController.RemoveTransform(&spr.GetTransform());
+    camController.RemoveTransform(&transform);
 }
 
-string DuckClientRenderer::GetAnimAndCuack(string anim) {
-    if (cuack) {
-        return anim += "_cuack";
+string DuckClientRenderer::GetAnimAndCuack(string animTarget) {
+    if (cuack && anim.TargetExists(animTarget + "_cuack")) {
+        return animTarget += "_cuack";
     }
-    return anim;
+    return animTarget;
 }
 
 void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
-    fromPos = spr.GetTransform().GetPos();
+    fromPos = transform.GetPos();
     tLerp = 0;
     target = newTarget;
 
-    spr.SetFlip(target.flipping == Flip::Left);
+    SetFlip(target.flipping == Flip::Left);
 
     if (target.cuacking)
         OnCuack();
 
     switch (target.stateTransition) {
         case DuckState::IDLE:
-            anim.SetTarget(GetAnimAndCuack("idle"));
+            SetTargetAnimation("idle");
             break;
         case DuckState::RUNNING:
-            anim.SetTarget(GetAnimAndCuack("run"), false);
+            SetTargetAnimation("run", false);
             break;
         case DuckState::JUMPING:
-            anim.SetTarget(GetAnimAndCuack("jumping"));
+            SetTargetAnimation("jumping");
             break;
         case DuckState::FALLING:
-            anim.SetTarget(GetAnimAndCuack("falling"));
+            SetTargetAnimation("falling");
             break;
         case DuckState::WOUNDED:
             OnDamaged();
@@ -142,7 +146,15 @@ void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
     }
 
     if (newTarget.isCrouched)
-        anim.SetTarget(GetAnimAndCuack("crouched"));
+        SetTargetAnimation("crouched");
+
+    chestplate.SetVisible(target.hasArmor);
+    helmet.SetVisible(target.hasHelmet);
 
     handItem.SetItem(target.typeOnHand);
+}
+
+void DuckClientRenderer::SetTargetAnimation(const string& animTarget, bool resetIndex) {
+    anim.SetTarget(GetAnimAndCuack(animTarget), resetIndex);
+    chestplate.SetAnimTarget(animTarget, resetIndex);
 }

@@ -29,9 +29,9 @@ public:
                   float inclination = ShootingInclination::BASIC_NO_INCLINATION);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
-    void BeDropped(const Vector2D& duckPosition) override;
+    void BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) override;
     virtual bool Use(Duck* shooter) override;
-    void Update(float deltaTime) override;  // por el momento solo se usa para el cooldown
+    void Update(float deltaTime, StaticMap& /*map*/) override;
     virtual ~InstantWeapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
 };

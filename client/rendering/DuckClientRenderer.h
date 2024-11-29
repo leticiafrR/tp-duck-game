@@ -4,18 +4,16 @@
 #include <map>
 #include <string>
 
-#include "client/gameplay/Animator.h"
+#include "client/Framework.h"
 #include "client/gameplay/CameraController.h"
 #include "client/rendering/HandItemRenderer.h"
-#include "client/utils/Timer.h"
-#include "common/Transform.h"
 #include "data/dataTransferObjects.h"
 #include "data/snapshot.h"
-#include "multimedia/2d/Object2D.h"
-#include "multimedia/ColorExtension.h"
-#include "multimedia/audio/AudioManager.h"
 
-class DuckClientRenderer {
+#include "ChestplateRenderer.h"
+#include "HelmetRenderer.h"
+
+class DuckClientRenderer: public Object2D {
 private:
     static const std::map<uint8_t, Color> SkinColors;
 
@@ -28,7 +26,6 @@ private:
 
 public:
     CameraController& camController;
-    Object2D spr;
     Animator anim;
 
     Vector2D fromPos;
@@ -37,6 +34,9 @@ public:
     PlayerEvent target;
 
     HandItemRenderer handItem;
+
+    ChestplateRenderer chestplate;
+    HelmetRenderer helmet;
 
     DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
                        CameraController& camController);
@@ -49,7 +49,7 @@ public:
 
     void Update(float deltaTime);
 
-    void Draw(Camera& cam);
+    void Draw(Camera& cam) override;
 
     Transform& GetTransform();
 
@@ -59,7 +59,9 @@ public:
 
     void OnDead();
 
-    string GetAnimAndCuack(string anim);
+    void SetTargetAnimation(const string& animTarget, bool resetIndex = true);
+
+    string GetAnimAndCuack(string animTarget);
     void SetEventTarget(PlayerEvent newTarget);
 };
 
