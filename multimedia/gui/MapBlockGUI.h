@@ -1,37 +1,34 @@
-#ifndef MAP_BLOCK_2D_H
-#define MAP_BLOCK_2D_H
+#ifndef MAP_BLOCK_GUI_H
+#define MAP_BLOCK_GUI_H
 
 #include <algorithm>
 #include <string>
 #include <vector>
 
 #include "common/Transform.h"
+#include "multimedia/2d/MapBlock2D.h"
 #include "multimedia/Camera.h"
 #include "multimedia/cache/SheetDataCache.h"
 
-#include "MapBlockRenderData.h"
+#include "GraphicUI.h"
 
 using std::map;
 using std::string;
 using std::vector;
 using namespace SDL2pp;  // NOLINT
 
-class MapBlock2D {
-protected:
-    Transform transform;
+class MapBlockGUI: public GraphicUI {
     MapBlockRenderData renderData;
 
 public:
-    MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
-               const Transform& transform, float tileSize);
+    MapBlockGUI(const string& imageFilename, const string& sheetDataFilename,
+                const RectTransform& rectTransform, float tileSize, int layerOrder = 0);
 
-    ~MapBlock2D();
-
-    Transform& GetTransform();
+    ~MapBlockGUI();
 
     void SetBorders(bool left, bool right, bool top, bool bottom);
 
-    void Draw(Camera& cam);
+    void Draw(Camera& cam) override;
 };
 
 #endif

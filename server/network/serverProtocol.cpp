@@ -104,14 +104,6 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
     // sending the theme of the game
     assistant.sendString(gameSceneDto.theme);
 
-    // sending the vector of transforms of platforms (except the ang)
-    uint8_t numberPlatforms = (uint8_t)gameSceneDto.platforms.size();
-    assistant.sendNumber(numberPlatforms);
-    for (auto& platform: gameSceneDto.platforms) {
-        assistant.sendVector2D(platform.GetSize());
-        assistant.sendVector2D(platform.GetPos());
-    }
-
     uint8_t numbGroundBlocks = (uint8_t)gameSceneDto.groundBlocks.size();
     assistant.sendNumber(numbGroundBlocks);
     for (auto& groundDto: gameSceneDto.groundBlocks) {

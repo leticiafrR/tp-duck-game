@@ -16,7 +16,7 @@ MenuScreen::MenuScreen(Camera& cam):
                 BUTTON_IMAGE_PATH.c_str(),
                 RectTransform(Vector2D(-120, -120), Vector2D(300, 150), Vector2D(0.85, 0.65)),
                 [this]() {
-                    option = true;
+                    option = CREATE_LVL;
                     running = false;
                 },
                 Color(220, 220, 220), 1),
@@ -27,20 +27,20 @@ MenuScreen::MenuScreen(Camera& cam):
                 BUTTON_IMAGE_PATH.c_str(),
                 RectTransform(Vector2D(-120, -120), Vector2D(300, 150), Vector2D(0.45, 0.65)),
                 [this]() {
-                    option = false;
+                    option = EDIT_LVL;
                     running = false;
                 },
                 Color(220, 220, 220), 1),
         textEditLvl(EDIT_LABEL.c_str(), 20,
                     RectTransform(Vector2D(-120, -120), Vector2D(400, 400), Vector2D(0.45, 0.65)),
                     ColorExtension::White(), 1),
-        option(true) {}
+        option(CREATE_LVL) {}
 
 MenuScreen::~MenuScreen() {
     cam.ClearCacheItem(DUCK_BACKGROUND.c_str());
     cam.ClearCacheItem(DUCK_GAME_LOGO.c_str());
 }
-bool MenuScreen::run() {
+int MenuScreen::run() {
     cam.InitRate();
 
     while (running) {
@@ -50,7 +50,7 @@ bool MenuScreen::run() {
             switch (event.type) {
                 case SDL_QUIT:
                     running = false;
-                    break;
+                    return QUIT;
             }
 
             ButtonsManager::GetInstance().HandleEvent(event, cam);

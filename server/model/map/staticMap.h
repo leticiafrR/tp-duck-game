@@ -21,7 +21,6 @@ private:
     std::string theme;
     std::vector<size_t> size;
     std::vector<float> limits;
-    std::vector<Transform> plataforms;
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
     std::vector<Vector2D> weaponsSpawnPoints;

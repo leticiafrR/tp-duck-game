@@ -100,3 +100,20 @@ Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {
     return Rect(screenX - (rectSize.x) * rectT.GetPivot().x,
                 screenY - ((rectSize.y) - rectSize.y * rectT.GetPivot().y), rectSize.x, rectSize.y);
 }
+
+
+Vector2D Camera::ScreenToWorldPoint(Vector2D screenPos) {
+
+    int screenWidth = render.GetOutputWidth();
+    int screenHeight = render.GetOutputHeight();
+
+    // Keeps aspect ratio
+    float screenScale = std::min(static_cast<float>(screenWidth) / size,
+                                 static_cast<float>(screenHeight) / size);
+
+    Vector2D worldPos =
+            Vector2D(((screenPos.x - (screenWidth / 2)) / screenScale) + position.x,
+                     (-((screenPos.y - (screenHeight / 2)) / screenScale) - position.x));
+
+    return worldPos;
+}

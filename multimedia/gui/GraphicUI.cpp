@@ -31,6 +31,11 @@ void GraphicUI::SetActive(bool active) {
 void GraphicUI::SetRectTransform(const RectTransform& rect) { this->rect = rect; }
 RectTransform& GraphicUI::GetRectTransform() { return rect; }
 
+Transform& GraphicUI::GetTransform() { return rect.GetTransform(); }
+
+Vector2D GraphicUI::GetSize() { return rect.GetSize(); }
+Vector2D GraphicUI::GetPos() { return rect.GetPos(); }
+
 void GraphicUI::SetColor(Color color) { this->color = color; }
 Color GraphicUI::GetColor() { return color; }
 

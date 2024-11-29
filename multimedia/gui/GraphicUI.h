@@ -39,6 +39,10 @@ public:
     void SetRectTransform(const RectTransform& rect);
     RectTransform& GetRectTransform();
 
+    Transform& GetTransform();
+    Vector2D GetSize();
+    Vector2D GetPos();
+
     void SetColor(Color color);
     Color GetColor();
 

@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "data/gameScene.h"
-#include "multimedia/2d/MapBlock2D.h"
 #include "multimedia/gui/Button.h"
+#include "multimedia/gui/MapBlockGUI.h"
 #include "multimedia/gui/Text.h"
 
 #include "constantsEditor.h"
@@ -14,7 +14,7 @@ using std::vector;
 class PlatformOptionWidget {
 private:
 public:
-    MapBlock2D obj;
+    MapBlockGUI obj;
     Button btn;
     vector<string> edges;
     Text selectLevelText;
@@ -25,7 +25,7 @@ public:
     explicit PlatformOptionWidget(GroundDto& info, CallbackParam<vector<string>> onSelect);
 
     ~PlatformOptionWidget() = default;
-
-    void MoveContent(Vector2D movement);
+    void DrawOption(Camera& cam);
+    void MoveContent(Vector2D movement /*,Vector2D moveObj*/);
 };
 #endif

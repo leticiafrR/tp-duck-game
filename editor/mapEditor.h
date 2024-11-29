@@ -8,36 +8,42 @@
 #include <yaml-cpp/yaml.h>
 
 #include "data/gameScene.h"
+#include "multimedia/ThemeInfo.h"
 
 #include "constants.h"
 #include "constantsEditor.h"
 
+using std::set;
+using std::string;
+using std::vector;
 class MapEditor {
 private:
     YAML::Node config;
     int platformsCounter;
-    std::string fileName;
-    std::string filePath;
+    string fileName;
+    string filePath;
+    ThemeInfo parser;
 
 public:
     MapEditor();
-    explicit MapEditor(const std::string& fileName);
+    explicit MapEditor(const string& fileName);
 
-    void AddFileName(const std::string& fileName);
+    void AddFileName(const string& fileName);
     void AddAPlataform(const float& x, const float& y, const float& w, const float& h,
-                       const std::vector<std::string>& edges);
+                       const vector<string>& edges);
     void SaveChanges();
     void AddPlayerSpawnPoint(const float& x, const float& y);
     void AddWeaponSpawnPoint(const float& x, const float& y);
     void AddBoxSpawnPoint(const float& x, const float& y);
-    void AddTheme(const std::string& theme);
+    void AddTheme(const string& theme);
     void AddFullMapSize(const size_t& x, const size_t& y);
     void DeleteALevel();
-    void ModificateAPlataform(const std::string& plataformName, const float& x, const float& y,
-                              const float& w, const float& h,
-                              const std::vector<std::string>& edges);
-    void DeleteAPlataform(const std::string& plataformName);
-    std::vector<GroundDto> GetPlataforms();
+    void ModificateAPlataform(const string& plataformName, const float& x, const float& y,
+                              const float& w, const float& h, const vector<string>& edges);
+    void DeleteAPlataform(const string& plataformName);
+    vector<GroundDto> GetPlataforms();
+    GameSceneDto GetGameScene();
+
     // faltan implementar
 };
 #endif

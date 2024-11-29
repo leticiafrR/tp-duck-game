@@ -56,6 +56,8 @@ public:
     void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
 
     Rect RectTransformToRenderRect(RectTransform& rectTransform);
+
+    Vector2D ScreenToWorldPoint(Vector2D screenPos);
 };
 
 #endif

@@ -3,14 +3,14 @@
 #include "client/tweening/TweenManager.h"
 
 #include "constants.h"
-
+#include "constantsEditor.h"
 GroundDto EditorScreen::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
 
     auto plats = config[platformName];
 
     float x = 0, y = 0, w = 0, h = 0;
     for (auto fl: plats) {
-        std::string key = fl.first.as<std::string>();
+        string key = fl.first.as<std::string>();
         auto value = fl.second;
         if (key == X_STR) {
             x = value.as<float>();
@@ -22,6 +22,7 @@ GroundDto EditorScreen::loadPlatforms(const YAML::Node& config, const std::strin
             h = value.as<float>();
         }
     }
+    // x = 400;
     std::set<VISIBLE_EDGES> edges;
     for (auto edge: plats[EDGES_STR]) {
         std::string edgeStr = edge.as<std::string>();
@@ -51,46 +52,63 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
         cam(cam),
         writer(w),
         saveButton(
-                "button_1.png",
-                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+                BUTTON_1_IMAGE,
+                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
                               Vector2D(0.5, 0.5)),
                 [this]() { running = false; }, Color(40, 40, 40), 4),
-        saveButtonText("SAVE", 20,
-                       RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
+        saveButtonText(SAVE_LABEL.c_str(), 20,
+                       RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
                                      Vector2D(0.5, 0.5)),
-                       ColorExtension::White(), 5) {
+                       ColorExtension::White(), 5)
+/*gameMap(cam, w.GetGameScene())*/ {
 
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
-    Vector2D initialPos(0, -400);
-    int moveDelta = 130;
-
+    Vector2D initialPos(-200, -100);
+    Vector2D initialObj(-200, 300);
+    int moveDelta = 100;
     for (size_t i = 0; i < groundBlocks.size(); i++) {
         basicsPlatform.emplace_back(groundBlocks[i],
                                     [this](vector<string> edges) { edgesSelected = edges; });
-        basicsPlatform.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
+        Vector2D movement = Vector2D::Down() * i * moveDelta + initialPos;
+        Vector2D moveObj = Vector2D::Down() * i * moveDelta + initialObj;
+        basicsPlatform.back().MoveContent(movement /*,moveObj*/);
+        basicsPlatform.back().DrawOption(cam);
+    }
+    scrollSize = 400 + groundBlocks.size() * 130;
+}
+
+void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
+    if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
+        return;
+    }
+    currentY += movement.y;
+    for (auto& widget: basicsPlatform) {
+        widget.MoveContent(movement /* ,movement*/);
     }
 }
+
 bool EditorScreen::Render() {
     cam.InitRate();
-
+    // GameWorld(cam, writer.GetGameScene()).Run();
     while (running) {
         cam.Clean();
         SDL_Event event;
-
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
                     exit(0);
                     break;
-                    /*case SDL_MOUSEWHEEL:
-                        Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                        UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
-                        break;*/
+                case SDL_MOUSEWHEEL:
+                    Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+                    UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+                    break;
             }
 
             ButtonsManager::GetInstance().HandleEvent(event, cam);
         }
-
+        for (auto& plt: basicsPlatform) {
+            plt.DrawOption(cam);
+        }
         GUIManager::GetInstance().Draw(cam);
         // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 

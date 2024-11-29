@@ -1,0 +1,4 @@
+FOREST:
+  bg: bg_forest.png
+  tile: tile_set.png
+  tile_data: tile_set.yaml

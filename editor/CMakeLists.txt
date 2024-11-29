@@ -10,6 +10,7 @@ target_sources(taller_editor
     EditorRunner.cpp
     PlatformOptionWidget.cpp
     EditorScreen.cpp
+    editWorld/GameWorld.cpp
     PUBLIC
     # .h files
     mapEditor.h
@@ -20,4 +21,5 @@ target_sources(taller_editor
     EditorRunner.h
     PlatformOptionWidget.h
     EditorScreen.h
+    editWorld/GameWorld.h
     )

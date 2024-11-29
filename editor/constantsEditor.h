@@ -13,6 +13,11 @@ const std::string EDIT_LABEL = "Edit a level";
 
 const std::string SELECT_STR = "Select";
 const std::string ENTER_LVL_NAME = "Write the level name";
+const std::string SAVE_LABEL = "Save";
 
 const std::string OPTIONS_BLOCKS = "../config/basicsGrounds.yaml";
+
+const int CREATE_LVL = 0;
+const int QUIT = -1;
+const int EDIT_LVL = 1;
 #endif

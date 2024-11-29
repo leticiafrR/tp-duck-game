@@ -70,7 +70,7 @@ SetLevelName::SetLevelName(Camera& c):
                 },
                 Color(40, 40, 40)),
 
-        buttonText("START", 200,
+        buttonText(CREATE_LABEL.c_str(), 200,
                    RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
                                  Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
                    ColorExtension::White()) {}

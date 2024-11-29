@@ -27,6 +27,7 @@ public:
     Transform& GetTransform();
     void SetSize(Vector2D size);
     Vector2D GetSize();
+    Vector2D GetPos();
     Vector2D GetPivot();
     Vector2D GetAnchor();
 

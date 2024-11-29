@@ -1,20 +1,24 @@
 #include "mapEditor.h"
 
+#include <filesystem>
 #include <set>
 
 #include "common/Transform.h"
 #include "common/Vector2D.h"
-MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0) {
-    config[THEME_STR] = "FOREST";
+
+MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0), parser() {
+    config[THEME_STR] = FOREST_KEY;
     config[FULL_MAP_STR][X_STR] = 100;
     config[FULL_MAP_STR][Y_STR] = 160;
     config[PLATFORMS_STR] = YAML::Node(YAML::NodeType::Sequence);
 }
-MapEditor::MapEditor(const std::string& _fileName):
+MapEditor::MapEditor(const string& _fileName):
         config(YAML::LoadFile(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE)),
         platformsCounter(0),
         fileName(_fileName),
-        filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE) {
+        filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE),
+        parser() {
+
     if (config[PLATFORMS_STR] && config[PLATFORMS_STR].IsSequence()) {
         platformsCounter = config[PLATFORMS_STR].size();
     } else {
@@ -25,9 +29,8 @@ void MapEditor::SaveChanges() {
     std::ofstream fout(filePath);
     fout << config;
     YAML::Node availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
-    std::vector<std::string> availableLevels =
-            availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
-    auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
+    vector<string> availableLevels = availableConfig[AVAILABLE_LEVELS_STR].as<vector<string>>();
+    auto it = find(availableLevels.begin(), availableLevels.end(), filePath);
     if (it == availableLevels.end()) {
         availableLevels.emplace_back(fileName);
         availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
@@ -35,12 +38,12 @@ void MapEditor::SaveChanges() {
         fout2 << availableConfig;
     }
 }
-void MapEditor::AddFileName(const std::string& _fileName) {
+void MapEditor::AddFileName(const string& _fileName) {
     fileName = _fileName;
     filePath = RELATIVE_LEVEL_PATH + fileName + YAML_FILE;
 }
 void MapEditor::AddAPlataform(const float& x, const float& y, const float& w, const float& h,
-                              const std::vector<std::string>& edges) {
+                              const vector<string>& edges) {
 
     if (w >= MINIMUN_SIZE && h >= MINIMUN_SIZE) {
         YAML::Node platform = YAML::Node(YAML::NodeType::Map);
@@ -49,7 +52,7 @@ void MapEditor::AddAPlataform(const float& x, const float& y, const float& w, co
         platform[WEIGHT_STR] = w;
         platform[HIGH_STR] = h;
         platform[EDGES_STR] = edges;
-        std::string platformName = PLATFORM_KEY + std::to_string(platformsCounter++);
+        string platformName = PLATFORM_KEY + std::to_string(platformsCounter++);
         config[platformName] = platform;
         config[PLATFORMS_STR].push_back(platformName);
     }
@@ -81,7 +84,7 @@ void MapEditor::AddBoxSpawnPoint(const float& x, const float& y) {
     }
     config[BOX_POINTS_STR].push_back(boxSpawnPoint);
 }
-void MapEditor::AddTheme(const std::string& theme) { config[THEME_STR] = theme; }
+void MapEditor::AddTheme(const string& theme) { config[THEME_STR] = theme; }
 void MapEditor::AddFullMapSize(const size_t& x, const size_t& y) {
     config[FULL_MAP_STR][X_STR] = x;
     config[FULL_MAP_STR][Y_STR] = y;
@@ -91,9 +94,8 @@ void MapEditor::DeleteALevel() {
         std::cerr << "Occurred an error when trying to delete the file: " << filePath << std::endl;
     } else {
         YAML::Node availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
-        std::vector<std::string> availableLevels =
-                availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
-        auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
+        vector<string> availableLevels = availableConfig[AVAILABLE_LEVELS_STR].as<vector<string>>();
+        auto it = find(availableLevels.begin(), availableLevels.end(), filePath);
         if (it != availableLevels.end()) {
             availableLevels.erase(it);
             availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
@@ -102,19 +104,18 @@ void MapEditor::DeleteALevel() {
         }
     }
 }
-void MapEditor::ModificateAPlataform(const std::string& plataformName, const float& x,
-                                     const float& y, const float& w, const float& h,
-                                     const std::vector<std::string>& edges) {
+void MapEditor::ModificateAPlataform(const string& plataformName, const float& x, const float& y,
+                                     const float& w, const float& h, const vector<string>& edges) {
     config[plataformName][X_STR] = x;
     config[plataformName][Y_STR] = y;
     config[plataformName][WEIGHT_STR] = w;
     config[plataformName][HIGH_STR] = h;
     config[plataformName][EDGES_STR] = edges;
 }
-void MapEditor::DeleteAPlataform(const std::string& platformName) {
+void MapEditor::DeleteAPlataform(const string& platformName) {
     if (config[platformName]) {
         config.remove(platformName);
-        std::vector<std::string> platforms = config[PLATFORMS_STR].as<std::vector<std::string>>();
+        vector<string> platforms = config[PLATFORMS_STR].as<vector<string>>();
         for (size_t i = 0; i < platforms.size(); ++i) {
             if (platforms[i] == platformName) {
                 platforms.erase(platforms.begin() + i);
@@ -127,17 +128,16 @@ void MapEditor::DeleteAPlataform(const std::string& platformName) {
                   << std::endl;
     }
 }
-std::vector<GroundDto> MapEditor::GetPlataforms() {
-    std::vector<GroundDto> grounds;
-    std::vector<std::string> platforms = config[PLATFORMS_STR].as<std::vector<std::string>>();
+vector<GroundDto> MapEditor::GetPlataforms() {
+    vector<GroundDto> grounds;
+    vector<string> platforms = config[PLATFORMS_STR].as<vector<string>>();
     for (const auto& name: platforms) {
         float x = config[name][X_STR].as<float>();
         float y = config[name][Y_STR].as<float>();
         float w = config[name][WEIGHT_STR].as<float>();
         float h = config[name][HIGH_STR].as<float>();
-        std::vector<std::string> edgesConfig =
-                config[name][EDGES_STR].as<std::vector<std::string>>();
-        std::set<VISIBLE_EDGES> edges;
+        vector<string> edgesConfig = config[name][EDGES_STR].as<vector<string>>();
+        set<VISIBLE_EDGES> edges;
         for (auto edge: edgesConfig) {
             if (edge == LEFT_STR)
                 edges.insert(LEFT);
@@ -152,4 +152,7 @@ std::vector<GroundDto> MapEditor::GetPlataforms() {
                 GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), NULL_ANGLE), edges));
     }
     return grounds;
+}
+GameSceneDto MapEditor::GetGameScene() {
+    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlataforms());
 }
