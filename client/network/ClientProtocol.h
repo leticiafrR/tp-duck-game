@@ -14,18 +14,12 @@
 #include "common/protocolAssistant.h"
 #include "common/socket.h"
 #include "data/command.h"
+#include "data/dataTransferObjects.h"
+#include "data/gameScene.h"
 #include "data/id.h"
 #include "data/matchSelection.h"
 #include "data/networkMsg.h"
 #include "data/snapshot.h"
-
-
-struct Snapshot;
-struct MatchStartDto;
-struct GameSceneDto;
-struct GamesRecountDto;
-struct Command;
-struct ActiveMatch;
 
 class ClientProtocol {
 private:

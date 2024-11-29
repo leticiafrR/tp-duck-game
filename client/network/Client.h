@@ -1,49 +1,68 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "common/queue.h"
-#include "common/thread.h"
+
+#include "ClientProtocol.h"
+#include "Receiver.h"
+// #include "data/snapshot.h"
+
 #include "data/command.h"
+#include "data/matchSelection.h"
 #include "data/networkMsg.h"
 
-#include "Receiver.h"
+
+#define MAX_MESSAGES 100
+#define MAX_COMMANDS 100
+#define DEFAULT_LOCAL_PLAYERS 1
+
 
 class Client {
 private:
     ClientProtocol protocol;
+    std::atomic<uint16_t> localID = 0;
+
     Queue<std::shared_ptr<NetworkMsg>> msgQueue;
     Queue<Command> cmmdQueue;
+
     Queue<std::optional<MatchSelection>> matchSelections;
-    Receiver* receiver;
-    std::atomic<uint16_t> localID = 0;
+
+    std::unique_ptr<Receiver> receiver;
 
 public:
     Client(const char* servname, const char* hostname, const std::string& name):
             protocol(std::move(Socket(hostname, servname))),
-            msgQueue(),
-            cmmdQueue(),
-            receiver(new Receiver(protocol, msgQueue, cmmdQueue, name, matchSelections, localID)) {
+            msgQueue(MAX_MESSAGES),
+            cmmdQueue(MAX_COMMANDS),
+            receiver(std::make_unique<Receiver>(protocol, msgQueue, cmmdQueue, name,
+                                                matchSelections, localID)) {
         receiver->start();
     }
 
-    uint16_t getLocalID() { return localID; }
+    bool IsConnected() { return receiver->is_alive(); }
+
+    void KillComunicationThreads() { receiver->kill(); }
+
+    void JoinCommunicationThreads() { receiver->join(); }
+
+    uint16_t GetLocalID() { return localID; }
 
     void Refresh() {
-        // Empty selection to denote refresh
+        // Empty selection to denote client dint take a match selection.
         std::optional<MatchSelection> selection{};
         matchSelections.try_push(selection);
     }
-    void SelectMatch(uint16_t matchID, uint8_t playersPerConnection = 1) {
+
+    void SelectMatch(uint16_t matchID, uint8_t playersPerConnection = DEFAULT_LOCAL_PLAYERS) {
         std::optional<MatchSelection> selection = MatchSelection(matchID, playersPerConnection);
         matchSelections.try_push(selection);
     }
 
-    void CreateMatch(uint8_t playersPerConnection = 1) {
+    void CreateMatch(uint8_t playersPerConnection = DEFAULT_LOCAL_PLAYERS) {
         std::optional<MatchSelection> createSelection = MatchSelection(0, playersPerConnection);
         matchSelections.try_push(createSelection);
     }
@@ -53,7 +72,7 @@ public:
         matchSelections.try_push(itentionStart);
     }
 
-    bool TrySendRequest(CommandCode code, uint8_t indexLocalPlayer = 0) {
+    bool TrySendRequest(CommandCode code, uint8_t indexLocalPlayer = DEFAULT_LOCAL_PLAYERS - 1) {
         Command command(code, indexLocalPlayer);
         return cmmdQueue.try_push(command);
     }
@@ -66,16 +85,6 @@ public:
             return true;
         }
         return false;
-    }
-
-    // no creo que esto estè bien
-    ~Client() {
-        // receiver->kill();
-        receiver->stop();
-        if (receiver->is_alive()) {
-            receiver->join();
-        }
-        delete receiver;
     }
 
     Client(const Client&) = delete;

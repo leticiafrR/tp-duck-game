@@ -15,6 +15,11 @@
 
 #include "gamesHandler.h"
 
+#define EMPTY_MATCH_KILLED                                                                        \
+    "[Match Thread] killed, must not continue playing games and other processing because it has " \
+    "run out of players."
+#define CLOSING_SERVER_MATCH_KILLED "[Match Thread] killed, server closing serving.\n"
+
 #define MAX_COMMANDS 100
 #define NO_WINNER_FORCED_END 0
 
@@ -91,7 +96,10 @@ void Match::run() {
         auto winner = gamesHandler.whoWon();
         setEndOfMatch(winner);
     } catch (const ClosedQueue& q) {
-    } catch (const RunOutOfPlayers& r) {}
+        std::cerr << CLOSING_SERVER_MATCH_KILLED << std::endl;
+    } catch (const RunOutOfPlayers& r) {
+        std::cerr << EMPTY_MATCH_KILLED << std::endl;
+    }
 }
 
 void Match::forceEnd() { setEndOfMatch(NO_WINNER_FORCED_END); }

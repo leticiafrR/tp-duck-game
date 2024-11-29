@@ -6,8 +6,6 @@ ProtocolAssistant::ProtocolAssistant(Socket& skt): skt(skt) {}
 
 void ProtocolAssistant::checkShipping(int cantBytes, const std::string& when) {
     if (cantBytes == 0) {
-        std::cout << "[Protocol_assistant]:result of checking bytes is 0, when " << when
-                  << ". The connion has been shuted down.\n";
         throw ConnectionFailed();
     }
 }

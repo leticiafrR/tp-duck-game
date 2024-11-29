@@ -99,7 +99,7 @@ void Gameplay::TakeInput() {
                         break;
                 }
 
-                if (!players.contains(PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                if (!players.contains(PlayerIdentifier::GeneratePlayerID(client.GetLocalID(), 1)))
                     continue;
                 switch (keyEvent.keysym.sym) {
 
@@ -171,7 +171,7 @@ void Gameplay::TakeInput() {
                         break;
                 }
 
-                if (!players.contains(PlayerIdentifier::GeneratePlayerID(client.getLocalID(), 1)))
+                if (!players.contains(PlayerIdentifier::GeneratePlayerID(client.GetLocalID(), 1)))
                     continue;
                 switch (keyEvent.keysym.sym) {
 
@@ -264,7 +264,7 @@ void Gameplay::DrawGameWorld() {
 }
 
 void Gameplay::InitGUI() {
-    uint16_t localConnectionId = client.getLocalID();
+    uint16_t localConnectionId = client.GetLocalID();
 
     bool isPlayer1 = true;
     for (uint8_t i = 0; i < (uint8_t)players.size(); i++) {

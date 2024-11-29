@@ -4,7 +4,6 @@
 #include <cstdint>
 
 struct MatchSelection {
-    // has the local Id to create a new match.
     uint16_t matchSelection;
     uint8_t playersPerConection;
     MatchSelection(uint16_t _matchSelection, uint8_t _playersPerConection):
