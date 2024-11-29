@@ -32,7 +32,9 @@ target_sources(taller_client
     screens/PlayersCountSelection.cpp
     screens/ShowColorsScreen.cpp
 
+    ClientRunner.cpp
     main.cpp
+    
     network/ClientProtocol.cpp
 
     PUBLIC
