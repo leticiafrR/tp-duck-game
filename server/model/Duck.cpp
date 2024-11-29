@@ -184,7 +184,7 @@ void Duck::TryCollect(CollectablesController& c) {
 void Duck::TryDrop(CollectablesController& c) {
     if (itemOnHand && isGrounded) {
         if (itemOnHand->StillReusable()) {
-            c.Drop(itemOnHand, mySpace.GetPos(), GetLookVector());
+            c.Drop(itemOnHand, mySpace.GetPos());
         }
         itemOnHand.reset();
         typeOnHand = TypeCollectable::EMPTY;
@@ -229,9 +229,8 @@ void Duck::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);
 }
 
-void Duck::TryEquip(TypeCollectable typeProtection) {
-    if (equipment.TryEquip(typeProtection)) {
-        std::cout << "something was equipp (helmet or armor)\n";
+void Duck::TryEquip() {
+    if (equipment.TryEquip(typeOnHand)) {
         itemOnHand.reset();
         TriggerEvent();
     }

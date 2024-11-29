@@ -58,7 +58,7 @@ public:
 
     void Cuack();
 
-    void TryEquip(TypeCollectable typeProtection);
+    void TryEquip();
 
     void TryCollect(CollectablesController& c);
     void TryDrop(CollectablesController& c);

@@ -56,7 +56,3 @@ void InstantWeapon::Update(float deltaTime, StaticMap& /*map*/) {
         cooldownTimer += deltaTime;
     }
 }
-
-void InstantWeapon::BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) {
-    mySpace.SetPos(duckPosition);
-}

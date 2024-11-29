@@ -10,18 +10,10 @@ public:
         collectorTypeRef = TypeCollectable::ARMOR;
         std::cout << "armor collected\n";
     }
-    bool Use(Duck* user) override {
-        user->TryEquip(TypeCollectable::ARMOR);
-        return true;
-    }
 
     void StopUse(Duck* /*user*/) override {}
     void Update(float /*deltaTime*/, StaticMap& /*map*/) override {}
-    bool StillReusable() override { return true; }
     TypeCollectable GetTypeCollectable() override { return TypeCollectable::ARMOR; }
-    void BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) override {
-        mySpace.SetPos(duckPosition);
-    }
 };
 
 #endif

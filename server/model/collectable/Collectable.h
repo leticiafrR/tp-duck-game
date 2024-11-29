@@ -14,21 +14,18 @@ protected:
     Transform mySpace;
 
 public:
-    explicit Collectable(const Transform& initialSpace): mySpace(initialSpace) {}
+    explicit Collectable(const Transform& initialSpace);
     virtual ~Collectable() = default;
 
-
-    virtual void BeDropped(const Vector2D& duckPosition, const Vector2D& direction) = 0;
-
-    virtual bool Use(Duck* user) = 0;
+    void BeDropped(const Vector2D& duckPosition);
+    virtual bool Use(Duck* user);
     virtual void StopUse(Duck* user) = 0;
     virtual void Update(float deltaTime, StaticMap& map) = 0;
 
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;
-    const Transform& GetTransform() const { return mySpace; }
-    virtual bool StillReusable() = 0;
+    const Transform& GetTransform() const;
+    virtual bool StillReusable();
 };
-
 
 #endif

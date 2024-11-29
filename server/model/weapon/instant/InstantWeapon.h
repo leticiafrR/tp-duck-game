@@ -29,7 +29,6 @@ public:
                   float inclination = ShootingInclination::BASIC_NO_INCLINATION);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
-    void BeDropped(const Vector2D& duckPosition, const Vector2D& /*direction*/) override;
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime, StaticMap& /*map*/) override;
     virtual ~InstantWeapon() = default;

@@ -24,6 +24,7 @@ target_sources(taller_server
     model/projectile/InstantProjectile.cpp
     model/projectile/BounceInstantProjectile.cpp
 
+    model/collectable/Collectable.cpp
     model/collectable/CollectableWrapper.cpp
     model/collectable/CollectableSpawner.cpp
     model/collectable/Collectables.cpp
@@ -60,9 +61,7 @@ target_sources(taller_server
     model/event/PlayerEventListener.h
     
     model/Equipment.h
-    model/collectable/CollectablesController.h
-    # model/collectable/Protection.h
-    model/collectable/Collectable.h
+    
     model/weapon/Weapon.h
     model/weapon/instant/InstantWeapon.h
     model/weapon/instant/PistolaCowboy.h
