@@ -20,7 +20,7 @@ void Shotgun::Shoot(Duck* shooter) {
             InstantProjectile* projectile = new InstantProjectile(shooter->GetTransform().GetPos(),
                                                                   GetShootingDirection(shooter),
                                                                   scope, damage, typeProjectile, l);
-            projectilesController.RelaseProjectile(projectile);
+            projectilesController.RelaseInstantProjectile(projectile);
         }
         ammoLoaded = false;
     } else {

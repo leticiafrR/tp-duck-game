@@ -17,8 +17,7 @@ class Duck: public DynamicObject {
 private:
     PlayerID_t id;
 
-    bool isShooting;  // just touched by the ones who needs key up and key down (not used as
-                      // momment)
+    bool isShooting;
     bool isLookingUp;
     bool isCrouched;
     bool isGrounded;

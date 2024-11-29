@@ -16,11 +16,11 @@ protected:
     bool isDead;
 
 public:
-    void MarkAsDead();
-    bool IsDead();
     explicit Projectile(TypeProjectile type);
     virtual ~Projectile() = default;
     virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) = 0;
+    void MarkAsDead();
+    bool IsDead();
 };
 
 #endif

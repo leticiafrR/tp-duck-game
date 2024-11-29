@@ -9,12 +9,12 @@
 #include "../event/InstantProjectileEventListener.h"
 #include "../map/staticMap.h"
 #include "common/Vector2D.h"
-
-#include "Projectile.h"
+#include "instant/InstantProjectile.h"
 
 class ProjectilesController {
 private:
-    std::vector<Projectile*> projectiles;
+    std::vector<InstantProjectile*> instantProjectiles;
+    // std::unordered_map<ProjectileID_t,ThrowableProjectile*> throwableProjectiles;
     InstantProjectileEventListener* instantProjectileListener;
 
 public:
@@ -24,7 +24,7 @@ public:
 
     void RegisterListener(InstantProjectileEventListener* listener);
 
-    void RelaseProjectile(Projectile* projectile);
+    void RelaseInstantProjectile(InstantProjectile* projectile);
 
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players);
 

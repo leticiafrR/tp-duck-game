@@ -17,14 +17,14 @@ public:
     explicit Collectable(const Transform& initialSpace);
     virtual ~Collectable() = default;
 
-    void BeDropped(const Vector2D& duckPosition);
+    virtual void BeDropped(const Vector2D& duckPosition);
     virtual bool Use(Duck* user);
     virtual void StopUse(Duck* user) = 0;
     virtual void Update(float deltaTime) = 0;
 
     virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
     virtual TypeCollectable GetTypeCollectable() = 0;
-    const Transform& GetTransform() const;
+    Transform& GetTransform();
     virtual bool StillReusable();
 };
 

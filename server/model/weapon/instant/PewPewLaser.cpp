@@ -13,7 +13,6 @@ PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& ini
 
 void PewPewLaser::BeCollected(TypeCollectable& collectorTypeRef) {
     collectorTypeRef = TypeCollectable::PEW_PEW_LASER;
-    std::cout << "[pewpew] recogiste una pewpew GRRRR\n";
 }
 
 void PewPewLaser::Shoot(Duck* shooter) {
@@ -22,7 +21,7 @@ void PewPewLaser::Shoot(Duck* shooter) {
         InstantProjectile* projectile = new InstantProjectile(shooter->GetTransform().GetPos(),
                                                               GetShootingDirection(shooter), scope,
                                                               damage, typeProjectile, l);
-        projectilesController.RelaseProjectile(projectile);
+        projectilesController.RelaseInstantProjectile(projectile);
         inclination *= i;
     }
     inclination = originalInclination;

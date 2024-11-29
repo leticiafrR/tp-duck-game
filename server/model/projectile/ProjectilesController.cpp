@@ -10,32 +10,33 @@ void ProjectilesController::RegisterListener(InstantProjectileEventListener* lis
     instantProjectileListener = listener;
 }
 
-void ProjectilesController::RelaseProjectile(Projectile* projectile) {
-    projectiles.push_back(projectile);
+void ProjectilesController::RelaseInstantProjectile(InstantProjectile* projectile) {
+    instantProjectiles.push_back(projectile);
 }
 
 void ProjectilesController::Update(const StaticMap& map,
                                    std::unordered_map<PlayerID_t, Duck*>& players) {
-    for (auto projectile: projectiles) {
+    for (auto projectile: instantProjectiles) {
         projectile->Update(map, players);
     }
     ReapDead();
 }
 
 void ProjectilesController::ReapDead() {
-    auto deleter = std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile* p) {
-        if (p->IsDead()) {
-            delete p;
-            return true;
-        }
-        return false;
-    });
-    projectiles.erase(deleter, projectiles.end());
+    auto deleter =
+            std::remove_if(instantProjectiles.begin(), instantProjectiles.end(), [](Projectile* p) {
+                if (p->IsDead()) {
+                    delete p;
+                    return true;
+                }
+                return false;
+            });
+    instantProjectiles.erase(deleter, instantProjectiles.end());
 }
 
 ProjectilesController::~ProjectilesController() {
-    for (Projectile* p: projectiles) {
+    for (Projectile* p: instantProjectiles) {
         delete p;
     }
-    projectiles.clear();
+    instantProjectiles.clear();
 }

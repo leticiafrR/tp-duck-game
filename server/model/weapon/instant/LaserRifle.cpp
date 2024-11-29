@@ -17,7 +17,7 @@ void LaserRifle::Shoot(Duck* shooter) {
     BounceInstantProjectile* projectile = new BounceInstantProjectile(
             shooter->GetTransform().GetPos(), GetShootingDirection(shooter), scope, damage,
             typeProjectile, l);
-    projectilesController.RelaseProjectile(projectile);
+    projectilesController.RelaseInstantProjectile(projectile);
 }
 
 bool LaserRifle::Use(Duck* shooter) {
