@@ -60,7 +60,7 @@ void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isIni
     });
 
     laodRoundScreen.Run("LOADING...");
-    Gameplay(client, cam, matchData, *mapData, *firstSnapshot).Run(isInitial);
+    Gameplay(client, cam, matchData, *mapData, *firstSnapshot, isInitial).Run(wasClosed);
 }
 
 void ClientRunner::ErrorScreen(const string& text) {
@@ -74,17 +74,41 @@ void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
     GameStatusScreen(cam, players, gameResults, winner).Run();
 }
 
-ClientRunner::ClientRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
+ClientRunner::ClientRunner(Renderer& render, int fps):
+        cam(std::move(render), 70, Rate(fps)), wasClosed(false) {}
+
 ClientRunner::~ClientRunner() = default;
 
 void ClientRunner::Run() {
     try {
-        string nickname = MenuScreen(cam).Render();
+        string nickname;
+        MenuScreen(cam, nickname).Run(wasClosed);
+        if (wasClosed)
+            return;
 
         Client client("8080", "localhost", nickname);
-        bool isOwner = MatchListScreen(cam, client).Render();
 
-        MatchStartDto matchData = *(LobbyScreen(cam, client, isOwner).Render());
+        bool isOwner;
+        MatchListScreen(cam, client, isOwner).Run(wasClosed);
+        if (wasClosed) {
+            std::cout << "Esperando hilos\n";
+            client.KillComunicationThreads();
+            client.JoinCommunicationThreads();
+            std::cout << "Hilos matados\n";
+            return;
+        }
+
+        shared_ptr<MatchStartDto> matchDataPtr;
+        LobbyScreen(cam, client, isOwner, matchDataPtr).Run(wasClosed);
+        if (wasClosed) {
+            std::cout << "Esperando hilos\n";
+            client.KillComunicationThreads();
+            client.JoinCommunicationThreads();
+            std::cout << "Hilos matados\n";
+            return;
+        }
+
+        MatchStartDto matchData = *matchDataPtr;
 
         AudioManager::GetInstance().PlayGameMusic();
         bool matchEnded = false;
@@ -92,6 +116,13 @@ void ClientRunner::Run() {
         bool isInitial = true;
         while (!matchEnded) {
             PlayRound(client, matchData, isInitial);
+
+            if (wasClosed) {
+                client.KillComunicationThreads();
+                client.JoinCommunicationThreads();
+                return;
+            }
+
             isInitial = false;
 
             bool isFinalGroup = false;
@@ -114,10 +145,9 @@ void ClientRunner::Run() {
 
         ShowResultsScreen(winner, matchData.playersData, roundResults);
 
-    } catch (LibError& e) {
+    } catch (ConnectionFailed& e) {
         std::cerr << e.what() << std::endl;
         ErrorScreen("Can't connect to server, please try again later");
-
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         ErrorScreen("An unexpected error occurred, please try again later");

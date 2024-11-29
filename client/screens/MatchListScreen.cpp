@@ -95,8 +95,8 @@ void MatchListScreen::UpdateWidgetListPosition(Vector2D movement) {
     }
 }
 
-MatchListScreen::MatchListScreen(Camera& c, Client& cl):
-        cam(c),
+MatchListScreen::MatchListScreen(Camera& c, Client& cl, bool& isOwner):
+        BaseScreen(c),
         client(cl),
         header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
                              Vector2D(0.5, 1)),
@@ -139,44 +139,28 @@ MatchListScreen::MatchListScreen(Camera& c, Client& cl):
         controlsButtonText("CONTROLS", 20,
                            RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
                                          Vector2D(0.5, 0.5)),
-                           ColorExtension::White(), 5) {
+                           ColorExtension::White(), 5),
+        isOwner(isOwner) {
     controls.SetActive(false);
 }
 
 MatchListScreen::~MatchListScreen() = default;
 
-bool MatchListScreen::Render() {
-    running = true;
-
-    // Get the first available lobbies
-    WaitRefresh();
-
-    cam.InitRate();
-
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-                case SDL_MOUSEWHEEL:
-                    Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                    UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
-                    break;
-            }
-
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
-
-        GUIManager::GetInstance().Draw(cam);
-        TweenManager::GetInstance().Update(cam.GetRateDeltatime());
-
-        cam.Render();
-        cam.Delay();
+void MatchListScreen::TakeInput(SDL_Event event) {
+    switch (event.type) {
+        case SDL_MOUSEWHEEL:
+            Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+            UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+            break;
     }
 
-    return isOwner;
+    ButtonsManager::GetInstance().HandleEvent(event, cam);
+}
+
+
+void MatchListScreen::InitRun() { WaitRefresh(); }
+
+void MatchListScreen::Update(float deltaTime) {
+    TweenManager::GetInstance().Update(deltaTime);
+    GUIManager::GetInstance().Draw(cam);
 }

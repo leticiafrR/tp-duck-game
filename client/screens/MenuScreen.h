@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "client/BaseScreen.h"
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
 #include "multimedia/Camera.h"
@@ -13,8 +14,6 @@
 #include "multimedia/gui/ButtonsManager.h"
 #include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Text.h"
-
-#include "BaseScreen.h"
 
 using std::string;
 
@@ -34,7 +33,7 @@ private:
     Button startButton;
     Text buttonText;
 
-    string nicknameInput = "";
+    string& nicknameInput;
 
     TransformTween btnTween;
     TransformTween textTween;
@@ -44,11 +43,9 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    explicit MenuScreen(Camera& c);
+    explicit MenuScreen(Camera& c, string& input);
 
     ~MenuScreen();
-
-    string Render();
 };
 
 #endif

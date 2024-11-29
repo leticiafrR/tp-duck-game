@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "client/BaseScreen.h"
 #include "client/network/Client.h"
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
@@ -28,17 +29,13 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-class MatchListScreen {
+class MatchListScreen: public BaseScreen {
 private:
-    Camera& cam;
     Client& client;
     list<LobbyItemWidget> widgets;
 
     float currentY = 0;
     float scrollSize = 0;
-
-    bool running = false;
-    bool isOwner = false;
 
     Image header;
     Text titleText;
@@ -58,6 +55,8 @@ private:
 
     PlayersCountSelection playersCountSelection;
 
+    bool& isOwner;
+
     void OnCreatePressed();
 
     void OnJoinLobbyPressed(int id);
@@ -70,12 +69,16 @@ private:
 
     void UpdateWidgetListPosition(Vector2D movement);
 
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
+
 public:
-    MatchListScreen(Camera& c, Client& cl);
+    MatchListScreen(Camera& c, Client& cl, bool& isOwner);
 
     ~MatchListScreen();
 
-    bool Render();
+    // bool Render();
 };
 
 #endif

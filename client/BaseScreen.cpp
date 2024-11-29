@@ -1,11 +1,12 @@
 #include "BaseScreen.h"
 
-BaseScreen::BaseScreen(Camera& cam): cam(cam), wasClosed(false), running(false) {}
+BaseScreen::BaseScreen(Camera& cam): cam(cam), running(false) {}
 BaseScreen::~BaseScreen() = default;
 
-bool BaseScreen::WasClosed() { return wasClosed; }
+void BaseScreen::Run(bool& wasClosed) {
+    if (wasClosed)
+        return;
 
-void BaseScreen::Run() {
     running = true;
 
     InitRun();

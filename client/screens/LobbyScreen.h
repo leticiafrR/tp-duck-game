@@ -2,6 +2,7 @@
 #define LOBBY_SCREEN_H
 #include <memory>
 
+#include "client/BaseScreen.h"
 #include "client/network/Client.h"
 #include "client/tweening/TweenManager.h"
 #include "data/networkMsg.h"
@@ -16,21 +17,28 @@
 
 using std::shared_ptr;
 
-class LobbyScreen {
+class LobbyScreen: public BaseScreen {
 private:
-    Camera& cam;
     Client& client;
     bool isOwner;
-
-    bool running = false;
+    shared_ptr<MatchStartDto>& matchData;
     bool waitingToStart = false;
 
+    Button startButton;
+
+    Text startButtonText;
+    Text waitingTest;
+
+    void OnStartButtonPressed();
+
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
+
 public:
-    LobbyScreen(Camera& cam, Client& client, bool isOwner);
+    LobbyScreen(Camera& cam, Client& client, bool isOwner, shared_ptr<MatchStartDto>& matchData);
 
     ~LobbyScreen();
-
-    std::shared_ptr<MatchStartDto> Render();
 };
 
 #endif

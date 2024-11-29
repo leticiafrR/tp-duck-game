@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "client/BaseScreen.h"
 #include "client/gameplay/CameraController.h"
 #include "client/gameplay/GameplayGUI.h"
 #include "client/network/Client.h"
@@ -24,18 +25,23 @@
 #include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Image.h"
 
+#include "ClientControls.h"
+
 using std::list;
 using std::set;
 using std::shared_ptr;
 using std::unordered_map;
 using std::vector;
 
-class Gameplay {
+class Gameplay: public BaseScreen {
 private:
     Client& client;
-    Camera& cam;
+    bool isInitial;
     CameraController camController;
     Object2D mapBg;
+
+    Image fadePanel;
+    ImageTween fadePanelTween;
 
     vector<PlayerData> playersData;
     map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
@@ -45,9 +51,9 @@ private:
 
     GameplayGUI gui;
 
-    set<int> pressedKeysSet;
+    // set<int> pressedKeysSet;
+    ClientControls controls;
 
-    bool running = false;
     bool finishing = true;
 
     void InitPlayers(const MatchStartDto& matchData, const Snapshot& firstSnapshot);
@@ -59,8 +65,6 @@ private:
     void DespawnCollectable(CollectableID_t id);
     void SpawnCollectable(CollectableSpawnEventDto collectableData);
 
-    void TakeInput();
-
     void TakeSnapshots(Callback OnLastSnapshot);
 
     void UpdateGame(const Snapshot& snapshot);
@@ -69,12 +73,14 @@ private:
 
     void InitGUI();
 
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
+
 public:
     Gameplay(Client& cl, Camera& c, MatchStartDto matchData, GameSceneDto mapData,
-             Snapshot firstSnapshot);
+             Snapshot firstSnapshot, bool isInitial);
     ~Gameplay();
-
-    void Run(bool isInitial);
 };
 
 #endif

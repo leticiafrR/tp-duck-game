@@ -29,6 +29,7 @@ using std::vector;
 class ClientRunner {
 private:
     Camera cam;
+    bool wasClosed;
 
     PlayerData LoadWinner(Client& client, vector<PlayerData> players);
 

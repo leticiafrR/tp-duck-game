@@ -10,6 +10,9 @@ target_sources(taller_client
     utils/Animator.cpp
     utils/TransformFollow.cpp
 
+    BaseScreen.cpp
+
+    gameplay/ClientControls.cpp
     gameplay/CameraController.cpp
     gameplay/Gameplay.cpp
     gameplay/GameplayGUI.cpp
@@ -22,7 +25,6 @@ target_sources(taller_client
     rendering/ChestplateRenderer.cpp
     rendering/HelmetRenderer.cpp
 
-    screens/BaseScreen.cpp
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
     screens/MatchListScreen.cpp
@@ -53,11 +55,13 @@ target_sources(taller_client
     utils/Animator.h
     utils/TransformFollow.h
 
+    BaseScreen.h
+
+    gameplay/ClientControls.h
     gameplay/CameraController.h
     gameplay/Gameplay.h
     gameplay/GameplayGUI.h
 
-    screens/BaseScreen.h
     screens/MenuScreen.h
     screens/LoadingScreen.h
     screens/MatchListScreen.h

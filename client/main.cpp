@@ -24,4 +24,9 @@ int main() {
 
     ClientRunner runner(render, 60);
     runner.Run();
+    std::cout << "Cerrando el programa correctamente!\n";
+
+    // Verificar
+    FontCache::Clear();
+    GUIManager::GetInstance().Clear();
 }

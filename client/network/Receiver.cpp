@@ -53,6 +53,7 @@ void Receiver::receiveLoop() {
 }
 
 void Receiver::kill() {
+    matchSelections.close();
     msgQueue.close();
     protocol.endConnection();
 }

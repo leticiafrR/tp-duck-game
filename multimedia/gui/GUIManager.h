@@ -31,6 +31,8 @@ public:
     // Remove copy
     GUIManager(const GUIManager&) = delete;
     GUIManager& operator=(const GUIManager&) = delete;
+
+    void Clear() { graphics.clear(); }
 };
 
 #endif
