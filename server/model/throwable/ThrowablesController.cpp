@@ -17,7 +17,11 @@ void ThrowablesController::Update(StaticMap& map, float deltaTime) {
     for (auto& pair: throwables) {
         pair.second->Update(map, deltaTime);
         // deberìa ser un throwableMovingEventDto
-        l->Spawning(pair.first, pair.second->GetMovingEventDto());
+        if (pair.second->IsDead()) {
+            l->Despawning(pair.first);
+        } else {
+            l->Spawning(pair.first, pair.second->GetMovingEventDto());
+        }
     }
     Reapdead();
 }

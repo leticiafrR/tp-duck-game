@@ -1,6 +1,6 @@
 #include "Grenade.h"
 
-#define MASS_GRENADE 7
+#define MASS_GRENADE 4
 #define TIME_TO_EXPLOTE 4  // parametrizable
 #define SCOPE_GRENADE 30
 #define DAMAGE_GRENADE 6
