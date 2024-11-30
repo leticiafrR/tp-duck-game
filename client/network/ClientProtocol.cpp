@@ -151,7 +151,6 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
 
 Snapshot ClientProtocol::receiveGameUpdateDto() {
     bool _gameOver = assistant.receiveBooelan();
-
     // receiving updates
     uint8_t numberUpdates = assistant.receiveNumberOneByte();
     std::unordered_map<PlayerID_t, PlayerEvent> _updates((size_t)numberUpdates);
@@ -172,6 +171,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         _updates[ID] = PlayerEvent{evMotion,   evState,  evFlip,   lookingUp, typeOnHand,
                                    isCrouched, cuacking, hasArmor, hasHelmet};
     }
+
     // receiving raycastsEvents
     uint8_t numberProjectile = assistant.receiveNumberOneByte();
     std::vector<InstantProjectileEventDto> _raycastsEvents((size_t)numberProjectile);
@@ -199,7 +199,26 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         _collectableSpawns[i] = CollectableSpawnEventDto{id, position, type};
     }
 
-    return Snapshot(_gameOver, _updates, _raycastsEvents, _collectableDespawns, _collectableSpawns);
+    // receiving throwableSpawns std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>
+    uint8_t numberThrowableSpawns = assistant.receiveNumberOneByte();
+    std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto> _throwableSpawns(
+            (size_t)numberThrowableSpawns);
+    for (uint8_t i = 0; i < numberThrowableSpawns; i++) {
+        ThrowableID_t id = assistant.receiveNumberOneByte();
+        auto type = (TypeCollectable)assistant.receiveNumberOneByte();
+        auto pos = assistant.receiveVector2D();
+        _throwableSpawns[id] = ThrowableSpawnEventDto(type, pos);
+    }
+
+    // receiving throwableDespawns
+    uint8_t numberThrowableDespawns = assistant.receiveNumberOneByte();
+    std::vector<ThrowableID_t> _throwableDespawns((size_t)numberThrowableDespawns);
+    for (uint8_t i = 0; i < numberThrowableDespawns; i++) {
+        _throwableDespawns[i] = assistant.receiveNumberOneByte();
+    }
+
+    return Snapshot(_gameOver, _updates, _raycastsEvents, _collectableDespawns, _collectableSpawns,
+                    _throwableSpawns, _throwableDespawns);
 }
 
 bool ClientProtocol::receiveFinalGroupGame() {

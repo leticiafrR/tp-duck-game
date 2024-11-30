@@ -28,6 +28,9 @@ private:
     void sendRaycastsEvents(const std::vector<InstantProjectileEventDto>& raycastsEvents);
     void sendCollectableDespawns(const std::vector<CollectableID_t>& collectableDespawns);
     void sendCollectableSpawns(const std::vector<CollectableSpawnEventDto>& collectableSpawns);
+    void sendThrowableSpawns(
+            const std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>& throwableSpawns);
+    void sendThrowableDespawns(const std::vector<ThrowableID_t>& throwableDespawns);
 
 public:
     explicit ServerProtocol(Socket&& skt);

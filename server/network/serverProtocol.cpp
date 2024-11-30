@@ -176,14 +176,37 @@ void ServerProtocol::sendCollectableSpawns(
     }
 }
 
+void ServerProtocol::sendThrowableSpawns(
+        const std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>& throwableSpawns) {
+    assistant.sendNumber((uint8_t)throwableSpawns.size());
+    for (auto it = throwableSpawns.begin(); it != throwableSpawns.end(); ++it) {
+        // ThrowableID_t
+        assistant.sendNumber(it->first);
+        // ThrowableSpawnEventDto
+        assistant.sendNumber((uint8_t)it->second.type);
+        assistant.sendVector2D(it->second.position);
+    }
+}
+
+void ServerProtocol::sendThrowableDespawns(const std::vector<ThrowableID_t>& throwableDespawns) {
+    assistant.sendNumber((uint8_t)throwableDespawns.size());
+    for (auto it = throwableDespawns.begin(); it != throwableDespawns.end(); ++it) {
+        assistant.sendNumber((uint8_t)*it);
+    }
+}
+
 void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(SNAPSHOT);
     assistant.sendBoolean(snapshot.gameOver);
-
     sendPlayerUpdates(snapshot.updates);
+
     sendRaycastsEvents(snapshot.raycastsEvents);
+
     sendCollectableDespawns(snapshot.collectableDespawns);
     sendCollectableSpawns(snapshot.collectableSpawns);
+
+    sendThrowableSpawns(snapshot.throwableSpawns);
+    sendThrowableDespawns(snapshot.throwableDespawns);
 }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
