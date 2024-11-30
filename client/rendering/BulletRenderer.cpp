@@ -2,6 +2,10 @@
 
 BulletRenderer::BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed):
         origin(origin), end(end), speed(speed), alive(true) {
+
+    std::cout << "Rendering ray/bullet [origin: " + origin.ToString() +
+                         " - end: " + end.ToString() + "]\n";
+
     renderData = bulletsDataMap.contains(type) ? bulletsDataMap.at(type) :
                                                  bulletsDataMap.at(TypeProjectile::BULLET);
     SetFileName(renderData.imageFile);
