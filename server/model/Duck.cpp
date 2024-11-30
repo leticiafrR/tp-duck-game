@@ -114,8 +114,6 @@ bool Duck::TryUpdateThrowable(const StaticMap& map, float deltaTime) {
             throwableOnHand.reset();
             typeOnHand = TypeCollectable::EMPTY;
             TriggerEvent();
-            std::cout << "la pos de donde debiò de haber salido los fragmentos"
-                      << mySpace.GetPos().ToString() << std::endl;
         }
     } else {
         return false;

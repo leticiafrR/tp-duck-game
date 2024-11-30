@@ -2,7 +2,7 @@
 
 GrenadeCreator::GrenadeCreator(ProjectilesController& projectilesController,
                                const Transform& initialSpace):
-        ThrowableCreator(projectilesController, initialSpace) {}
+        ThrowableCreator(initialSpace), projectilesController(projectilesController) {}
 
 std::shared_ptr<Throwable> GrenadeCreator::GetThrowable() {
     return std::make_shared<Grenade>(projectilesController);

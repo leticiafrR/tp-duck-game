@@ -45,7 +45,9 @@ void Throwable::Update(const StaticMap& map, float deltaTime) {
         std::cout << "[Thowable]: updated pos is " << mySpace.GetPos().ToString() << std::endl;
     }
 }
-void Throwable::FollowPosition(const Vector2D& duckPos) { mySpace.SetPos(duckPos); }
+void Throwable::FollowPosition(const Vector2D& duckPos) {
+    mySpace.SetPos(duckPos + (Vector2D::Right() * 2));
+}
 
 void Throwable::HandleOutOfBounds(float /* disp*/) { MarkAsDead(); }
 

@@ -3,12 +3,18 @@
 
 #include <random>
 
-#include "../Weapon.h"
+#include "../collectable/Collectable.h"
 #include "server/config.h"
-#include "server/model/types.h"
+#include "server/model/event/InstantProjectileEventListener.h"
+#include "server/model/projectile/ProjectilesController.h"
+#include "server/model/projectile/instant/InstantProjectile.h"
 
-class InstantWeapon: public Weapon {
+#define NO_INCLINATION 0
+
+class InstantWeapon: public Collectable {
 protected:
+    ProjectilesController& projectilesController;
+    uint16_t ammo;
     TypeProjectile typeProjectile;
     const float scope;
     const uint8_t damage;
@@ -25,14 +31,15 @@ protected:
 public:
     InstantWeapon(ProjectilesController& projectilesController, const Transform& initialSpace,
                   float scope, uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,
-                  TypeProjectile typeProjectile,
-                  float inclination = ShootingInclination::BASIC_NO_INCLINATION);
+                  TypeProjectile typeProjectile, float inclination = NO_INCLINATION);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;
     virtual ~InstantWeapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
+    bool StillReusable() override;
+    void StopUse(Duck* shooter) override;
 };
 
 #endif

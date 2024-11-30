@@ -3,11 +3,11 @@
 
 #include "server/model/collectable/Armor.h"
 #include "server/model/collectable/Helmet.h"
-#include "server/model/weapon/instantCreator/DuelingPistol.h"
-#include "server/model/weapon/instantCreator/LaserRifle.h"
-#include "server/model/weapon/instantCreator/PewPewLaser.h"
-#include "server/model/weapon/instantCreator/PistolaCowboy.h"
-#include "server/model/weapon/instantCreator/Shotgun.h"
-#include "server/model/weapon/throwableCreator/GrenadeCreator.h"
+#include "server/model/throwable/creator/GrenadeCreator.h"
+#include "server/model/weapon/DuelingPistol.h"
+#include "server/model/weapon/LaserRifle.h"
+#include "server/model/weapon/PewPewLaser.h"
+#include "server/model/weapon/PistolaCowboy.h"
+#include "server/model/weapon/Shotgun.h"
 
 #endif

@@ -4,30 +4,16 @@
 #include <unordered_map>
 
 #include "server/model/event/ThrowableEventListener.h"
+// #include "BananaPeels.h"
 
 #include "Throwable.h"
-// class Banana;
-// class ActiveBananas {
-//     private:
-//     std::unordered_map<ThrowableID_t,std::shared_ptr<Banana>> activeBananas;
-//     public:
-//     void NewActiveBanana(ThrowableID_t bananaID,std::shared_ptr<Banana> banana){
-//         activeBananas[bananaID] = banana;
-//     }
-//     void CheckCollisionWithDuck(Duck* duck){
-//         for (auto& pair: activeBananas){
-
-//             Collision::RectCollision(pair.second)
-//         }
-//     }
-// }
 
 class ThrowablesController {
 private:
     ThrowableID_t unicID;
     std::unordered_map<ThrowableID_t, std::shared_ptr<Throwable>> throwables;
     ThrowableEventListener* l;
-
+    // BananaPeels bananaPeels;
     void Reapdead();
 
 public:

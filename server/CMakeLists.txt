@@ -13,13 +13,12 @@ target_sources(taller_server
     model/Game.cpp
     model/map/staticMap.cpp
 
-    model/weapon/Weapon.cpp
-    model/weapon/instantCreator/InstantWeapon.cpp
-    model/weapon/instantCreator/PistolaCowboy.cpp
-    model/weapon/instantCreator/DuelingPistol.cpp
-    model/weapon/instantCreator/LaserRifle.cpp
-    model/weapon/instantCreator/PewPewLaser.cpp
-    model/weapon/instantCreator/Shotgun.cpp
+    model/weapon/InstantWeapon.cpp
+    model/weapon/PistolaCowboy.cpp
+    model/weapon/DuelingPistol.cpp
+    model/weapon/LaserRifle.cpp
+    model/weapon/PewPewLaser.cpp
+    model/weapon/Shotgun.cpp
 
     model/projectile/Projectile.cpp
     model/projectile/ProjectilesController.cpp
@@ -39,9 +38,8 @@ target_sources(taller_server
     model/throwable/Throwable.cpp
     model/throwable/Grenade.cpp
     model/throwable/ThrowablesController.cpp
-
-    model/weapon/throwableCreator/ThrowableCreator.cpp
-    model/weapon/throwableCreator/GrenadeCreator.cpp
+    model/throwable/creator/GrenadeCreator.cpp
+    model/throwable/creator/ThrowableCreator.cpp
 
     #network
     network/sender.cpp
@@ -74,13 +72,13 @@ target_sources(taller_server
     
     model/Equipment.h
     
-    model/weapon/Weapon.h
-    model/weapon/instantCreator/InstantWeapon.h
-    model/weapon/instantCreator/PistolaCowboy.h
-    model/weapon/instantCreator/DuelingPistol.h
-    model/weapon/instantCreator/LaserRifle.h
-    model/weapon/instantCreator/PewPewLaser.h
-    model/weapon/instantCreator/Shotgun.h
+
+    model/weapon/InstantWeapon.h
+    model/weapon/PistolaCowboy.h
+    model/weapon/DuelingPistol.h
+    model/weapon/LaserRifle.h
+    model/weapon/PewPewLaser.h
+    model/weapon/Shotgun.h
 
     model/projectile/instant/InstantProjectile.h
     model/projectile/instant/BounceInstantProjectile.h
@@ -105,8 +103,9 @@ target_sources(taller_server
     model/throwable/Grenade.h
     model/throwable/ThrowablesController.h
 
-    model/weapon/throwableCreator/ThrowableCreator.h
-    model/weapon/throwableCreator/GrenadeCreator.h
+
+    model/throwable/creator/GrenadeCreator.h
+    model/throwable/creator/ThrowableCreator.h
 
     network/serverProtocol.h
     network/messageSender.h

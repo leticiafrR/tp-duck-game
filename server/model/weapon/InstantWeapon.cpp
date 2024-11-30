@@ -1,13 +1,14 @@
 #include "InstantWeapon.h"
 
 #include "server/model/Duck.h"
-#include "server/model/projectile/instant/InstantProjectile.h"
 
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
                              TypeProjectile typeProjectile, float inclination):
-        Weapon(projectilesController, initialSpace, ammo),
+        Collectable(initialSpace),
+        projectilesController(projectilesController),
+        ammo(ammo),
         typeProjectile(typeProjectile),
         scope(scope),
         damage(damage),
@@ -60,3 +61,8 @@ void InstantWeapon::Update(float deltaTime) {
         cooldownTimer += deltaTime;
     }
 }
+
+
+bool InstantWeapon::StillReusable() { return ammo > 0; }
+
+void InstantWeapon::StopUse(Duck* shooter) { shooter->StopShooting(); }
