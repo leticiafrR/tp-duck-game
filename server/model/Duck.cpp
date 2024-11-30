@@ -10,6 +10,8 @@
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
+
+#define COEFFICIENT_FRICTION_FLOOR 200
 Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         DynamicObject(Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize()))),
         id(id),
@@ -20,7 +22,7 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         isCrouched(false),
         isGrounded(true),
         isWounded(false),
-        body(mySpace, conf.getDuckMass()),
+        body(mySpace, conf.getDuckMass(), COEFFICIENT_FRICTION_FLOOR),
         l(nullptr),
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
@@ -195,7 +197,7 @@ void Duck::ApplyGravity(const StaticMap& map, float deltaTime) {
 }
 
 void Duck::TryCollect(CollectablesController& c) {
-    if (!itemOnHand) {
+    if (typeOnHand == TypeCollectable::EMPTY) {
         itemOnHand = c.TryCollect(mySpace, typeOnHand);
         TriggerEvent();
     }
