@@ -28,36 +28,12 @@ private:
 
     std::unordered_map<ThrowableID_t, std::shared_ptr<Throwable>> throwables;
     ThrowableEventListener* l;
-    void Reapdead() {
-        for (auto it = throwables.begin(); it != throwables.end();) {
-            if (it->second->IsDead()) {
-                it = throwables.erase(it);
-            } else {
-                ++it;
-            }
-        }
-    }
+    void Reapdead();
 
 public:
-    ThrowablesController(): unicID(0), l(nullptr) {}
-
-    void RegisterListener(ThrowableEventListener* listener) { l = listener; }
-
-    void Throw(std::shared_ptr<Throwable> obj, const Vector2D& origin, const Vector2D& direction) {
-        obj->BeThrown(origin, direction);
-        throwables[unicID] = obj;
-        l->Spawning(unicID, obj->GetMovingEventDto());
-        unicID++;
-        std::cout << "se arrojò el throwable con id: " << (int)unicID;
-    }
-
-    void Update(StaticMap& map, float deltaTime) {
-        for (auto& pair: throwables) {
-            pair.second->Update(map, deltaTime);
-            // deberìa ser un throwableMovingEventDto
-            l->Spawning(pair.first, pair.second->GetMovingEventDto());
-        }
-        Reapdead();
-    }
+    ThrowablesController();
+    void RegisterListener(ThrowableEventListener* listener);
+    void Throw(std::shared_ptr<Throwable> obj, const Vector2D& origin, const Vector2D& direction);
+    void Update(StaticMap& map, float deltaTime);
 };
 #endif

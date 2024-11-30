@@ -37,6 +37,8 @@ target_sources(taller_server
 
 
     model/throwable/Throwable.cpp
+    model/throwable/Grenade.cpp
+    model/throwable/ThrowablesController.cpp
 
     model/weapon/throwableCreator/ThrowableCreator.cpp
 
