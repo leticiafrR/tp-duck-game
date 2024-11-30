@@ -32,6 +32,8 @@ enum class TypeCollectable : uint8_t {
     MAGNUM,
     HELMET,
     ARMOR,
+    GRENADE,
+    BANANA,
     __typesCount  // always at the end
 };
 
@@ -83,20 +85,22 @@ struct CollectableSpawnEventDto {
     CollectableSpawnEventDto() = default;
 };
 
+struct ThrowableSpawnEventDto {
+    TypeCollectable type;
+    Vector2D position;
+    ThrowableSpawnEventDto() = default;
+    ThrowableSpawnEventDto(TypeCollectable type, const Vector2D& position):
+            type(type), position(position) {}
+};
+
 struct Snapshot: public NetworkMsg {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
     std::vector<InstantProjectileEventDto> raycastsEvents;
     std::vector<CollectableID_t> collectableDespawns;
     std::vector<CollectableSpawnEventDto> collectableSpawns;
-
-    Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
-             const std::vector<InstantProjectileEventDto>& raycastsEvents):
-            gameOver(gameOver),
-            updates(updates),
-            raycastsEvents(raycastsEvents),
-            collectableDespawns(),
-            collectableSpawns() {}
+    std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto> throwableSpawns;
+    std::vector<ThrowableID_t> throwableDespawns;
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
              const std::vector<InstantProjectileEventDto>& raycastsEvents,
@@ -106,7 +110,23 @@ struct Snapshot: public NetworkMsg {
             updates(updates),
             raycastsEvents(raycastsEvents),
             collectableDespawns(collectableDespawns),
-            collectableSpawns(collectableSpawns) {}
+            collectableSpawns(collectableSpawns),
+            throwableSpawns(),
+            throwableDespawns() {}
+
+    Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
+             const std::vector<InstantProjectileEventDto>& raycastsEvents,
+             const std::vector<CollectableID_t>& collectableDespawns,
+             const std::vector<CollectableSpawnEventDto>& collectableSpawns,
+             const std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>& throwableSpawns,
+             const std::vector<ThrowableID_t>& throwableDespawns):
+            gameOver(gameOver),
+            updates(updates),
+            raycastsEvents(raycastsEvents),
+            collectableDespawns(collectableDespawns),
+            collectableSpawns(collectableSpawns),
+            throwableSpawns(throwableSpawns),
+            throwableDespawns(throwableDespawns) {}
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates):
             gameOver(gameOver), updates(updates) {}
