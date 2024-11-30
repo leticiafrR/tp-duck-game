@@ -21,7 +21,7 @@ DuckResultItemGUI::~DuckResultItemGUI() = default;
 GameStatusScreen::GameStatusScreen(Camera& cam, vector<PlayerData> players,
                                    unordered_map<PlayerID_t, int> gameResults,
                                    std::optional<PlayerData> winner):
-        cam(cam),
+        BaseScreen(cam),
         imgBg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black()),
         txtTitle("", 40, RectTransform(Vector2D(0, -130), Vector2D(800, 120), Vector2D(0.5, 1)),
                  ColorExtension::White(), 10),
@@ -31,7 +31,8 @@ GameStatusScreen::GameStatusScreen(Camera& cam, vector<PlayerData> players,
                     running = false;
                     AudioManager::GetInstance().PlayButtonSFX();
                 },
-                ColorExtension::White(), 11) {
+                ColorExtension::White(), 11),
+        timer(3.0f, [this]() { running = false; }) {
 
 
     if (winner.has_value()) {
@@ -42,6 +43,13 @@ GameStatusScreen::GameStatusScreen(Camera& cam, vector<PlayerData> players,
         btnBack.SetActive(false);
     }
 
+    InitPlayersDisplay(players, gameResults);
+}
+
+GameStatusScreen::~GameStatusScreen() = default;
+
+void GameStatusScreen::InitPlayersDisplay(vector<PlayerData> players,
+                                          unordered_map<PlayerID_t, int> gameResults) {
     std::sort(players.begin(), players.end(), [&gameResults](PlayerData a, PlayerData b) {
         return gameResults[a.playerID] > gameResults[b.playerID];
     });
@@ -54,33 +62,16 @@ GameStatusScreen::GameStatusScreen(Camera& cam, vector<PlayerData> players,
     }
 }
 
-GameStatusScreen::~GameStatusScreen() = default;
-
-void GameStatusScreen::Run() {
-
-    Timer timer(3.0f, [this]() { running = false; });
-
+void GameStatusScreen::InitRun() {
     if (!btnBack.GetVisible()) {
         timer.Start();
     }
-    cam.InitRate();
+}
 
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
-
-        timer.Update(cam.GetRateDeltatime());
-        GUIManager::GetInstance().Draw(cam);
-        cam.Render();
-        cam.Delay();
-    }
+void GameStatusScreen::TakeInput(SDL_Event event) {
+    ButtonsManager::GetInstance().HandleEvent(event, cam);
+}
+void GameStatusScreen::Update(float deltaTime) {
+    timer.Update(deltaTime);
+    GUIManager::GetInstance().Draw(cam);
 }

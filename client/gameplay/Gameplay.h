@@ -15,6 +15,7 @@
 #include "client/rendering/BulletRenderer.h"
 #include "client/rendering/CollectableRenderer.h"
 #include "client/rendering/DuckClientRenderer.h"
+#include "client/rendering/ThrowableRenderer.h"
 #include "client/screens/ShowColorsScreen.h"
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
@@ -48,6 +49,7 @@ private:
     vector<MapBlock2D> mapBlocks;
     list<BulletRenderer> bullets;
     unordered_map<CollectableID_t, CollectableRenderer> collectables;
+    unordered_map<ThrowableID_t, ThrowableRenderer> throwables;
 
     GameplayGUI gui;
 
@@ -62,8 +64,11 @@ private:
 
     void BulletsReapDead();
 
-    void DespawnCollectable(CollectableID_t id);
     void SpawnCollectable(CollectableSpawnEventDto collectableData);
+    void DespawnCollectable(CollectableID_t id);
+
+    void SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData);
+    void DespawnThrowable(ThrowableID_t id);
 
     void TakeSnapshots(Callback OnLastSnapshot);
 

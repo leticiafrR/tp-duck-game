@@ -45,6 +45,8 @@ private:
     void ShowResultsScreen(std::optional<PlayerData> winner, const vector<PlayerData>& players,
                            const unordered_map<PlayerID_t, int>& gameResults);
 
+    void KillClient(Client& client);
+
 public:
     ClientRunner(Renderer& render, int fps);
     ~ClientRunner();

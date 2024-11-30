@@ -55,6 +55,14 @@ private:
             {TypeCollectable::SHOTGUN,
              HendItemRenderData("shotguns.png", "shotguns.yaml", "shotgun", Vector2D(0, -0.4f),
                                 Vector2D(4, 4))},
+
+            {TypeCollectable::BANANA, HendItemRenderData("grenades.png", "grenades.yaml", "banana",
+                                                         Vector2D(0, -0.4f), Vector2D(2, 2))},
+            {TypeCollectable::GRENADE,
+             HendItemRenderData("grenades.png", "grenades.yaml", "grenade", Vector2D(0, -0.4f),
+                                Vector2D(2, 2))},
+
+
             {TypeCollectable::ARMOR, HendItemRenderData("defense.png", "defense.yaml", "chest",
                                                         Vector2D(0, -0.4f), Vector2D(2, 2))},
             {TypeCollectable::HELMET, HendItemRenderData("defense.png", "defense.yaml", "helmet",

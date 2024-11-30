@@ -28,6 +28,12 @@ private:
              SpriteRendererData("laser.png", "laser.yaml", "laser_rifle", Vector2D(4, 4), -45)},
             {TypeCollectable::SHOTGUN,
              SpriteRendererData("shotguns.png", "shotguns.yaml", "shotgun", Vector2D(4, 4))},
+
+            {TypeCollectable::BANANA,
+             SpriteRendererData("grenades.png", "grenades.yaml", "banana", Vector2D(2, 2))},
+            {TypeCollectable::GRENADE,
+             SpriteRendererData("grenades.png", "grenades.yaml", "grenade", Vector2D(2, 2))},
+
             {TypeCollectable::ARMOR,
              SpriteRendererData("defense.png", "defense.yaml", "chest", Vector2D(2, 2))},
             {TypeCollectable::HELMET,
