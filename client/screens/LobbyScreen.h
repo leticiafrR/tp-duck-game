@@ -36,7 +36,8 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    LobbyScreen(Camera& cam, Client& client, bool isOwner, shared_ptr<MatchStartDto>& matchData);
+    LobbyScreen(Camera& cam, bool& wasClosed, Client& client, bool isOwner,
+                shared_ptr<MatchStartDto>& matchData);
 
     ~LobbyScreen();
 };
