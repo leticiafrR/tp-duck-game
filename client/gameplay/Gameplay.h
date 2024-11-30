@@ -83,7 +83,7 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    Gameplay(Client& cl, Camera& c, MatchStartDto matchData, GameSceneDto mapData,
+    Gameplay(Client& cl, Camera& c, bool& wasClosed, MatchStartDto matchData, GameSceneDto mapData,
              Snapshot firstSnapshot, bool isInitial);
     ~Gameplay();
 };

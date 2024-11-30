@@ -2,7 +2,7 @@
 
 PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) {
     PlayerID_t winnerId;
-    LoadingScreen(cam, [&client, &winnerId]() {
+    LoadingScreen(cam, wasClosed, [&client, &winnerId]() {
         shared_ptr<FinalWinner> msg;
 
         if (client.TryRecvNetworkMsg(msg)) {
@@ -19,7 +19,7 @@ PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) 
 void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
     std::cout << "Waiting for final group"
               << "\n";
-    LoadingScreen loadingFinalGroup(cam, [&isFinalGroup, &client]() {
+    LoadingScreen loadingFinalGroup(cam, wasClosed, [&isFinalGroup, &client]() {
         shared_ptr<FinalGroupGame> finalGroupData;
 
         if (client.TryRecvNetworkMsg(finalGroupData)) {
@@ -35,7 +35,7 @@ void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
 
 void ClientRunner::LoadRoundResults(Client& client, bool& matchEnded,
                                     unordered_map<PlayerID_t, int>& results) {
-    LoadingScreen matchEndedScreen(cam, [&client, &matchEnded, &results]() {
+    LoadingScreen matchEndedScreen(cam, wasClosed, [&client, &matchEnded, &results]() {
         shared_ptr<GamesRecountDto> recountData;
         if (client.TryRecvNetworkMsg(recountData)) {
             matchEnded = recountData->matchEnded;
@@ -51,7 +51,7 @@ void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isIni
     shared_ptr<GameSceneDto> mapData = nullptr;
     shared_ptr<Snapshot> firstSnapshot = nullptr;
 
-    LoadingScreen laodRoundScreen(cam, [&client, &mapData, &firstSnapshot]() {
+    LoadingScreen laodRoundScreen(cam, wasClosed, [&client, &mapData, &firstSnapshot]() {
         if (!mapData)
             client.TryRecvNetworkMsg(mapData);
         if (mapData && !firstSnapshot)
@@ -60,18 +60,18 @@ void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isIni
     });
 
     laodRoundScreen.Run("LOADING...");
-    Gameplay(client, cam, matchData, *mapData, *firstSnapshot, isInitial).Run(wasClosed);
+    Gameplay(client, cam, wasClosed, matchData, *mapData, *firstSnapshot, isInitial).Run();
 }
 
 void ClientRunner::ErrorScreen(const string& text) {
-    LoadingScreen(cam, []() { return false; }).Run(text);
+    LoadingScreen(cam, wasClosed, []() { return false; }).Run(text);
 }
 
 void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
                                      const vector<PlayerData>& players,
                                      const unordered_map<PlayerID_t, int>& gameResults) {
 
-    GameStatusScreen(cam, players, gameResults, winner).Run(wasClosed);
+    GameStatusScreen(cam, wasClosed, players, gameResults, winner).Run();
 }
 
 ClientRunner::ClientRunner(Renderer& render, int fps):
@@ -89,17 +89,17 @@ void ClientRunner::KillClient(Client& client) {
 void ClientRunner::Run() {
     try {
         string nickname;
-        MenuScreen(cam, nickname).Run(wasClosed);
+        MenuScreen(cam, wasClosed, nickname).Run();
         if (wasClosed)
             return;
 
         Client client("8080", "localhost", nickname);
 
         bool isOwner;
-        MatchListScreen(cam, client, isOwner).Run(wasClosed);
+        MatchListScreen(cam, wasClosed, client, isOwner).Run();
 
         shared_ptr<MatchStartDto> matchDataPtr;
-        LobbyScreen(cam, client, isOwner, matchDataPtr).Run(wasClosed);
+        LobbyScreen(cam, wasClosed, client, isOwner, matchDataPtr).Run();
 
         if (wasClosed) {
             KillClient(client);
@@ -112,7 +112,7 @@ void ClientRunner::Run() {
         bool matchEnded = false;
         unordered_map<PlayerID_t, int> roundResults;
         bool isInitial = true;
-        while (!matchEnded) {
+        while (!matchEnded && !wasClosed) {
             PlayRound(client, matchData, isInitial);
 
             isInitial = false;
@@ -120,7 +120,7 @@ void ClientRunner::Run() {
             bool isFinalGroup = false;
             LoadFinalGroup(client, isFinalGroup);
 
-            while (!isFinalGroup) {
+            while (!isFinalGroup && !wasClosed) {
                 PlayRound(client, matchData, isInitial);
                 LoadFinalGroup(client, isFinalGroup);
             }

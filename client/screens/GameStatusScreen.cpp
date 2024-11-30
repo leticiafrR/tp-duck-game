@@ -18,10 +18,10 @@ DuckResultItemGUI::DuckResultItemGUI(Vector2D pos, const PlayerData& duck, int c
 DuckResultItemGUI::~DuckResultItemGUI() = default;
 
 
-GameStatusScreen::GameStatusScreen(Camera& cam, vector<PlayerData> players,
+GameStatusScreen::GameStatusScreen(Camera& cam, bool& wasClosed, vector<PlayerData> players,
                                    unordered_map<PlayerID_t, int> gameResults,
                                    std::optional<PlayerData> winner):
-        BaseScreen(cam),
+        BaseScreen(cam, wasClosed),
         imgBg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black()),
         txtTitle("", 40, RectTransform(Vector2D(0, -130), Vector2D(800, 120), Vector2D(0.5, 1)),
                  ColorExtension::White(), 10),

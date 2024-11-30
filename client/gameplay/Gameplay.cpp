@@ -147,9 +147,9 @@ void Gameplay::InitGUI() {
     }
 }
 
-Gameplay::Gameplay(Client& cl, Camera& c, MatchStartDto matchData, GameSceneDto mapData,
-                   Snapshot firstSnapshot, bool isInitial):
-        BaseScreen(c),
+Gameplay::Gameplay(Client& cl, Camera& c, bool& wasClosed, MatchStartDto matchData,
+                   GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial):
+        BaseScreen(c, wasClosed),
         client(cl),
         isInitial(isInitial),
         camController(c),

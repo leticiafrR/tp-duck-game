@@ -1,8 +1,8 @@
 #include "LobbyScreen.h"
 
-LobbyScreen::LobbyScreen(Camera& cam, Client& client, bool isOwner,
+LobbyScreen::LobbyScreen(Camera& cam, bool& wasClosed, Client& client, bool isOwner,
                          shared_ptr<MatchStartDto>& matchData):
-        BaseScreen(cam),
+        BaseScreen(cam, wasClosed),
         client(client),
         isOwner(isOwner),
         matchData(matchData),
@@ -28,7 +28,7 @@ void LobbyScreen::OnStartButtonPressed() {
 
     client.StartMatch();
     bool startSuccess;
-    LoadingScreen loading(cam, [this, &startSuccess]() {
+    LoadingScreen loading(cam, wasClosed, [this, &startSuccess]() {
         std::shared_ptr<ResultStartingMatch> startResult = nullptr;
         if (client.TryRecvNetworkMsg(startResult)) {
             startSuccess = startResult->success;
@@ -37,6 +37,9 @@ void LobbyScreen::OnStartButtonPressed() {
         return false;
     });
     loading.Run("Waiting for server", true);
+
+    if (wasClosed)
+        return;
 
     if (!startSuccess) {
         startButton.SetInteractable(true);

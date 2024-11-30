@@ -1,7 +1,7 @@
 #include "MenuScreen.h"
 
-MenuScreen::MenuScreen(Camera& c, string& input):
-        BaseScreen(c),
+MenuScreen::MenuScreen(Camera& c, bool& wasClosed, string& input):
+        BaseScreen(c, wasClosed),
         bgImage("duck_game_bg.jpg", RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
         logoImage("duck_game_logo.png", RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
         inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),

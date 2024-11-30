@@ -1,7 +1,7 @@
 #include "LoadingScreen.h"
 
-LoadingScreen::LoadingScreen(Camera& cam, Function<bool> endFunction):
-        cam(cam), endFunction(endFunction) {}
+LoadingScreen::LoadingScreen(Camera& cam, bool& wasClosed, Function<bool> endFunction):
+        BaseScreen(cam, wasClosed), endFunction(endFunction) {}
 
 LoadingScreen::~LoadingScreen() = default;
 
@@ -14,27 +14,36 @@ void LoadingScreen::Run(const string& text, bool lockerOnly) {
 
     bg.SetVisible(!lockerOnly);
     bg.SetVisible(!lockerOnly);
+    BaseScreen::Run();
+    // cam.InitRate();
 
-    cam.InitRate();
+    // while (true) {
+    //     cam.Clean();
+    //     SDL_Event event;
 
-    while (true) {
-        cam.Clean();
-        SDL_Event event;
+    //     while (SDL_PollEvent(&event)) {
+    //         switch (event.type) {
+    //             case SDL_QUIT:
+    //                 exit(0);
+    //                 break;
+    //         }
+    //     }
 
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-        }
+    //     if (endFunction()) {
+    //         break;
+    //     }
 
-        if (endFunction()) {
-            break;
-        }
+    //     GUIManager::GetInstance().Draw(cam);
+    //     cam.Render();
+    //     cam.Delay();
+    // }
+}
 
-        GUIManager::GetInstance().Draw(cam);
-        cam.Render();
-        cam.Delay();
+void LoadingScreen::InitRun() {}
+void LoadingScreen::TakeInput([[maybe_unused]] SDL_Event event) {}
+void LoadingScreen::Update([[maybe_unused]] float deltaTime) {
+    if (endFunction()) {
+        running = false;
     }
+    GUIManager::GetInstance().Draw(cam);
 }

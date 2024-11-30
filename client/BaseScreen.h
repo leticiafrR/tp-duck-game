@@ -6,10 +6,11 @@
 class BaseScreen {
 protected:
     Camera& cam;
+    bool& wasClosed;
     bool running;
 
 public:
-    explicit BaseScreen(Camera& cam);
+    explicit BaseScreen(Camera& cam, bool& wasClosed);
     virtual ~BaseScreen();
 
     virtual void InitRun() = 0;
@@ -18,7 +19,7 @@ public:
 
     virtual void Update(float deltaTime) = 0;
 
-    void Run(bool& wasClosed);
+    void Run();
 };
 
 #endif

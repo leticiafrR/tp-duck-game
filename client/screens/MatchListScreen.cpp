@@ -6,7 +6,7 @@ void MatchListScreen::OnCreatePressed() {
     playersCountSelection.Display([this](uint8_t playersCount) {
         bool createSuccess;
         client.CreateMatch(playersCount);
-        LoadingScreen loading(cam, [this, &createSuccess]() {
+        LoadingScreen loading(cam, wasClosed, [this, &createSuccess]() {
             std::shared_ptr<ResultJoining> joinResult = nullptr;
             if (client.TryRecvNetworkMsg(joinResult)) {
                 createSuccess = joinResult->eCode == 0;
@@ -14,7 +14,10 @@ void MatchListScreen::OnCreatePressed() {
             }
             return false;
         });
+
         loading.Run("Creating match");
+        if (wasClosed)
+            return;
 
         if (createSuccess) {
             isOwner = true;
@@ -29,7 +32,7 @@ void MatchListScreen::OnJoinLobbyPressed(int id) {
     playersCountSelection.Display([this, id](uint8_t playersCount) {
         bool joinSuccess;
         client.SelectMatch(id, playersCount);
-        LoadingScreen loading(cam, [this, &joinSuccess]() {
+        LoadingScreen loading(cam, wasClosed, [this, &joinSuccess]() {
             std::shared_ptr<ResultJoining> joinResult = nullptr;
             if (client.TryRecvNetworkMsg(joinResult)) {
                 joinSuccess = joinResult->eCode == 0;
@@ -38,6 +41,8 @@ void MatchListScreen::OnJoinLobbyPressed(int id) {
             return false;
         });
         loading.Run("Joining match");
+        if (wasClosed)
+            return;
 
         if (joinSuccess) {
             isOwner = false;
@@ -55,7 +60,7 @@ void MatchListScreen::OnRefreshPressed() {
 }
 
 void MatchListScreen::WaitRefresh() {
-    LoadingScreen loading(cam, [this]() {
+    LoadingScreen loading(cam, wasClosed, [this]() {
         std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
         if (client.TryRecvNetworkMsg(lobbyListResult)) {
             LoadWidgetList(lobbyListResult->matches);
@@ -95,8 +100,8 @@ void MatchListScreen::UpdateWidgetListPosition(Vector2D movement) {
     }
 }
 
-MatchListScreen::MatchListScreen(Camera& c, Client& cl, bool& isOwner):
-        BaseScreen(c),
+MatchListScreen::MatchListScreen(Camera& c, bool& wasClosed, Client& cl, bool& isOwner):
+        BaseScreen(c, wasClosed),
         client(cl),
         header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
                              Vector2D(0.5, 1)),

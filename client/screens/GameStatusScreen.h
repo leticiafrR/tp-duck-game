@@ -47,7 +47,7 @@ private:
     vector<shared_ptr<DuckResultItemGUI>> ducksGUI;
 
 public:
-    GameStatusScreen(Camera& cam, vector<PlayerData> players,
+    GameStatusScreen(Camera& cam, bool& wasClosed, vector<PlayerData> players,
                      unordered_map<PlayerID_t, int> gameResults, std::optional<PlayerData> winner);
 
     void InitPlayersDisplay(vector<PlayerData> players, unordered_map<PlayerID_t, int> gameResults);

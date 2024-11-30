@@ -1,9 +1,10 @@
 #include "BaseScreen.h"
 
-BaseScreen::BaseScreen(Camera& cam): cam(cam), running(false) {}
+BaseScreen::BaseScreen(Camera& cam, bool& wasClosed):
+        cam(cam), wasClosed(wasClosed), running(false) {}
 BaseScreen::~BaseScreen() = default;
 
-void BaseScreen::Run(bool& wasClosed) {
+void BaseScreen::Run() {
     if (wasClosed)
         return;
 
@@ -13,7 +14,7 @@ void BaseScreen::Run(bool& wasClosed) {
 
     cam.InitRate();
 
-    while (running) {
+    while (running && !wasClosed) {
         cam.Clean();
 
         SDL_Event event;
