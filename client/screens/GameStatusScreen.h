@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "client/BaseScreen.h"
 #include "client/rendering/DuckClientRenderer.h"
 #include "client/utils/Timer.h"
 #include "data/dataTransferObjects.h"
@@ -36,22 +37,24 @@ public:
     ~DuckResultItemGUI();
 };
 
-class GameStatusScreen {
+class GameStatusScreen: public BaseScreen {
 private:
-    Camera& cam;
     Image imgBg;
     Text txtTitle;
     Button btnBack;
+    Timer timer;
 
     vector<shared_ptr<DuckResultItemGUI>> ducksGUI;
-
-    bool running = true;
 
 public:
     GameStatusScreen(Camera& cam, vector<PlayerData> players,
                      unordered_map<PlayerID_t, int> gameResults, std::optional<PlayerData> winner);
 
-    void Run();
+    void InitPlayersDisplay(vector<PlayerData> players, unordered_map<PlayerID_t, int> gameResults);
+
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
 
     ~GameStatusScreen();
 };

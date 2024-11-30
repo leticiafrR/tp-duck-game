@@ -71,13 +71,20 @@ void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
                                      const vector<PlayerData>& players,
                                      const unordered_map<PlayerID_t, int>& gameResults) {
 
-    GameStatusScreen(cam, players, gameResults, winner).Run();
+    GameStatusScreen(cam, players, gameResults, winner).Run(wasClosed);
 }
 
 ClientRunner::ClientRunner(Renderer& render, int fps):
         cam(std::move(render), 70, Rate(fps)), wasClosed(false) {}
 
 ClientRunner::~ClientRunner() = default;
+
+void ClientRunner::KillClient(Client& client) {
+    std::cout << "Esperando hilos\n";
+    client.KillComunicationThreads();
+    client.JoinCommunicationThreads();
+    std::cout << "Hilos matados\n";
+}
 
 void ClientRunner::Run() {
     try {
@@ -90,21 +97,12 @@ void ClientRunner::Run() {
 
         bool isOwner;
         MatchListScreen(cam, client, isOwner).Run(wasClosed);
-        if (wasClosed) {
-            std::cout << "Esperando hilos\n";
-            client.KillComunicationThreads();
-            client.JoinCommunicationThreads();
-            std::cout << "Hilos matados\n";
-            return;
-        }
 
         shared_ptr<MatchStartDto> matchDataPtr;
         LobbyScreen(cam, client, isOwner, matchDataPtr).Run(wasClosed);
+
         if (wasClosed) {
-            std::cout << "Esperando hilos\n";
-            client.KillComunicationThreads();
-            client.JoinCommunicationThreads();
-            std::cout << "Hilos matados\n";
+            KillClient(client);
             return;
         }
 
@@ -116,12 +114,6 @@ void ClientRunner::Run() {
         bool isInitial = true;
         while (!matchEnded) {
             PlayRound(client, matchData, isInitial);
-
-            if (wasClosed) {
-                client.KillComunicationThreads();
-                client.JoinCommunicationThreads();
-                return;
-            }
 
             isInitial = false;
 
@@ -138,12 +130,19 @@ void ClientRunner::Run() {
             if (!matchEnded) {
                 ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
             }
+
+            if (wasClosed) {
+                KillClient(client);
+                return;
+            }
         }
         AudioManager::GetInstance().StopMusic();
 
         PlayerData winner = LoadWinner(client, matchData.playersData);
 
         ShowResultsScreen(winner, matchData.playersData, roundResults);
+
+        client.JoinCommunicationThreads();
 
     } catch (ConnectionFailed& e) {
         std::cerr << e.what() << std::endl;
