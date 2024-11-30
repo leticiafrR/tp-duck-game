@@ -14,9 +14,11 @@ void Grenade::Update(const StaticMap& map, float deltaTime) {
     timer -= deltaTime;
     if (timer <= 0) {
         Explote();
-        MarkAsDead();
+    } else if (throwingID != NOT_THROWED) {
+        listener->Moving(throwingID, GetMovingEventDto());
     }
 }
+
 void Grenade::Explote() {
     Vector2D dir = Vector2D::Right();
     for (int i = 0; i < 5; i++, dir.Rotate(360 / 5)) {
@@ -25,4 +27,8 @@ void Grenade::Explote() {
                 projectiles.GetInstantProjectileListener());
         projectiles.RelaseInstantProjectile(fragment);
     }
+    if (throwingID != NOT_THROWED) {
+        listener->Despawning(throwingID);
+    }
+    MarkAsDead();
 }

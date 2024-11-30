@@ -25,9 +25,9 @@
 class ThrowablesController {
 private:
     ThrowableID_t unicID;
-
     std::unordered_map<ThrowableID_t, std::shared_ptr<Throwable>> throwables;
     ThrowableEventListener* l;
+
     void Reapdead();
 
 public:

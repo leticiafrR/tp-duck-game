@@ -5,11 +5,14 @@
 #define THROWABLE_SIZE 1
 #define COEFFICIENT_FRICTION_AIR 15
 
+
 Throwable::Throwable(float mass):
         DynamicObject(Transform(Vector2D::Zero(), Vector2D(THROWABLE_SIZE, THROWABLE_SIZE))),
         body(mySpace, mass, COEFFICIENT_FRICTION_AIR),
         isGrounded(false),
-        beenThrown(false) {}
+        beenThrown(false),
+        listener(nullptr),
+        throwingID(NOT_THROWED) {}
 
 
 Vector2D Throwable::GetForceToBeThrown(const Vector2D& direction) {
@@ -28,16 +31,16 @@ void Throwable::ApplyGravity(const StaticMap& map, float deltaTime) {
     }
 }
 
-void Throwable::BeThrown(const Vector2D& origin, const Vector2D& direction) {
+void Throwable::BeThrown(const Vector2D& origin, const Vector2D& direction,
+                         ThrowableEventListener* l, ThrowableID_t id) {
+    listener = l;
+    throwingID = id;
     mySpace.SetPos(origin);
     body.ApplyForce(GetForceToBeThrown(direction));
-    beenThrown = true;
-    std::cout << "[THROW]: se lanzò con fuerza " << GetForceToBeThrown(direction).ToString()
-              << std::endl;
 }
 
 void Throwable::Update(const StaticMap& map, float deltaTime) {
-    if (beenThrown) {
+    if (throwingID != NOT_THROWED) {
         UpdatePosition(map, deltaTime);
         std::cout << "[Thowable]: updated pos is " << mySpace.GetPos().ToString() << std::endl;
     }

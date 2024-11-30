@@ -16,7 +16,7 @@ public:
                            std::vector<ThrowableID_t>& despawnings):
             spawnings(spawnings), despawnings(despawnings) {}
 
-    void Spawning(ThrowableID_t sourceID, ThrowableSpawnEventDto event) {
+    void Moving(ThrowableID_t sourceID, ThrowableSpawnEventDto event) {
         std::cout << "moving Throwable with ID " << (int)sourceID << "\n";
         spawnings[sourceID] = event;
     }

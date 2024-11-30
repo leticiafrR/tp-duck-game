@@ -1,15 +1,15 @@
-// #include "GrenadeCreator.h"
-// GrenadeCreator::GrenadeCreator(ProjectilesController& projectilesController, const Transform&
-// initialSpace):
-//         ThrowableCreator(projectilesController, initialSpace) {
-// }
+#include "GrenadeCreator.h"
 
-// std::shared_ptr<Throwable> GrenadeCreator::GetThrowable() {
-//     return std::make_shared<Grenade>(projectilesController);
-// }
+GrenadeCreator::GrenadeCreator(ProjectilesController& projectilesController,
+                               const Transform& initialSpace):
+        ThrowableCreator(projectilesController, initialSpace) {}
 
-// void GrenadeCreator::BeCollected(TypeCollectable& typeOnHandRef) {
-//     typeOnHandRef = TypeCollectable::GRENADE;
-// }
+std::shared_ptr<Throwable> GrenadeCreator::GetThrowable() {
+    return std::make_shared<Grenade>(projectilesController);
+}
 
-// TypeCollectable GrenadeCreator::GetTypeCollectable() { return TypeCollectable::GRENADE; }
+void GrenadeCreator::BeCollected(TypeCollectable& typeOnHandRef) {
+    typeOnHandRef = TypeCollectable::GRENADE;
+}
+
+TypeCollectable GrenadeCreator::GetTypeCollectable() { return TypeCollectable::GRENADE; }
