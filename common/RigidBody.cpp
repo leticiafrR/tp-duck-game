@@ -1,6 +1,7 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(Transform& transform, float mass): sourceT(transform), mass(mass) {}
+RigidBody::RigidBody(Transform& transform, float mass, float coefficientFriction):
+        sourceT(transform), mass(mass), coefficientFriction(coefficientFriction) {}
 RigidBody::~RigidBody() = default;
 
 Vector2D RigidBody::GetVelocity() const { return this->velocity; }
@@ -15,7 +16,7 @@ void RigidBody::Update(float deltaTime) {
     ApplyForce(Vector2D::Down() * GRAVITY * mass * deltaTime);  // Gravity
 
     if (velocity.GetMagnitude() > 0)
-        velocity.x += (velocity.Normalized() * -200 * deltaTime).x;  // Friction
+        velocity.x += (velocity.Normalized() * (-coefficientFriction) * deltaTime).x;  // Friction
 
     sourceT.Move(velocity * deltaTime);  // Movement update
 }

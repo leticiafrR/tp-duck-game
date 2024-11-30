@@ -10,9 +10,10 @@ private:
     Transform& sourceT;
     Vector2D velocity;
     float mass;
+    float coefficientFriction;
 
 public:
-    RigidBody(Transform& transform, float mass);
+    RigidBody(Transform& transform, float mass, float coefficientFriction);
     ~RigidBody();
 
     Vector2D GetVelocity() const;
