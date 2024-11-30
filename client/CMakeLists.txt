@@ -24,6 +24,7 @@ target_sources(taller_client
     rendering/HandItemRenderer.cpp
     rendering/ChestplateRenderer.cpp
     rendering/HelmetRenderer.cpp
+    rendering/ThrowableRenderer.cpp
 
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
@@ -79,6 +80,7 @@ target_sources(taller_client
     rendering/HandItemRenderer.h
     rendering/ChestplateRenderer.h
     rendering/HelmetRenderer.h
+    rendering/ThrowableRenderer.h
 
     ClientRunner.h
 

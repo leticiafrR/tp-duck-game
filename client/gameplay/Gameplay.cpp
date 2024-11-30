@@ -38,11 +38,23 @@ void Gameplay::BulletsReapDead() {
     bullets.remove_if([](BulletRenderer c) { return !c.IsAlive(); });
 }
 
-void Gameplay::DespawnCollectable(CollectableID_t id) { collectables.erase(id); }
 void Gameplay::SpawnCollectable(CollectableSpawnEventDto collectableData) {
     collectables.emplace(collectableData.id,
                          CollectableRenderer(collectableData.type, collectableData.position));
 }
+void Gameplay::DespawnCollectable(CollectableID_t id) { collectables.erase(id); }
+
+
+void Gameplay::SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData) {
+    if (throwables.contains(id)) {
+        throwables.at(id).SetTargetPos(throwableData.position);
+        return;
+    }
+
+    throwables.emplace(id, ThrowableRenderer(throwableData.type, throwableData.position));
+}
+void Gameplay::DespawnThrowable(ThrowableID_t id) { throwables.erase(id); }
+
 
 void Gameplay::UpdateGame(const Snapshot& snapshot) {
     for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
@@ -62,6 +74,15 @@ void Gameplay::UpdateGame(const Snapshot& snapshot) {
     for (const auto& it: snapshot.collectableDespawns) {
         std::cout << "Collectable Despawn\n";
         DespawnCollectable(it);
+    }
+
+    for (const auto& it: snapshot.throwableSpawns) {
+        std::cout << "Throwable spawn/update\n";
+        SpawnUpdateThrowable(it.first, it.second);
+    }
+    for (const auto& it: snapshot.throwableDespawns) {
+        std::cout << "Throwable Despawn\n";
+        DespawnThrowable(it);
     }
 }
 

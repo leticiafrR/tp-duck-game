@@ -56,10 +56,10 @@ private:
              HendItemRenderData("shotguns.png", "shotguns.yaml", "shotgun", Vector2D(0, -0.4f),
                                 Vector2D(4, 4))},
 
-            {TypeCollectable::BANANA, HendItemRenderData("granades.png", "granades.yaml", "banana",
+            {TypeCollectable::BANANA, HendItemRenderData("grenades.png", "grenades.yaml", "banana",
                                                          Vector2D(0, -0.4f), Vector2D(2, 2))},
             {TypeCollectable::GRENADE,
-             HendItemRenderData("granades.png", "granades.yaml", "granade", Vector2D(0, -0.4f),
+             HendItemRenderData("grenades.png", "grenades.yaml", "grenade", Vector2D(0, -0.4f),
                                 Vector2D(2, 2))},
 
 

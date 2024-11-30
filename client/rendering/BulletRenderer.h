@@ -21,7 +21,8 @@ private:
              SpriteRendererData("laser.png", "laser.yaml", "laser_ray", Vector2D(3, 1.5))},
             {TypeProjectile::FRAGMENT, SpriteRendererData("", "", "")},
 
-            {TypeProjectile::BANANA, SpriteRendererData("granades.png", "ganades.yaml", "banana")}};
+            {TypeProjectile::BANANA,
+             SpriteRendererData("grenades.png", "grenades.yaml", "banana")}};
 
     Vector2D origin;
     Vector2D end;
