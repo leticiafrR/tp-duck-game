@@ -1,10 +1,16 @@
 #include "ThrowableRenderer.h"
 
 ThrowableRenderer::ThrowableRenderer(TypeCollectable type, Vector2D target):
-        Object2D(itemsMap.at(type).imageFile, Transform(target, itemsMap.at(type).size)),
-        fromPos(target),
-        targetPos(target),
-        tLerp(0) {
+        fromPos(target), targetPos(target), tLerp(0) {
+
+    if (!itemsMap.contains(type)) {
+        std::cout << "item NOT recognized\n";
+        return;
+    }
+    transform.SetPos(target);
+    transform.SetSize(itemsMap.at(type).size);
+
+    SetFileName(itemsMap.at(type).imageFile);
     SetSourceRect(itemsMap.at(type).GetSourceRect());
 }
 

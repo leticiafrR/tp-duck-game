@@ -39,8 +39,6 @@ private:
             {TypeCollectable::HELMET,
              SpriteRendererData("defense.png", "defense.yaml", "helmet", Vector2D(2, 2))}};
 
-    TransformTween sizeTween;
-
 public:
     CollectableRenderer(TypeCollectable type, Vector2D position);
 

@@ -1,7 +1,6 @@
 #include "CollectableRenderer.h"
 
-CollectableRenderer::CollectableRenderer(TypeCollectable type, Vector2D position):
-        sizeTween(transform) {
+CollectableRenderer::CollectableRenderer(TypeCollectable type, Vector2D position) {
     SetItem(type, position);
 }
 CollectableRenderer::~CollectableRenderer() = default;
@@ -16,7 +15,4 @@ void CollectableRenderer::SetItem(TypeCollectable type, Vector2D position) {
     SetSourceRect(itemData.GetSourceRect());
 
     SetTransform(Transform(position, itemData.size, itemData.angle));
-
-    sizeTween.SetTarget(transform.GetSize() * 1.2f, 0.6f);
-    sizeTween.SetLoops(-1, LoopType::Yoyo);
 }

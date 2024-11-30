@@ -99,7 +99,7 @@ void Gameplay::TakeSnapshots(Callback OnLastSnapshot) {
     }
 }
 
-void Gameplay::DrawGameWorld() {
+void Gameplay::DrawGameWorld(float deltaTime) {
     mapBg.Draw(cam);
 
     for (auto& it: mapBlocks) {
@@ -107,7 +107,7 @@ void Gameplay::DrawGameWorld() {
     }
 
     for (auto& it: bullets) {
-        it.Update(cam.GetRateDeltatime());
+        it.Update(deltaTime);
         it.Draw(cam);
     }
 
@@ -115,9 +115,14 @@ void Gameplay::DrawGameWorld() {
         it.second.Draw(cam);
     }
 
+    for (auto& it: throwables) {
+        it.second.Update(deltaTime);
+        it.second.Draw(cam);
+    }
+
     for (const auto& it: players) {
         auto data = it.second;
-        data->Update(cam.GetRateDeltatime());
+        data->Update(deltaTime);
         data->Draw(cam);
     }
 }
@@ -177,7 +182,7 @@ void Gameplay::InitRun() {
     finishing = false;
     camController.Reset();
     if (isInitial) {
-        ShowColorsScreen(cam, players).Run([this]() { DrawGameWorld(); });
+        ShowColorsScreen(cam, players).Run([this]() { DrawGameWorld(0); });
     }
 }
 
@@ -188,6 +193,6 @@ void Gameplay::Update(float deltaTime) {
     TweenManager::GetInstance().Update(deltaTime);
 
     BulletsReapDead();
-    DrawGameWorld();
+    DrawGameWorld(deltaTime);
     GUIManager::GetInstance().Draw(cam);
 }

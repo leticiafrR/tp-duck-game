@@ -74,7 +74,7 @@ private:
 
     void UpdateGame(const Snapshot& snapshot);
 
-    void DrawGameWorld();
+    void DrawGameWorld(float deltaTime);
 
     void InitGUI();
 
