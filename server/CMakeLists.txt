@@ -41,6 +41,7 @@ target_sources(taller_server
     model/throwable/ThrowablesController.cpp
 
     model/weapon/throwableCreator/ThrowableCreator.cpp
+    model/weapon/throwableCreator/GrenadeCreator.cpp
 
     #network
     network/sender.cpp
