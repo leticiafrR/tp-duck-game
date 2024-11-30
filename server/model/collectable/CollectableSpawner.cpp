@@ -41,10 +41,12 @@ std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable 
         case TypeCollectable::HELMET:
             return std::make_shared<Helmet>(spawnPlace);
             break;
+        case TypeCollectable::GRENADE:
+            return std::make_shared<GrenadeCreator>(projectilesController, spawnPlace);
         default:
             break;
     }
-    return std::make_shared<Helmet>(spawnPlace);
+    return std::make_shared<GrenadeCreator>(projectilesController, spawnPlace);
     // return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
     // return std::make_shared<Armor>(spawnPlace);
 }

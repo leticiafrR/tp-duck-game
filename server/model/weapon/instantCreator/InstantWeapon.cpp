@@ -1,12 +1,14 @@
 #include "InstantWeapon.h"
 
+#include "server/model/Duck.h"
 #include "server/model/projectile/instant/InstantProjectile.h"
 
 InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
                              const Transform& initialSpace, float scope, uint16_t ammo,
                              uint8_t damage, float dispersionRange, float cooldown,
                              TypeProjectile typeProjectile, float inclination):
-        Weapon(projectilesController, initialSpace, ammo, typeProjectile),
+        Weapon(projectilesController, initialSpace, ammo),
+        typeProjectile(typeProjectile),
         scope(scope),
         damage(damage),
         dispersionRange(dispersionRange),

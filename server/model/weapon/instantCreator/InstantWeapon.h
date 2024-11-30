@@ -9,6 +9,7 @@
 
 class InstantWeapon: public Weapon {
 protected:
+    TypeProjectile typeProjectile;
     const float scope;
     const uint8_t damage;
     float dispersionRange;

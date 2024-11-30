@@ -1,5 +1,6 @@
 #include "PewPewLaser.h"
 
+#include "server/model/Duck.h"
 #include "server/model/projectile/instant/InstantProjectile.h"
 #define CUSTOM_DAMAGE(x) ((x) / 9)
 

@@ -12,7 +12,7 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
     eventsManager.SendCollectableListener(collectablesController);
-    // collectablesController.ReleasePewPew();
+    eventsManager.SendThrowableListener(throwablesController);
 }
 
 GameWorld::~GameWorld() {
@@ -34,6 +34,7 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const C
 void GameWorld::Update(float deltaTime) {
     projectilesController.Update(map, players, deltaTime);
     collectablesController.Update(deltaTime);
+    throwablesController.Update(map, deltaTime);
     for (auto& pair: players) {
         pair.second->Update(map, deltaTime);
     }
@@ -103,7 +104,7 @@ void GameWorld::ExecCommand(Duck* player, const CommandCode& code) {
             player->TryCollect(collectablesController);
             break;
         case CommandCode::DropItem:
-            player->TryDrop(collectablesController);
+            player->TryDrop(collectablesController, throwablesController);
             break;
         default:
             break;

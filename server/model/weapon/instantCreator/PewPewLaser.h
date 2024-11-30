@@ -2,7 +2,6 @@
 #define PEW_PEW_LASER_H
 #include "InstantWeapon.h"
 class PewPewLaser: public InstantWeapon {
-    /*sin disparos continuos, rafaga de 3, algo de dispersiòn*/
 public:
     PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
                 const Config& conf);

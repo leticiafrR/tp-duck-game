@@ -63,7 +63,7 @@ bool StaticMap::IsOnTheFloor(const Transform& dynamicT) const {
             });
 }
 
-std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) {
+std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamicT) const {
     Vector2D posDynamic = dynamicT.GetPos();
     float xDynamic = posDynamic.x;
     float yDynamic = posDynamic.y;
@@ -83,7 +83,7 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
     return std::nullopt;  // El objeto está dentro de los límites
 }
 
-std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) {
+std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) const {
     auto it = std::find_if(grounds.begin(), grounds.end(), [&dynamicT](const auto& ground) {
         return Collision::RectCollision(dynamicT, ground.mySpace);
     });

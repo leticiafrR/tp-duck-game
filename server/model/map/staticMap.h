@@ -33,7 +33,7 @@ private:
 
 public:
     explicit StaticMap(const std::string& lvlName);
-    std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT);
+    std::optional<float> DisplacementOutOfBounds(const Transform& dynamicT) const;
 
     bool IsOnTheFloor(const Transform& dynamicT) const;
 
@@ -42,7 +42,7 @@ public:
                                                             float rayLenght) const;
 
 
-    std::optional<Transform> CheckCollision(const Transform& dynamicT);
+    std::optional<Transform> CheckCollision(const Transform& dynamicT) const;
 
     std::vector<Vector2D> GetPlayersSpawnPoints();
 

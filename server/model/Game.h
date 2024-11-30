@@ -13,6 +13,7 @@
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
 #include "server/config.h"
+#include "throwable/ThrowablesController.h"
 
 #include "Duck.h"
 #define ID_PLAYER_UNIQUE_TEST 1
@@ -24,6 +25,8 @@ private:
     EventsManager eventsManager;
     ProjectilesController projectilesController;
     CollectablesController collectablesController;
+    ThrowablesController throwablesController;
+
     void ReapDead();
     void Testing(const Vector2D& posToTest);
     void CreatePlayers(const std::vector<PlayerID_t>& playersIds, const Config& conf);

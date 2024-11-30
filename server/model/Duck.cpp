@@ -4,19 +4,17 @@
 #include "common/Collision.h"
 #include "map/staticMap.h"
 #include "projectile/ProjectilesController.h"
-#include "weapon/instant/DuelingPistol.h"
-#include "weapon/instant/PewPewLaser.h"
-#include "weapon/instant/PistolaCowboy.h"
-#include "weapon/instant/Shotgun.h"
+#include "throwable/ThrowablesController.h"
+
 
 /*******************************************************************************************/
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
 Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
-        DynamicObject(conf.getDuckSpeed(),
-                      Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize())),
-                      conf.getDuckLife()),
+        DynamicObject(Transform(initialPos, Vector2D(conf.getDuckSize(), conf.getDuckSize()))),
         id(id),
+        speedX(conf.getDuckSpeed()),
+        life(conf.getDuckLife()),
         isShooting(false),
         isLookingUp(false),
         isCrouched(false),
@@ -27,6 +25,7 @@ Duck::Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf):
         myFlip(Flip::Right),
         myState(DuckState::IDLE),
         itemOnHand(nullptr),
+        throwableOnHand(nullptr),
         typeOnHand(TypeCollectable::EMPTY) {}
 
 void Duck::TriggerEvent(bool cuack) {
@@ -73,13 +72,14 @@ void Duck::StopShooting() { isShooting = false; }
 void Duck::StartShooting() { isShooting = true; }
 
 void Duck::HandleReceiveDamage(uint8_t damage) {
-    if (!isCrouched) {
-        if (!equipment.AbsorbDamage()) {
-            isWounded = true;
-            DynamicObject::HandleReceiveDamage(damage);
-        } else {
-            TriggerEvent();
+    if (!isCrouched && !equipment.AbsorbDamage()) {
+        isWounded = true;
+        life -= damage;
+        if (life <= 0) {
+            HandleDead();
         }
+    } else if (!isCrouched) {
+        TriggerEvent();
     }
 }
 
@@ -104,17 +104,36 @@ void Duck::RegistListener(PlayerEventListener* listener) {
     // on the first iteration, everything is new
     TriggerEvent();
 }
-
-bool Duck::HasWeaponOnHand() {
-    return (itemOnHand &&
-            !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR));
+bool Duck::TryUpdateThrowable(const StaticMap& map, float deltaTime) {
+    if (throwableOnHand) {
+        throwableOnHand->FollowPosition(mySpace.GetPos());
+        throwableOnHand->Update(map, deltaTime);
+        if (throwableOnHand->IsDead()) {
+            throwableOnHand.reset();
+            typeOnHand = TypeCollectable::EMPTY;
+            TriggerEvent();
+            std::cout << "la pos de donde debiò de haber salido los fragmentos"
+                      << mySpace.GetPos().ToString() << std::endl;
+        }
+    } else {
+        return false;
+    }
+    return true;
 }
-
-void Duck::UpdateWeapon(float deltaTime) {
-    if (HasWeaponOnHand()) {
+void Duck::TryUpdateCollectable(float deltaTime) {
+    if (itemOnHand) {
         itemOnHand->Update(deltaTime);
         if (isShooting) {
             itemOnHand->Use(this);
+        }
+    }
+}
+
+void Duck::UpdateHand(const StaticMap& map, float deltaTime) {
+    if (typeOnHand != TypeCollectable::EMPTY &&
+        !(typeOnHand == TypeCollectable::HELMET || typeOnHand == TypeCollectable::ARMOR)) {
+        if (!TryUpdateThrowable(map, deltaTime)) {
+            TryUpdateCollectable(deltaTime);
         }
     }
 }
@@ -126,12 +145,12 @@ Vector2D Duck::GetLookVector() {
     return ((myFlip == Flip::Left) ? Vector2D::Left() : Vector2D::Right());
 }
 
-void Duck::Update(StaticMap& map, float deltaTime) {
+void Duck::Update(const StaticMap& map, float deltaTime) {
     DuckState initialState = myState;
     Vector2D initialPos = mySpace.GetPos();
 
     UpdatePosition(map, deltaTime);
-    UpdateWeapon(deltaTime);
+    UpdateHand(map, deltaTime);
     UpdateState();
     UpdateListener(initialState, initialPos);
 }
@@ -166,7 +185,7 @@ void Duck::TryJump() {
     }
 }
 
-void Duck::ApplyGravity(StaticMap& map, float deltaTime) {
+void Duck::ApplyGravity(const StaticMap& map, float deltaTime) {
     body.Update(deltaTime);
     isGrounded = map.IsOnTheFloor(mySpace);
     if (isGrounded) {
@@ -181,12 +200,38 @@ void Duck::TryCollect(CollectablesController& c) {
         TriggerEvent();
     }
 }
-void Duck::TryDrop(CollectablesController& c) {
+
+
+bool Duck::TryDropCollectable(CollectablesController& collectables) {
     if (itemOnHand && isGrounded) {
         if (itemOnHand->StillReusable()) {
-            c.Drop(itemOnHand, mySpace.GetPos());
+            collectables.Drop(itemOnHand, mySpace.GetPos());
         }
         itemOnHand.reset();
+        return true;
+    }
+    return false;
+}
+
+bool Duck::TryThrow(ThrowablesController& throwables) {
+    if (throwableOnHand) {
+        throwables.Throw(throwableOnHand, mySpace.GetPos(), GetLookVector());
+        throwableOnHand.reset();
+        std::cout << "tenias un throwable\n";
+        return true;
+    }
+    return false;
+}
+
+
+void Duck::PrepareToThrow(std::shared_ptr<Throwable> throwable) {
+    itemOnHand.reset();
+    throwableOnHand = throwable;
+}
+
+
+void Duck::TryDrop(CollectablesController& collectables, ThrowablesController& throwables) {
+    if (TryThrow(throwables) || TryDropCollectable(collectables)) {
         typeOnHand = TypeCollectable::EMPTY;
         TriggerEvent();
     }

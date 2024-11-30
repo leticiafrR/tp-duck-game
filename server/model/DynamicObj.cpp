@@ -5,36 +5,28 @@
 /*                                DEFINITIONS                                              */
 /*******************************************************************************************/
 
-DynamicObject::DynamicObject(int speedX, const Transform& mySpace, int life):
-        mySpace(mySpace), isDead(false), speedX(speedX), life(life) {}
+DynamicObject::DynamicObject(const Transform& mySpace): mySpace(mySpace), isDead(false) {}
 
 
-void DynamicObject::HandleReceiveDamage(uint8_t damage) {
-    life -= damage;
-    if (life <= 0) {
-        HandleDead();
-    }
-}
-
-void DynamicObject::UpdatePosition(StaticMap& map, float deltaTime) {
+void DynamicObject::UpdatePosition(const StaticMap& map, float deltaTime) {
     mySpace.Move(velocity * deltaTime);
     CheckInteractionWithMap(map, deltaTime);
 }
 
-void DynamicObject::CheckInteractionWithMap(StaticMap& map, float deltaTime) {
+void DynamicObject::CheckInteractionWithMap(const StaticMap& map, float deltaTime) {
     ApplyGravity(map, deltaTime);
     CheckOutOfMapBoundaries(map);
     CheckCollisionWithMap(map);
 }
 
-void DynamicObject::CheckOutOfMapBoundaries(StaticMap& map) {
+void DynamicObject::CheckOutOfMapBoundaries(const StaticMap& map) {
     std::optional<float> maybeDisplacement = map.DisplacementOutOfBounds(mySpace);
     if (maybeDisplacement.has_value()) {
         HandleOutOfBounds(maybeDisplacement.value());
     }
 }
 
-void DynamicObject::CheckCollisionWithMap(StaticMap& map) {
+void DynamicObject::CheckCollisionWithMap(const StaticMap& map) {
     std::optional<Transform> maybeCollision = map.CheckCollision(mySpace);
     while (maybeCollision.has_value()) {
         HandleCollisionWithMap(maybeCollision.value());

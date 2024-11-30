@@ -1,5 +1,6 @@
 #include "Shotgun.h"
 
+#include "server/model/Duck.h"
 #include "server/model/projectile/instant/InstantProjectile.h"
 Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpace,
                  const Config& conf):

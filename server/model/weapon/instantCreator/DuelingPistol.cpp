@@ -1,4 +1,6 @@
 #include "DuelingPistol.h"
+
+#include "server/model/Duck.h"
 DuelingPistol::DuelingPistol(ProjectilesController& controller, const Transform& initialSpace,
                              const Config& conf):
         InstantWeapon(controller, initialSpace, conf.getDuelingPistolScope(),

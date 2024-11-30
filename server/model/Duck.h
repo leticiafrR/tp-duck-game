@@ -6,16 +6,20 @@
 #include "common/RigidBody.h"
 #include "event/PlayerEventListener.h"
 #include "server/config.h"
+#include "throwable/Throwable.h"
 
 #include "DynamicObj.h"
 #include "Equipment.h"
 #include "MotionHandler.h"
 class ProjectilesController;
 class CollectablesController;
+class ThrowablesController;
 
 class Duck: public DynamicObject {
 private:
     PlayerID_t id;
+    const int speedX;
+    int life;
 
     bool isShooting;
     bool isLookingUp;
@@ -29,15 +33,19 @@ private:
     Flip myFlip;
     DuckState myState;
     std::shared_ptr<Collectable> itemOnHand;
+    std::shared_ptr<Throwable> throwableOnHand;
     TypeCollectable typeOnHand;
     Equipment equipment;
 
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     DuckState GetLowerPriorityState();
     void UpdateState();
-    void UpdateWeapon(float deltaTime);
-    bool HasWeaponOnHand();
+    void UpdateHand(const StaticMap& map, float deltaTime);
     void TriggerEvent(bool cuack = false);
+    bool TryDropCollectable(CollectablesController& collectables);
+    bool TryThrow(ThrowablesController& throwables);
+    bool TryUpdateThrowable(const StaticMap& map, float deltaTime);
+    void TryUpdateCollectable(float deltaTime);
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf);
@@ -60,18 +68,19 @@ public:
     void TryEquip();
 
     void TryCollect(CollectablesController& c);
-    void TryDrop(CollectablesController& c);
+    void TryDrop(CollectablesController& collectables, ThrowablesController& throwables);
 
+    void PrepareToThrow(std::shared_ptr<Throwable> throwable);
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float displacement) override;
-    void HandleDead() override;
-    void HandleReceiveDamage(uint8_t damage) override;
+    void HandleDead();
+    void HandleReceiveDamage(uint8_t damage);
 
-    void ApplyGravity(StaticMap& map, float deltaTime) override;
+    void ApplyGravity(const StaticMap& map, float deltaTime) override;
     void ApplyRecoil(float intensity);
 
     void RegistListener(PlayerEventListener* listener);
-    void Update(StaticMap& map, float deltaTime);
+    void Update(const StaticMap& map, float deltaTime);
     const Flip& GetFlip() const;
     Vector2D GetLookVector();
     bool IsShooting() const;
