@@ -2,6 +2,7 @@
 
 #include "server/model/Duck.h"
 #include "server/model/projectile/BounceProjectile.h"
+#define RECOIL_LASER 10
 
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):
@@ -24,7 +25,7 @@ void LaserRifle::Shoot(Duck* shooter) {
 bool LaserRifle::Use(Duck* shooter) {
     if (Weapon::Use(shooter)) {
         shooter->StartShooting();
-        shooter->ApplyRecoil(10);
+        shooter->ApplyRecoil(RECOIL_LASER);
         return true;
     }
     return false;
