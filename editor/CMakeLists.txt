@@ -1,7 +1,7 @@
 target_sources(taller_editor
     PRIVATE
     # .cpp files
-    main.cpp
+   
     mapEditor.cpp
     MenuScreen.cpp
     editLevel/LevelsScreen.cpp
@@ -11,6 +11,8 @@ target_sources(taller_editor
     PlatformOptionWidget.cpp
     EditorScreen.cpp
     editWorld/GameWorld.cpp
+    SpawnPointWidget.cpp
+     main.cpp
     PUBLIC
     # .h files
     mapEditor.h
@@ -22,4 +24,5 @@ target_sources(taller_editor
     PlatformOptionWidget.h
     EditorScreen.h
     editWorld/GameWorld.h
+    SpawnPointWidget.h
     )

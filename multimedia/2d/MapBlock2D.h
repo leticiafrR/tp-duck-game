@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "common/Transform.h"
+#include "data/gameScene.h"
 #include "multimedia/Camera.h"
 #include "multimedia/cache/SheetDataCache.h"
 
@@ -20,6 +21,7 @@ class MapBlock2D {
 protected:
     Transform transform;
     MapBlockRenderData renderData;
+    vector<string> edges;
 
 public:
     MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
@@ -30,6 +32,8 @@ public:
     Transform& GetTransform();
 
     void SetBorders(bool left, bool right, bool top, bool bottom);
+
+    vector<string> GetEdges();
 
     void Draw(Camera& cam);
 };

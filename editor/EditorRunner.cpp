@@ -23,7 +23,5 @@ void EditorRunner::run() {
     }
 
     EditorScreen runner(cam, writeArchive);
-    bool b = runner.Render();
-    std::cout << b << std::endl;
-    writeArchive.SaveChanges();
+    runner.Render();
 }

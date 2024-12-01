@@ -36,7 +36,6 @@ private:
     // CameraController camController;
     Object2D mapBg;
 
-    map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
     vector<MapBlock2D> mapBlocks;
     // unordered_map<CollectableID_t, CollectableRenderer> collectables;
 

@@ -1,57 +1,43 @@
 #include "PlatformOptionWidget.h"
 
 #include "constants.h"
+#include "constantsEditor.h"
 
-PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<vector<string>> onSelect):
-        obj(BLOCK_MAP, BLOCK_MAP_YAML,
-            RectTransform(Transform(info.mySpace.GetPos() * 10, info.mySpace.GetSize() * 10, 0),
-                          Vector2D(0.35, 1)),
-            40),
+PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<MapBlock2D> onSelect):
+
         btn(
                 BUTTON_1_IMAGE,
                 RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
-                [this]() {
-                    std::cout << "Boton presionado " << std::endl;
-                    this->onSelectClicked(this->edges);
-                },
-                Color(40, 40, 40), 1),
+                [this]() { this->onSelectClicked(this->gameBlock); }, Color(40, 40, 40), 1),
+        obj(BLOCK_MAP, BLOCK_MAP_YAML,
+            RectTransform(Transform(info.mySpace.GetPos() * 10, info.mySpace.GetSize() * 10),
+                          Vector2D(0.25, 1)),
+            40),
+
         selectLevelText(
                 SELECT_STR.c_str(), 30,
                 RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
                 ColorExtension::White(), 2),
-        onSelectClicked(onSelect) {
-    bool left = false, right = false, top = false, bottom = false;
-    if (info.visibleEdges.find(VISIBLE_EDGES::LEFT) != info.visibleEdges.end()) {
-        left = true;
-        edges.emplace_back(LEFT_STR);
-    }
+        onSelectClicked(onSelect),
+        gameBlock(BLOCK_MAP, BLOCK_MAP_YAML, info.mySpace, 4) {
+    bool left = info.visibleEdges.find(VISIBLE_EDGES::LEFT) != info.visibleEdges.end();
 
-    if (info.visibleEdges.find(VISIBLE_EDGES::RIGHT) != info.visibleEdges.end()) {
-        right = true;
-        edges.emplace_back(RIGHT_STR);
-    }
+    bool right = info.visibleEdges.find(VISIBLE_EDGES::RIGHT) != info.visibleEdges.end();
 
-    if (info.visibleEdges.find(VISIBLE_EDGES::TOP) != info.visibleEdges.end()) {
-        top = true;
-        edges.emplace_back(TOP_STR);
-    }
+    bool top = info.visibleEdges.find(VISIBLE_EDGES::TOP) != info.visibleEdges.end();
 
-    if (info.visibleEdges.find(VISIBLE_EDGES::BOTTOM) != info.visibleEdges.end()) {
-        bottom = true;
-        edges.emplace_back(BOTTOM_STR);
-    }
+    bool bottom = info.visibleEdges.find(VISIBLE_EDGES::BOTTOM) != info.visibleEdges.end();
 
     obj.SetBorders(left, right, top, bottom);
+    gameBlock.SetBorders(left, right, top, bottom);
 }
 
 void PlatformOptionWidget::DrawOption(Camera& cam) { obj.Draw(cam); }
 
 
-void PlatformOptionWidget::MoveContent(Vector2D movement /*,Vector2D moveOb*/) {
+void PlatformOptionWidget::MoveContent(Vector2D movement) {
 
     btn.GetRectTransform().Move(movement);
     selectLevelText.GetRectTransform().Move(movement);
-    std::cout << "BOTON: " << btn.GetRectTransform().GetTransform().ToString() << std::endl;
     obj.GetRectTransform().Move(movement);
-    std::cout << "IMAGE: " << obj.GetRectTransform().GetTransform().ToString() << std::endl;
 }

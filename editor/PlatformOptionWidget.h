@@ -14,15 +14,15 @@ using std::vector;
 class PlatformOptionWidget {
 private:
 public:
-    MapBlockGUI obj;
     Button btn;
-    vector<string> edges;
+    MapBlockGUI obj;
     Text selectLevelText;
-    CallbackParam<vector<string>> onSelectClicked;
+    CallbackParam<MapBlock2D> onSelectClicked;
+    MapBlock2D gameBlock;
 
     PlatformOptionWidget();
 
-    explicit PlatformOptionWidget(GroundDto& info, CallbackParam<vector<string>> onSelect);
+    explicit PlatformOptionWidget(GroundDto& info, CallbackParam<MapBlock2D> onSelect);
 
     ~PlatformOptionWidget() = default;
     void DrawOption(Camera& cam);

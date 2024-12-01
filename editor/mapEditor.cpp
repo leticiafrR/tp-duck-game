@@ -27,15 +27,39 @@ MapEditor::MapEditor(const string& _fileName):
 }
 void MapEditor::SaveChanges() {
     std::ofstream fout(filePath);
+    if (!fout.is_open()) {
+        std::cerr << "Error: Could not open file for writing: " << filePath << std::endl;
+        return;
+    }
     fout << config;
-    YAML::Node availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
-    vector<string> availableLevels = availableConfig[AVAILABLE_LEVELS_STR].as<vector<string>>();
-    auto it = find(availableLevels.begin(), availableLevels.end(), filePath);
+
+    fout.close();
+    YAML::Node availableConfig;
+    try {
+        availableConfig = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
+    } catch (const YAML::Exception& e) {
+        std::cerr << "Error loading available levels file:" << e.what() << std::endl;
+        return;
+    }
+    std::vector<std::string> availableLevels;
+    try {
+        availableLevels = availableConfig[AVAILABLE_LEVELS_STR].as<std::vector<std::string>>();
+    } catch (const YAML::Exception& e) {
+        std::cerr << "Error reading available levels:" << e.what() << std::endl;
+        return;
+    }
+    auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
     if (it == availableLevels.end()) {
         availableLevels.emplace_back(fileName);
         availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
         std::ofstream fout2(AVAILABLE_LEVELS_PATH);
+        if (!fout2.is_open()) {
+            std::cerr << "Error: Could not open file for writing: " << AVAILABLE_LEVELS_PATH
+                      << std::endl;
+            return;
+        }
         fout2 << availableConfig;
+        fout2.close();
     }
 }
 void MapEditor::AddFileName(const string& _fileName) {
@@ -66,24 +90,16 @@ void MapEditor::AddPlayerSpawnPoint(const float& x, const float& y) {
     }
     config[PLAYERS_POINTS_STR].push_back(playersSpawnPoint);
 }
-void MapEditor::AddWeaponSpawnPoint(const float& x, const float& y) {
+void MapEditor::AddCollectableSpawnPoint(const float& x, const float& y) {
     YAML::Node weaponSpawnPoint = YAML::Node(YAML::NodeType::Map);
     weaponSpawnPoint[X_STR] = x;
     weaponSpawnPoint[Y_STR] = y;
-    if (!config[WEAPONS_POINTS_STR]) {
-        config[WEAPONS_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
+    if (!config[COLLECTABLES_POINTS_STR]) {
+        config[COLLECTABLES_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
     }
-    config[WEAPONS_POINTS_STR].push_back(weaponSpawnPoint);
+    config[COLLECTABLES_POINTS_STR].push_back(weaponSpawnPoint);
 }
-void MapEditor::AddBoxSpawnPoint(const float& x, const float& y) {
-    YAML::Node boxSpawnPoint = YAML::Node(YAML::NodeType::Map);
-    boxSpawnPoint[X_STR] = x;
-    boxSpawnPoint[Y_STR] = y;
-    if (!config[BOX_POINTS_STR]) {
-        config[BOX_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
-    }
-    config[BOX_POINTS_STR].push_back(boxSpawnPoint);
-}
+
 void MapEditor::AddTheme(const string& theme) { config[THEME_STR] = theme; }
 void MapEditor::AddFullMapSize(const size_t& x, const size_t& y) {
     config[FULL_MAP_STR][X_STR] = x;
@@ -155,4 +171,12 @@ vector<GroundDto> MapEditor::GetPlataforms() {
 }
 GameSceneDto MapEditor::GetGameScene() {
     return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlataforms());
+}
+
+void MapEditor::Print() {
+    vector<GroundDto> p = GetPlataforms();
+
+    for (auto& it: p) {
+        std::cout << it.mySpace.ToString() << std::endl;
+    }
 }

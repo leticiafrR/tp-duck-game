@@ -14,5 +14,6 @@ private:
 public:
     explicit EditorRunner(Renderer& render, int fps);
     void run();
+    ~EditorRunner() = default;
 };
 #endif

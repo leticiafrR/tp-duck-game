@@ -33,8 +33,7 @@ public:
                        const vector<string>& edges);
     void SaveChanges();
     void AddPlayerSpawnPoint(const float& x, const float& y);
-    void AddWeaponSpawnPoint(const float& x, const float& y);
-    void AddBoxSpawnPoint(const float& x, const float& y);
+    void AddCollectableSpawnPoint(const float& x, const float& y);
     void AddTheme(const string& theme);
     void AddFullMapSize(const size_t& x, const size_t& y);
     void DeleteALevel();
@@ -43,7 +42,8 @@ public:
     void DeleteAPlataform(const string& plataformName);
     vector<GroundDto> GetPlataforms();
     GameSceneDto GetGameScene();
+    ~MapEditor() = default;
 
-    // faltan implementar
+    void Print();
 };
 #endif

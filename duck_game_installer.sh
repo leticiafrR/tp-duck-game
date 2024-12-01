@@ -37,6 +37,7 @@ else
     mkdir -p /etc/duckGame_g6
 fi
 sudo cp -r config/* /etc/duckGame_g6
+sudo chmod -R o+w /etc/duckGame_g6
 
 # 4. Compilar el proyecto
 print_colored_message $GREEN "\n[DUCK GAME INSTALLER] Building the game ..."
@@ -53,5 +54,10 @@ if [ -f "/usr/bin/taller_client" ]; then
     rm -f /usr/bin/taller_client
 fi
 sudo cp build/taller_client /usr/bin/
+
+if [ -f "/usr/bin/taller_editor" ]; then
+    rm -f /usr/bin/taller_editor
+fi
+sudo cp build/taller_editor /usr/bin/
 
 print_colored_message $GREEN_BOLD "\n[DUCK GAME INSTALLER] Installation completed successfully."

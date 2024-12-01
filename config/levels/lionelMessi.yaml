@@ -10,7 +10,7 @@ players_spawn_points:
     y: 8
   - x: 3
     y: 8
-weapons_spawn_points:
+collectables_spawn_points:
   - x: 0
     y: 8
   - x: 3
