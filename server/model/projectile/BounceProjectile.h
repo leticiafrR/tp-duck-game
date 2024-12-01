@@ -1,13 +1,13 @@
-#ifndef BOUNCE_INSTANT_PROJECTILE_H
-#define BOUNCE_INSTANT_PROJECTILE_H
+#ifndef BOUNCE_PROJECTILE_H
+#define BOUNCE_PROJECTILE_H
 #include <cmath>
 #include <optional>
 #include <unordered_map>
 #include <utility>
 
-#include "InstantProjectile.h"
+#include "Projectile.h"
 
-class BounceInstantProjectile: public InstantProjectile {
+class BounceProjectile: public Projectile {
 private:
     std::optional<std::pair<float, Duck*>> CheckImpactWithSomeDuck(
             const std::unordered_map<PlayerID_t, Duck*>& players);
@@ -16,8 +16,8 @@ private:
     bool CheckCollision(const StaticMap& map, const std::unordered_map<PlayerID_t, Duck*>& players);
 
 public:
-    BounceInstantProjectile(const Vector2D& origin, const Vector2D& direction, float scope,
-                            uint8_t damage, TypeProjectile type, InstantProjectileEventListener* l);
+    BounceProjectile(const Vector2D& origin, const Vector2D& direction, float scope, uint8_t damage,
+                     TypeProjectile type, ProjectileEventListener* l);
 
 
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override;

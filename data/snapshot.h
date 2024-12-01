@@ -64,13 +64,13 @@ struct PlayerEvent {
             hasHelmet(_hasHelmet) {}
 };
 
-struct InstantProjectileEventDto {
+struct ProjectileEventDto {
     TypeProjectile type;
     Vector2D origin;
     Vector2D end;
 
-    InstantProjectileEventDto() = default;
-    InstantProjectileEventDto(TypeProjectile type, const Vector2D& origin, const Vector2D& end):
+    ProjectileEventDto() = default;
+    ProjectileEventDto(TypeProjectile type, const Vector2D& origin, const Vector2D& end):
             type(type), origin(origin), end(end) {}
 };
 
@@ -96,14 +96,14 @@ struct ThrowableSpawnEventDto {
 struct Snapshot: public NetworkMsg {
     bool gameOver;
     std::unordered_map<PlayerID_t, PlayerEvent> updates;
-    std::vector<InstantProjectileEventDto> raycastsEvents;
+    std::vector<ProjectileEventDto> raycastsEvents;
     std::vector<CollectableID_t> collectableDespawns;
     std::vector<CollectableSpawnEventDto> collectableSpawns;
     std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto> throwableSpawns;
     std::vector<ThrowableID_t> throwableDespawns;
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
-             const std::vector<InstantProjectileEventDto>& raycastsEvents,
+             const std::vector<ProjectileEventDto>& raycastsEvents,
              const std::vector<CollectableID_t>& collectableDespawns,
              const std::vector<CollectableSpawnEventDto>& collectableSpawns):
             gameOver(gameOver),
@@ -115,7 +115,7 @@ struct Snapshot: public NetworkMsg {
             throwableDespawns() {}
 
     Snapshot(bool gameOver, const std::unordered_map<PlayerID_t, PlayerEvent>& updates,
-             const std::vector<InstantProjectileEventDto>& raycastsEvents,
+             const std::vector<ProjectileEventDto>& raycastsEvents,
              const std::vector<CollectableID_t>& collectableDespawns,
              const std::vector<CollectableSpawnEventDto>& collectableSpawns,
              const std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>& throwableSpawns,

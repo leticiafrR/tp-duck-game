@@ -5,7 +5,7 @@ target_sources(taller_server
 
     model/event/CollectableEventListener.cpp
     model/event/EventsManager.cpp
-    model/event/InstantProjectileEventListener.cpp
+    model/event/ProjectileEventListener.cpp
     model/event/PlayerEventListener.cpp
 
     model/DynamicObj.cpp
@@ -20,11 +20,9 @@ target_sources(taller_server
     model/weaponCollectable/PewPewLaser.cpp
     model/weaponCollectable/Shotgun.cpp
 
-    model/projectile/Projectile.cpp
     model/projectile/ProjectilesController.cpp
-    model/projectile/instant/InstantProjectilesController.cpp
-    model/projectile/instant/InstantProjectile.cpp
-    model/projectile/instant/BounceInstantProjectile.cpp
+    model/projectile/Projectile.cpp
+    model/projectile/BounceProjectile.cpp
 
     
     model/collectable/spawning/CollectableWrapper.cpp
@@ -69,7 +67,7 @@ target_sources(taller_server
 
     model/event/CollectableEventListener.h
     model/event/EventsManager.h
-    model/event/InstantProjectileEventListener.h
+    model/event/ProjectileEventListener.h
     model/event/PlayerEventListener.h
     
     model/Equipment.h
@@ -82,11 +80,9 @@ target_sources(taller_server
     model/weaponCollectable/PewPewLaser.h
     model/weaponCollectable/Shotgun.h
 
-    model/projectile/instant/InstantProjectile.h
-    model/projectile/instant/BounceInstantProjectile.h
-    model/projectile/instant/InstantProjectilesController.h
-    model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
+    model/projectile/Projectile.h
+    model/projectile/BounceProjectile.h
     
 
     model/collectable/spawning/CollectableWrapper.h

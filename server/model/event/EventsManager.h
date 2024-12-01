@@ -9,8 +9,8 @@
 #include "data/snapshot.h"
 
 #include "CollectableEventListener.h"
-#include "InstantProjectileEventListener.h"
 #include "PlayerEventListener.h"
+#include "ProjectileEventListener.h"
 #include "ThrowableEventListener.h"
 
 class Duck;
@@ -21,7 +21,7 @@ class ThrowablesController;
 class EventsManager {
 private:
     std::unordered_map<PlayerID_t, PlayerEvent> playerEvents;
-    std::vector<InstantProjectileEventDto> instantProjectileEvents;
+    std::vector<ProjectileEventDto> projectileEvents;
     std::vector<CollectableID_t> collectableDespawnEvents;
     std::vector<CollectableSpawnEventDto> collectableSpawnEvents;
 
@@ -30,7 +30,7 @@ private:
 
 
     PlayerEventListener playerListener;
-    InstantProjectileEventListener instantProjectileListener;
+    ProjectileEventListener projectileListener;
     CollectableEventListener collectableListener;
     ThrowableEventListener throwableListener;
 
@@ -38,7 +38,7 @@ public:
     EventsManager();
 
     void SendPlayersListeners(const std::unordered_map<PlayerID_t, Duck*>& players);
-    void SendInstantProjectileListener(ProjectilesController& projectilesController);
+    void SendProjectileListener(ProjectilesController& projectilesController);
     void SendCollectableListener(CollectablesController& collectableContoller);
     void SendThrowableListener(ThrowablesController& throwablesController);
 

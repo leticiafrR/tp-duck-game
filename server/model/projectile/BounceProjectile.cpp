@@ -1,16 +1,15 @@
-#include "BounceInstantProjectile.h"
+#include "BounceProjectile.h"
 
-#include "../../Duck.h"
+#include "../Duck.h"
 #include "common/Collision.h"
 #include "server/model/map/staticMap.h"
 
-BounceInstantProjectile::BounceInstantProjectile(const Vector2D& origin, const Vector2D& direction,
-                                                 float scope, uint8_t damage, TypeProjectile type,
-                                                 InstantProjectileEventListener* l):
-        InstantProjectile(origin, direction, scope, damage, type, l) {}
+BounceProjectile::BounceProjectile(const Vector2D& origin, const Vector2D& direction, float scope,
+                                   uint8_t damage, TypeProjectile type, ProjectileEventListener* l):
+        Projectile(origin, direction, scope, damage, type, l) {}
 
 
-std::optional<std::pair<float, Duck*>> BounceInstantProjectile::CheckImpactWithSomeDuck(
+std::optional<std::pair<float, Duck*>> BounceProjectile::CheckImpactWithSomeDuck(
         const std::unordered_map<PlayerID_t, Duck*>& players) {
     Duck* woundedDuck = nullptr;
     float distanceUntilImpact = INFINITY;
@@ -29,9 +28,9 @@ std::optional<std::pair<float, Duck*>> BounceInstantProjectile::CheckImpactWithS
                     std::optional<std::pair<float, Duck*>>({distanceUntilImpact, woundedDuck}));
 }
 
-void BounceInstantProjectile::HandleCollisionWithMap(std::pair<float, bool> infoCollision) {
+void BounceProjectile::HandleCollisionWithMap(std::pair<float, bool> infoCollision) {
     Vector2D rayEnd = rayOrigin + rayDirection * (infoCollision.first);
-    l->NewInstantProjectileEvent(type, rayOrigin, rayEnd);
+    l->NewProjectileEvent(type, rayOrigin, rayEnd);
     rayLenght = rayLenght - (rayEnd - rayOrigin).GetMagnitude();
     rayOrigin = rayEnd;
     rayDirection =
@@ -41,15 +40,15 @@ void BounceInstantProjectile::HandleCollisionWithMap(std::pair<float, bool> info
     }
 }
 
-void BounceInstantProjectile::HandleCollisionWithDuck(std::pair<float, Duck*> infoCollision) {
+void BounceProjectile::HandleCollisionWithDuck(std::pair<float, Duck*> infoCollision) {
     infoCollision.second->HandleReceiveDamage(damage);
     rayLenght = infoCollision.first;
-    l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
+    l->NewProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
     MarkAsDead();
 }
 
-bool BounceInstantProjectile::CheckCollision(const StaticMap& map,
-                                             const std::unordered_map<PlayerID_t, Duck*>& players) {
+bool BounceProjectile::CheckCollision(const StaticMap& map,
+                                      const std::unordered_map<PlayerID_t, Duck*>& players) {
     std::optional<std::pair<float, Duck*>> maybeInfoCollisionWithDuck =
             CheckImpactWithSomeDuck(players);
     std::optional<std::pair<float, bool>> maybeInfoCollisionWithMap =
@@ -73,10 +72,10 @@ bool BounceInstantProjectile::CheckCollision(const StaticMap& map,
     return true;
 }
 
-void BounceInstantProjectile::Update(const StaticMap& map,
-                                     std::unordered_map<PlayerID_t, Duck*>& players) {
+void BounceProjectile::Update(const StaticMap& map,
+                              std::unordered_map<PlayerID_t, Duck*>& players) {
     if (!CheckCollision(map, players)) {
-        l->NewInstantProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
+        l->NewProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
         MarkAsDead();
     }
 }

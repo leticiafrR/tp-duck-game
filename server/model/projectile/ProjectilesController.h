@@ -1,29 +1,22 @@
-
 #ifndef PROJECTILES_CONTROLLER_H
 #define PROJECTILES_CONTROLLER_H
-
-#include <iostream>
 #include <unordered_map>
-// #include "throwable/ThrowableProjectile.h"
-#include "instant/InstantProjectilesController.h"
-// #include "throwable/ThrowableProjectilesController.h"
-class StaticMap;
-class Duck;
+#include <vector>
 
+#include "Projectile.h"
 
 class ProjectilesController {
 private:
-    InstantProjectilesController instantProjectiles;
-    // ThrowableProjectileID_t unicThrowableID;
-    // std::unordered_map<ThrowableProjectileID_t,ThrowableProjectile*> throwableProjectiles;
-public:
-    // ProjectilesController();
-    InstantProjectileEventListener* GetInstantProjectileListener();
-    void RegisterListener(InstantProjectileEventListener* listener);
-    void RelaseInstantProjectile(InstantProjectile* projectile);
-    // void RelaseThrowableProjectile(ThrowableProjectile* projectile);
-    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
-                float deltaTime);
-};
+    std::vector<Projectile*> projectiles;
+    ProjectileEventListener* instantProjectileListener;
+    void ReapDead();
 
+public:
+    ProjectilesController();
+    ProjectileEventListener* GetInstantProjectileListener();
+    void RegisterListener(ProjectileEventListener* listener);
+    void RelaseProjectile(Projectile* projectile);
+    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players);
+    ~ProjectilesController();
+};
 #endif

@@ -5,9 +5,9 @@
 
 #include "../collectable/Collectable.h"
 #include "server/config.h"
-#include "server/model/event/InstantProjectileEventListener.h"
+#include "server/model/event/ProjectileEventListener.h"
+#include "server/model/projectile/Projectile.h"
 #include "server/model/projectile/ProjectilesController.h"
-#include "server/model/projectile/instant/InstantProjectile.h"
 
 #define NO_INCLINATION 0
 
@@ -22,7 +22,7 @@ protected:
     const float cooldown;
     float cooldownTimer;
     float inclination;
-    InstantProjectileEventListener* l;
+    ProjectileEventListener* l;
 
     float RandomDisturbance();
     virtual void Shoot(Duck* shooter);

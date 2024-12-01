@@ -39,10 +39,10 @@ Vector2D Weapon::GetShootingDirection(Duck* shooter) {
 }
 
 void Weapon::Shoot(Duck* shooter) {
-    InstantProjectile* projectile =
-            new InstantProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
-                                  scope, damage, typeProjectile, l);
-    projectilesController.RelaseInstantProjectile(projectile);
+    Projectile* projectile =
+            new Projectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter), scope,
+                           damage, typeProjectile, l);
+    projectilesController.RelaseProjectile(projectile);
 }
 
 bool Weapon::Use(Duck* shooter) {

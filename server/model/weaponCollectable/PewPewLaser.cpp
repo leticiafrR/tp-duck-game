@@ -1,7 +1,7 @@
 #include "PewPewLaser.h"
 
 #include "server/model/Duck.h"
-#include "server/model/projectile/instant/InstantProjectile.h"
+#include "server/model/projectile/Projectile.h"
 #define CUSTOM_DAMAGE(x) ((x) / 9)
 
 PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
@@ -18,10 +18,10 @@ void PewPewLaser::BeCollected(TypeCollectable& collectorTypeRef) {
 void PewPewLaser::Shoot(Duck* shooter) {
     float originalInclination = inclination;
     for (int i = -1; i < 2; i++) {
-        InstantProjectile* projectile = new InstantProjectile(shooter->GetTransform().GetPos(),
-                                                              GetShootingDirection(shooter), scope,
-                                                              damage, typeProjectile, l);
-        projectilesController.RelaseInstantProjectile(projectile);
+        Projectile* projectile =
+                new Projectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
+                               scope, damage, typeProjectile, l);
+        projectilesController.RelaseProjectile(projectile);
         inclination *= i;
     }
     inclination = originalInclination;

@@ -147,8 +147,7 @@ void ServerProtocol::sendPlayerUpdates(const std::unordered_map<PlayerID_t, Play
         assistant.sendBoolean(it->second.hasHelmet);
     }
 }
-void ServerProtocol::sendRaycastsEvents(
-        const std::vector<InstantProjectileEventDto>& raycastsEvents) {
+void ServerProtocol::sendRaycastsEvents(const std::vector<ProjectileEventDto>& raycastsEvents) {
     uint8_t numberProjectiles = (uint8_t)raycastsEvents.size();
     assistant.sendNumber(numberProjectiles);
     for (auto it = raycastsEvents.begin(); it != raycastsEvents.end(); ++it) {

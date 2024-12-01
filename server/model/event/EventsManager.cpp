@@ -6,12 +6,12 @@
 #include "../throwable/ThrowablesController.h"
 EventsManager::EventsManager():
         playerListener(playerEvents),
-        instantProjectileListener(instantProjectileEvents),
+        projectileListener(projectileEvents),
         collectableListener(collectableDespawnEvents, collectableSpawnEvents),
         throwableListener(throwablesSpawnings, throwablesDespawnings) {}
 
 Snapshot EventsManager::GetSnapshot(bool gameOver) {
-    Snapshot s(gameOver, playerEvents, instantProjectileEvents, collectableDespawnEvents,
+    Snapshot s(gameOver, playerEvents, projectileEvents, collectableDespawnEvents,
                collectableSpawnEvents, throwablesSpawnings, throwablesDespawnings);
     for (auto& pair: throwablesSpawnings) {
         std::cout << "[snapshot]: \n ->ID: " << (int)pair.first
@@ -19,7 +19,7 @@ Snapshot EventsManager::GetSnapshot(bool gameOver) {
                   << std::endl;
     }
     playerEvents.clear();
-    instantProjectileEvents.clear();
+    projectileEvents.clear();
     collectableDespawnEvents.clear();
     collectableSpawnEvents.clear();
     throwablesSpawnings.clear();
@@ -27,8 +27,8 @@ Snapshot EventsManager::GetSnapshot(bool gameOver) {
     return s;
 }
 
-void EventsManager::SendInstantProjectileListener(ProjectilesController& projectilesController) {
-    projectilesController.RegisterListener(&instantProjectileListener);
+void EventsManager::SendProjectileListener(ProjectilesController& projectilesController) {
+    projectilesController.RegisterListener(&projectileListener);
 }
 
 void EventsManager::SendCollectableListener(CollectablesController& collectableContoller) {

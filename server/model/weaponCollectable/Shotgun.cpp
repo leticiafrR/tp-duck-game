@@ -1,7 +1,7 @@
 #include "Shotgun.h"
 
 #include "server/model/Duck.h"
-#include "server/model/projectile/instant/InstantProjectile.h"
+#include "server/model/projectile/Projectile.h"
 Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpace,
                  const Config& conf):
         Weapon(controller, initialSpace, conf.getShotgunScope(),
@@ -18,10 +18,10 @@ void Shotgun::Shoot(Duck* shooter) {
     if (ammoLoaded) {
         shooter->StartShooting();
         for (int i = 0; i < 6; i++) {
-            InstantProjectile* projectile = new InstantProjectile(shooter->GetTransform().GetPos(),
-                                                                  GetShootingDirection(shooter),
-                                                                  scope, damage, typeProjectile, l);
-            projectilesController.RelaseInstantProjectile(projectile);
+            Projectile* projectile =
+                    new Projectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
+                                   scope, damage, typeProjectile, l);
+            projectilesController.RelaseProjectile(projectile);
         }
         ammoLoaded = false;
     } else {

@@ -69,7 +69,7 @@ std::string TypeProjectileStr(const TypeProjectile& type) {
 }
 
 
-void ShowProjectileEvent(const InstantProjectileEventDto& e) {
+void ShowProjectileEvent(const ProjectileEventDto& e) {
     std::cout << "***[ProjectilesEvents] type: " << TypeProjectileStr(e.type) << std::endl;
     std::cout << "***[ProjectilesEvents] origin: ";
     ShowVector(e.origin);

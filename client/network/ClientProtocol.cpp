@@ -174,12 +174,12 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
 
     // receiving raycastsEvents
     uint8_t numberProjectile = assistant.receiveNumberOneByte();
-    std::vector<InstantProjectileEventDto> _raycastsEvents((size_t)numberProjectile);
+    std::vector<ProjectileEventDto> _raycastsEvents((size_t)numberProjectile);
     for (uint8_t i = 0; i < numberProjectile; i++) {
         auto type = (TypeProjectile)assistant.receiveNumberOneByte();
         auto origin = assistant.receiveVector2D();
         auto end = assistant.receiveVector2D();
-        _raycastsEvents[i] = InstantProjectileEventDto{type, origin, end};
+        _raycastsEvents[i] = ProjectileEventDto{type, origin, end};
     }
 
     // receiving collectableDespawns

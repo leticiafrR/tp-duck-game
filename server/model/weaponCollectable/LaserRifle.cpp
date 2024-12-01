@@ -1,7 +1,7 @@
 #include "LaserRifle.h"
 
 #include "server/model/Duck.h"
-#include "server/model/projectile/instant/BounceInstantProjectile.h"
+#include "server/model/projectile/BounceProjectile.h"
 
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):
@@ -15,10 +15,10 @@ void LaserRifle::BeCollected(TypeCollectable& collectorTypeRef) {
 }
 
 void LaserRifle::Shoot(Duck* shooter) {
-    BounceInstantProjectile* projectile = new BounceInstantProjectile(
-            shooter->GetTransform().GetPos(), GetShootingDirection(shooter), scope, damage,
-            typeProjectile, l);
-    projectilesController.RelaseInstantProjectile(projectile);
+    BounceProjectile* projectile =
+            new BounceProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
+                                 scope, damage, typeProjectile, l);
+    projectilesController.RelaseProjectile(projectile);
 }
 
 bool LaserRifle::Use(Duck* shooter) {

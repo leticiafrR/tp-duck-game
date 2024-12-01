@@ -8,7 +8,7 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
         map(sceneName),
         projectilesController(),
         collectablesController(projectilesController, conf, map.GetWeaponsSpawnPoints()) {
-    eventsManager.SendInstantProjectileListener(projectilesController);
+    eventsManager.SendProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
     eventsManager.SendCollectableListener(collectablesController);
@@ -32,7 +32,7 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const C
 }
 
 void GameWorld::Update(float deltaTime) {
-    projectilesController.Update(map, players, deltaTime);
+    projectilesController.Update(map, players);
     collectablesController.Update(deltaTime);
     throwablesController.Update(map, deltaTime);
     for (auto& pair: players) {
