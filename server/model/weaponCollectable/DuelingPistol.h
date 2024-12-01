@@ -1,7 +1,7 @@
 #ifndef DUELING_PISTOL_H
 #define DUELING_PISTOL_H
-#include "InstantWeapon.h"
-class DuelingPistol: public InstantWeapon {
+#include "Weapon.h"
+class DuelingPistol: public Weapon {
 public:
     DuelingPistol(ProjectilesController& controller, const Transform& initialSpace,
                   const Config& conf);

@@ -6,10 +6,9 @@
 
 PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
                          const Config& conf):
-        InstantWeapon(controller, initialSpace, conf.getPewPewLaserScope(),
-                      conf.getPewPewLaserAmmo(), CUSTOM_DAMAGE(conf.getDamageShort()),
-                      conf.getNoDispersion(), conf.getCooldownBasic(), TypeProjectile::LASER,
-                      conf.getHiperDispersion()) {}
+        Weapon(controller, initialSpace, conf.getPewPewLaserScope(), conf.getPewPewLaserAmmo(),
+               CUSTOM_DAMAGE(conf.getDamageShort()), conf.getNoDispersion(),
+               conf.getCooldownBasic(), TypeProjectile::LASER, conf.getHiperDispersion()) {}
 
 
 void PewPewLaser::BeCollected(TypeCollectable& collectorTypeRef) {

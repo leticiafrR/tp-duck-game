@@ -11,7 +11,7 @@
 
 #define NO_INCLINATION 0
 
-class InstantWeapon: public Collectable {
+class Weapon: public Collectable {
 protected:
     ProjectilesController& projectilesController;
     uint16_t ammo;
@@ -29,14 +29,14 @@ protected:
     virtual Vector2D GetShootingDirection(Duck* shooter);
 
 public:
-    InstantWeapon(ProjectilesController& projectilesController, const Transform& initialSpace,
-                  float scope, uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,
-                  TypeProjectile typeProjectile, float inclination = NO_INCLINATION);
+    Weapon(ProjectilesController& projectilesController, const Transform& initialSpace, float scope,
+           uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,
+           TypeProjectile typeProjectile, float inclination = NO_INCLINATION);
 
     virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;
-    virtual ~InstantWeapon() = default;
+    virtual ~Weapon() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
     bool StillReusable() override;
     void StopUse(Duck* shooter) override;

@@ -1,8 +1,8 @@
 #ifndef PISTOLA_COWBOY_H
 #define PISTOLA_COWBOY_H
-#include "InstantWeapon.h"
+#include "Weapon.h"
 
-class PistolaCowboy: public InstantWeapon {
+class PistolaCowboy: public Weapon {
 public:
     PistolaCowboy(ProjectilesController& controller, const Transform& initialSpace,
                   const Config& conf);

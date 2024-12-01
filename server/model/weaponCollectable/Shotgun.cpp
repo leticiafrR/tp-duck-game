@@ -4,9 +4,9 @@
 #include "server/model/projectile/instant/InstantProjectile.h"
 Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpace,
                  const Config& conf):
-        InstantWeapon(controller, initialSpace, conf.getShotgunScope(),
-                      AMMO_WITH_RELOAD(conf.getShotgunAmmo()), conf.getDamageShort(),
-                      conf.getLongDispersion(), conf.getCooldownBasic(), TypeProjectile::BULLET),
+        Weapon(controller, initialSpace, conf.getShotgunScope(),
+               AMMO_WITH_RELOAD(conf.getShotgunAmmo()), conf.getDamageShort(),
+               conf.getLongDispersion(), conf.getCooldownBasic(), TypeProjectile::BULLET),
         ammoLoaded(true) {}
 
 

@@ -5,9 +5,9 @@
 
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):
-        InstantWeapon(controller, initialSpace, conf.getLaserRifleScope(), conf.getLaserRifleAmmo(),
-                      conf.getDamageMedium(), conf.getShortDispersion(), conf.getCooldownBasic(),
-                      TypeProjectile::LASER, conf.getLaserRifleInclination()) {}
+        Weapon(controller, initialSpace, conf.getLaserRifleScope(), conf.getLaserRifleAmmo(),
+               conf.getDamageMedium(), conf.getShortDispersion(), conf.getCooldownBasic(),
+               TypeProjectile::LASER, conf.getLaserRifleInclination()) {}
 
 
 void LaserRifle::BeCollected(TypeCollectable& collectorTypeRef) {
@@ -22,7 +22,7 @@ void LaserRifle::Shoot(Duck* shooter) {
 }
 
 bool LaserRifle::Use(Duck* shooter) {
-    if (InstantWeapon::Use(shooter)) {
+    if (Weapon::Use(shooter)) {
         shooter->StartShooting();
         shooter->ApplyRecoil(10);
         return true;

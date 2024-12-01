@@ -8,7 +8,6 @@ public:
     explicit Armor(Transform initialSpace): Collectable(initialSpace) {}
     void BeCollected(TypeCollectable& collectorTypeRef) override {
         collectorTypeRef = TypeCollectable::ARMOR;
-        std::cout << "armor collected\n";
     }
 
     void StopUse(Duck* /*user*/) override {}

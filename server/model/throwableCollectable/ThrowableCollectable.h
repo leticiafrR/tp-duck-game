@@ -1,13 +1,13 @@
-#ifndef THROWABLE_CREATOR_H
-#define THROWABLE_CREATOR_H
+#ifndef THROWABLE_COLLECTABLE_H
+#define THROWABLE_COLLECTABLE_H
 #include <memory>
 
 #include "server/model/collectable/Collectable.h"
 
 class Throwable;
-class ThrowableCreator: public Collectable {
+class ThrowableCollectable: public Collectable {
 public:
-    explicit ThrowableCreator(const Transform& initialSpace);
+    explicit ThrowableCollectable(const Transform& initialSpace);
 
     virtual std::shared_ptr<Throwable> GetThrowable() = 0;
 
@@ -15,7 +15,7 @@ public:
     bool Use(Duck* thrower) override;
     void StopUse(Duck* /*user*/) override {}
     void Update(float /*deltaTime*/) override;
-    virtual ~ThrowableCreator() = default;
+    virtual ~ThrowableCollectable() = default;
     virtual TypeCollectable GetTypeCollectable() override = 0;
 };
 

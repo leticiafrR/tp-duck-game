@@ -1,8 +1,8 @@
 #ifndef LASER_RIFLE_H
 #define LASER_RIFLE_H
-#include "InstantWeapon.h"
+#include "Weapon.h"
 
-class LaserRifle: public InstantWeapon {
+class LaserRifle: public Weapon {
 public:
     LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                const Config& conf);

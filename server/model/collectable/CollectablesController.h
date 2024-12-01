@@ -5,8 +5,8 @@
 #include <memory>
 #include <vector>
 
-#include "CollectableSpawner.h"
-#include "Collectables.h"
+#include "spawning/CollectableSpawner.h"
+#include "spawning/Collectables.h"
 class Transform;
 class Collectable;
 class CollectableEventListener;

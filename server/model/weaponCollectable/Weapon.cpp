@@ -1,11 +1,10 @@
-#include "InstantWeapon.h"
+#include "Weapon.h"
 
 #include "server/model/Duck.h"
 
-InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
-                             const Transform& initialSpace, float scope, uint16_t ammo,
-                             uint8_t damage, float dispersionRange, float cooldown,
-                             TypeProjectile typeProjectile, float inclination):
+Weapon::Weapon(ProjectilesController& projectilesController, const Transform& initialSpace,
+               float scope, uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,
+               TypeProjectile typeProjectile, float inclination):
         Collectable(initialSpace),
         projectilesController(projectilesController),
         ammo(ammo),
@@ -18,14 +17,14 @@ InstantWeapon::InstantWeapon(ProjectilesController& projectilesController,
         inclination(inclination),
         l(projectilesController.GetInstantProjectileListener()) {}
 
-float InstantWeapon::RandomDisturbance() {
+float Weapon::RandomDisturbance() {
     std::random_device rd;
     std::mt19937 generator(rd());
     std::uniform_real_distribution<float> dist(-dispersionRange, dispersionRange);
     return dist(generator);
 }
 
-Vector2D InstantWeapon::GetShootingDirection(Duck* shooter) {
+Vector2D Weapon::GetShootingDirection(Duck* shooter) {
     Vector2D direction = shooter->GetLookVector();
     if (inclination && shooter->GetFlip() == Flip::Left) {
         direction.Rotate(-inclination);
@@ -39,14 +38,14 @@ Vector2D InstantWeapon::GetShootingDirection(Duck* shooter) {
     return direction.Normalized();
 }
 
-void InstantWeapon::Shoot(Duck* shooter) {
+void Weapon::Shoot(Duck* shooter) {
     InstantProjectile* projectile =
             new InstantProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
                                   scope, damage, typeProjectile, l);
     projectilesController.RelaseInstantProjectile(projectile);
 }
 
-bool InstantWeapon::Use(Duck* shooter) {
+bool Weapon::Use(Duck* shooter) {
     if (ammo > 0 && cooldown <= cooldownTimer) {
         Shoot(shooter);
         ammo--;
@@ -56,13 +55,13 @@ bool InstantWeapon::Use(Duck* shooter) {
     return false;
 }
 
-void InstantWeapon::Update(float deltaTime) {
+void Weapon::Update(float deltaTime) {
     if (cooldownTimer <= cooldown) {
         cooldownTimer += deltaTime;
     }
 }
 
 
-bool InstantWeapon::StillReusable() { return ammo > 0; }
+bool Weapon::StillReusable() { return ammo > 0; }
 
-void InstantWeapon::StopUse(Duck* shooter) { shooter->StopShooting(); }
+void Weapon::StopUse(Duck* shooter) { shooter->StopShooting(); }

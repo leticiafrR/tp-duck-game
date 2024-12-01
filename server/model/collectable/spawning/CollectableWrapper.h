@@ -2,7 +2,7 @@
 #define COLLECTABLE_WRAPPER_H
 #include <memory>
 
-#include "Collectable.h"
+#include "../Collectable.h"
 
 class CollectableWrapper {
 private:

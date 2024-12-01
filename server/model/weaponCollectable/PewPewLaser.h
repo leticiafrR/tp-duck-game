@@ -1,7 +1,7 @@
 #ifndef PEW_PEW_LASER_H
 #define PEW_PEW_LASER_H
-#include "InstantWeapon.h"
-class PewPewLaser: public InstantWeapon {
+#include "Weapon.h"
+class PewPewLaser: public Weapon {
 public:
     PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
                 const Config& conf);

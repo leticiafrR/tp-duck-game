@@ -13,12 +13,12 @@ target_sources(taller_server
     model/Game.cpp
     model/map/staticMap.cpp
 
-    model/weapon/InstantWeapon.cpp
-    model/weapon/PistolaCowboy.cpp
-    model/weapon/DuelingPistol.cpp
-    model/weapon/LaserRifle.cpp
-    model/weapon/PewPewLaser.cpp
-    model/weapon/Shotgun.cpp
+    model/weaponCollectable/Weapon.cpp
+    model/weaponCollectable/PistolaCowboy.cpp
+    model/weaponCollectable/DuelingPistol.cpp
+    model/weaponCollectable/LaserRifle.cpp
+    model/weaponCollectable/PewPewLaser.cpp
+    model/weaponCollectable/Shotgun.cpp
 
     model/projectile/Projectile.cpp
     model/projectile/ProjectilesController.cpp
@@ -26,19 +26,22 @@ target_sources(taller_server
     model/projectile/instant/InstantProjectile.cpp
     model/projectile/instant/BounceInstantProjectile.cpp
 
-    model/collectable/Collectable.cpp
-    model/collectable/CollectableWrapper.cpp
-    model/collectable/CollectableSpawner.cpp
-    model/collectable/Collectables.cpp
+    
+    model/collectable/spawning/CollectableWrapper.cpp
+    model/collectable/spawning/CollectableSpawner.cpp
+    model/collectable/spawning/Collectables.cpp
     model/collectable/CollectablesController.cpp
+    model/collectable/Collectable.cpp
 
 
 
     model/throwable/Throwable.cpp
     model/throwable/Grenade.cpp
     model/throwable/ThrowablesController.cpp
-    model/throwable/creator/GrenadeCreator.cpp
-    model/throwable/creator/ThrowableCreator.cpp
+
+    model/throwableCollectable/GrenadeCollectable.cpp
+    model/throwableCollectable/ThrowableCollectable.cpp
+
 
     #network
     network/sender.cpp
@@ -72,12 +75,12 @@ target_sources(taller_server
     model/Equipment.h
     
 
-    model/weapon/InstantWeapon.h
-    model/weapon/PistolaCowboy.h
-    model/weapon/DuelingPistol.h
-    model/weapon/LaserRifle.h
-    model/weapon/PewPewLaser.h
-    model/weapon/Shotgun.h
+    model/weaponCollectable/Weapon.h
+    model/weaponCollectable/PistolaCowboy.h
+    model/weaponCollectable/DuelingPistol.h
+    model/weaponCollectable/LaserRifle.h
+    model/weaponCollectable/PewPewLaser.h
+    model/weaponCollectable/Shotgun.h
 
     model/projectile/instant/InstantProjectile.h
     model/projectile/instant/BounceInstantProjectile.h
@@ -85,13 +88,12 @@ target_sources(taller_server
     model/projectile/Projectile.h
     model/projectile/ProjectilesController.h
     
-    
 
-    model/collectable/CollectableWrapper.h
-    model/collectable/Collectable.h
-    model/collectable/CollectableSpawner.h
-    model/collectable/Collectables.h
+    model/collectable/spawning/CollectableWrapper.h
+    model/collectable/spawning/CollectableSpawner.h
+    model/collectable/spawning/Collectables.h
     model/collectable/CollectablesController.h
+    model/collectable/Collectable.h
     model/collectable/Armor.h
     model/collectable/Helmet.h
 
@@ -102,8 +104,8 @@ target_sources(taller_server
     model/throwable/ThrowablesController.h
 
 
-    model/throwable/creator/GrenadeCreator.h
-    model/throwable/creator/ThrowableCreator.h
+    model/throwableCollectable/GrenadeCollectable.h
+    model/throwableCollectable/ThrowableCollectable.h
 
     network/serverProtocol.h
     network/messageSender.h

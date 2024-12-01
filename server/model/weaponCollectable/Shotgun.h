@@ -1,10 +1,10 @@
 #ifndef SHOTGUN_H
 #define SHOTGUN_H
-#include "InstantWeapon.h"
+#include "Weapon.h"
 
 #define AMMO_WITH_RELOAD(x) ((x)*2)
 
-class Shotgun: public InstantWeapon {
+class Shotgun: public Weapon {
 private:
     /* sin disparo continuo, necesita recargar municiones */
     bool ammoLoaded;
