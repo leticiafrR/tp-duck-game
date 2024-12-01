@@ -268,11 +268,10 @@ bool EditorScreen::Render() {
             spawnPoint.value().Draw(cam);
         }
         GUIManager::GetInstance().Draw(cam);
-        // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
         cam.Delay();
     }
-
+    GUIManager::GetInstance().Clear();
     return true;
 }

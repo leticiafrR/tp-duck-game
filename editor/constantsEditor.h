@@ -14,11 +14,14 @@ const std::string EDIT_LABEL = "Edit a level";
 const std::string SELECT_STR = "Select";
 const std::string ENTER_LVL_NAME = "Write the level name";
 const std::string SAVE_LABEL = "Save";
+const std::string EXIT_LABEL = "Exit";
+const std::string MENU_LABEL = "Menu options";
 
 const std::string OPTIONS_BLOCKS = "/etc/duckGame_g6/basicsGrounds.yaml";
 
 const int CREATE_LVL = 0;
 const int QUIT = -1;
 const int EDIT_LVL = 1;
+
 
 #endif

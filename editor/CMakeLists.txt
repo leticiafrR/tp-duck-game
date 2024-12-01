@@ -11,6 +11,7 @@ target_sources(taller_editor
     editWorld/PlatformOptionWidget.cpp
     editWorld/EditorScreen.cpp
     editWorld/SpawnPointWidget.cpp
+    ExitOptions.cpp
     main.cpp
     PUBLIC
     # .h files
@@ -23,4 +24,5 @@ target_sources(taller_editor
     editWorld/PlatformOptionWidget.h
     editWorld/EditorScreen.h
     editWorld/SpawnPointWidget.h
+    ExitOptions.h
     )

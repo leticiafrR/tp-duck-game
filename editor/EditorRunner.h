@@ -8,7 +8,6 @@
 class EditorRunner {
 private:
     Camera cam;
-    MapEditor writeArchive;
 
 public:
     explicit EditorRunner(Renderer& render, int fps);
