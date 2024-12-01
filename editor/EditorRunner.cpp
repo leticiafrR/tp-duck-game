@@ -4,8 +4,8 @@
 
 #include "createLevel/setLevelName.h"
 #include "editLevel/LevelsScreen.h"
+#include "editWorld/EditorScreen.h"
 
-#include "EditorScreen.h"
 #include "MenuScreen.h"
 using std::string;
 
@@ -23,7 +23,5 @@ void EditorRunner::run() {
     }
 
     EditorScreen runner(cam, writeArchive);
-    bool b = runner.Render();
-    std::cout << b << std::endl;
-    writeArchive.SaveChanges();
+    runner.Render();
 }

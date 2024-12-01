@@ -2,13 +2,6 @@
 
 #include "multimedia/gui/ButtonsManager.h"
 
-/*string LevelsScreen::OnSelectLevelPressed(const std::string& name) {
-    // AudioManager::GetInstance().PlayButtonSFX();
-    std::cout << name << std::endl;
-    return name;
-
-}*/
-
 void LevelsScreen::ReadAvaiableLevels() {
     YAML::Node config = YAML::LoadFile(AVAILABLE_LEVELS_PATH);
     auto platformsList = config[AVAILABLE_LEVELS_STR];
@@ -32,10 +25,7 @@ void LevelsScreen::ReadAvaiableLevels() {
 }
 
 LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() {}
-LevelsScreen::~LevelsScreen() {
-    cam.ClearCacheItem(DUCK_BACKGROUND.c_str());
-    // cam.ClearCacheItem("duck_game_logo.png");
-}
+LevelsScreen::~LevelsScreen() { cam.ClearCacheItem(DUCK_BACKGROUND.c_str()); }
 
 
 string LevelsScreen::Render(bool lockerOnly) {
@@ -51,16 +41,11 @@ string LevelsScreen::Render(bool lockerOnly) {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
-                    exit(0);
-                    break;
+                    running = false;
+                    return "";
             }
             ButtonsManager::GetInstance().HandleEvent(event, cam);
         }
-
-        // if (endFunction()) {
-        //     break;
-        // }
-
         GUIManager::GetInstance().Draw(cam);
         cam.Render();
         cam.Delay();

@@ -1,5 +1,6 @@
 #include "MapBlock2D.h"
 
+#include "constants.h"
 MapBlock2D::MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
                        const Transform& transform, float tileSize):
         transform(transform), renderData(imageFilename, sheetDataFilename, tileSize) {}
@@ -8,7 +9,26 @@ MapBlock2D::~MapBlock2D() = default;
 
 void MapBlock2D::SetBorders(bool left, bool right, bool top, bool bottom) {
     renderData.SetBorders(left, right, top, bottom);
+    vector<string> newEdges;
+    if (left) {
+        newEdges.emplace_back(LEFT_STR);
+    }
+
+    if (right) {
+        newEdges.emplace_back(RIGHT_STR);
+    }
+
+    if (top) {
+        newEdges.emplace_back(TOP_STR);
+    }
+
+    if (bottom) {
+        newEdges.emplace_back(BOTTOM_STR);
+    }
+    edges = newEdges;
 }
+
+vector<string> MapBlock2D::GetEdges() { return edges; }
 
 Transform& MapBlock2D::GetTransform() { return transform; }
 

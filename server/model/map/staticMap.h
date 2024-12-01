@@ -23,7 +23,7 @@ private:
     std::vector<float> limits;
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
-    std::vector<Vector2D> weaponsSpawnPoints;
+    std::vector<Vector2D> collectablesSpawnPoints;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);

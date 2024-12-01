@@ -93,7 +93,6 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
 
 endif()
 
-# Add this for common to use sdl and yaml
 add_dependencies(taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 target_link_libraries(taller_multimedia SDL2pp::SDL2pp yaml-cpp)
 

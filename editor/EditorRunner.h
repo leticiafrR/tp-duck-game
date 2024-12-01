@@ -2,9 +2,8 @@
 #define EDITORRUNNER_H
 #include <utility>
 
+#include "editWorld/mapEditor.h"
 #include "multimedia/Camera.h"
-
-#include "mapEditor.h"
 
 class EditorRunner {
 private:
@@ -14,5 +13,6 @@ private:
 public:
     explicit EditorRunner(Renderer& render, int fps);
     void run();
+    ~EditorRunner() = default;
 };
 #endif
