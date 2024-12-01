@@ -43,6 +43,10 @@ private:
             {TypeCollectable::DUELING_PISTOL,
              HendItemRenderData("pistols.png", "pistols.yaml", "dueling_pistol", Vector2D(0, -0.4f),
                                 Vector2D(4, 4))},
+
+            {TypeCollectable::MAGNUM, HendItemRenderData("pistols.png", "pistols.yaml", "magnum",
+                                                         Vector2D(0, -0.4f), Vector2D(4, 4))},
+
             {TypeCollectable::AK47,
              HendItemRenderData("machine_guns.png", "machine_guns.yaml", "ak_47",
                                 Vector2D(0, -0.4f), Vector2D(4, 4))},

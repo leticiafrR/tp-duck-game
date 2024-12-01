@@ -20,6 +20,10 @@ private:
                                 Vector2D(2.8, 1.4))},
             {TypeCollectable::DUELING_PISTOL,
              SpriteRendererData("pistols.png", "pistols.yaml", "dueling_pistol", Vector2D(4, 4))},
+
+            {TypeCollectable::MAGNUM,
+             SpriteRendererData("pistols.png", "pistols.yaml", "magnum", Vector2D(4, 4))},
+
             {TypeCollectable::AK47,
              SpriteRendererData("machine_guns.png", "machine_guns.yaml", "ak_47", Vector2D(4, 4))},
             {TypeCollectable::PEW_PEW_LASER,
