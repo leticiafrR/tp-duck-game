@@ -2,8 +2,12 @@
 
 #include "common/Collision.h"
 #include "server/model/map/staticMap.h"
+
 #define THROWABLE_SIZE 1
 #define COEFFICIENT_FRICTION_AIR 15
+#define THROWING_INTESITY 20
+#define VERTICAL_THROWING_INTESITY 35
+#define OFFSET_FROM_THROWER 2
 
 
 Throwable::Throwable(float mass):
@@ -17,9 +21,9 @@ Throwable::Throwable(float mass):
 
 Vector2D Throwable::GetForceToBeThrown(const Vector2D& direction) {
     if (!direction.IsFarFrom(Vector2D::Up())) {
-        return Vector2D::Up() * 30;
+        return Vector2D::Up() * VERTICAL_THROWING_INTESITY;
     }
-    return (((direction) + Vector2D::Up()) * 20);
+    return ((direction + Vector2D::Up()) * THROWING_INTESITY);
 }
 
 void Throwable::ApplyGravity(const StaticMap& map, float deltaTime) {
@@ -46,7 +50,7 @@ void Throwable::Update(const StaticMap& map, float deltaTime) {
     }
 }
 void Throwable::FollowPosition(const Vector2D& duckPos) {
-    mySpace.SetPos(duckPos + (Vector2D::Right() * 2));
+    mySpace.SetPos(duckPos + (Vector2D::Right() * OFFSET_FROM_THROWER));
 }
 
 void Throwable::HandleOutOfBounds(float /* disp*/) { MarkAsDead(); }
