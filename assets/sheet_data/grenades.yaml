@@ -8,3 +8,5 @@ banana:
 banana_floor:
   - { x: 1, y: 67, w: 16, h: 16 }
 
+fragment:
+  - { x: 0, y: 135, w: 16, h: 16 }

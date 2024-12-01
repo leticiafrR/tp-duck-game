@@ -19,7 +19,8 @@ private:
                                                         "machine_bullet", Vector2D(1, 1))},
             {TypeProjectile::LASER,
              SpriteRendererData("laser.png", "laser.yaml", "laser_ray", Vector2D(3, 1.5))},
-            {TypeProjectile::FRAGMENT, SpriteRendererData("", "", "")},
+            {TypeProjectile::FRAGMENT,
+             SpriteRendererData("grenades.png", "grenades.yaml", "fragment", Vector2D(2, 2))},
 
             {TypeProjectile::BANANA,
              SpriteRendererData("grenades.png", "grenades.yaml", "banana")}};
