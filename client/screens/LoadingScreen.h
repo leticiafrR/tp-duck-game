@@ -11,16 +11,18 @@
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
 
-class LoadingScreen: BaseScreen {
+class LoadingScreen: public BaseScreen {
 private:
+    Image bg;
+    Text titleText;
+
     Function<bool> endFunction;
 
 public:
-    LoadingScreen(Camera& cam, bool& wasClosed, Function<bool> endFunction);
+    LoadingScreen(Camera& cam, bool& wasClosed, Function<bool> endFunction, const string& text = "",
+                  bool lockerOnly = false);
 
     ~LoadingScreen();
-
-    void Run(const string& text = "", bool lockerOnly = false);
 
     void InitRun() override;
     void TakeInput(SDL_Event event) override;

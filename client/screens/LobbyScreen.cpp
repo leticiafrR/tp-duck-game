@@ -28,15 +28,18 @@ void LobbyScreen::OnStartButtonPressed() {
 
     client.StartMatch();
     bool startSuccess;
-    LoadingScreen loading(cam, wasClosed, [this, &startSuccess]() {
-        std::shared_ptr<ResultStartingMatch> startResult = nullptr;
-        if (client.TryRecvNetworkMsg(startResult)) {
-            startSuccess = startResult->success;
-            return true;
-        }
-        return false;
-    });
-    loading.Run("Waiting for server", true);
+    LoadingScreen loading(
+            cam, wasClosed,
+            [this, &startSuccess]() {
+                std::shared_ptr<ResultStartingMatch> startResult = nullptr;
+                if (client.TryRecvNetworkMsg(startResult)) {
+                    startSuccess = startResult->success;
+                    return true;
+                }
+                return false;
+            },
+            "Waiting for server", true);
+    loading.Run();
 
     if (wasClosed)
         return;

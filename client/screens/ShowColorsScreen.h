@@ -25,23 +25,29 @@ private:
 
 public:
     DuckColorItemGUI(Vector2D pos, const DuckClientRenderer& duck);
+    void SetActive(bool active);
     ~DuckColorItemGUI();
 };
 
 
 class ShowColorsScreen {
 private:
-    Camera& cam;
-
-    map<PlayerID_t, shared_ptr<DuckClientRenderer>>& playersData;
     Image bg;
+    ImageTween bgTween;
+    Timer timer;
+
+    bool finished;
 
     vector<shared_ptr<DuckColorItemGUI>> ducksGUI;
 
 public:
-    ShowColorsScreen(Camera& cam, map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks);
+    ShowColorsScreen();
 
-    void Run(Callback drawBack);
+    void Show(map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks);
+    void Update(float deltaTime);
+
+    void Finish();
+    bool HasFinished();
 
     ~ShowColorsScreen();
 };

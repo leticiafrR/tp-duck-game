@@ -6,17 +6,26 @@ void MatchListScreen::OnCreatePressed() {
     playersCountSelection.Display([this](uint8_t playersCount) {
         bool createSuccess;
         client.CreateMatch(playersCount);
-        LoadingScreen loading(cam, wasClosed, [this, &createSuccess]() {
-            std::shared_ptr<ResultJoining> joinResult = nullptr;
-            if (client.TryRecvNetworkMsg(joinResult)) {
-                createSuccess = joinResult->eCode == 0;
-                return true;
-            }
-            return false;
-        });
+        LoadingScreen loading(
+                cam, wasClosed,
+                [this, &createSuccess]() {
+                    if (!client.IsConnected()) {
+                        running = false;
+                        return true;
+                    }
 
-        loading.Run("Creating match");
-        if (wasClosed)
+                    std::shared_ptr<ResultJoining> joinResult = nullptr;
+                    if (client.TryRecvNetworkMsg(joinResult)) {
+                        createSuccess = joinResult->eCode == 0;
+                        return true;
+                    }
+                    return false;
+                },
+                "Creating match");
+
+        loading.Run();
+
+        if (wasClosed || !running)
             return;
 
         if (createSuccess) {
@@ -32,16 +41,19 @@ void MatchListScreen::OnJoinLobbyPressed(int id) {
     playersCountSelection.Display([this, id](uint8_t playersCount) {
         bool joinSuccess;
         client.SelectMatch(id, playersCount);
-        LoadingScreen loading(cam, wasClosed, [this, &joinSuccess]() {
-            std::shared_ptr<ResultJoining> joinResult = nullptr;
-            if (client.TryRecvNetworkMsg(joinResult)) {
-                joinSuccess = joinResult->eCode == 0;
-                return true;
-            }
-            return false;
-        });
-        loading.Run("Joining match");
-        if (wasClosed)
+        LoadingScreen loading(
+                cam, wasClosed,
+                [this, &joinSuccess]() {
+                    std::shared_ptr<ResultJoining> joinResult = nullptr;
+                    if (client.TryRecvNetworkMsg(joinResult)) {
+                        joinSuccess = joinResult->eCode == 0;
+                        return true;
+                    }
+                    return false;
+                },
+                "Joining match");
+        loading.Run();
+        if (wasClosed || !running)
             return;
 
         if (joinSuccess) {
@@ -60,15 +72,18 @@ void MatchListScreen::OnRefreshPressed() {
 }
 
 void MatchListScreen::WaitRefresh() {
-    LoadingScreen loading(cam, wasClosed, [this]() {
-        std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
-        if (client.TryRecvNetworkMsg(lobbyListResult)) {
-            LoadWidgetList(lobbyListResult->matches);
-            return true;
-        }
-        return false;
-    });
-    loading.Run("Getting available lobbies");
+    LoadingScreen loading(
+            cam, wasClosed,
+            [this]() {
+                std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
+                if (client.TryRecvNetworkMsg(lobbyListResult)) {
+                    LoadWidgetList(lobbyListResult->matches);
+                    return true;
+                }
+                return false;
+            },
+            "Getting available lobbies");
+    loading.Run();
 }
 
 void MatchListScreen::LoadWidgetList(std::vector<DataMatch> data) {

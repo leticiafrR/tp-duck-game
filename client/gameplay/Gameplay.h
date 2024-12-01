@@ -50,6 +50,7 @@ private:
     list<BulletRenderer> bullets;
     unordered_map<CollectableID_t, CollectableRenderer> collectables;
     unordered_map<ThrowableID_t, ThrowableRenderer> throwables;
+    ShowColorsScreen showColorsPanel;
 
     GameplayGUI gui;
 

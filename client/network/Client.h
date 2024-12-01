@@ -20,6 +20,9 @@
 #define MAX_COMMANDS 100
 #define DEFAULT_LOCAL_PLAYERS 1
 
+struct ServerUnavailable: public std::runtime_error {
+    ServerUnavailable(): std::runtime_error("Server connection unavailable") {}
+};
 
 class Client {
 private:
@@ -73,12 +76,23 @@ public:
     }
 
     bool TrySendRequest(CommandCode code, uint8_t indexLocalPlayer = DEFAULT_LOCAL_PLAYERS - 1) {
+        if (!IsConnected()) {
+            std::cout << "No conectado en send!!!\n";
+            throw ServerUnavailable();
+        }
+
         Command command(code, indexLocalPlayer);
         return cmmdQueue.try_push(command);
     }
 
     template <typename NetworkMsgDerivedClass>
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsgDerivedClass>& concretMsg) {
+
+        if (!IsConnected()) {
+            std::cout << "No conectado en recv!!!\n";
+            throw ServerUnavailable();
+        }
+
         std::shared_ptr<NetworkMsg> msg;
         if (msgQueue.try_pop(msg)) {
             concretMsg = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
