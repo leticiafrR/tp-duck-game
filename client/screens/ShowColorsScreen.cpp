@@ -11,53 +11,48 @@ DuckColorItemGUI::DuckColorItemGUI(Vector2D pos, const DuckClientRenderer& duck)
 
 DuckColorItemGUI::~DuckColorItemGUI() = default;
 
-ShowColorsScreen::ShowColorsScreen(Camera& cam,
-                                   map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks):
-        cam(cam),
-        playersData(ducks),
+void DuckColorItemGUI::SetActive(bool active) {
+    imgColor.SetActive(active);
+    txtNickname.SetActive(active);
+}
+
+
+ShowColorsScreen::ShowColorsScreen():
         bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
-           ColorExtension::Black().SetAlpha(180)) {
+           ColorExtension::Black().SetAlpha(180)),
+        bgTween(bg, ColorExtension::Empty(), 0.7f, [this]() { Finish(); }),
+        timer(3.0f, [this]() { bgTween.Play(); }),
+        finished(true) {
+    bg.SetActive(false);
+}
+
+void ShowColorsScreen::Show(map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks) {
+    finished = false;
+
+    bg.SetActive(true);
 
     Vector2D initialPos(-100, 100);
     for (const auto& it: ducks) {
         ducksGUI.emplace_back(std::make_shared<DuckColorItemGUI>(initialPos, *it.second));
         initialPos += Vector2D::Down() * 80;
     }
+
+    timer.Start();
 }
 
 ShowColorsScreen::~ShowColorsScreen() = default;
 
-void ShowColorsScreen::Run(Callback drawBack) {
+void ShowColorsScreen::Update(float deltaTime) {
 
-    bool running = true;
+    timer.Update(deltaTime);
+    TweenManager::GetInstance().Update(deltaTime);
+}
 
-    ImageTween bgTween(bg, ColorExtension::Empty(), 0.7f, [&running]() { running = false; });
-
-    Timer timer(3.0f, [&bgTween]() { bgTween.Play(); });
-
-    timer.Start();
-
-    cam.InitRate();
-
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    exit(0);
-                    break;
-            }
-        }
-
-        drawBack();
-
-        timer.Update(cam.GetRateDeltatime());
-        TweenManager::GetInstance().Update(cam.GetRateDeltatime());
-        GUIManager::GetInstance().Draw(cam);
-
-        cam.Render();
-        cam.Delay();
+void ShowColorsScreen::Finish() {
+    finished = true;
+    bg.SetActive(false);
+    for (const auto& it: ducksGUI) {
+        it->SetActive(false);
     }
 }
+bool ShowColorsScreen::HasFinished() { return finished; }

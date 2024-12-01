@@ -81,12 +81,12 @@ public:
     void push(T const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
-        if (closed) {
-            throw ClosedQueue();
+        while (q.size() == this->max_size && !closed) {
+            is_not_full.wait(lck);
         }
 
-        while (q.size() == this->max_size) {
-            is_not_full.wait(lck);
+        if (closed) {
+            throw ClosedQueue();
         }
 
         if (q.empty()) {
@@ -126,6 +126,7 @@ public:
 
         closed = true;
         is_not_empty.notify_all();
+        is_not_full.notify_all();
     }
 
 private:

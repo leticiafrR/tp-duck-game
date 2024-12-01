@@ -47,6 +47,9 @@ private:
 
     void KillClient(Client& client);
 
+
+    void PlayConnected(Client& client);
+
 public:
     ClientRunner(Renderer& render, int fps);
     ~ClientRunner();

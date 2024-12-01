@@ -173,6 +173,9 @@ Gameplay::~Gameplay() = default;
 void Gameplay::TakeInput(SDL_Event event) {
     if (finishing)
         return;
+    if (!showColorsPanel.HasFinished()) {
+        return;
+    }
 
     controls.TakeInputEvent(event);
 }
@@ -182,17 +185,22 @@ void Gameplay::InitRun() {
     finishing = false;
     camController.Reset();
     if (isInitial) {
-        ShowColorsScreen(cam, players).Run([this]() { DrawGameWorld(0); });
+        showColorsPanel.Show(players);
     }
 }
 
 void Gameplay::Update(float deltaTime) {
-    TakeSnapshots([this]() { fadePanelTween.Play(); });
+    if (!showColorsPanel.HasFinished()) {
+        showColorsPanel.Update(deltaTime);
+    } else {
+        TakeSnapshots([this]() { fadePanelTween.Play(); });
+    }
 
     camController.Update(deltaTime);
     TweenManager::GetInstance().Update(deltaTime);
 
     BulletsReapDead();
+
     DrawGameWorld(deltaTime);
     GUIManager::GetInstance().Draw(cam);
 }

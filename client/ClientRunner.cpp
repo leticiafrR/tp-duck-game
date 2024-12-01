@@ -2,15 +2,19 @@
 
 PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) {
     PlayerID_t winnerId;
-    LoadingScreen(cam, wasClosed, [&client, &winnerId]() {
-        shared_ptr<FinalWinner> msg;
+    LoadingScreen loadingWinner(
+            cam, wasClosed,
+            [&client, &winnerId]() {
+                shared_ptr<FinalWinner> msg;
 
-        if (client.TryRecvNetworkMsg(msg)) {
-            winnerId = msg->winner;
-            return true;
-        }
-        return false;
-    }).Run("GETTING WINNER...");
+                if (client.TryRecvNetworkMsg(msg)) {
+                    winnerId = msg->winner;
+                    return true;
+                }
+                return false;
+            },
+            "GETTING WINNER...");
+    loadingWinner.Run();
     auto it = std::find_if(players.begin(), players.end(),
                            [&winnerId](PlayerData p) { return p.playerID == winnerId; });
     return *it;
@@ -19,52 +23,62 @@ PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) 
 void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
     std::cout << "Waiting for final group"
               << "\n";
-    LoadingScreen loadingFinalGroup(cam, wasClosed, [&isFinalGroup, &client]() {
-        shared_ptr<FinalGroupGame> finalGroupData;
+    LoadingScreen loadingFinalGroup(
+            cam, wasClosed,
+            [&isFinalGroup, &client]() {
+                shared_ptr<FinalGroupGame> finalGroupData;
 
-        if (client.TryRecvNetworkMsg(finalGroupData)) {
-            isFinalGroup = finalGroupData->finalGroupGame;
-            std::cout << "Received final group"
-                      << "\n";
-            return true;
-        }
-        return false;
-    });
-    loadingFinalGroup.Run("LOADING...");
+                if (client.TryRecvNetworkMsg(finalGroupData)) {
+                    isFinalGroup = finalGroupData->finalGroupGame;
+                    std::cout << "Received final group"
+                              << "\n";
+                    return true;
+                }
+                return false;
+            },
+            "LOADING...");
+    loadingFinalGroup.Run();
 }
 
 void ClientRunner::LoadRoundResults(Client& client, bool& matchEnded,
                                     unordered_map<PlayerID_t, int>& results) {
-    LoadingScreen matchEndedScreen(cam, wasClosed, [&client, &matchEnded, &results]() {
-        shared_ptr<GamesRecountDto> recountData;
-        if (client.TryRecvNetworkMsg(recountData)) {
-            matchEnded = recountData->matchEnded;
-            results = recountData->results;
-            return true;
-        }
-        return false;
-    });
-    matchEndedScreen.Run("GETTING RESULTS");
+    LoadingScreen matchEndedScreen(
+            cam, wasClosed,
+            [&client, &matchEnded, &results]() {
+                shared_ptr<GamesRecountDto> recountData;
+                if (client.TryRecvNetworkMsg(recountData)) {
+                    matchEnded = recountData->matchEnded;
+                    results = recountData->results;
+                    return true;
+                }
+                return false;
+            },
+            "GETTING RESULTS");
+    matchEndedScreen.Run();
 }
 
 void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isInitial) {
     shared_ptr<GameSceneDto> mapData = nullptr;
     shared_ptr<Snapshot> firstSnapshot = nullptr;
 
-    LoadingScreen laodRoundScreen(cam, wasClosed, [&client, &mapData, &firstSnapshot]() {
-        if (!mapData)
-            client.TryRecvNetworkMsg(mapData);
-        if (mapData && !firstSnapshot)
-            client.TryRecvNetworkMsg(firstSnapshot);
-        return mapData && firstSnapshot;
-    });
-
-    laodRoundScreen.Run("LOADING...");
+    LoadingScreen(
+            cam, wasClosed,
+            [&client, &mapData, &firstSnapshot]() {
+                if (!mapData)
+                    client.TryRecvNetworkMsg(mapData);
+                if (mapData && !firstSnapshot)
+                    client.TryRecvNetworkMsg(firstSnapshot);
+                return mapData && firstSnapshot;
+            },
+            "LOADING...")
+            .Run();
     Gameplay(client, cam, wasClosed, matchData, *mapData, *firstSnapshot, isInitial).Run();
 }
 
 void ClientRunner::ErrorScreen(const string& text) {
-    LoadingScreen(cam, wasClosed, []() { return false; }).Run(text);
+    LoadingScreen(
+            cam, wasClosed, []() { return false; }, text)
+            .Run();
 }
 
 void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
@@ -81,72 +95,87 @@ ClientRunner::~ClientRunner() = default;
 
 void ClientRunner::KillClient(Client& client) {
     std::cout << "Esperando hilos\n";
-    client.KillComunicationThreads();
+    if (client.IsConnected())
+        client.KillComunicationThreads();
     client.JoinCommunicationThreads();
     std::cout << "Hilos matados\n";
 }
 
-void ClientRunner::Run() {
-    try {
-        string nickname;
-        MenuScreen(cam, wasClosed, nickname).Run();
-        if (wasClosed)
-            return;
+void ClientRunner::PlayConnected(Client& client) try {
+    bool isOwner;
+    MatchListScreen(cam, wasClosed, client, isOwner).Run();
 
-        Client client("8080", "localhost", nickname);
+    if (wasClosed) {
+        KillClient(client);
+        return;
+    }
 
-        bool isOwner;
-        MatchListScreen(cam, wasClosed, client, isOwner).Run();
+    shared_ptr<MatchStartDto> matchDataPtr;
+    LobbyScreen(cam, wasClosed, client, isOwner, matchDataPtr).Run();
 
-        shared_ptr<MatchStartDto> matchDataPtr;
-        LobbyScreen(cam, wasClosed, client, isOwner, matchDataPtr).Run();
+    if (wasClosed) {
+        KillClient(client);
+        return;
+    }
+
+    MatchStartDto matchData = *matchDataPtr;
+
+    AudioManager::GetInstance().PlayGameMusic();
+    bool matchEnded = false;
+    unordered_map<PlayerID_t, int> roundResults;
+    bool isInitial = true;
+    while (!matchEnded && !wasClosed) {
+        PlayRound(client, matchData, isInitial);
+
+        isInitial = false;
+
+        bool isFinalGroup = false;
+        LoadFinalGroup(client, isFinalGroup);
+
+        while (!isFinalGroup && !wasClosed) {
+            PlayRound(client, matchData, isInitial);
+            LoadFinalGroup(client, isFinalGroup);
+        }
+
+        LoadRoundResults(client, matchEnded, roundResults);
+
+        if (!matchEnded) {
+            ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
+        }
 
         if (wasClosed) {
             KillClient(client);
             return;
         }
+    }
+    AudioManager::GetInstance().StopMusic();
 
-        MatchStartDto matchData = *matchDataPtr;
+    std::optional<PlayerData> winner = LoadWinner(client, matchData.playersData);
 
-        AudioManager::GetInstance().PlayGameMusic();
-        bool matchEnded = false;
-        unordered_map<PlayerID_t, int> roundResults;
-        bool isInitial = true;
-        while (!matchEnded && !wasClosed) {
-            PlayRound(client, matchData, isInitial);
+    ShowResultsScreen(winner, matchData.playersData, roundResults);
 
-            isInitial = false;
+    KillClient(client);
 
-            bool isFinalGroup = false;
-            LoadFinalGroup(client, isFinalGroup);
+} catch (const ServerUnavailable& e) {
+    std::cerr << e.what() << std::endl;
+    client.JoinCommunicationThreads();
+    ErrorScreen("Can't connect to server, please try again later");
+} catch (std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    client.JoinCommunicationThreads();
+    ErrorScreen("An unexpected error occurred, please try again later");
+}
 
-            while (!isFinalGroup && !wasClosed) {
-                PlayRound(client, matchData, isInitial);
-                LoadFinalGroup(client, isFinalGroup);
-            }
+void ClientRunner::Run() {
+    string nickname;
+    MenuScreen(cam, wasClosed, nickname).Run();
+    if (wasClosed)
+        return;
 
-            LoadRoundResults(client, matchEnded, roundResults);
+    try {
+        Client client("8080", "localhost", nickname);
+        PlayConnected(client);
 
-            if (!matchEnded) {
-                ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
-            }
-
-            if (wasClosed) {
-                KillClient(client);
-                return;
-            }
-        }
-        AudioManager::GetInstance().StopMusic();
-
-        PlayerData winner = LoadWinner(client, matchData.playersData);
-
-        ShowResultsScreen(winner, matchData.playersData, roundResults);
-
-        client.JoinCommunicationThreads();
-
-    } catch (ConnectionFailed& e) {
-        std::cerr << e.what() << std::endl;
-        ErrorScreen("Can't connect to server, please try again later");
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         ErrorScreen("An unexpected error occurred, please try again later");
