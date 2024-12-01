@@ -1,13 +1,20 @@
 #include "CollectablesController.h"
 
+#include <algorithm>
+
 #include "server/config.h"
 #include "server/model/event/CollectableEventListener.h"
 #include "server/model/projectile/ProjectilesController.h"
 
 CollectablesController::CollectablesController(ProjectilesController& projectilesController,
                                                const Config& conf,
-                                               const std::vector<Vector2D>& positions):
-        collectablesSpawner(positions, projectilesController, conf) {}
+                                               const std::vector<Vector2D>& positions) {
+    std::transform(positions.begin(), positions.end(), std::back_inserter(spawners),
+                   [&](const Vector2D& pos) {
+                       return CollectableSpawner(pos, projectilesController, conf);
+                   });
+}
+
 
 std::shared_ptr<Collectable> CollectablesController::TryCollect(const Transform& collectorSpace,
                                                                 TypeCollectable& collectorType) {
@@ -24,5 +31,7 @@ void CollectablesController::RegisterListener(CollectableEventListener* collecta
 }
 
 void CollectablesController::Update(float deltaTime) {
-    collectablesSpawner.Update(deltaTime, collectables);
+    for (CollectableSpawner& spawner: spawners) {
+        spawner.Update(deltaTime, collectables);
+    }
 }

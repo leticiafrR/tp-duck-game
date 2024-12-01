@@ -25,6 +25,5 @@ public:
 
     std::shared_ptr<Collectable> PickCollectable(const Transform& collectorSpace,
                                                  TypeCollectable& collectorType);
-    void Reapdead();
 };
 #endif

@@ -9,7 +9,6 @@ void CollectableWrapper::BeCollected(TypeCollectable& itemInHandRef) {
     if (sourceTimer) {
         *sourceTimer = 0;
         sourceTimer.reset();
-        std::cout << "se reinicia contador\n";
     }
     collectable->BeCollected(itemInHandRef);
 }

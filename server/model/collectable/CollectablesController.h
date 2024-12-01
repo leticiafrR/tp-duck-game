@@ -5,8 +5,8 @@
 #include <memory>
 #include <vector>
 
+#include "CollectableSpawner.h"
 #include "Collectables.h"
-#include "CollectablesSpawner.h"
 class Transform;
 class Collectable;
 class CollectableEventListener;
@@ -16,7 +16,7 @@ class Config;
 class CollectablesController {
 private:
     Collectables collectables;
-    CollectablesSpawner collectablesSpawner;
+    std::vector<CollectableSpawner> spawners;
 
 public:
     explicit CollectablesController(ProjectilesController& projectilesController,

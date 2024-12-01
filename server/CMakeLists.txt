@@ -30,7 +30,6 @@ target_sources(taller_server
     model/collectable/CollectableWrapper.cpp
     model/collectable/CollectableSpawner.cpp
     model/collectable/Collectables.cpp
-    model/collectable/CollectablesSpawner.cpp
     model/collectable/CollectablesController.cpp
 
 
@@ -92,7 +91,6 @@ target_sources(taller_server
     model/collectable/Collectable.h
     model/collectable/CollectableSpawner.h
     model/collectable/Collectables.h
-    model/collectable/CollectablesSpawner.h
     model/collectable/CollectablesController.h
     model/collectable/Armor.h
     model/collectable/Helmet.h

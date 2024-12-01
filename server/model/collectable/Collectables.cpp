@@ -36,16 +36,3 @@ std::shared_ptr<Collectable> Collectables::PickCollectable(const Transform& coll
     }
     return std::shared_ptr<Collectable>();
 }
-
-void Collectables::Reapdead() {
-    // for (auto it = collectablesWrapps.begin(); it !=collectablesWrapps.end();) {
-    //     if (it->second.) {
-    //         std::cout << "muriò el jugador con ID: [" << it->first << "]\n";
-    //         delete it->second;
-    //         it = players.erase(it);
-    //         livePlayers--;
-    //     } else {
-    //         ++it;
-    //     }
-    // }
-}

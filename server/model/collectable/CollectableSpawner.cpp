@@ -47,8 +47,6 @@ std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable 
             break;
     }
     return std::make_shared<GrenadeCreator>(projectilesController, spawnPlace);
-    // return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
-    // return std::make_shared<Armor>(spawnPlace);
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {
