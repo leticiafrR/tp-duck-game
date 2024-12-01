@@ -6,11 +6,13 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "editWorld/mapEditor.h"
+#include "multimedia/gui/GUIManager.h"
+
 #include "EditorRunner.h"
 #include "MenuScreen.h"
 #include "constants.h"
 #include "constantsEditor.h"
-#include "mapEditor.h"
 
 const int WEIGHT_SCREEN = 940;
 const int HIGH_SCREEN = 940;
@@ -30,6 +32,7 @@ int main() {
 
     EditorRunner editor(render, 60);
     editor.run();
-    SDL_Quit();
+    FontCache::Clear();
+    GUIManager::GetInstance().Clear();
     return SUCCESS_EXIT;
 }

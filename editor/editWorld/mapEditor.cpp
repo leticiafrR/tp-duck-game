@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <set>
 
+#include "common/Collision.h"
 #include "common/Transform.h"
 #include "common/Vector2D.h"
 
@@ -48,7 +49,7 @@ void MapEditor::SaveChanges() {
         std::cerr << "Error reading available levels:" << e.what() << std::endl;
         return;
     }
-    auto it = std::find(availableLevels.begin(), availableLevels.end(), filePath);
+    auto it = std::find(availableLevels.begin(), availableLevels.end(), fileName);
     if (it == availableLevels.end()) {
         availableLevels.emplace_back(fileName);
         availableConfig[AVAILABLE_LEVELS_STR] = availableLevels;
@@ -61,6 +62,34 @@ void MapEditor::SaveChanges() {
         fout2 << availableConfig;
         fout2.close();
     }
+}
+optional<GroundDto> MapEditor::TakePltaform(const Vector2D pos) {
+    vector<string> platforms = config[PLATFORMS_STR].as<vector<string>>();
+    for (const auto& name: platforms) {
+        float x = config[name][X_STR].as<float>();
+        float y = config[name][Y_STR].as<float>();
+        float w = config[name][WEIGHT_STR].as<float>();
+        float h = config[name][HIGH_STR].as<float>();
+        vector<string> edgesConfig = config[name][EDGES_STR].as<vector<string>>();
+        set<VISIBLE_EDGES> edges;
+        for (auto edge: edgesConfig) {
+            if (edge == LEFT_STR)
+                edges.insert(LEFT);
+            else if (edge == RIGHT_STR)
+                edges.insert(RIGHT);
+            else if (edge == TOP_STR)
+                edges.insert(TOP);
+            else if (edge == BOTTOM_STR)
+                edges.insert(BOTTOM);
+        }
+
+        GroundDto platform(Transform(Vector2D(x, y), Vector2D(w, h), NULL_ANGLE), edges);
+        if (Collision::RectCollision(platform.mySpace, Transform(pos, Vector2D(2, 2), 0))) {
+            DeleteAPlatform(name);
+            return platform;
+        }
+    }
+    return std::nullopt;
 }
 void MapEditor::AddFileName(const string& _fileName) {
     fileName = _fileName;
@@ -128,7 +157,7 @@ void MapEditor::ModificateAPlataform(const string& plataformName, const float& x
     config[plataformName][HIGH_STR] = h;
     config[plataformName][EDGES_STR] = edges;
 }
-void MapEditor::DeleteAPlataform(const string& platformName) {
+void MapEditor::DeleteAPlatform(const string& platformName) {
     if (config[platformName]) {
         config.remove(platformName);
         vector<string> platforms = config[PLATFORMS_STR].as<vector<string>>();
@@ -144,7 +173,7 @@ void MapEditor::DeleteAPlataform(const string& platformName) {
                   << std::endl;
     }
 }
-vector<GroundDto> MapEditor::GetPlataforms() {
+vector<GroundDto> MapEditor::GetPlatforms() {
     vector<GroundDto> grounds;
     vector<string> platforms = config[PLATFORMS_STR].as<vector<string>>();
     for (const auto& name: platforms) {
@@ -170,13 +199,5 @@ vector<GroundDto> MapEditor::GetPlataforms() {
     return grounds;
 }
 GameSceneDto MapEditor::GetGameScene() {
-    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlataforms());
-}
-
-void MapEditor::Print() {
-    vector<GroundDto> p = GetPlataforms();
-
-    for (auto& it: p) {
-        std::cout << it.mySpace.ToString() << std::endl;
-    }
+    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms());
 }

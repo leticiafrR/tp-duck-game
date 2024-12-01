@@ -1,7 +1,8 @@
 #include "SpawnPointWidget.h"
 
+#include "editor/constantsEditor.h"
+
 #include "constants.h"
-#include "constantsEditor.h"
 
 SpawnPointWidget::SpawnPointWidget(CallbackParam<pair<Object2D, int>> onSelect, int _type,
                                    const std::string& fileName, Vector2D pos,

@@ -10,8 +10,7 @@ void SetLevelName::TakeInput() {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
-                exit(0);
-                break;
+                return;
             case SDL_KEYDOWN: {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
 
@@ -64,11 +63,7 @@ SetLevelName::SetLevelName(Camera& c):
                 BUTTON_1_IMAGE.c_str(),
                 RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
                               Vector2D(0.5, 0.5)),
-                [this]() {
-                    running = false;
-                    // AudioManager::GetInstance().PlayButtonSFX();
-                },
-                Color(40, 40, 40)),
+                [this]() { running = false; }, Color(40, 40, 40)),
 
         buttonText(CREATE_LABEL.c_str(), 200,
                    RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
@@ -78,15 +73,6 @@ SetLevelName::SetLevelName(Camera& c):
 string SetLevelName::Render() {
     running = true;
 
-    // Transform& btnTransform = startButton.GetRectTransform().GetTransform();
-    // Transform& textTransform = buttonText.GetRectTransform().GetTransform();
-
-    // TransformTween btnTween(btnTransform, btnTransform.GetSize() * 1.1f, 0.6f);
-    // TransformTween textTween(textTransform, textTransform.GetSize() * 1.1f, 0.6f);
-    // btnTween.SetLoops(-1, LoopType::Yoyo);
-    // textTween.SetLoops(-1, LoopType::Yoyo);
-    // btnTween.Play();
-    // textTween.Play();
     cam.InitRate();
 
     while (running) {
@@ -101,7 +87,6 @@ string SetLevelName::Render() {
         buttonText.SetVisible(nicknameInput.size() != 0);
 
         GUIManager::GetInstance().Draw(cam);
-        // TweenManager::GetInstance().Update(cam.GetRateDeltatime());
 
         cam.Render();
         cam.Delay();

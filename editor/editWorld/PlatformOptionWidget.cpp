@@ -1,7 +1,8 @@
 #include "PlatformOptionWidget.h"
 
+#include "editor/constantsEditor.h"
+
 #include "constants.h"
-#include "constantsEditor.h"
 
 PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<MapBlock2D> onSelect):
 

@@ -4,8 +4,8 @@
 
 #include "createLevel/setLevelName.h"
 #include "editLevel/LevelsScreen.h"
+#include "editWorld/EditorScreen.h"
 
-#include "EditorScreen.h"
 #include "MenuScreen.h"
 using std::string;
 

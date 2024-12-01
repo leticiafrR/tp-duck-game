@@ -9,7 +9,6 @@
 
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
-#include "editWorld/GameWorld.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/KeyboardExtension.h"
@@ -22,8 +21,6 @@
 #include "PlatformOptionWidget.h"
 #include "SpawnPointWidget.h"
 #include "mapEditor.h"
-// se debe poder agregar una plataforma (obtiene aristas), y escribe en la posicion que
-// se indica el boton del tablero
 
 using std::list;
 using std::optional;
@@ -55,10 +52,12 @@ private:
     void InitMap(GameSceneDto mapData);
     void TakeInput();
     void HandleMouseClick(const SDL_MouseButtonEvent& eventButton);
+    void TakeAPlatform();
+    void UpdateWorld();
 
 public:
     explicit EditorScreen(Camera& cam, MapEditor& writer);
-    ~EditorScreen() = default;
+    ~EditorScreen();
     bool Render();
 };
 #endif

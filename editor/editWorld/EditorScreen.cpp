@@ -1,10 +1,12 @@
 #include "EditorScreen.h"
 
+#include <set>
+
 #include "client/tweening/TweenManager.h"
+#include "data/gameScene.h"
+#include "editor/constantsEditor.h"
 
 #include "constants.h"
-#include "constantsEditor.h"
-
 using std::pair;
 GroundDto EditorScreen::loadPlatforms(const YAML::Node& config, const std::string& platformName) {
 
@@ -60,7 +62,6 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
                 [this]() {
                     running = false;
                     writer.SaveChanges();
-                    exit(0);
                 },
                 Color(40, 40, 40), 4),
         saveButtonText(SAVE_LABEL.c_str(), 20,
@@ -126,9 +127,16 @@ void EditorScreen::InitMap(GameSceneDto mapData) {
     }
 }
 
-void EditorScreen::DrawGameWorld() {
-    mapBg.Draw(cam);
+EditorScreen::~EditorScreen() { cam.ClearCacheItem(writer.GetGameScene().theme); }
 
+void EditorScreen::UpdateWorld() {
+    mapBlocks.clear();
+    InitMap(writer.GetGameScene());
+}
+
+void EditorScreen::DrawGameWorld() {
+    UpdateWorld();
+    mapBg.Draw(cam);
     for (auto& it: mapBlocks) {
         it.Draw(cam);
     }
@@ -155,13 +163,38 @@ void EditorScreen::TakeInput() {
     }
 }
 
+void EditorScreen::TakeAPlatform() {
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+    Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
+    optional<GroundDto> info = writer.TakePltaform(worldPos);
+    if (info.has_value()) {
+        selected = MapBlock2D(BLOCK_MAP, BLOCK_MAP_YAML, info.value().mySpace, 4);
+        bool left = false, right = false, top = false, bottom = false;
+        set<VISIBLE_EDGES> edges = info.value().visibleEdges;
+        for (auto& i: edges) {
+            if (i == LEFT) {
+                left = true;
+            } else if (i == RIGHT) {
+                right = true;
+            } else if (i == TOP) {
+                top = true;
+            } else if (i == BOTTOM) {
+                bottom = true;
+            }
+        }
+        selected.value().SetBorders(left, right, top, bottom);
+    }
+}
+
 void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
     if (event.button == SDL_BUTTON_LEFT) {
-        if (selected.has_value()) {
+        if (!selected.has_value() && !spawnPoint.has_value()) {
+            TakeAPlatform();
+        } else if (selected.has_value()) {
             int mouseX = event.x;
             int mouseY = event.y;
             Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
-            // Lógica para actualizar 'selected' basado en la posición del clic
             MapBlock2D block = selected.value();
             Vector2D size = block.GetTransform().GetSize();
             vector<string> edges = block.GetEdges();
@@ -195,6 +228,9 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
             spawnPoint.reset();
             typeSpawnPoint.reset();
         }
+    } else if (event.button == SDL_BUTTON_RIGHT) {
+        selected.reset();
+        spawnPoint.reset();
     }
 }
 
@@ -206,8 +242,8 @@ bool EditorScreen::Render() {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
-                    exit(0);
-                    break;
+                    running = false;
+                    return false;
                 case SDL_MOUSEBUTTONDOWN:
                     HandleMouseClick(event.button);
                     break;

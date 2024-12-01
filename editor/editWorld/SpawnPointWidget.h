@@ -1,16 +1,15 @@
-#ifndef SPAWNPOINTNWIDGET_H
+#ifndef SPAWNPOINTWIDGET_H
 #define SPAWNPOINTWIDGET_H
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "data/gameScene.h"
+#include "editor/constantsEditor.h"
 #include "multimedia/2d/Object2D.h"
 #include "multimedia/gui/Button.h"
 #include "multimedia/gui/MapBlockGUI.h"
 #include "multimedia/gui/Text.h"
-
-#include "constantsEditor.h"
 using std::pair;
 using std::string;
 using std::vector;
