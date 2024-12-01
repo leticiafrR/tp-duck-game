@@ -2,7 +2,7 @@
 
 #include "server/model/Duck.h"
 #include "server/model/projectile/BounceProjectile.h"
-#define RECOIL_LASER 10
+#define RECOIL_LASER 13
 
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):

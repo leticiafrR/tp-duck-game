@@ -20,6 +20,7 @@ target_sources(taller_server
     model/weaponCollectable/PewPewLaser.cpp
     model/weaponCollectable/Shotgun.cpp
     model/weaponCollectable/AK47.cpp
+    model/weaponCollectable/Magnum.cpp
 
     model/projectile/ProjectilesController.cpp
     model/projectile/Projectile.cpp
@@ -81,6 +82,7 @@ target_sources(taller_server
     model/weaponCollectable/PewPewLaser.h
     model/weaponCollectable/Shotgun.h
     model/weaponCollectable/AK47.h
+    model/weaponCollectable/Magnum.h
 
     model/projectile/ProjectilesController.h
     model/projectile/Projectile.h

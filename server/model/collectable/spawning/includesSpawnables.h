@@ -7,6 +7,7 @@
 #include "server/model/weaponCollectable/AK47.h"
 #include "server/model/weaponCollectable/DuelingPistol.h"
 #include "server/model/weaponCollectable/LaserRifle.h"
+#include "server/model/weaponCollectable/Magnum.h"
 #include "server/model/weaponCollectable/PewPewLaser.h"
 #include "server/model/weaponCollectable/PistolaCowboy.h"
 #include "server/model/weaponCollectable/Shotgun.h"
