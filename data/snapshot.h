@@ -34,7 +34,8 @@ enum class TypeCollectable : uint8_t {
     ARMOR,
     GRENADE,
     BANANA,
-    __typesCount  // always at the end
+    __typesCount,
+    BANANA_PEEL
 };
 
 struct PlayerEvent {
