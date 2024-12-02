@@ -17,7 +17,7 @@ const string FULL_MAP_STR = "full_map_size";
 const string X_STR = "x";
 const string Y_STR = "y";
 const string PLAYERS_POINTS_STR = "players_spawn_points";
-const string COLLECTABLES_POINTS_STR = "collectables_spawn_points";
+const string COLLECTABLE_POINTS_STR = "collectable_spawn_points";
 const string BOX_POINTS_STR = "box_spawn_points";
 const string PLATFORMS_STR = "platforms";
 const string EDGES_STR = "edges";
@@ -59,4 +59,5 @@ const string BACKGROUND_KEY = "bg";
 
 const int PLAYERS_SPAWN_POINT = 0;
 const int COLLECTABLE_SPAWN_POINT = 1;
+const int BOX_SPAWN_POINT = 2;
 #endif

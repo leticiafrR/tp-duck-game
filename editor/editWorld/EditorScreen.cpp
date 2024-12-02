@@ -84,7 +84,14 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
                 },
-                PLAYERS_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(200, -40), COLLECTABLE_POINT_LABEL,
+                COLLECTABLE_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(200, -40),
+                COLLECTABLE_POINT_LABEL, Vector2D(30, 30)),
+        boxPoint(
+                [this](pair<Object2D, int> _spawnPoint) {
+                    spawnPoint = _spawnPoint.first;
+                    typeSpawnPoint = _spawnPoint.second;
+                },
+                BOX_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(-100, -40), BOXES_POINT_LABEL,
                 Vector2D(30, 30)) {
     InitMap(writer.GetGameScene());
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
@@ -102,9 +109,6 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
 }
 
 void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
-    /*if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
-        return;
-    }*/
     currentY += movement.y;
     for (auto& widget: basicsPlatform) {
         widget.MoveContent(movement);
@@ -197,47 +201,53 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
     if (event.button == SDL_BUTTON_LEFT) {
         if (!selected.has_value() && !spawnPoint.has_value()) {
             TakeAPlatform();
-        } else if (selected.has_value()) {
-            int mouseX = event.x;
-            int mouseY = event.y;
-            Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
-            MapBlock2D block = selected.value();
-            Vector2D size = block.GetTransform().GetSize();
-            vector<string> edges = block.GetEdges();
-            writer.AddAPlataform(worldPos.x, worldPos.y, size.x, size.y, edges);
-            mapBlocks.emplace_back(resourceManager.GetMapThemeData(FOREST_KEY),
-                                   block.GetTransform());
+        } else {
+            if (selected.has_value()) {
+                int mouseX = event.x;
+                int mouseY = event.y;
+                Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
+                MapBlock2D block = selected.value();
+                Vector2D size = block.GetTransform().GetSize();
+                vector<string> edges = block.GetEdges();
+                writer.AddAPlataform(worldPos.x, worldPos.y, size.x, size.y, edges);
+                mapBlocks.emplace_back(resourceManager.GetMapThemeData(FOREST_KEY),
+                                       block.GetTransform());
 
-            bool left = false, right = false, top = false, bottom = false;
+                bool left = false, right = false, top = false, bottom = false;
 
-            for (auto& i: edges) {
-                if (i == LEFT_STR) {
-                    left = true;
-                } else if (i == RIGHT_STR) {
-                    right = true;
-                } else if (i == TOP_STR) {
-                    top = true;
-                } else if (i == BOTTOM_STR) {
-                    bottom = true;
+                for (auto& i: edges) {
+                    if (i == LEFT_STR) {
+                        left = true;
+                    } else if (i == RIGHT_STR) {
+                        right = true;
+                    } else if (i == TOP_STR) {
+                        top = true;
+                    } else if (i == BOTTOM_STR) {
+                        bottom = true;
+                    }
                 }
+                mapBlocks.back().SetBorders(left, right, top, bottom);
+                selected.reset();
+            } else if (spawnPoint.has_value()) {
+                int mouseX = event.x;
+                int mouseY = event.y;
+                Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
+                if (typeSpawnPoint.value() == PLAYERS_SPAWN_POINT) {
+                    writer.AddPlayerSpawnPoint(worldPos.x, worldPos.y);
+                } else if (typeSpawnPoint.value() == COLLECTABLE_SPAWN_POINT) {
+                    writer.AddCollectableSpawnPoint(worldPos.x, worldPos.y);
+                } else if (typeSpawnPoint.value() == BOX_SPAWN_POINT) {
+                    writer.AddArmorSpawnPoint(worldPos.x, worldPos.y);
+                }
+                spawnPoint.reset();
+                typeSpawnPoint.reset();
             }
-            mapBlocks.back().SetBorders(left, right, top, bottom);
+        }
+        if (event.button == SDL_BUTTON_RIGHT) {
             selected.reset();
-        } else if (spawnPoint.has_value()) {
-            int mouseX = event.x;
-            int mouseY = event.y;
-            Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
-            if (typeSpawnPoint.value()) {
-                writer.AddPlayerSpawnPoint(worldPos.x, worldPos.y);
-            } else if (typeSpawnPoint.value() == 1) {
-                writer.AddCollectableSpawnPoint(worldPos.x, worldPos.y);
-            }
             spawnPoint.reset();
             typeSpawnPoint.reset();
         }
-    } else if (event.button == SDL_BUTTON_RIGHT) {
-        selected.reset();
-        spawnPoint.reset();
     }
 }
 

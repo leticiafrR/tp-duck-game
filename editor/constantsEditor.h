@@ -18,6 +18,7 @@ const string SAVE_LABEL = "Save";
 const string EXIT_LABEL = "Exit";
 const string MENU_LABEL = "Menu options";
 const string PLAYER_POINT_LABEL = "Player Points";
+const string BOXES_POINT_LABEL = "Boxes Points";
 const string COLLECTABLE_POINT_LABEL = "Collectables";
 const string OPTIONS_BLOCKS = "/etc/duckGame_g6/basicsGrounds.yaml";
 

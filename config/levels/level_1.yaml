@@ -2,16 +2,21 @@ theme: FOREST
 full_map_size:
   x: 100
   y: 160
-collectables_spawn_points:
+collectable_spawn_points:
   - x: -18
     y: 10
   - x: 40
     y: -10
+   
 players_spawn_points:
   - x: -18 
     y: 12
   - x: 40
     y: -8
+
+box_spawn_points:
+  - x: 48
+    y: 6
   
 platforms:
   - platform_one

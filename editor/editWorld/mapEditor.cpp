@@ -123,10 +123,10 @@ void MapEditor::AddCollectableSpawnPoint(const float& x, const float& y) {
     YAML::Node weaponSpawnPoint = YAML::Node(YAML::NodeType::Map);
     weaponSpawnPoint[X_STR] = x;
     weaponSpawnPoint[Y_STR] = y;
-    if (!config[COLLECTABLES_POINTS_STR]) {
-        config[COLLECTABLES_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
+    if (!config[COLLECTABLE_POINTS_STR]) {
+        config[COLLECTABLE_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
     }
-    config[COLLECTABLES_POINTS_STR].push_back(weaponSpawnPoint);
+    config[COLLECTABLE_POINTS_STR].push_back(weaponSpawnPoint);
 }
 
 void MapEditor::AddTheme(const string& theme) { config[THEME_STR] = theme; }
@@ -200,4 +200,13 @@ vector<GroundDto> MapEditor::GetPlatforms() {
 }
 GameSceneDto MapEditor::GetGameScene() {
     return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms());
+}
+void MapEditor::AddArmorSpawnPoint(const float& x, const float& y) {
+    YAML::Node boxSpawnPoint = YAML::Node(YAML::NodeType::Map);
+    boxSpawnPoint[X_STR] = x;
+    boxSpawnPoint[Y_STR] = y;
+    if (!config[BOX_POINTS_STR]) {
+        config[BOX_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
+    }
+    config[BOX_POINTS_STR].push_back(boxSpawnPoint);
 }
