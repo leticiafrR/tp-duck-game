@@ -23,7 +23,8 @@ private:
     std::vector<float> limits;
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
-    std::vector<Vector2D> collectablesSpawnPoints;
+    std::vector<Vector2D> weaponsSpawnPoints;
+    std::vector<Vector2D> armorSpawnPoints;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -47,6 +48,7 @@ public:
     std::vector<Vector2D> GetPlayersSpawnPoints();
 
     std::vector<Vector2D> GetWeaponsSpawnPoints();
+    std::vector<Vector2D> GetArmorSpawnPoints();
 
     GameSceneDto GetScene();
     ~StaticMap() {}

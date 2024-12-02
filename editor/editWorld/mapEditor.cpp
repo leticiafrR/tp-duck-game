@@ -123,10 +123,10 @@ void MapEditor::AddCollectableSpawnPoint(const float& x, const float& y) {
     YAML::Node weaponSpawnPoint = YAML::Node(YAML::NodeType::Map);
     weaponSpawnPoint[X_STR] = x;
     weaponSpawnPoint[Y_STR] = y;
-    if (!config[COLLECTABLES_POINTS_STR]) {
-        config[COLLECTABLES_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
+    if (!config[WEAPONS_POINTS_STR]) {
+        config[WEAPONS_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
     }
-    config[COLLECTABLES_POINTS_STR].push_back(weaponSpawnPoint);
+    config[WEAPONS_POINTS_STR].push_back(weaponSpawnPoint);
 }
 
 void MapEditor::AddTheme(const string& theme) { config[THEME_STR] = theme; }
