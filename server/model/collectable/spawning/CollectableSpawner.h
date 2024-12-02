@@ -6,7 +6,7 @@
 
 #include "common/Vector2D.h"
 
-#include "includesSpawnables.h"
+#include "includesCollectables.h"
 
 class Collectables;
 class CollectableSpawner {

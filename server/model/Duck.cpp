@@ -216,7 +216,7 @@ void Duck::TryCollect(CollectablesController& c) {
 bool Duck::TryDropCollectable(CollectablesController& collectables) {
     if (itemOnHand && isGrounded) {
         if (itemOnHand->StillReusable()) {
-            collectables.Drop(itemOnHand, mySpace.GetPos());
+            collectables.AddCollectable(itemOnHand, mySpace.GetPos());
         }
         itemOnHand.reset();
         return true;

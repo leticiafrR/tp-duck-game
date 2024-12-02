@@ -1,11 +1,10 @@
 #include "Grenade.h"
 
 #define MASS_GRENADE 4
-#define TIME_TO_EXPLOTE 4
 #define SCOPE_GRENADE 30
 #define DAMAGE_GRENADE 6
-Grenade::Grenade(ProjectilesController& projectilesController, TypeItem type):
-        Throwable(MASS_GRENADE, type), projectiles(projectilesController), timer(TIME_TO_EXPLOTE) {}
+Grenade::Grenade(ProjectilesController& projectilesController, TypeItem type, float timeToExplote):
+        Throwable(MASS_GRENADE, type), projectiles(projectilesController), timer(timeToExplote) {}
 
 void Grenade::Update(const StaticMap& map, float deltaTime) {
     Throwable::Update(map, deltaTime);

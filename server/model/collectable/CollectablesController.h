@@ -23,7 +23,8 @@ public:
                                     const Config& conf, const std::vector<Vector2D>& positions);
     std::shared_ptr<Collectable> TryCollect(const Transform& collectorSpace,
                                             TypeItem& collectorTyperRef);
-    void Drop(std::shared_ptr<Collectable> obj, const Vector2D& position);
+    void AddCollectable(std::shared_ptr<Collectable> obj, const Vector2D& position);
+
     void RegisterListener(CollectableEventListener* collectableListener);
     void Update(float deltaTime);
 };

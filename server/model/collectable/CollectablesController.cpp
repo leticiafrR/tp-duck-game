@@ -21,7 +21,8 @@ std::shared_ptr<Collectable> CollectablesController::TryCollect(const Transform&
     return collectables.PickCollectable(collectorSpace, collectorType);
 }
 
-void CollectablesController::Drop(std::shared_ptr<Collectable> obj, const Vector2D& position) {
+void CollectablesController::AddCollectable(std::shared_ptr<Collectable> obj,
+                                            const Vector2D& position) {
     obj->BeDropped(position);
     collectables.SpawnCollectable(obj);
 }
