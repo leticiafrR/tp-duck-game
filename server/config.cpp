@@ -163,7 +163,7 @@ float Config::getCooldownNone() const { return cooldown[NONE_INDEX]; }
 float Config::getCooldownShort() const { return cooldown[SHORT_INDEX]; }
 float Config::getCooldownMedium() const { return cooldown[MEDIUM_INDEX]; }
 float Config::getCooldownLong() const { return cooldown[LONG_INDEX]; }
-float Config::getCooldownExploteGranada() const { return cooldown[TO_EXPLOTE_GRANADA_INDEX]; }
+float Config::getTimeToExploteGranada() const { return cooldown[TO_EXPLOTE_GRANADA_INDEX]; }
 float Config::getCooldownBasic() const { return cooldown[BASIC_INDEX]; }
 // Damage
 int Config::getDamageMinimun() const { return damage[MINIMUN_INDEX]; }
