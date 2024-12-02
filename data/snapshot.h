@@ -20,8 +20,8 @@ enum class DuckState : uint8_t {
     DEAD,
     DEAD_BY_FALLING
 };
+// typeItem
 enum class TypeCollectable : uint8_t {
-    EMPTY,
     COWBOY_PISTOL,
     LASER_RIFLE,
     PEW_PEW_LASER,
@@ -34,8 +34,10 @@ enum class TypeCollectable : uint8_t {
     ARMOR,
     GRENADE,
     BANANA,
-    __typesCount,
-    BANANA_PEEL
+    __typesCount,  //__collectableCount
+    EMPTY,
+    BANANA_PEEL,
+    GRENADE_UNLOCK
 };
 
 struct PlayerEvent {
@@ -87,7 +89,7 @@ struct CollectableSpawnEventDto {
 };
 
 struct ThrowableSpawnEventDto {
-    TypeCollectable type;
+    TypeCollectable type;  //    BANANA_PEEL or GRENADE_UNLOCK
     Vector2D position;
     ThrowableSpawnEventDto() = default;
     ThrowableSpawnEventDto(TypeCollectable type, const Vector2D& position):
