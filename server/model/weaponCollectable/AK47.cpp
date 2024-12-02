@@ -17,13 +17,9 @@ void AK47::IncraseDispersion() {
 }
 
 
-void AK47::BeCollected(TypeItem& collectorTypeRef) {
-    collectorTypeRef = TypeItem::AK47;
-    std::cout << "ak47 " << std::endl;
-}
+void AK47::BeCollected(TypeItem& collectorTypeRef) { collectorTypeRef = TypeItem::AK47; }
 
 void AK47::Shoot(Duck* shooter) {
-    std::cout << "print: " << (int)damage << std::endl;
     BounceProjectile* projectile =
             new BounceProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
                                  scope, damage, typeProjectile, l);

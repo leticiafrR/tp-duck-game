@@ -16,7 +16,6 @@ void LaserRifle::BeCollected(TypeItem& collectorTypeRef) {
 }
 
 void LaserRifle::Shoot(Duck* shooter) {
-    std::cout << "print: " << (int)damage << std::endl;
     BounceProjectile* projectile =
             new BounceProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
                                  scope, damage, typeProjectile, l);
