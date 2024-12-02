@@ -121,7 +121,7 @@ void GamesHandler::gameLoop() {
         }
         auto deltaTime = timeManager.updateTickTimer();
         currentGame->Update(deltaTime);
-        broadcastGameMssg(std::make_shared<GameUpdateSender>(currentGame->GetSnapshot()));
+        broadcastGameMssg(std::make_shared<GameSnapshotSender>(currentGame->GetSnapshot()));
         timeManager.sleepIfNeeded();
     }
 }

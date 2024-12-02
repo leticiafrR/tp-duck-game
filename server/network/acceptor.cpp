@@ -5,6 +5,9 @@
 #define FIRST_PLAYER_ID 1
 #define PRINT_NEW_CONNECTION(connectionID) \
     std::cout << "New user ID: " << (connectionID) << "!" << std::endl;
+#define UNPOLITE_TERMINATION                                                                      \
+    "The accept loop has been interrupted unpolietly (closing the acceptor socket). Server must " \
+    "be ending its execution."
 
 AcceptorThread::AcceptorThread(const char* servname, Config& config):
         skt(servname), matchesMonitor(config) {}
@@ -13,6 +16,7 @@ void AcceptorThread::run() {
     try {
         acceptLoop();
     } catch (const LibError& e) {
+        std::cerr << UNPOLITE_TERMINATION << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "Exception in the Aceptor thread: " << e.what() << std::endl;
     } catch (...) {

@@ -19,7 +19,6 @@
 
 #define NOT_ENOUGH_NUMBER_PLAYERS 0
 
-
 struct RunOutOfPlayers: public std::runtime_error {
     RunOutOfPlayers(): std::runtime_error("The match has no players to continue with. ") {}
 };

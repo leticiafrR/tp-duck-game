@@ -5,7 +5,7 @@
 
 #define NON_CONCRETE_SELECTION_OF_MATCH 0
 #define MAX_MESSAGES 100
-// pero quien està cerrando la queue???? creo que solo la match
+
 #define MATCH_ENDED_KILLED_PARTICIPANTS \
     "Communication thread killed when match removed the client as participant."
 #define CLIENT_DISCONNECTED_THREAD_KILLED \
