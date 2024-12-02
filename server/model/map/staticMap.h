@@ -7,6 +7,7 @@
 #include <optional>
 #include <random>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -24,7 +25,7 @@ private:
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
     std::vector<Vector2D> collectableSpawnPoints;
-    std::vector<Vector2D> boxSpawnPoints;
+    std::unordered_map<BoxID_t, Vector2D> boxes;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -48,7 +49,7 @@ public:
     std::vector<Vector2D> GetPlayersSpawnPoints();
 
     std::vector<Vector2D> GetCollectableSpawnPoints();
-    std::vector<Vector2D> GetBoxesSpawnPoints();
+    std::unordered_map<BoxID_t, Vector2D> GetBoxes();
 
     GameSceneDto GetScene();
     ~StaticMap() {}

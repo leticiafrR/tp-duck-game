@@ -153,12 +153,14 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
         pos.y = _collectableSpawnPoints[i][Y_STR].as<float>();
         collectableSpawnPoints.push_back(pos);
     }
+    BoxID_t id = 0;
     auto _boxSpawnPoints = config[BOX_POINTS_STR];
     for (std::size_t i = 0; i < _boxSpawnPoints.size(); ++i) {
         Vector2D pos;
         pos.x = _boxSpawnPoints[i][X_STR].as<float>();
         pos.y = _boxSpawnPoints[i][Y_STR].as<float>();
-        boxSpawnPoints.push_back(pos);
+        boxes[id] = pos;
+        id++;
     }
 
     auto platformsList = config[PLATFORMS_STR];
@@ -169,4 +171,4 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
 }
 
 std::vector<Vector2D> StaticMap::GetCollectableSpawnPoints() { return collectableSpawnPoints; }
-std::vector<Vector2D> StaticMap::GetBoxesSpawnPoints() { return boxSpawnPoints; }
+std::unordered_map<BoxID_t, Vector2D> StaticMap::GetBoxes() { return boxes; }
