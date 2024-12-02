@@ -7,7 +7,7 @@
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):
         Weapon(controller, initialSpace, conf.getLaserRifleScope(), conf.getLaserRifleAmmo(),
-               conf.getDamageShort(), conf.getShortDispersion(), conf.getCooldownBasic(),
+               conf.getDamageMedium(), conf.getShortDispersion(), conf.getCooldownBasic(),
                TypeProjectile::LASER, conf.getLaserRifleInclination()) {}
 
 
@@ -16,6 +16,7 @@ void LaserRifle::BeCollected(TypeItem& collectorTypeRef) {
 }
 
 void LaserRifle::Shoot(Duck* shooter) {
+    std::cout << "print: " << (int)damage << std::endl;
     BounceProjectile* projectile =
             new BounceProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
                                  scope, damage, typeProjectile, l);
