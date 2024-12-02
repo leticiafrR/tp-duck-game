@@ -1,10 +1,8 @@
 #include "AK47.h"
 
+#include "../physicsConstants.h"
 #include "server/model/Duck.h"
 #include "server/model/projectile/BounceProjectile.h"
-
-#define DISPERSION_RATE_AK47 0.3
-#define RECOIL_AK47 12
 
 AK47::AK47(ProjectilesController& controller, const Transform& initialSpace, const Config& conf):
         Weapon(controller, initialSpace, conf.getAK47Scope(), conf.getAK47Ammo(),
