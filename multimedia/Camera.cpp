@@ -70,11 +70,14 @@ void Camera::DrawImageGUI(const string& filename, RectTransform rect,
     tex.SetColorAndAlphaMod(Color(255, 255, 255, 255));  // Return texture color to normal
 }
 
-void Camera::DrawText(const string& text, Font& font, RectTransform rectTransform, Color color) {
-    Texture text_sprite(render, font.RenderText_Blended(text, color));
-    float textAspectRatio = static_cast<float>(text_sprite.GetWidth()) / text_sprite.GetHeight();
+void Camera::DrawText(const string& text, const string& fontFile, int fontSize,
+                      RectTransform rectTransform, Color color) {
 
-    Vector2D targetSize = Vector2D(text_sprite.GetWidth(), text_sprite.GetHeight());
+    Font& font = fontCache.GetFontData(fontFile, fontSize);
+    Texture fontTexture(render, font.RenderText_Blended(text, color));
+    float textAspectRatio = static_cast<float>(fontTexture.GetWidth()) / fontTexture.GetHeight();
+
+    Vector2D targetSize = Vector2D(fontTexture.GetWidth(), fontTexture.GetHeight());
 
     if (targetSize.x > rectTransform.GetSize().x) {
         targetSize.x = rectTransform.GetSize().x;
@@ -88,7 +91,7 @@ void Camera::DrawText(const string& text, Font& font, RectTransform rectTransfor
 
     rectTransform.SetSize(targetSize);
     Rect rect = RectTransformToRenderRect(rectTransform);
-    render.Copy(text_sprite, SDL2pp::NullOpt, rect, -rectTransform.GetAngle());
+    render.Copy(fontTexture, SDL2pp::NullOpt, rect, -rectTransform.GetAngle());
 }
 
 Rect Camera::RectTransformToRenderRect(RectTransform& rectT) {

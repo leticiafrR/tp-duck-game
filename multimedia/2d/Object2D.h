@@ -30,8 +30,10 @@ protected:
 
 public:
     Object2D();
+    explicit Object2D(const Transform& transform, Color color = ColorExtension::White());
+
     explicit Object2D(const std::string& filename, const Transform& transform = Transform(),
-                      Color color = Color(255, 255, 255, 255));
+                      Color color = ColorExtension::White());
 
     void SetColor(Color color);
     Color GetColor();

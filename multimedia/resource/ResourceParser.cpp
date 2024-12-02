@@ -26,9 +26,6 @@ MenuData ResourceParser::ParseMenu(YAML::Node data) {
     MenuData menuData;
     menuData.menuBgFile = data["menu_bg"].as<string>();
     menuData.logoBgFile = data["logo_bg"].as<string>();
-    menuData.buttonImgFile = data["button_img"].as<string>();
-    menuData.buttonBackImgFile = data["button_back_img"].as<string>();
-    menuData.buttonSfxFile = data["button_sfx"].as<string>();
     return menuData;
 }
 

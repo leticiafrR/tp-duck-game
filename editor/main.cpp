@@ -32,7 +32,5 @@ int main() {
 
     EditorRunner editor(render, 60);
     editor.run();
-    FontCache::Clear();
-    GUIManager::GetInstance().Clear();
     return SUCCESS_EXIT;
 }

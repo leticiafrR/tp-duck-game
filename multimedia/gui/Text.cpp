@@ -20,11 +20,9 @@ void Text::SetTextAndFontSize(const string& newText, int fontSize) {
     SetFontSize(fontSize);
 }
 
-Font& Text::GetFont() { return FontCache::GetData(filename, fontSize); }
-
 void Text::Draw(Camera& cam) {
     if (text.size() == 0 || !visible) {
         return;
     }
-    cam.DrawText(text, GetFont(), rect, color);
+    cam.DrawText(text, filename, fontSize, rect, color);
 }

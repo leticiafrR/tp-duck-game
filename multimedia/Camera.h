@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "cache/FontCache.h"
 #include "cache/TextureCache.h"
 #include "common/Transform.h"
 #include "common/Vector2D.h"
@@ -24,6 +25,7 @@ class Camera {
 private:
     Renderer render;
     TextureCache textureCache;
+    FontCache fontCache;
     Vector2D position;
 
     float size;
@@ -58,7 +60,8 @@ public:
     void DrawImageGUI(const string& filename, RectTransform rect, SDL2pp::Optional<Rect> srcRect,
                       Color color = ColorExtension::White(), bool flip = false);
 
-    void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
+    void DrawText(const string& text, const string& fontFile, int fontSize,
+                  RectTransform rectTransform, Color color);
 
     Rect RectTransformToRenderRect(RectTransform& rectTransform);
 

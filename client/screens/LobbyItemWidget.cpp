@@ -15,7 +15,7 @@ LobbyItemWidget::LobbyItemWidget(int id, const string& ownerName, int playerCoun
                 RectTransform(Transform(Vector2D(0, 0), Vector2D(180, 120)), Vector2D(0.5, 1)),
                 ColorExtension::White(), 1),
         matchJoinButton(
-                "button_1.png",
+                BUTTON_FILE,
                 RectTransform(Transform(Vector2D(280, 0), Vector2D(150, 80)), Vector2D(0.5, 1)),
                 [this]() { this->onJoinClicked(this->lobbyId); }, Color(40, 40, 40), 1),
         matchJoinText(

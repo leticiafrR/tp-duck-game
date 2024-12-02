@@ -6,6 +6,7 @@ void Gameplay::InitPlayers(const MatchStartDto& matchData, const Snapshot& first
 
 void Gameplay::InitMap(GameSceneDto mapData) {
     MapThemeData& themeData = resourceManager.GetMapThemeData(mapData.theme);
+    mapBg.SetFileName(themeData.bgfile);
 
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
@@ -23,16 +24,6 @@ void Gameplay::InitMap(GameSceneDto mapData) {
         mapBlocks[i].SetBorders(left, right, top, bottom);
     }
 }
-
-// void Gameplay::SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData) {
-//     if (throwables.contains(id)) {
-//         throwables.at(id).SetTargetPos(throwableData.position);
-//         return;
-//     }
-
-//     throwables.emplace(id, ThrowableRenderer(throwableData.type, throwableData.position));
-// }
-// void Gameplay::DespawnThrowable(ThrowableID_t id) { throwables.erase(id); }
 
 
 void Gameplay::UpdateGame(const Snapshot& snapshot) {
@@ -108,7 +99,7 @@ Gameplay::Gameplay(Client& cl, GameKit& gameKit, bool& wasClosed, MatchStartDto 
         client(cl),
         isInitial(isInitial),
         camController(gameKit.GetCamera()),
-        mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
+        mapBg(Transform(Vector2D::Zero(), Vector2D(250, 250))),
         fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
                   ColorExtension::Black().SetAlpha(0), 20),
         fadePanelTween(fadePanel, ColorExtension::Black().SetAlpha(255), 0.6f,
