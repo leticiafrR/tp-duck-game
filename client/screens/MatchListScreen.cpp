@@ -125,7 +125,7 @@ MatchListScreen::MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool
                                 Vector2D(0.5, 0.5)),
                   ColorExtension::White(), 4),
         createButton(
-                "button_1.png",
+                BUTTON_FILE,
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this]() { this->OnCreatePressed(); }, Color(40, 40, 40), 4),
@@ -138,7 +138,7 @@ MatchListScreen::MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool
                                     Vector2D(0.5, 0.5)),
                       ColorExtension::White(), 4),
         refreshButton(
-                "button_1.png",
+                BUTTON_FILE,
                 RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this]() { this->OnRefreshPressed(); }, Color(40, 40, 40), 4),
@@ -147,7 +147,7 @@ MatchListScreen::MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool
                                         Vector2D(0.5, 0.5)),
                           ColorExtension::White(), 5),
         controlsButton(
-                "button_1.png",
+                BUTTON_FILE,
                 RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
                               Vector2D(0.5, 0.5)),
                 [this]() {

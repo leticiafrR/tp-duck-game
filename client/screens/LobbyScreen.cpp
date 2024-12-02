@@ -7,7 +7,7 @@ LobbyScreen::LobbyScreen(GameKit& kit, bool& wasClosed, Client& client, bool isO
         isOwner(isOwner),
         matchData(matchData),
         startButton(
-                "button_1.png",
+                BUTTON_FILE,
                 RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
                               Vector2D(0.5, 0.5)),
                 [this]() { OnStartButtonPressed(); }, Color(40, 40, 40), 4),

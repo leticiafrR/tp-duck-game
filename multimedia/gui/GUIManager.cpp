@@ -1,5 +1,7 @@
 #include "GUIManager.h"
 
+#include "Button.h"
+
 GUIManager::GUIManager() = default;
 GUIManager::~GUIManager() = default;
 
@@ -42,3 +44,7 @@ void GUIManager::Draw(Camera& cam) {
         gui->Draw(cam);
     }
 }
+
+// Button* GUIManager::CreateButton() {
+
+// }

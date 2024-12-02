@@ -16,4 +16,4 @@ TweenManager& GameKit::GetTweenManager() { return tweenManager; }
 
 ResourceManager& GameKit::GetResourceManager() { return resourceManager; }
 
-void GameKit::PlayButtonSFX() { audioManager.PlaySFX(resourceManager.GetMenuData().buttonSfxFile); }
+void GameKit::PlayButtonSFX() { audioManager.PlaySFX(BUTTON_SFX_FILE); }

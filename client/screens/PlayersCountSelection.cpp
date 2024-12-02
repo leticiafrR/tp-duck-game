@@ -6,7 +6,8 @@ PlayersCountSelection::PlayersCountSelection(GameKit& gameKit):
         imgBg(RectTransform(Vector2D::Zero(), Vector2D(600, 600)),
               ColorExtension::Black().SetAlpha(225), 9),
         btnBack(
-                "back_icon.png", RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
+                BACK_BUTTON_FILE,
+                RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
                 [this, &gameKit]() {
                     this->Hide();
                     gameKit.PlayButtonSFX();
@@ -15,7 +16,7 @@ PlayersCountSelection::PlayersCountSelection(GameKit& gameKit):
         txtTitle("Local players selection", 30, RectTransform(Vector2D(0, 200), Vector2D(500, 100)),
                  ColorExtension::White(), 11),
         btnOnePlayer(
-                "button_1.png", RectTransform(Vector2D(0, 50), Vector2D(200, 80)),
+                BUTTON_FILE, RectTransform(Vector2D(0, 50), Vector2D(200, 80)),
                 [this, &gameKit]() {
                     this->Hide();
                     this->onSelection(1);
@@ -25,7 +26,7 @@ PlayersCountSelection::PlayersCountSelection(GameKit& gameKit):
         txtOnePlayer("One Player", 24, RectTransform(Vector2D(0, 50), Vector2D(200, 80)),
                      ColorExtension::White(), 12),
         btnTwoPlayers(
-                "button_1.png", RectTransform(Vector2D(0, -50), Vector2D(200, 80)),
+                BUTTON_FILE, RectTransform(Vector2D(0, -50), Vector2D(200, 80)),
                 [this, &gameKit]() {
                     this->Hide();
                     this->onSelection(2);

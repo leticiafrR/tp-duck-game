@@ -2,6 +2,9 @@
 
 Object2D::Object2D() {}
 
+Object2D::Object2D(const Transform& transform, Color color):
+        filename(""), sourceRect(SDL2pp::NullOpt), transform(transform), color(color) {}
+
 Object2D::Object2D(const std::string& filename, const Transform& transform, Color color):
         filename(filename), sourceRect(SDL2pp::NullOpt), transform(transform), color(color) {}
 

@@ -1,7 +1,12 @@
 #include "BaseScreen.h"
 
 BaseScreen::BaseScreen(GameKit& gameKit, bool& wasClosed):
-        gameKit(gameKit), cam(gameKit.GetCamera()), wasClosed(wasClosed), running(false) {}
+        gameKit(gameKit),
+        cam(gameKit.GetCamera()),
+        menuData(gameKit.GetResourceManager().GetMenuData()),
+        wasClosed(wasClosed),
+        running(false) {}
+
 BaseScreen::~BaseScreen() = default;
 
 void BaseScreen::Run() {

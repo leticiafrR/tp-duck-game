@@ -8,10 +8,8 @@ MenuScreen::MenuScreen(GameKit& kit, bool& wasClosed, string& input):
                      ColorExtension::Black().SetAlpha(80)),
         nicknamePlaceHolderText(RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
                                               Vector2D(0.5, 0.5))),
-        nicknameText("", 50,
-                     RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
-                                   Vector2D(0.5, 0.5)),
-                     ColorExtension::White()),
+        nicknameText(RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
+                                   Vector2D(0.5, 0.5))),
         startButton(RectTransform(Vector2D(0, -200), Vector2D(200, 80), Vector2D(0.5, 0.5),
                                   Vector2D(0.5, 0.5)),
                     ColorExtension::DarkGray()),
@@ -20,15 +18,15 @@ MenuScreen::MenuScreen(GameKit& kit, bool& wasClosed, string& input):
         nicknameInput(input),
         btnTween(startButton.GetTransform()),
         textTween(buttonText.GetTransform()) {
-    MenuData menuData = kit.GetResourceManager().GetMenuData();
 
     bgImage.SetFile(menuData.menuBgFile);
     logoImage.SetFile(menuData.logoBgFile);
 
     nicknamePlaceHolderText.SetTextAndFontSize("Write your nickname", 50);
     nicknamePlaceHolderText.SetColor(ColorExtension::White().SetAlpha(120));
+    nicknameText.SetTextAndFontSize("", 50);
 
-    startButton.SetFile(menuData.buttonImgFile);
+    startButton.SetFile(BUTTON_FILE);
     startButton.SetCallback([this]() {
         running = false;
         gameKit.PlayButtonSFX();
@@ -37,8 +35,8 @@ MenuScreen::MenuScreen(GameKit& kit, bool& wasClosed, string& input):
 }
 
 MenuScreen::~MenuScreen() {
-    cam.ClearCacheItem("duck_game_bg.jpg");
-    cam.ClearCacheItem("duck_game_logo.png");
+    cam.ClearCacheItem(menuData.menuBgFile);
+    cam.ClearCacheItem(menuData.logoBgFile);
 }
 
 void MenuScreen::TakeInput(SDL_Event event) {

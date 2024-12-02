@@ -32,6 +32,8 @@ public:
     GUIManager(const GUIManager&) = delete;
     GUIManager& operator=(const GUIManager&) = delete;
 
+    // Button* CreateButton();
+
     void Clear() { graphics.clear(); }
 };
 

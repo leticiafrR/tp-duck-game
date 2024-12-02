@@ -27,7 +27,8 @@ GameStatusScreen::GameStatusScreen(GameKit& kit, bool& wasClosed, vector<PlayerD
         txtTitle("", 40, RectTransform(Vector2D(0, -130), Vector2D(800, 120), Vector2D(0.5, 1)),
                  ColorExtension::White(), 10),
         btnBack(
-                "back_icon.png", RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
+                BACK_BUTTON_FILE,
+                RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
                 [this]() {
                     running = false;
                     gameKit.PlayButtonSFX();

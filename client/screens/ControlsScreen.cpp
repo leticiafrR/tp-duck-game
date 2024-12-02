@@ -85,7 +85,8 @@ ControlsScreen::ControlsScreen(GameKit& gameKit):
         imgBg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
               ColorExtension::Black().SetAlpha(225), 9),
         btnBack(
-                "back_icon.png", RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
+                BACK_BUTTON_FILE,
+                RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
                 [this, &gameKit]() {
                     this->SetActive(false);
                     gameKit.PlayButtonSFX();

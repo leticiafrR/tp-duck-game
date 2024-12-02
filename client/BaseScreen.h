@@ -7,6 +7,8 @@ class BaseScreen {
 protected:
     GameKit& gameKit;
     Camera& cam;
+    MenuData menuData;
+
     bool& wasClosed;
     bool running;
 

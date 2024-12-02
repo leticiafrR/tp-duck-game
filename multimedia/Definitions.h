@@ -14,4 +14,8 @@ using Function = std::function<T()>;
 template <typename T>
 using CallbackParam = std::function<void(T)>;
 
+#define BUTTON_FILE "button_1.png"
+#define BACK_BUTTON_FILE "back_icon.png"
+#define BUTTON_SFX_FILE "buttonSFX.mp3"
+
 #endif
