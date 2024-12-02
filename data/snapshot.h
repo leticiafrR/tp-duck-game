@@ -20,7 +20,7 @@ enum class DuckState : uint8_t {
     DEAD,
     DEAD_BY_FALLING
 };
-// typeItem
+
 enum class TypeItem : uint8_t {
     COWBOY_PISTOL,
     LASER_RIFLE,
