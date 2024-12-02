@@ -201,3 +201,12 @@ vector<GroundDto> MapEditor::GetPlatforms() {
 GameSceneDto MapEditor::GetGameScene() {
     return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms());
 }
+void MapEditor::AddArmorSpawnPoint(const float& x, const float& y) {
+    YAML::Node armorSpawnPoint = YAML::Node(YAML::NodeType::Map);
+    armorSpawnPoint[X_STR] = x;
+    armorSpawnPoint[Y_STR] = y;
+    if (!config[ARMOR_POINTS_STR]) {
+        config[ARMOR_POINTS_STR] = YAML::Node(YAML::NodeType::Sequence);
+    }
+    config[ARMOR_POINTS_STR].push_back(armorSpawnPoint);
+}

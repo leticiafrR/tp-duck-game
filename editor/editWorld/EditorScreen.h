@@ -44,6 +44,7 @@ private:
     optional<int> typeSpawnPoint;
     SpawnPointWidget playersPoint;
     SpawnPointWidget collectablesPoint;
+    SpawnPointWidget armorPoint;
     void UpdateWidgetListPosition(Vector2D movement);
     float currentY = 0;
     float scrollSize = 0;
