@@ -22,8 +22,8 @@ class ServerProtocol {
 private:
     Socket skt;
     ProtocolAssistant assistant;
-    V_BTTM_TOP encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>&);
-    V_RG_LF encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
+    VISIBILITY_BOTTOM_TOP encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>&);
+    VISIBILITY_RIGTH_LEFT encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>&);
     void sendPlayerUpdates(const std::unordered_map<PlayerID_t, PlayerEvent>& updates);
     void sendRaycastsEvents(const std::vector<ProjectileEventDto>& raycastsEvents);
     void sendCollectableDespawns(const std::vector<CollectableID_t>& collectableDespawns);
@@ -31,6 +31,7 @@ private:
     void sendThrowableSpawns(
             const std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto>& throwableSpawns);
     void sendThrowableDespawns(const std::vector<ThrowableID_t>& throwableDespawns);
+    void sendBoxesDespawns(const std::vector<BoxID_t>& boxesDespawns);
 
 public:
     explicit ServerProtocol(Socket&& skt);

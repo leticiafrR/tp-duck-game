@@ -120,22 +120,22 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
     auto theme = assistant.receiveString();
 
     auto numberGroundB = assistant.receiveNumberOneByte();
-    std::vector<GroundDto> groundBlocks(numberGroundB);
+    std::vector<GroundDto> _groundBlocks(numberGroundB);
     for (uint8_t i = 0; i < numberGroundB; i++) {
         // receiving the visible edges
         std::set<VISIBLE_EDGES> edges;
         auto bttm_tp = assistant.receiveNumberOneByte();
-        if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::TP)
+        if (bttm_tp == VISIBILITY_BOTTOM_TOP::BOTH_TB || bttm_tp == VISIBILITY_BOTTOM_TOP::TP)
             edges.insert(VISIBLE_EDGES::TOP);
 
-        if (bttm_tp == V_BTTM_TOP::BOTH_TB || bttm_tp == V_BTTM_TOP::BTTM)
+        if (bttm_tp == VISIBILITY_BOTTOM_TOP::BOTH_TB || bttm_tp == VISIBILITY_BOTTOM_TOP::BTTM)
             edges.insert(VISIBLE_EDGES::BOTTOM);
 
         auto rg_lf = assistant.receiveNumberOneByte();
-        if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::RG)
+        if (rg_lf == VISIBILITY_RIGTH_LEFT::BOTH_RL || rg_lf == VISIBILITY_RIGTH_LEFT::RG)
             edges.insert(VISIBLE_EDGES::RIGHT);
 
-        if (rg_lf == V_RG_LF::BOTH_RL || rg_lf == V_RG_LF::LF)
+        if (rg_lf == VISIBILITY_RIGTH_LEFT::BOTH_RL || rg_lf == VISIBILITY_RIGTH_LEFT::LF)
             edges.insert(VISIBLE_EDGES::LEFT);
 
         // receiving the data of their transforms
@@ -144,9 +144,18 @@ GameSceneDto ClientProtocol::receiveGameSceneDto() {
         Transform transform(pos, size);
 
         // building the GroundDto
-        groundBlocks[i] = GroundDto{std::move(transform), std::move(edges)};
+        _groundBlocks[i] = GroundDto{std::move(transform), std::move(edges)};
     }
-    return GameSceneDto{theme, groundBlocks};
+
+    // receiving the boxes points
+    auto numberBoxes = assistant.receiveNumberOneByte();
+    std::unordered_map<BoxID_t, Vector2D> _boxesPoints((size_t)numberBoxes);
+    for (uint8_t i = 0; i < numberBoxes; i++) {
+        auto ID = assistant.receiveNumberOneByte();
+        auto pos = assistant.receiveVector2D();
+        _boxesPoints[ID] = pos;
+    }
+    return GameSceneDto{theme, _groundBlocks, _boxesPoints};
 }
 
 Snapshot ClientProtocol::receiveGameUpdateDto() {
@@ -217,8 +226,15 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         _throwableDespawns[i] = assistant.receiveNumberOneByte();
     }
 
+    // receiving boxesDespawns
+    uint8_t numberBoxesDespawns = assistant.receiveNumberOneByte();
+    std::vector<BoxID_t> _boxesDespawns((size_t)numberBoxesDespawns);
+    for (uint8_t i = 0; i < numberBoxesDespawns; i++) {
+        _boxesDespawns[i] = assistant.receiveNumberOneByte();
+    }
+
     return Snapshot(_gameOver, _updates, _raycastsEvents, _collectableDespawns, _collectableSpawns,
-                    _throwableSpawns, _throwableDespawns);
+                    _throwableSpawns, _throwableDespawns, _boxesDespawns);
 }
 
 bool ClientProtocol::receiveFinalGroupGame() {

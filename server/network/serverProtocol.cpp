@@ -74,29 +74,32 @@ void ServerProtocol::sendMatchStartSettings(const MatchStartDto& matchStartDto) 
     // probably latter this mssg will contain the size of other items
 }
 
-V_BTTM_TOP ServerProtocol::encodeVisibleBottomTopEdges(const std::set<VISIBLE_EDGES>& edges) {
+VISIBILITY_BOTTOM_TOP ServerProtocol::encodeVisibleBottomTopEdges(
+        const std::set<VISIBLE_EDGES>& edges) {
     if (edges.find(VISIBLE_EDGES::TOP) == edges.end()) {
         if (edges.find(VISIBLE_EDGES::BOTTOM) == edges.end()) {
-            return V_BTTM_TOP::NONE_TB;
+            return VISIBILITY_BOTTOM_TOP::NONE_TB;
         }
-        return V_BTTM_TOP::BTTM;
+        return VISIBILITY_BOTTOM_TOP::BTTM;
     }
     if (edges.find(VISIBLE_EDGES::BOTTOM) == edges.end()) {
-        return V_BTTM_TOP::TP;
+        return VISIBILITY_BOTTOM_TOP::TP;
     }
-    return V_BTTM_TOP::BOTH_TB;
+    return VISIBILITY_BOTTOM_TOP::BOTH_TB;
 }
-V_RG_LF ServerProtocol::encodeVisibleRightLeftEdges(const std::set<VISIBLE_EDGES>& edges) {
+
+VISIBILITY_RIGTH_LEFT ServerProtocol::encodeVisibleRightLeftEdges(
+        const std::set<VISIBLE_EDGES>& edges) {
     if (edges.find(VISIBLE_EDGES::LEFT) == edges.end()) {
         if (edges.find(VISIBLE_EDGES::RIGHT) == edges.end()) {
-            return V_RG_LF::NONE_RL;
+            return VISIBILITY_RIGTH_LEFT::NONE_RL;
         }
-        return V_RG_LF::RG;
+        return VISIBILITY_RIGTH_LEFT::RG;
     }
     if (edges.find(VISIBLE_EDGES::RIGHT) == edges.end()) {
-        return V_RG_LF::LF;
+        return VISIBILITY_RIGTH_LEFT::LF;
     }
-    return V_RG_LF::BOTH_RL;
+    return VISIBILITY_RIGTH_LEFT::BOTH_RL;
 }
 
 void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
@@ -104,6 +107,7 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
     // sending the theme of the game
     assistant.sendString(gameSceneDto.theme);
 
+    // sending the groundBlocks
     uint8_t numbGroundBlocks = (uint8_t)gameSceneDto.groundBlocks.size();
     assistant.sendNumber(numbGroundBlocks);
     for (auto& groundDto: gameSceneDto.groundBlocks) {
@@ -113,6 +117,13 @@ void ServerProtocol::sendGameStartSettings(const GameSceneDto& gameSceneDto) {
         // sending data of the  transform
         assistant.sendVector2D(groundDto.mySpace.GetSize());
         assistant.sendVector2D(groundDto.mySpace.GetPos());
+    }
+
+    // sending the boxes points
+    assistant.sendNumber((uint8_t)gameSceneDto.boxesPoints.size());
+    for (auto it = gameSceneDto.boxesPoints.begin(); it != gameSceneDto.boxesPoints.end(); ++it) {
+        assistant.sendNumber(it->first);
+        assistant.sendVector2D(it->second);
     }
 }
 
@@ -194,6 +205,13 @@ void ServerProtocol::sendThrowableDespawns(const std::vector<ThrowableID_t>& thr
     }
 }
 
+void ServerProtocol::sendBoxesDespawns(const std::vector<BoxID_t>& boxesDespawns) {
+    assistant.sendNumber((uint8_t)boxesDespawns.size());
+    for (auto it = boxesDespawns.begin(); it != boxesDespawns.end(); ++it) {
+        assistant.sendNumber((uint8_t)*it);
+    }
+}
+
 void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
     assistant.sendNumber(SNAPSHOT);
     assistant.sendBoolean(snapshot.gameOver);
@@ -206,6 +224,7 @@ void ServerProtocol::sendGameUpdate(const Snapshot& snapshot) {
 
     sendThrowableSpawns(snapshot.throwableSpawns);
     sendThrowableDespawns(snapshot.throwableDespawns);
+    sendBoxesDespawns(snapshot.boxesDespawns);
 }
 
 void ServerProtocol::sendGamesRecount(const GamesRecountDto& gamesRecount) {
