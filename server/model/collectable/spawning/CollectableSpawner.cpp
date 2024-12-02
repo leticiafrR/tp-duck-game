@@ -14,7 +14,7 @@ CollectableSpawner::CollectableSpawner(const Vector2D& pos,
 
 TypeItem CollectableSpawner::GetRandomTypeCollectable() {
     std::srand(std::time(nullptr));
-    int randomIndex = std::rand() % static_cast<int>(TypeItem::__typesCount);
+    int randomIndex = std::rand() % static_cast<int>(TypeItem::__collectableCount);
     return static_cast<TypeItem>(randomIndex);
 }
 
