@@ -146,19 +146,19 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
         playersSpawnPlaces.push_back(pos);
     }
 
-    auto _collectableSpawnPoints = config[WEAPONS_POINTS_STR];
+    auto _collectableSpawnPoints = config[COLLECTABLE_POINTS_STR];
     for (std::size_t i = 0; i < _collectableSpawnPoints.size(); ++i) {
         Vector2D pos;
         pos.x = _collectableSpawnPoints[i][X_STR].as<float>();
         pos.y = _collectableSpawnPoints[i][Y_STR].as<float>();
         collectableSpawnPoints.push_back(pos);
     }
-    auto _armorSpawnPoints = config[ARMOR_POINTS_STR];
-    for (std::size_t i = 0; i < _armorSpawnPoints.size(); ++i) {
+    auto _boxSpawnPoints = config[BOX_POINTS_STR];
+    for (std::size_t i = 0; i < _boxSpawnPoints.size(); ++i) {
         Vector2D pos;
-        pos.x = _armorSpawnPoints[i][X_STR].as<float>();
-        pos.y = _armorSpawnPoints[i][Y_STR].as<float>();
-        armorSpawnPoints.push_back(pos);
+        pos.x = _boxSpawnPoints[i][X_STR].as<float>();
+        pos.y = _boxSpawnPoints[i][Y_STR].as<float>();
+        boxSpawnPoints.push_back(pos);
     }
 
     auto platformsList = config[PLATFORMS_STR];
@@ -169,4 +169,4 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
 }
 
 std::vector<Vector2D> StaticMap::GetCollectableSpawnPoints() { return collectableSpawnPoints; }
-std::vector<Vector2D> StaticMap::GetArmorSpawnPoints() { return armorSpawnPoints; }
+std::vector<Vector2D> StaticMap::GetBoxesSpawnPoints() { return boxSpawnPoints; }

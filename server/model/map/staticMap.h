@@ -24,7 +24,7 @@ private:
     std::vector<GroundDto> grounds;
     std::vector<Vector2D> playersSpawnPlaces;
     std::vector<Vector2D> collectableSpawnPoints;
-    std::vector<Vector2D> armorSpawnPoints;
+    std::vector<Vector2D> boxSpawnPoints;
 
     // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
@@ -48,7 +48,7 @@ public:
     std::vector<Vector2D> GetPlayersSpawnPoints();
 
     std::vector<Vector2D> GetCollectableSpawnPoints();
-    std::vector<Vector2D> GetArmorSpawnPoints();
+    std::vector<Vector2D> GetBoxesSpawnPoints();
 
     GameSceneDto GetScene();
     ~StaticMap() {}
