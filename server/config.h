@@ -53,7 +53,7 @@ public:
     float getCooldownBasic() const;
     float getCooldownMedium() const;
     float getCooldownLong() const;
-    float getTimeToExploteGranada() const;
+    float getTimeToExploteGranade() const;
 
     /***************************DAMAGE**************************************** */
     int getDamageMinimun() const;
