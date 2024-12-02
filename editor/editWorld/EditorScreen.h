@@ -39,6 +39,7 @@ private:
     Text saveButtonText;
     Object2D mapBg;
     vector<MapBlock2D> mapBlocks;
+    vector<Object2D> boxes;
     optional<MapBlock2D> selected;
     optional<Object2D> spawnPoint;
     optional<int> typeSpawnPoint;

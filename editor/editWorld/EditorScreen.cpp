@@ -1,5 +1,6 @@
 #include "EditorScreen.h"
 
+#include <algorithm>
 #include <set>
 
 #include "client/tweening/TweenManager.h"
@@ -131,6 +132,10 @@ void EditorScreen::InitMap(GameSceneDto mapData) {
 
         mapBlocks[i].SetBorders(left, right, top, bottom);
     }
+    std::transform(mapData.boxesPoints.begin(), mapData.boxesPoints.end(),
+                   std::back_inserter(boxes), [](const auto& box) {
+                       return Object2D(BOX_IMG.c_str(), Transform(box.second, Vector2D(2, 2)));
+                   });
 }
 
 EditorScreen::~EditorScreen() { cam.ClearCacheItem(writer.GetGameScene().theme); }
@@ -144,6 +149,9 @@ void EditorScreen::DrawGameWorld() {
     UpdateWorld();
     mapBg.Draw(cam);
     for (auto& it: mapBlocks) {
+        it.Draw(cam);
+    }
+    for (auto& it: boxes) {
         it.Draw(cam);
     }
 }
@@ -237,7 +245,7 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
                 } else if (typeSpawnPoint.value() == COLLECTABLE_SPAWN_POINT) {
                     writer.AddCollectableSpawnPoint(worldPos.x, worldPos.y);
                 } else if (typeSpawnPoint.value() == BOX_SPAWN_POINT) {
-                    writer.AddArmorSpawnPoint(worldPos.x, worldPos.y);
+                    writer.AddBoxSpawnPoint(worldPos.x, worldPos.y);
                 }
                 spawnPoint.reset();
                 typeSpawnPoint.reset();

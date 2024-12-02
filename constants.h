@@ -27,7 +27,7 @@ const string LEFT_STR = "LEFT";
 const string RIGHT_STR = "RIGHT";
 const string BOTTOM_STR = "BOTTOM";
 const string TOP_STR = "TOP";
-
+const string KEY = "key";
 const std::string RELATIVE_LEVEL_PATH = "/etc/duckGame_g6/levels/";
 const std::string YAML_FILE = ".yaml";
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <yaml-cpp/yaml.h>
@@ -17,6 +18,7 @@
 using std::optional;
 using std::set;
 using std::string;
+using std::unordered_map;
 using std::vector;
 class MapEditor {
 private:
@@ -36,7 +38,7 @@ public:
     void SaveChanges();
     void AddPlayerSpawnPoint(const float& x, const float& y);
     void AddCollectableSpawnPoint(const float& x, const float& y);
-    void AddArmorSpawnPoint(const float& x, const float& y);
+    void AddBoxSpawnPoint(const float& x, const float& y);
     void AddTheme(const string& theme);
     void AddFullMapSize(const size_t& x, const size_t& y);
     void DeleteALevel();
@@ -46,6 +48,7 @@ public:
     optional<GroundDto> TakePltaform(const Vector2D pos);
     vector<GroundDto> GetPlatforms();
     GameSceneDto GetGameScene();
+    unordered_map<BoxID_t, Vector2D> GetBoxes();
     ~MapEditor() = default;
 };
 #endif

@@ -199,9 +199,24 @@ vector<GroundDto> MapEditor::GetPlatforms() {
     return grounds;
 }
 GameSceneDto MapEditor::GetGameScene() {
-    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms());
+
+    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms(),
+                        GetBoxes());
 }
-void MapEditor::AddArmorSpawnPoint(const float& x, const float& y) {
+unordered_map<BoxID_t, Vector2D> MapEditor::GetBoxes() {
+    BoxID_t id = 0;
+    unordered_map<BoxID_t, Vector2D> boxes;
+    auto _boxSpawnPoints = config[BOX_POINTS_STR];
+    for (std::size_t i = 0; i < _boxSpawnPoints.size(); ++i) {
+        Vector2D pos;
+        pos.x = _boxSpawnPoints[i][X_STR].as<float>();
+        pos.y = _boxSpawnPoints[i][Y_STR].as<float>();
+        boxes[id] = pos;
+    }
+    return boxes;
+}
+
+void MapEditor::AddBoxSpawnPoint(const float& x, const float& y) {
     YAML::Node boxSpawnPoint = YAML::Node(YAML::NodeType::Map);
     boxSpawnPoint[X_STR] = x;
     boxSpawnPoint[Y_STR] = y;

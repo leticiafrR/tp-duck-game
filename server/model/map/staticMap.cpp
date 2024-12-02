@@ -160,7 +160,6 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
         pos.x = _boxSpawnPoints[i][X_STR].as<float>();
         pos.y = _boxSpawnPoints[i][Y_STR].as<float>();
         boxes[id] = pos;
-        id++;
     }
 
     auto platformsList = config[PLATFORMS_STR];

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "common/Transform.h"
@@ -24,12 +25,12 @@ struct GroundDto {
 struct GameSceneDto: public NetworkMsg {
     std::string theme;
     std::vector<GroundDto> groundBlocks;
-    std::vector<BoxID_t> boxesPoints;
+    std::unordered_map<BoxID_t, Vector2D> boxesPoints;
 
     GameSceneDto(const std::string& theme, const std::vector<GroundDto>& groundBlocks):
             theme(theme), groundBlocks(groundBlocks), boxesPoints() {}
     GameSceneDto(const std::string& theme, const std::vector<GroundDto>& groundBlocks,
-                 const std::vector<BoxID_t>& boxesPoints):
+                 const std::unordered_map<BoxID_t, Vector2D>& boxesPoints):
             theme(theme), groundBlocks(groundBlocks), boxesPoints(boxesPoints) {}
 };
 
