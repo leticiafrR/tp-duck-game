@@ -13,7 +13,8 @@ private:
     void Explote();
 
 public:
-    explicit Grenade(ProjectilesController& projectilesController, TypeItem type);
+    explicit Grenade(ProjectilesController& projectilesController, TypeItem type,
+                     float timeToExplote);
     ~Grenade() = default;
     void Update(const StaticMap& map, float deltaTime) override;
     void CheckCollisionWithDucks(std::unordered_map<PlayerID_t, Duck*>& /*ducks*/) override;
