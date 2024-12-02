@@ -13,11 +13,7 @@ EventsManager::EventsManager():
 Snapshot EventsManager::GetSnapshot(bool gameOver) {
     Snapshot s(gameOver, playerEvents, projectileEvents, collectableDespawnEvents,
                collectableSpawnEvents, throwablesSpawnings, throwablesDespawnings);
-    // for (auto& pair: throwablesSpawnings) {
-    //     std::cout << "[snapshot]: \n ->ID: " << (int)pair.first
-    //               << "\n  ->position: " << pair.second.position.ToString() << std::endl
-    //               << std::endl;
-    // }
+
     playerEvents.clear();
     projectileEvents.clear();
     collectableDespawnEvents.clear();
