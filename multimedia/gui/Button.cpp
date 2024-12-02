@@ -5,6 +5,17 @@
 #include "ButtonsManager.h"
 #include "GUIManager.h"
 
+
+Button::Button(RectTransform rect, Color color, int layerOrder):
+        Image(rect, color, layerOrder),
+        onClick([]() {}),
+        normalColor(color),
+        pressedColor(ColorExtension::AddValue(color, -50)),
+        disabledColor(color.SetAlpha(120)),
+        interactable(true) {
+    ButtonsManager::GetInstance().AddButton(this);
+}
+
 Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder):
         Image(rect, color, layerOrder),
         onClick(onClick),

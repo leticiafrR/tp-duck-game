@@ -108,6 +108,7 @@ void Config::setCooldown(const YAML::Node& config) {
 void Config::setDamage(const YAML::Node& config) {
     damage.emplace_back(config[MINIMUN_STR].as<int>());
     damage.emplace_back(config[SHORT_STR].as<int>());
+    damage.emplace_back(config[MEDIUM_STR].as<int>());
     damage.emplace_back(config[LONG_STR].as<int>());
 }
 

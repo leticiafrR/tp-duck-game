@@ -15,19 +15,28 @@
 using std::string;
 using namespace SDL2pp;  // NOLINT
 
+const string DEFAULT_TTF = "pixel.ttf";
+
 class Text: public GraphicUI {
 private:
     string text = "";
-    string filename = "pixel.ttf";
+    string filename = DEFAULT_TTF;
     int fontSize = 0;
 
 public:
-    Text(const string& text, int fontSize, const RectTransform& rect, Color color,
-         int layerOrder = 0, const string& filename = "pixel.ttf");
+    Text(const RectTransform& rect = RectTransform(), int layerOrder = 0,
+         Color color = ColorExtension::White(), const string& filename = DEFAULT_TTF);
+
+    Text(const string& text, int fontSize, const RectTransform& rect,
+         Color color = ColorExtension::White(), int layerOrder = 0,
+         const string& filename = DEFAULT_TTF);
 
     ~Text();
 
     void SetText(const string& newText);
+    void SetFontSize(int fontSize);
+
+    void SetTextAndFontSize(const string& newText, int fontSize);
 
     Font& GetFont();
 

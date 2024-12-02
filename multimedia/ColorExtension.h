@@ -21,6 +21,7 @@ public:
     static Color Orange();
     static Color Cyan();
     static Color Yellow();
+    static Color DarkGray();
 
     static Color AddValue(Color color, int value);
 
