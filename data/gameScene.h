@@ -7,6 +7,7 @@
 
 #include "common/Transform.h"
 
+#include "id.h"
 #include "networkMsg.h"
 
 typedef enum: uint8_t { RIGHT, LEFT, TOP, BOTTOM } VISIBLE_EDGES;
@@ -23,9 +24,13 @@ struct GroundDto {
 struct GameSceneDto: public NetworkMsg {
     std::string theme;
     std::vector<GroundDto> groundBlocks;
+    std::vector<BoxID_t> boxesPoints;
 
     GameSceneDto(const std::string& theme, const std::vector<GroundDto>& groundBlocks):
-            theme(theme), groundBlocks(groundBlocks) {}
+            theme(theme), groundBlocks(groundBlocks), boxesPoints() {}
+    GameSceneDto(const std::string& theme, const std::vector<GroundDto>& groundBlocks,
+                 const std::vector<BoxID_t>& boxesPoints):
+            theme(theme), groundBlocks(groundBlocks), boxesPoints(boxesPoints) {}
 };
 
 #endif
