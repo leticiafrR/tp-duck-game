@@ -34,7 +34,7 @@ enum class TypeItem : uint8_t {
     ARMOR,
     GRENADE,
     BANANA,
-    __typesCount,
+    __collectableCount,
     EMPTY,
     BANANA_PEEL,
     GRENADE_UNLOCK
