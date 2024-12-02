@@ -2,7 +2,7 @@
 #define GAME_STATUS_SCREEN_H
 
 #include <algorithm>
-#include <memory>
+#include <list>
 #include <optional>
 #include <unordered_map>
 #include <vector>
@@ -20,8 +20,7 @@
 
 #include "ShowColorsScreen.h"
 
-using std::make_shared;
-using std::shared_ptr;
+using std::list;
 using std::unordered_map;
 using std::vector;
 
@@ -32,7 +31,7 @@ private:
     Text txtCount;
 
 public:
-    DuckResultItemGUI(Vector2D pos, const PlayerData& duck, int count);
+    DuckResultItemGUI(Vector2D pos, const PlayerData& duck, DuckData duckData, int count);
 
     ~DuckResultItemGUI();
 };
@@ -44,13 +43,15 @@ private:
     Button btnBack;
     Timer timer;
 
-    vector<shared_ptr<DuckResultItemGUI>> ducksGUI;
+    list<DuckResultItemGUI> ducksGUI;
+
+    void InitPlayersDisplay(vector<PlayerData> players, unordered_map<PlayerID_t, int> gameResults,
+                            DuckData duckData);
 
 public:
-    GameStatusScreen(Camera& cam, bool& wasClosed, vector<PlayerData> players,
-                     unordered_map<PlayerID_t, int> gameResults, std::optional<PlayerData> winner);
-
-    void InitPlayersDisplay(vector<PlayerData> players, unordered_map<PlayerID_t, int> gameResults);
+    GameStatusScreen(GameKit& kit, bool& wasClosed, vector<PlayerData> players,
+                     unordered_map<PlayerID_t, int> gameResults, DuckData duckData,
+                     std::optional<PlayerData> winner);
 
     void InitRun() override;
     void TakeInput(SDL_Event event) override;

@@ -1,8 +1,8 @@
 #ifndef SHOW_COLORS_SCREEN_H
 #define SHOW_COLORS_SCREEN_H
 
-#include <memory>
-#include <vector>
+#include <list>
+#include <unordered_map>
 
 #include "client/rendering/DuckClientRenderer.h"
 #include "client/tweening/ImageTween.h"
@@ -14,9 +14,8 @@
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
 
-using std::make_shared;
-using std::shared_ptr;
-using std::vector;
+using std::list;
+using std::unordered_map;
 
 class DuckColorItemGUI {
 private:
@@ -24,7 +23,7 @@ private:
     Text txtNickname;
 
 public:
-    DuckColorItemGUI(Vector2D pos, const DuckClientRenderer& duck);
+    DuckColorItemGUI(Vector2D pos, const PlayerData& playerData, DuckData duckData);
     void SetActive(bool active);
     ~DuckColorItemGUI();
 };
@@ -38,12 +37,13 @@ private:
 
     bool finished;
 
-    vector<shared_ptr<DuckColorItemGUI>> ducksGUI;
+    list<DuckColorItemGUI> ducksGUI;
 
 public:
     ShowColorsScreen();
 
-    void Show(map<PlayerID_t, shared_ptr<DuckClientRenderer>>& ducks);
+    void Show(const unordered_map<PlayerID_t, PlayerData>& playersData, DuckData duckData);
+
     void Update(float deltaTime);
 
     void Finish();

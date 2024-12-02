@@ -1,13 +1,12 @@
 #include "MatchListScreen.h"
 
 void MatchListScreen::OnCreatePressed() {
-    AudioManager::GetInstance().PlayButtonSFX();
-
+    gameKit.PlayButtonSFX();
     playersCountSelection.Display([this](uint8_t playersCount) {
         bool createSuccess;
         client.CreateMatch(playersCount);
         LoadingScreen loading(
-                cam, wasClosed,
+                gameKit, wasClosed,
                 [this, &createSuccess]() {
                     if (!client.IsConnected()) {
                         running = false;
@@ -36,13 +35,13 @@ void MatchListScreen::OnCreatePressed() {
 }
 
 void MatchListScreen::OnJoinLobbyPressed(int id) {
-    AudioManager::GetInstance().PlayButtonSFX();
+    gameKit.PlayButtonSFX();
 
     playersCountSelection.Display([this, id](uint8_t playersCount) {
         bool joinSuccess;
         client.SelectMatch(id, playersCount);
         LoadingScreen loading(
-                cam, wasClosed,
+                gameKit, wasClosed,
                 [this, &joinSuccess]() {
                     std::shared_ptr<ResultJoining> joinResult = nullptr;
                     if (client.TryRecvNetworkMsg(joinResult)) {
@@ -64,7 +63,7 @@ void MatchListScreen::OnJoinLobbyPressed(int id) {
 }
 
 void MatchListScreen::OnRefreshPressed() {
-    AudioManager::GetInstance().PlayButtonSFX();
+    gameKit.PlayButtonSFX();
     refreshButton.SetInteractable(false);
     client.Refresh();
     WaitRefresh();
@@ -73,7 +72,7 @@ void MatchListScreen::OnRefreshPressed() {
 
 void MatchListScreen::WaitRefresh() {
     LoadingScreen loading(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [this]() {
                 std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
                 if (client.TryRecvNetworkMsg(lobbyListResult)) {
@@ -115,8 +114,8 @@ void MatchListScreen::UpdateWidgetListPosition(Vector2D movement) {
     }
 }
 
-MatchListScreen::MatchListScreen(Camera& c, bool& wasClosed, Client& cl, bool& isOwner):
-        BaseScreen(c, wasClosed),
+MatchListScreen::MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool& isOwner):
+        BaseScreen(kit, wasClosed),
         client(cl),
         header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
                              Vector2D(0.5, 1)),
@@ -153,13 +152,15 @@ MatchListScreen::MatchListScreen(Camera& c, bool& wasClosed, Client& cl, bool& i
                               Vector2D(0.5, 0.5)),
                 [this]() {
                     this->controls.SetActive(true);
-                    AudioManager::GetInstance().PlayButtonSFX();
+                    gameKit.PlayButtonSFX();
                 },
                 Color(40, 40, 40), 4),
         controlsButtonText("CONTROLS", 20,
                            RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
                                          Vector2D(0.5, 0.5)),
                            ColorExtension::White(), 5),
+        controls(gameKit),
+        playersCountSelection(gameKit),
         isOwner(isOwner) {
     controls.SetActive(false);
 }

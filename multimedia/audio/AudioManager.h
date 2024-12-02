@@ -18,24 +18,11 @@ class AudioManager {
 private:
     const int MAX_CHANELS = 20;
     Mixer mixer;
-
-    const unordered_map<TypeProjectile, string> bulletSFX = {
-            {TypeProjectile::BULLET, "bulletSFX.wav"},
-            {TypeProjectile::LASER, "laserSFX.mp3"},
-            {TypeProjectile::FRAGMENT, "bulletSFX.wav"},
-            {TypeProjectile::BANANA, "bulletSFX.wav"}};
-
-    AudioManager();
-    ~AudioManager();
+    AudioCache audioCache;
 
 public:
-    static AudioManager& GetInstance();
-
-    void PlayShootSFX(TypeProjectile type = TypeProjectile::BULLET);
-    void PlayCuackSFX();
-    void PlayDamagedSFX();
-    void PlayButtonSFX();
-    void PlayGameMusic();
+    AudioManager();
+    ~AudioManager();
 
     void PlaySFX(const string& filename);
 

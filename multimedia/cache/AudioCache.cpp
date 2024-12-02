@@ -23,6 +23,25 @@ Music& AudioCache::GetMusicData(const string& filename) {
     return musicCache.at(filename);
 }
 
+const Chunk& AudioCache::GetAudioSFXData(const string& filename) {
+    if (sfxMapCache.contains(filename)) {
+        return sfxMapCache.at(filename);
+    }
+
+    sfxMapCache.emplace(filename, Chunk(AUDIO_PATH + filename));
+    return sfxMapCache.at(filename);
+}
+
+const Music& AudioCache::GetAudioMusicData(const string& filename) {
+    if (musicMapCache.contains(filename)) {
+        return musicMapCache.at(filename);
+    }
+
+    musicMapCache.emplace(filename, Music(AUDIO_PATH + filename));
+    return musicMapCache.at(filename);
+}
+
+
 void AudioCache::Clear() {
     sfxCache.clear();
     musicCache.clear();

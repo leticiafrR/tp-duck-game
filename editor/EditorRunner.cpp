@@ -13,6 +13,9 @@ using std::string;
 EditorRunner::EditorRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
 void EditorRunner::run() {
     bool exit = false;
+
+    ResourceManager resourceManager;
+
     while (!exit) {
         MapEditor writeArchive;
         int option = MenuScreen(cam).run();
@@ -29,7 +32,7 @@ void EditorRunner::run() {
             }
             writeArchive = MapEditor(name);
         }
-        EditorScreen runner(cam, writeArchive);
+        EditorScreen runner(cam, writeArchive, resourceManager);
         if (!runner.Render()) {
             return;
         }

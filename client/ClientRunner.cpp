@@ -3,7 +3,7 @@
 PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) {
     PlayerID_t winnerId;
     LoadingScreen loadingWinner(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [&client, &winnerId]() {
                 shared_ptr<FinalWinner> msg;
 
@@ -24,7 +24,7 @@ void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
     std::cout << "Waiting for final group"
               << "\n";
     LoadingScreen loadingFinalGroup(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [&isFinalGroup, &client]() {
                 shared_ptr<FinalGroupGame> finalGroupData;
 
@@ -43,7 +43,7 @@ void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
 void ClientRunner::LoadRoundResults(Client& client, bool& matchEnded,
                                     unordered_map<PlayerID_t, int>& results) {
     LoadingScreen matchEndedScreen(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [&client, &matchEnded, &results]() {
                 shared_ptr<GamesRecountDto> recountData;
                 if (client.TryRecvNetworkMsg(recountData)) {
@@ -62,7 +62,7 @@ void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isIni
     shared_ptr<Snapshot> firstSnapshot = nullptr;
 
     LoadingScreen(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [&client, &mapData, &firstSnapshot]() {
                 if (!mapData)
                     client.TryRecvNetworkMsg(mapData);
@@ -72,12 +72,12 @@ void ClientRunner::PlayRound(Client& client, MatchStartDto matchData, bool isIni
             },
             "LOADING...")
             .Run();
-    Gameplay(client, cam, wasClosed, matchData, *mapData, *firstSnapshot, isInitial).Run();
+    Gameplay(client, gameKit, wasClosed, matchData, *mapData, *firstSnapshot, isInitial).Run();
 }
 
 void ClientRunner::ErrorScreen(const string& text) {
     LoadingScreen(
-            cam, wasClosed, []() { return false; }, text)
+            gameKit, wasClosed, []() { return false; }, text)
             .Run();
 }
 
@@ -85,11 +85,12 @@ void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
                                      const vector<PlayerData>& players,
                                      const unordered_map<PlayerID_t, int>& gameResults) {
 
-    GameStatusScreen(cam, wasClosed, players, gameResults, winner).Run();
+    DuckData duckData = gameKit.GetResourceManager().GetDuckData();
+    GameStatusScreen(gameKit, wasClosed, players, gameResults, duckData, winner).Run();
 }
 
 ClientRunner::ClientRunner(Renderer& render, int fps):
-        cam(std::move(render), 70, Rate(fps)), wasClosed(false) {}
+        cam(std::move(render), 70, Rate(fps)), wasClosed(false), gameKit(cam) {}
 
 ClientRunner::~ClientRunner() = default;
 
@@ -103,7 +104,7 @@ void ClientRunner::KillClient(Client& client) {
 
 void ClientRunner::PlayConnected(Client& client) try {
     bool isOwner;
-    MatchListScreen(cam, wasClosed, client, isOwner).Run();
+    MatchListScreen(gameKit, wasClosed, client, isOwner).Run();
 
     if (wasClosed) {
         KillClient(client);
@@ -111,7 +112,7 @@ void ClientRunner::PlayConnected(Client& client) try {
     }
 
     shared_ptr<MatchStartDto> matchDataPtr;
-    LobbyScreen(cam, wasClosed, client, isOwner, matchDataPtr).Run();
+    LobbyScreen(gameKit, wasClosed, client, isOwner, matchDataPtr).Run();
 
     if (wasClosed) {
         KillClient(client);
@@ -120,7 +121,7 @@ void ClientRunner::PlayConnected(Client& client) try {
 
     MatchStartDto matchData = *matchDataPtr;
 
-    AudioManager::GetInstance().PlayGameMusic();
+    // AudioManager::GetInstance().PlayGameMusic();
     bool matchEnded = false;
     unordered_map<PlayerID_t, int> roundResults;
     bool isInitial = true;
@@ -148,7 +149,7 @@ void ClientRunner::PlayConnected(Client& client) try {
             return;
         }
     }
-    AudioManager::GetInstance().StopMusic();
+    // gameKit.GetAudioManager().StopMusic();
 
     std::optional<PlayerData> winner = LoadWinner(client, matchData.playersData);
 
@@ -158,17 +159,21 @@ void ClientRunner::PlayConnected(Client& client) try {
 
 } catch (const ServerUnavailable& e) {
     std::cerr << e.what() << std::endl;
-    client.JoinCommunicationThreads();
+    KillClient(client);
     ErrorScreen("Can't connect to server, please try again later");
+} catch (const ResourceUndefined& e) {
+    std::cerr << e.what() << std::endl;
+    KillClient(client);
+    ErrorScreen("An error occurred while loading resources");
 } catch (std::exception& e) {
     std::cerr << e.what() << std::endl;
-    client.JoinCommunicationThreads();
+    KillClient(client);
     ErrorScreen("An unexpected error occurred, please try again later");
 }
 
 void ClientRunner::Run() {
     string nickname;
-    MenuScreen(cam, wasClosed, nickname).Run();
+    MenuScreen(gameKit, wasClosed, nickname).Run();
     if (wasClosed)
         return;
 

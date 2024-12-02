@@ -6,23 +6,8 @@ AudioManager::AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {
 
 AudioManager::~AudioManager() = default;
 
-AudioManager& AudioManager::GetInstance() {
-    static AudioManager Instance;
-    return Instance;
-}
-
-void AudioManager::PlayShootSFX(TypeProjectile type) {
-    PlaySFX(bulletSFX.contains(type) ? bulletSFX.at(type) : bulletSFX.at(TypeProjectile::BULLET));
-}
-
-void AudioManager::PlayCuackSFX() { PlaySFX("cuackSFX.mp3"); }
-void AudioManager::PlayDamagedSFX() { PlaySFX("damagedSFX.mp3"); }
-void AudioManager::PlayButtonSFX() { PlaySFX("buttonSFX.mp3"); }
-
-void AudioManager::PlayGameMusic() { PlayMusic("bgMusic.mp3"); }
-
 void AudioManager::PlaySFX(const string& filename) {
-    Chunk& audio = AudioCache::GetSFXData(filename);
+    const Chunk& audio = audioCache.GetAudioSFXData(filename);
     if (mixer.IsChannelPlaying(-1) == MAX_CHANELS) {
         return;
     }
@@ -30,7 +15,7 @@ void AudioManager::PlaySFX(const string& filename) {
 }
 
 void AudioManager::PlayMusic(const string& filename) {
-    Music& audio = AudioCache::GetMusicData(filename);
+    const Music& audio = audioCache.GetAudioMusicData(filename);
     mixer.PlayMusic(audio, -1);
 }
 

@@ -21,12 +21,18 @@ private:
     static map<string, Chunk> sfxCache;
     static map<string, Music> musicCache;
 
+    map<string, Chunk> sfxMapCache;
+    map<string, Music> musicMapCache;
+
 public:
-    AudioCache() = delete;
-    ~AudioCache() = delete;
+    // AudioCache() = delete;
+    // ~AudioCache() = delete;
 
     static Chunk& GetSFXData(const string& filename);
     static Music& GetMusicData(const string& filename);
+
+    const Chunk& GetAudioSFXData(const string& filename);
+    const Music& GetAudioMusicData(const string& filename);
 
     static void Clear();
 };

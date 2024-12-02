@@ -13,9 +13,13 @@
 #include "client/gameplay/GameplayGUI.h"
 #include "client/network/Client.h"
 #include "client/rendering/BulletRenderer.h"
+#include "client/rendering/BulletsController.h"
 #include "client/rendering/CollectableRenderer.h"
+#include "client/rendering/CollectablesController.h"
 #include "client/rendering/DuckClientRenderer.h"
+#include "client/rendering/DucksController.h"
 #include "client/rendering/ThrowableRenderer.h"
+#include "client/rendering/ThrowablesController.h"
 #include "client/screens/ShowColorsScreen.h"
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
@@ -44,32 +48,26 @@ private:
     Image fadePanel;
     ImageTween fadePanelTween;
 
-    vector<PlayerData> playersData;
-    map<PlayerID_t, std::shared_ptr<DuckClientRenderer>> players;
     vector<MapBlock2D> mapBlocks;
-    list<BulletRenderer> bullets;
-    unordered_map<CollectableID_t, CollectableRenderer> collectables;
-    unordered_map<ThrowableID_t, ThrowableRenderer> throwables;
     ShowColorsScreen showColorsPanel;
 
     GameplayGUI gui;
 
-    // set<int> pressedKeysSet;
     ClientControls controls;
+
+    ResourceManager& resourceManager;
+    AudioManager& audioManager;
+
+    ThrowablesController throwablesController;
+    CollectablesController collectablesController;
+    BulletsController bulletsController;
+    DucksController ducksController;
 
     bool finishing = true;
 
     void InitPlayers(const MatchStartDto& matchData, const Snapshot& firstSnapshot);
 
     void InitMap(GameSceneDto mapData);
-
-    void BulletsReapDead();
-
-    void SpawnCollectable(CollectableSpawnEventDto collectableData);
-    void DespawnCollectable(CollectableID_t id);
-
-    void SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData);
-    void DespawnThrowable(ThrowableID_t id);
 
     void TakeSnapshots(Callback OnLastSnapshot);
 
@@ -84,8 +82,8 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    Gameplay(Client& cl, Camera& c, bool& wasClosed, MatchStartDto matchData, GameSceneDto mapData,
-             Snapshot firstSnapshot, bool isInitial);
+    Gameplay(Client& cl, GameKit& gameKit, bool& wasClosed, MatchStartDto matchData,
+             GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial);
     ~Gameplay();
 };
 

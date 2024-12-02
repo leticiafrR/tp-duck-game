@@ -19,8 +19,8 @@ private:
     Function<bool> endFunction;
 
 public:
-    LoadingScreen(Camera& cam, bool& wasClosed, Function<bool> endFunction, const string& text = "",
-                  bool lockerOnly = false);
+    LoadingScreen(GameKit& kit, bool& wasClosed, Function<bool> endFunction,
+                  const string& text = "", bool lockerOnly = false);
 
     ~LoadingScreen();
 

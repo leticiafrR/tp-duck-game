@@ -1,0 +1,11 @@
+projectiles: projectiles.yaml
+
+collectables: collectables.yaml
+
+duck: base_duck.yaml
+
+armor: armor.yaml
+
+menu: menu.yaml
+
+map_themes: map_themes.yaml

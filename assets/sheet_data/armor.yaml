@@ -1,0 +1,20 @@
+file: defense.png
+
+frames:
+  armor_idle:
+    - { x: 451, y: 11, w: 32, h: 32 }
+
+  armor_run:
+    - { x: 419, y: 11, w: 32, h: 32 }
+    - { x: 451, y: 11, w: 32, h: 32 }
+    - { x: 483, y: 11, w: 32, h: 32 }
+    - { x: 515, y: 11, w: 32, h: 32 }
+    - { x: 547, y: 11, w: 32, h: 32 }
+
+  armor_jumping:
+    - { x: 419, y: 43, w: 32, h: 32 }
+  armor_falling:
+    - { x: 515, y: 43, w: 32, h: 32 }
+
+  armor_crouched:
+    - { x: 387, y: 75, w: 32, h: 32 }

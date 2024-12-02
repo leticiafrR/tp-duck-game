@@ -1,9 +1,9 @@
 #include "MapBlock2D.h"
 
 #include "constants.h"
-MapBlock2D::MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
-                       const Transform& transform, float tileSize):
-        transform(transform), renderData(imageFilename, sheetDataFilename, tileSize) {}
+
+MapBlock2D::MapBlock2D(MapThemeData& mapThemeData, const Transform& transform):
+        renderData(mapThemeData), transform(transform) {}
 
 MapBlock2D::~MapBlock2D() = default;
 
@@ -32,98 +32,75 @@ vector<string> MapBlock2D::GetEdges() { return edges; }
 
 Transform& MapBlock2D::GetTransform() { return transform; }
 
-void MapBlock2D::Draw(Camera& cam) {
+void MapBlock2D::DrawTop(Camera& cam, int hCount, int startXPos, int startYPos) {
+    string tileSetFile = renderData.GetTileFile();
 
-    int n = transform.GetSize().x / renderData.tileSize;
-    int k = transform.GetSize().y / renderData.tileSize;
+    cam.DrawTexture(tileSetFile, renderData.GetTopLeftRect(),
+                    Transform(Vector2D(startXPos, startYPos), Vector2D(TILE_SIZE, TILE_SIZE)));
 
-    float startXPos =
-            transform.GetPos().x - (transform.GetSize().x / 2) + (renderData.tileSize / 2);
-    float startYPos =
-            transform.GetPos().y + (transform.GetSize().y / 2) - (renderData.tileSize / 2);
-
-    // Top
-    cam.DrawTexture(renderData.imageFilename,
-                    renderData.mapBlockData[renderData.borderTop ? "ground_top" : "ground_center"]
-                                           [renderData.borderLeft ? 0 : 1],
-                    Color(255, 255, 255, 255),
-                    Transform(Vector2D(startXPos, startYPos),
-                              Vector2D(renderData.tileSize, renderData.tileSize)),
-                    SDL_FLIP_NONE);
-
-    for (int i = 1; i < n - 1; i++) {
-        cam.DrawTexture(
-                renderData.imageFilename,
-                renderData.mapBlockData[renderData.borderTop ? "ground_top" : "ground_center"][1],
-                Color(255, 255, 255, 255),
-                Transform(Vector2D(startXPos + i * renderData.tileSize, startYPos),
-                          Vector2D(renderData.tileSize, renderData.tileSize)),
-                SDL_FLIP_NONE);
+    for (int i = 1; i < hCount - 1; i++) {
+        cam.DrawTexture(tileSetFile, renderData.GetTopCenterRect(),
+                        Transform(Vector2D(startXPos + i * TILE_SIZE, startYPos),
+                                  Vector2D(TILE_SIZE, TILE_SIZE)));
     }
 
-    cam.DrawTexture(renderData.imageFilename,
-                    renderData.mapBlockData[renderData.borderTop ? "ground_top" : "ground_center"]
-                                           [renderData.borderRight ? 2 : 1],
-                    Color(255, 255, 255, 255),
-                    Transform(Vector2D(startXPos + (n - 1) * renderData.tileSize, startYPos),
-                              Vector2D(renderData.tileSize, renderData.tileSize)),
-                    SDL_FLIP_NONE);
+    cam.DrawTexture(tileSetFile, renderData.GetTopRightRect(),
+                    Transform(Vector2D(startXPos + (hCount - 1) * TILE_SIZE, startYPos),
+                              Vector2D(TILE_SIZE, TILE_SIZE)));
+}
 
-    // Center
-    for (int j = 1; j < k - 1; j++) {
-        cam.DrawTexture(renderData.imageFilename,
-                        renderData.mapBlockData["ground_center"][renderData.borderLeft ? 0 : 1],
-                        Color(255, 255, 255, 255),
-                        Transform(Vector2D(startXPos, startYPos - j * renderData.tileSize),
-                                  Vector2D(renderData.tileSize, renderData.tileSize)),
-                        SDL_FLIP_NONE);
+void MapBlock2D::DrawCenter(Camera& cam, int hCount, int vCount, int startXPos, int startYPos) {
 
-        for (int i = 1; i < n - 1; i++) {
-            cam.DrawTexture(renderData.imageFilename, renderData.mapBlockData["ground_center"][1],
-                            Color(255, 255, 255, 255),
-                            Transform(Vector2D(startXPos + i * renderData.tileSize,
-                                               startYPos - j * renderData.tileSize),
-                                      Vector2D(renderData.tileSize, renderData.tileSize)),
-                            SDL_FLIP_NONE);
+    string tileSetFile = renderData.GetTileFile();
+
+    for (int j = 1; j < vCount - 1; j++) {
+        cam.DrawTexture(tileSetFile, renderData.GetCenterLeftRect(),
+                        Transform(Vector2D(startXPos, startYPos - j * TILE_SIZE),
+                                  Vector2D(TILE_SIZE, TILE_SIZE)));
+
+        for (int i = 1; i < hCount - 1; i++) {
+            cam.DrawTexture(
+                    tileSetFile, renderData.GetCenterCenterRect(),
+                    Transform(Vector2D(startXPos + i * TILE_SIZE, startYPos - j * TILE_SIZE),
+                              Vector2D(TILE_SIZE, TILE_SIZE)));
         }
 
-        cam.DrawTexture(renderData.imageFilename,
-                        renderData.mapBlockData["ground_center"][renderData.borderRight ? 2 : 1],
-                        Color(255, 255, 255, 255),
-                        Transform(Vector2D(startXPos + (n - 1) * renderData.tileSize,
-                                           startYPos - j * renderData.tileSize),
-                                  Vector2D(renderData.tileSize, renderData.tileSize)),
-                        SDL_FLIP_NONE);
+        cam.DrawTexture(
+                tileSetFile, renderData.GetCenterRightRect(),
+                Transform(Vector2D(startXPos + (hCount - 1) * TILE_SIZE, startYPos - j * TILE_SIZE),
+                          Vector2D(TILE_SIZE, TILE_SIZE)));
+    }
+}
+
+void MapBlock2D::DrawBottom(Camera& cam, int hCount, int vCount, int startXPos, int startYPos) {
+
+    string tileSetFile = renderData.GetTileFile();
+
+    cam.DrawTexture(tileSetFile, renderData.GetBottomLeftRect(),
+                    Transform(Vector2D(startXPos, startYPos - (vCount - 1) * TILE_SIZE),
+                              Vector2D(TILE_SIZE, TILE_SIZE)));
+
+    for (int i = 1; i < hCount - 1; i++) {
+        cam.DrawTexture(
+                tileSetFile, renderData.GetBottomCenterRect(),
+                Transform(Vector2D(startXPos + i * TILE_SIZE, startYPos - (vCount - 1) * TILE_SIZE),
+                          Vector2D(TILE_SIZE, TILE_SIZE)));
     }
 
-    // Bottom
-    cam.DrawTexture(
-            renderData.imageFilename,
-            renderData.mapBlockData[renderData.borderBottom ? "ground_bottom" : "ground_center"]
-                                   [renderData.borderLeft ? 0 : 1],
-            Color(255, 255, 255, 255),
-            Transform(Vector2D(startXPos, startYPos - (k - 1) * renderData.tileSize),
-                      Vector2D(renderData.tileSize, renderData.tileSize)),
-            SDL_FLIP_NONE);
+    cam.DrawTexture(tileSetFile, renderData.GetBottomRightRect(),
+                    Transform(Vector2D(startXPos + (hCount - 1) * TILE_SIZE,
+                                       startYPos - (vCount - 1) * TILE_SIZE),
+                              Vector2D(TILE_SIZE, TILE_SIZE)));
+}
 
-    for (int i = 1; i < n - 1; i++) {
-        cam.DrawTexture(renderData.imageFilename,
-                        renderData.mapBlockData[renderData.borderBottom ? "ground_bottom" :
-                                                                          "ground_center"][1],
-                        Color(255, 255, 255, 255),
-                        Transform(Vector2D(startXPos + i * renderData.tileSize,
-                                           startYPos - (k - 1) * renderData.tileSize),
-                                  Vector2D(renderData.tileSize, renderData.tileSize)),
-                        SDL_FLIP_NONE);
-    }
+void MapBlock2D::Draw(Camera& cam) {
+    int hCount = transform.GetSize().x / TILE_SIZE;
+    int vCount = transform.GetSize().y / TILE_SIZE;
 
-    cam.DrawTexture(
-            renderData.imageFilename,
-            renderData.mapBlockData[renderData.borderBottom ? "ground_bottom" : "ground_center"]
-                                   [renderData.borderRight ? 2 : 1],
-            Color(255, 255, 255, 255),
-            Transform(Vector2D(startXPos + (n - 1) * renderData.tileSize,
-                               startYPos - (k - 1) * renderData.tileSize),
-                      Vector2D(renderData.tileSize, renderData.tileSize)),
-            SDL_FLIP_NONE);
+    float startXPos = transform.GetPos().x - (transform.GetSize().x / 2) + (TILE_SIZE / 2);
+    float startYPos = transform.GetPos().y + (transform.GetSize().y / 2) - (TILE_SIZE / 2);
+
+    DrawTop(cam, hCount, startXPos, startYPos);
+    DrawCenter(cam, hCount, vCount, startXPos, startYPos);
+    DrawBottom(cam, hCount, vCount, startXPos, startYPos);
 }

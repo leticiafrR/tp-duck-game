@@ -25,7 +25,10 @@ target_sources(taller_multimedia
     cache/AudioCache.cpp
     cache/FontCache.cpp
     cache/SheetDataCache.cpp
+    cache/YamlDataCache.cpp
 
+    resource/ResourceManager.cpp
+    resource/ResourceParser.cpp
     ThemeInfo.cpp
 
     PUBLIC
@@ -55,6 +58,12 @@ target_sources(taller_multimedia
     cache/AudioCache.h
     cache/FontCache.h
     cache/SheetDataCache.h
+    cache/YamlDataCache.h
 
+    resource/ResourceManager.h
+    resource/ResourceParser.h
+    resource/ResourceConstants.h
+    resource/ResourceData.h
+    
     ThemeInfo.h
     )

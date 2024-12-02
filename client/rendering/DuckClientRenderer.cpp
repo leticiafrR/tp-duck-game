@@ -1,31 +1,22 @@
 #include "DuckClientRenderer.h"
 
-const std::map<uint8_t, Color> DuckClientRenderer::SkinColors = {
-        {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},
-        {2, ColorExtension::Blue()},  {3, ColorExtension::Orange()},
-        {4, ColorExtension::Cyan()},  {5, ColorExtension::Purple()}};
-
-Color DuckClientRenderer::GetColorById(uint8_t id) { return SkinColors.at(id); }
-
-DuckClientRenderer::DuckClientRenderer(const Transform& transform, PlayerData data,
-                                       PlayerEvent initialEvent, CameraController& camController):
-        Object2D("base_duck.png", transform),
+DuckClientRenderer::DuckClientRenderer(Vector2D size, Color skinColor,
+                                       ResourceManager& resourceManager,
+                                       CameraController& camController):
+        duckData(resourceManager.GetDuckData()),
         camController(camController),
-        anim(*this, "duck.yaml", "idle", 22),
-        fromPos(transform.GetPos()),
-        target(initialEvent),
-        handItem(this->transform, initialEvent.typeOnHand),
-        chestplate(this->transform, 22),
-        helmet(this->transform) {
+        anim("idle", duckData.frames, 22),
+        handItem(this->transform),
+        armor(this->transform, resourceManager.GetArmorData(), 22),
+        helmet(this->transform, resourceManager.GetCollectableData(TypeCollectable::HELMET)) {
 
-    this->transform.SetSize(transform.GetSize() * 1.4);  // Size rendering offset
-
-    SetEventTarget(target);
-    skinColor = SkinColors.at(data.playerSkin);
+    this->skinColor = skinColor;
+    SetFileName(duckData.file);
+    transform.SetSize(size * 1.4f);  // Size rendering offset
     SetColor(skinColor);
-    nickname = data.nickname;
-    camController.AddTransform(&this->transform);
+    camController.AddTransform(&transform);
 }
+
 DuckClientRenderer::~DuckClientRenderer() = default;
 
 Color DuckClientRenderer::GetSkinColor() const { return skinColor; }
@@ -46,8 +37,8 @@ void DuckClientRenderer::Update(float deltaTime) {
         cuackTimer.Update(deltaTime);
     }
 
-    anim.Update(deltaTime);
-    chestplate.Update(deltaTime, GetFlip());
+    anim.Update(deltaTime, *this);
+    armor.Update(deltaTime, GetFlip());
     helmet.Update(GetFlip(), target.isCrouched);
 
     handItem.Update(GetFlip(), target.isLookingUp);
@@ -57,13 +48,13 @@ void DuckClientRenderer::Update(float deltaTime) {
 
 void DuckClientRenderer::Draw(Camera& cam) {
     Object2D::Draw(cam);
-    chestplate.Draw(cam);
+    armor.Draw(cam);
     helmet.Draw(cam);
     handItem.Draw(cam);
 }
 
-void DuckClientRenderer::OnCuack() {
-    AudioManager::GetInstance().PlayCuackSFX();
+void DuckClientRenderer::OnCuack(AudioManager& audioManager) {
+    audioManager.PlaySFX(duckData.cuackFileSFX);
     cuack = true;
     cuackTimer = Timer(0.2f, [this]() {
         cuack = false;
@@ -78,7 +69,7 @@ void DuckClientRenderer::OnCuack() {
     cuackTimer.Start();
 }
 
-void DuckClientRenderer::OnDamaged() {
+void DuckClientRenderer::OnDamaged(AudioManager& audioManager) {
     damaged = true;
     SetColor(Color(230, 40, 40));
     damagedTimer = Timer(0.15f, [this]() {
@@ -86,7 +77,7 @@ void DuckClientRenderer::OnDamaged() {
         SetTargetAnimation("idle");
         SetColor(skinColor);
     });
-    AudioManager::GetInstance().PlayDamagedSFX();
+    audioManager.PlaySFX(duckData.damagedFileSFX);
     damagedTimer.Start();
 }
 
@@ -109,17 +100,20 @@ string DuckClientRenderer::GetAnimAndCuack(string animTarget) {
     return animTarget;
 }
 
-void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
+void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget, ResourceManager& resourceManager,
+                                        AudioManager& audioManager, bool initial) {
+    if (initial)
+        transform.SetPos(newTarget.motion);
+
     fromPos = transform.GetPos();
     tLerp = 0;
-    target = newTarget;
 
-    SetFlip(target.flipping == Flip::Left);
+    SetFlip(newTarget.flipping == Flip::Left);
 
-    if (target.cuacking)
-        OnCuack();
+    if (newTarget.cuacking)
+        OnCuack(audioManager);
 
-    switch (target.stateTransition) {
+    switch (newTarget.stateTransition) {
         case DuckState::IDLE:
             SetTargetAnimation("idle");
             break;
@@ -133,7 +127,7 @@ void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
             SetTargetAnimation("falling");
             break;
         case DuckState::WOUNDED:
-            OnDamaged();
+            OnDamaged(audioManager);
             break;
         case DuckState::DEAD:
             OnDead();
@@ -148,13 +142,17 @@ void DuckClientRenderer::SetEventTarget(PlayerEvent newTarget) {
     if (newTarget.isCrouched)
         SetTargetAnimation("crouched");
 
-    chestplate.SetVisible(target.hasArmor);
-    helmet.SetVisible(target.hasHelmet);
+    armor.SetVisible(newTarget.hasArmor);
+    helmet.SetVisible(newTarget.hasHelmet);
 
-    handItem.SetItem(target.typeOnHand);
+    if (target.typeOnHand != newTarget.typeOnHand) {
+        handItem.SetItem(resourceManager.GetCollectableData(newTarget.typeOnHand));
+    }
+
+    target = newTarget;
 }
 
 void DuckClientRenderer::SetTargetAnimation(const string& animTarget, bool resetIndex) {
     anim.SetTarget(GetAnimAndCuack(animTarget), resetIndex);
-    chestplate.SetAnimTarget(animTarget, resetIndex);
+    armor.SetAnimTarget(animTarget, resetIndex);
 }

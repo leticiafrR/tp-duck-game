@@ -6,6 +6,7 @@ target_sources(taller_client
     tweening/Tween.cpp
     tweening/TweenManager.cpp
 
+    utils/GameKit.cpp
     utils/Timer.cpp
     utils/Animator.cpp
     utils/TransformFollow.cpp
@@ -25,6 +26,11 @@ target_sources(taller_client
     rendering/ChestplateRenderer.cpp
     rendering/HelmetRenderer.cpp
     rendering/ThrowableRenderer.cpp
+
+    rendering/ThrowablesController.cpp
+    rendering/CollectablesController.cpp
+    rendering/BulletsController.cpp
+    rendering/DucksController.cpp
 
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
@@ -52,6 +58,7 @@ target_sources(taller_client
     tweening/Tween.h
     tweening/TweenManager.h
 
+    utils/GameKit.h
     utils/Timer.h
     utils/Animator.h
     utils/TransformFollow.h
@@ -81,6 +88,11 @@ target_sources(taller_client
     rendering/ChestplateRenderer.h
     rendering/HelmetRenderer.h
     rendering/ThrowableRenderer.h
+
+    rendering/ThrowablesController.h
+    rendering/CollectablesController.h
+    rendering/BulletsController.h
+    rendering/DucksController.h
 
     ClientRunner.h
 

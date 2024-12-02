@@ -1,8 +1,8 @@
 #include "LobbyScreen.h"
 
-LobbyScreen::LobbyScreen(Camera& cam, bool& wasClosed, Client& client, bool isOwner,
+LobbyScreen::LobbyScreen(GameKit& kit, bool& wasClosed, Client& client, bool isOwner,
                          shared_ptr<MatchStartDto>& matchData):
-        BaseScreen(cam, wasClosed),
+        BaseScreen(kit, wasClosed),
         client(client),
         isOwner(isOwner),
         matchData(matchData),
@@ -23,13 +23,13 @@ LobbyScreen::LobbyScreen(Camera& cam, bool& wasClosed, Client& client, bool isOw
 LobbyScreen::~LobbyScreen() = default;
 
 void LobbyScreen::OnStartButtonPressed() {
-    AudioManager::GetInstance().PlayButtonSFX();
+    gameKit.PlayButtonSFX();
     startButton.SetInteractable(false);
 
     client.StartMatch();
     bool startSuccess;
     LoadingScreen loading(
-            cam, wasClosed,
+            gameKit, wasClosed,
             [this, &startSuccess]() {
                 std::shared_ptr<ResultStartingMatch> startResult = nullptr;
                 if (client.TryRecvNetworkMsg(startResult)) {

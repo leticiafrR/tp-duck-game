@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 
+#include "client/Framework.h"
 #include "common/Transform.h"
 #include "data/snapshot.h"
 #include "multimedia/2d/Object2D.h"
@@ -14,17 +15,6 @@ using std::unordered_map;
 
 class BulletRenderer: public Object2D {
 private:
-    const unordered_map<TypeProjectile, SpriteRendererData> bulletsDataMap = {
-            {TypeProjectile::BULLET, SpriteRendererData("machine_guns.png", "machine_guns.yaml",
-                                                        "machine_bullet", Vector2D(1, 1))},
-            {TypeProjectile::LASER,
-             SpriteRendererData("laser.png", "laser.yaml", "laser_ray", Vector2D(3, 1.5))},
-            {TypeProjectile::FRAGMENT,
-             SpriteRendererData("grenades.png", "grenades.yaml", "fragment", Vector2D(2, 2))},
-
-            {TypeProjectile::BANANA,
-             SpriteRendererData("grenades.png", "grenades.yaml", "banana")}};
-
     Vector2D origin;
     Vector2D end;
     float speed;
@@ -33,10 +23,10 @@ private:
     SpriteRendererData renderData;
 
 public:
-    BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed = 105);
+    BulletRenderer(ProjectileData data, Vector2D origin, Vector2D end);
     ~BulletRenderer();
-    void Update(float deltaTime);
 
+    void Update(float deltaTime);
     bool IsAlive();
 };
 

@@ -74,7 +74,7 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    MatchListScreen(Camera& c, bool& wasClosed, Client& cl, bool& isOwner);
+    MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool& isOwner);
 
     ~MatchListScreen();
 };

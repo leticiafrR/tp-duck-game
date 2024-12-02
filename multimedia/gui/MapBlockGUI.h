@@ -19,10 +19,17 @@ using namespace SDL2pp;  // NOLINT
 
 class MapBlockGUI: public GraphicUI {
     MapBlockRenderData renderData;
+    float tileSize;
+
+    void DrawTop(Camera& cam, int hCount, int startXPos, int startYPos);
+    void DrawCenter(Camera& cam, int hCount, int vCount, int startXPos, int startYPos);
+    void DrawBottom(Camera& cam, int hCount, int vCount, int startXPos, int startYPos);
+
+    RectTransform GetRelative(Vector2D pos);
 
 public:
-    MapBlockGUI(const string& imageFilename, const string& sheetDataFilename,
-                const RectTransform& rectTransform, float tileSize, int layerOrder = 0);
+    MapBlockGUI(MapThemeData& MapThemeData, const RectTransform& rectTransform, float tileSize,
+                int layerOrder = 0);
 
     ~MapBlockGUI();
 

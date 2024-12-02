@@ -5,12 +5,13 @@
 
 class BaseScreen {
 protected:
+    GameKit& gameKit;
     Camera& cam;
     bool& wasClosed;
     bool running;
 
 public:
-    explicit BaseScreen(Camera& cam, bool& wasClosed);
+    explicit BaseScreen(GameKit& gameKit, bool& wasClosed);
     virtual ~BaseScreen();
 
     virtual void InitRun() = 0;

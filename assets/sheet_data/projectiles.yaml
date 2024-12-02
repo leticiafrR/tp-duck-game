@@ -1,0 +1,20 @@
+machine_bullet:
+  file: machine_guns.png
+  sfx_file: bulletSFX.wav
+  file_rect: { x: 2, y: 205, w: 8, h: 8 }
+  size: { x: 1, y: 1 }
+  visual_speed: 120
+
+laser_ray:
+  file: laser.png
+  sfx_file: laserSFX.mp3
+  file_rect: { x: 1, y: 156, w: 32, h: 16 }
+  size: { x: 3, y: 1.5 }
+  visual_speed: 120
+
+fragment:
+  file: grenades.png
+  sfx_file: bulletSFX.wav
+  file_rect: { x: 0, y: 135, w: 16, h: 16 }
+  size: { x: 1, y: 1 }
+  visual_speed: 120

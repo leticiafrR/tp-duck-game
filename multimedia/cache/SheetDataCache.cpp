@@ -1,6 +1,6 @@
 #include "SheetDataCache.h"
 
-map<string, vector<Rect>> SheetDataCache::GetData(const string& filename) {
+unordered_map<string, vector<Rect>> SheetDataCache::GetData(const string& filename) {
     auto it = cache.find(filename);
     if (it != cache.end()) {
         return it->second;
@@ -8,7 +8,7 @@ map<string, vector<Rect>> SheetDataCache::GetData(const string& filename) {
 
     YAML::Node yamlData = YAML::LoadFile(SHEET_DATA_PATH + filename);
 
-    map<string, vector<Rect>> data;
+    unordered_map<string, vector<Rect>> data;
 
     for (const auto& item: yamlData) {
         const string key = item.first.as<string>();
@@ -27,4 +27,4 @@ map<string, vector<Rect>> SheetDataCache::GetData(const string& filename) {
 }
 
 void SheetDataCache::Clear() { cache.clear(); }
-map<string, map<string, vector<Rect>>> SheetDataCache::cache;
+unordered_map<string, unordered_map<string, vector<Rect>>> SheetDataCache::cache;

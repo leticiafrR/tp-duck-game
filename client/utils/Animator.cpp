@@ -1,8 +1,10 @@
 #include "Animator.h"
 
-Animator::Animator(Object2D& spr, const std::string& filename, const std::string& target,
+Animator::Animator() = default;
+
+Animator::Animator(const std::string& target, const unordered_map<string, vector<Rect>>& frames,
                    int targetFPS):
-        sprite(spr), animations(std::move(SheetDataCache::GetData(filename))) {
+        frames(frames) {
     frameIndex = 0;
     this->target = target;
 
@@ -12,17 +14,17 @@ Animator::Animator(Object2D& spr, const std::string& filename, const std::string
 
 Animator::~Animator() = default;
 
-void Animator::Update(float deltaTime) {
+void Animator::Update(float deltaTime, Object2D& obj) {
     updateTimer -= deltaTime;
     if (updateTimer <= 0) {
         updateTimer = animFrameTime;
         frameIndex += 1;
-        frameIndex = (frameIndex % animations[target].size());
+        frameIndex = (frameIndex % frames[target].size());
     }
-    sprite.SetSourceRect(GetTargetRect());
+    obj.SetSourceRect(GetTargetRect());
 }
 
-Rect Animator::GetTargetRect() { return animations[target][frameIndex]; }
+Rect Animator::GetTargetRect() { return frames[target][frameIndex]; }
 
 void Animator::SetTarget(const std::string& target, bool reset_index) {
     if (!TargetExists(target))
@@ -34,6 +36,6 @@ void Animator::SetTarget(const std::string& target, bool reset_index) {
     }
 }
 
-bool Animator::TargetExists(const std::string& target) { return animations.contains(target); }
+bool Animator::TargetExists(const std::string& target) { return frames.contains(target); }
 
 std::string Animator::GetTarget() { return target; }

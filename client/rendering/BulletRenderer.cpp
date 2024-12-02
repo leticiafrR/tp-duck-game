@@ -1,18 +1,14 @@
 #include "BulletRenderer.h"
 
-BulletRenderer::BulletRenderer(TypeProjectile type, Vector2D origin, Vector2D end, float speed):
-        origin(origin), end(end), speed(speed), alive(true) {
+BulletRenderer::BulletRenderer(ProjectileData data, Vector2D origin, Vector2D end):
+        origin(origin), end(end), speed(data.speed), alive(true) {
 
-    std::cout << "Rendering ray/bullet [origin: " + origin.ToString() +
-                         " - end: " + end.ToString() + "]\n";
-
-    renderData = bulletsDataMap.contains(type) ? bulletsDataMap.at(type) :
-                                                 bulletsDataMap.at(TypeProjectile::BULLET);
-    SetFileName(renderData.imageFile);
-    SetSourceRect(renderData.GetSourceRect());
-    SetTransform(Transform(origin, renderData.size, renderData.angle));
-    GetTransform().LookAt(end, Vector2D::Right(), renderData.angle);
+    SetFileName(data.file);
+    SetSourceRect(data.rect);
+    SetTransform(Transform(origin, data.size));
+    GetTransform().LookAt(end, Vector2D::Right());
 }
+
 BulletRenderer::~BulletRenderer() = default;
 
 void BulletRenderer::Update(float deltaTime) {

@@ -1,8 +1,8 @@
 #include "LoadingScreen.h"
 
-LoadingScreen::LoadingScreen(Camera& cam, bool& wasClosed, Function<bool> endFunction,
+LoadingScreen::LoadingScreen(GameKit& kit, bool& wasClosed, Function<bool> endFunction,
                              const string& text, bool lockerOnly):
-        BaseScreen(cam, wasClosed),
+        BaseScreen(kit, wasClosed),
         bg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)), ColorExtension::Black(), 10),
         titleText(text, 60,
                   RectTransform(Vector2D(0, 30), Vector2D(800, 160), Vector2D(0.5, 0.5),

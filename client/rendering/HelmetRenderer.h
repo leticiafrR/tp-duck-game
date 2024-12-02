@@ -13,7 +13,7 @@ private:
     TransformFollow follow;
 
 public:
-    explicit HelmetRenderer(Transform& playerT);
+    explicit HelmetRenderer(Transform& playerT, CollectableData data);
 
     void Update(bool flip, bool crouched);
 

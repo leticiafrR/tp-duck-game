@@ -43,7 +43,7 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    explicit MenuScreen(Camera& c, bool& wasClosed, string& input);
+    explicit MenuScreen(GameKit& kit, bool& wasClosed, string& input);
 
     ~MenuScreen();
 };

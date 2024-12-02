@@ -14,6 +14,7 @@
 #include "common/Vector2D.h"
 #include "gui/RectTransform.h"
 
+#include "ColorExtension.h"
 #include "Rate.h"
 
 using namespace SDL2pp;  // NOLINT
@@ -45,13 +46,17 @@ public:
 
     void ClearCacheItem(const string& filename);
 
+    void DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect,
+                     const Transform& transform, Color color = ColorExtension::White(),
+                     bool flip = false);
+
     void DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                      const Transform& transform, int flip);
 
     void DrawGUI(RectTransform rect, Color color);
 
     void DrawImageGUI(const string& filename, RectTransform rect, SDL2pp::Optional<Rect> srcRect,
-                      Color color, bool flip);
+                      Color color = ColorExtension::White(), bool flip = false);
 
     void DrawText(const string& text, SDL2pp::Font& font, RectTransform rectTransform, Color color);
 

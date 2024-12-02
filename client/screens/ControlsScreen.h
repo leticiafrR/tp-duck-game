@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#include "multimedia/audio/AudioManager.h"
+#include "client/utils/GameKit.h"
 #include "multimedia/gui/Button.h"
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
@@ -46,7 +46,7 @@ private:
     void InitPlayer2Keys();
 
 public:
-    ControlsScreen();
+    explicit ControlsScreen(GameKit& gameKit);
 
     void SetActive(bool active);
 

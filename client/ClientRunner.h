@@ -30,6 +30,7 @@ class ClientRunner {
 private:
     Camera cam;
     bool wasClosed;
+    GameKit gameKit;
 
     PlayerData LoadWinner(Client& client, vector<PlayerData> players);
 

@@ -15,8 +15,6 @@
 
 class DuckClientRenderer: public Object2D {
 private:
-    static const std::map<uint8_t, Color> SkinColors;
-
     Timer damagedTimer;
     Timer cuackTimer;
     Color skinColor;
@@ -25,6 +23,7 @@ private:
     bool cuack = false;
 
 public:
+    DuckData duckData;
     CameraController& camController;
     Animator anim;
 
@@ -35,14 +34,13 @@ public:
 
     HandItemRenderer handItem;
 
-    ChestplateRenderer chestplate;
+    ChestplateRenderer armor;
     HelmetRenderer helmet;
 
-    DuckClientRenderer(const Transform& transform, PlayerData data, PlayerEvent initialEvent,
+    DuckClientRenderer(Vector2D size, Color skinColor, ResourceManager& resourceManager,
                        CameraController& camController);
-    ~DuckClientRenderer();
 
-    static Color GetColorById(uint8_t id);
+    ~DuckClientRenderer();
 
     Color GetSkinColor() const;
     std::string GetNickname() const;
@@ -53,16 +51,18 @@ public:
 
     Transform& GetTransform();
 
-    void OnCuack();
+    void OnCuack(AudioManager& audioManager);
 
-    void OnDamaged();
+    void OnDamaged(AudioManager& audioManager);
 
     void OnDead();
 
     void SetTargetAnimation(const string& animTarget, bool resetIndex = true);
 
     string GetAnimAndCuack(string animTarget);
-    void SetEventTarget(PlayerEvent newTarget);
+
+    void SetEventTarget(PlayerEvent newTarget, ResourceManager& resourceManager,
+                        AudioManager& audioManager, bool initial = false);
 };
 
 #endif

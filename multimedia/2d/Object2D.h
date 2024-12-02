@@ -30,7 +30,7 @@ protected:
 
 public:
     Object2D();
-    Object2D(const std::string& filename, const Transform& transform,
+    Object2D(const std::string& filename = "", const Transform& transform = Transform(),
              Color color = Color(255, 255, 255, 255));
 
     void SetColor(Color color);

@@ -76,10 +76,8 @@ public:
     }
 
     bool TrySendRequest(CommandCode code, uint8_t indexLocalPlayer = DEFAULT_LOCAL_PLAYERS - 1) {
-        if (!IsConnected()) {
-            std::cout << "No conectado en send!!!\n";
+        if (!IsConnected())
             throw ServerUnavailable();
-        }
 
         Command command(code, indexLocalPlayer);
         return cmmdQueue.try_push(command);
@@ -87,17 +85,15 @@ public:
 
     template <typename NetworkMsgDerivedClass>
     bool TryRecvNetworkMsg(std::shared_ptr<NetworkMsgDerivedClass>& concretMsg) {
-
-        if (!IsConnected()) {
-            std::cout << "No conectado en recv!!!\n";
-            throw ServerUnavailable();
-        }
-
         std::shared_ptr<NetworkMsg> msg;
         if (msgQueue.try_pop(msg)) {
             concretMsg = dynamic_pointer_cast<NetworkMsgDerivedClass>(msg);
             return true;
         }
+
+        if (!IsConnected())
+            throw ServerUnavailable();
+
         return false;
     }
 

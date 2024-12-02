@@ -1,8 +1,8 @@
 #ifndef PLAYERS_COUNT_SELECTION_H
 #define PLAYERS_COUNT_SELECTION_H
 
+#include "client/utils/GameKit.h"
 #include "multimedia/Definitions.h"
-#include "multimedia/audio/AudioManager.h"
 #include "multimedia/gui/Button.h"
 #include "multimedia/gui/Text.h"
 
@@ -24,7 +24,7 @@ private:
     CallbackParam<uint8_t> onSelection;
 
 public:
-    PlayersCountSelection();
+    explicit PlayersCountSelection(GameKit& gameKit);
 
     ~PlayersCountSelection();
 

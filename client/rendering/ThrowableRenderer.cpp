@@ -1,17 +1,13 @@
 #include "ThrowableRenderer.h"
 
-ThrowableRenderer::ThrowableRenderer(TypeCollectable type, Vector2D target):
+ThrowableRenderer::ThrowableRenderer(CollectableData data, Vector2D target):
         fromPos(target), targetPos(target), tLerp(0) {
 
-    if (!itemsMap.contains(type)) {
-        std::cout << "item NOT recognized\n";
-        return;
-    }
     transform.SetPos(target);
-    transform.SetSize(itemsMap.at(type).size);
+    transform.SetSize(data.size);
 
-    SetFileName(itemsMap.at(type).imageFile);
-    SetSourceRect(itemsMap.at(type).GetSourceRect());
+    SetFileName(data.file);
+    SetSourceRect(data.rect);
 }
 
 void ThrowableRenderer::Update(float deltaTime) {

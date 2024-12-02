@@ -1,35 +1,54 @@
 #ifndef MAP_BLOCK_RENDER_DATA
 #define MAP_BLOCK_RENDER_DATA
 
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "multimedia/cache/SheetDataCache.h"
+#include "multimedia/resource/ResourceData.h"
 
-using std::map;
 using std::string;
+using std::unordered_map;
 using std::vector;
+
+const float TILE_SIZE = 4;
+
+const string TOP_RECTS = "top_rects";
+const string CENTER_RECTS = "center_rects";
+const string BOTTOM_RECTS = "bottom_rects";
 
 class MapBlockRenderData {
 private:
 public:
-    string imageFilename;
-    float tileSize;
+    string tileFile;
+    unordered_map<string, vector<Rect>>* tileRects;
 
     bool borderTop = false;
     bool borderBottom = false;
     bool borderLeft = false;
     bool borderRight = false;
 
-    map<string, vector<Rect>> mapBlockData;
-
-    MapBlockRenderData(const string& imageFilename, const string& sheetDataFilename,
-                       float tileSize);
+    explicit MapBlockRenderData(MapThemeData& mapThemeData);
 
     ~MapBlockRenderData();
 
     void SetBorders(bool left, bool right, bool top, bool bottom);
+
+    Rect GetTopLeftRect();
+    Rect GetTopCenterRect();
+    Rect GetTopRightRect();
+
+
+    Rect GetCenterLeftRect();
+    Rect GetCenterCenterRect();
+    Rect GetCenterRightRect();
+
+    Rect GetBottomLeftRect();
+    Rect GetBottomCenterRect();
+    Rect GetBottomRightRect();
+
+    string GetTileFile();
 };
 
 #endif

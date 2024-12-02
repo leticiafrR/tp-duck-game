@@ -1,8 +1,8 @@
 #ifndef ANIMATOR_H
 #define ANIMATOR_H
 
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -10,26 +10,29 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "multimedia/2d/Object2D.h"
-#include "multimedia/cache/SheetDataCache.h"
 
 using SDL2pp::Rect;
+using std::string;
+using std::unordered_map;
+using std::vector;
 
 class Animator {
 private:
-    Object2D& sprite;
-    std::map<std::string, std::vector<Rect>> animations;
-    std::string target;
+    unordered_map<string, vector<Rect>> frames;
+    string target;
     int frameIndex;
 
     float animFrameTime;
     float updateTimer;
 
 public:
-    Animator(Object2D& spr, const std::string& filename, const std::string& target, int targetFPS);
+    Animator();
+    Animator(const std::string& target, const unordered_map<string, vector<Rect>>& frames,
+             int targetFPS);
 
     ~Animator();
 
-    void Update(float deltaTime);
+    void Update(float deltaTime, Object2D& sprite);
 
     bool TargetExists(const std::string& target);
 

@@ -12,10 +12,10 @@ class GUIManager {
 private:
     std::vector<GraphicUI*> graphics;
 
+public:
     GUIManager();
     ~GUIManager();
 
-public:
     static GUIManager& GetInstance();
 
     const std::vector<GraphicUI*>& GetGraphics();

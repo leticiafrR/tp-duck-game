@@ -1,25 +1,15 @@
 #include "Gameplay.h"
 
 void Gameplay::InitPlayers(const MatchStartDto& matchData, const Snapshot& firstSnapshot) {
-    Vector2D duckSize = matchData.duckSize;
-    playersData = matchData.playersData;
-
-    for (auto& pData: playersData) {
-        if (firstSnapshot.updates.find(pData.playerID) == firstSnapshot.updates.end())
-            continue;
-        Vector2D spawnPos = firstSnapshot.updates.at(pData.playerID).motion;
-        PlayerEvent initialEvent = firstSnapshot.updates.at(pData.playerID);
-
-        players.emplace(pData.playerID,
-                        std::make_shared<DuckClientRenderer>(Transform(spawnPos, duckSize), pData,
-                                                             initialEvent, camController));
-    }
+    ducksController.SpawnPlayers(matchData.duckSize, matchData.playersData, firstSnapshot.updates);
 }
 
 void Gameplay::InitMap(GameSceneDto mapData) {
+    MapThemeData& themeData = resourceManager.GetMapThemeData(mapData.theme);
+
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
-        mapBlocks.emplace_back("tile_set.png", "tile_set.yaml", groundData.mySpace, 4);
+        mapBlocks.emplace_back(themeData, groundData.mySpace);
 
         bool left =
                 groundData.visibleEdges.find(VISIBLE_EDGES::LEFT) != groundData.visibleEdges.end();
@@ -34,55 +24,41 @@ void Gameplay::InitMap(GameSceneDto mapData) {
     }
 }
 
-void Gameplay::BulletsReapDead() {
-    bullets.remove_if([](BulletRenderer c) { return !c.IsAlive(); });
-}
+// void Gameplay::SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData) {
+//     if (throwables.contains(id)) {
+//         throwables.at(id).SetTargetPos(throwableData.position);
+//         return;
+//     }
 
-void Gameplay::SpawnCollectable(CollectableSpawnEventDto collectableData) {
-    collectables.emplace(collectableData.id,
-                         CollectableRenderer(collectableData.type, collectableData.position));
-}
-void Gameplay::DespawnCollectable(CollectableID_t id) { collectables.erase(id); }
-
-
-void Gameplay::SpawnUpdateThrowable(ThrowableID_t id, ThrowableSpawnEventDto throwableData) {
-    if (throwables.contains(id)) {
-        throwables.at(id).SetTargetPos(throwableData.position);
-        return;
-    }
-
-    throwables.emplace(id, ThrowableRenderer(throwableData.type, throwableData.position));
-}
-void Gameplay::DespawnThrowable(ThrowableID_t id) { throwables.erase(id); }
+//     throwables.emplace(id, ThrowableRenderer(throwableData.type, throwableData.position));
+// }
+// void Gameplay::DespawnThrowable(ThrowableID_t id) { throwables.erase(id); }
 
 
 void Gameplay::UpdateGame(const Snapshot& snapshot) {
     for (size_t i = 0; i < snapshot.raycastsEvents.size(); i++) {
         auto ray = snapshot.raycastsEvents[i];
-        bullets.emplace_back(ray.type, ray.origin, ray.end, 100);
-        AudioManager::GetInstance().PlayShootSFX(ray.type);
+        bulletsController.SpawnBullet(ray);
     }
 
-    for (const auto& it: snapshot.updates) {
-        players[it.first]->SetEventTarget(it.second);
-    }
+    ducksController.UpdateEvents(snapshot.updates);
 
     for (const auto& it: snapshot.collectableSpawns) {
         std::cout << "Collectable spawn\n";
-        SpawnCollectable(it);
+        collectablesController.SpawnCollectable(it);
     }
     for (const auto& it: snapshot.collectableDespawns) {
         std::cout << "Collectable Despawn\n";
-        DespawnCollectable(it);
+        collectablesController.DespawnCollectable(it);
     }
 
     for (const auto& it: snapshot.throwableSpawns) {
         std::cout << "Throwable spawn/update\n";
-        SpawnUpdateThrowable(it.first, it.second);
+        throwablesController.SpawnUpdateThrowable(it.first, it.second);
     }
     for (const auto& it: snapshot.throwableDespawns) {
         std::cout << "Throwable Despawn\n";
-        DespawnThrowable(it);
+        throwablesController.DespawnThrowable(it);
     }
 }
 
@@ -106,69 +82,58 @@ void Gameplay::DrawGameWorld(float deltaTime) {
         it.Draw(cam);
     }
 
-    for (auto& it: bullets) {
-        it.Update(deltaTime);
-        it.Draw(cam);
-    }
+    bulletsController.Draw(deltaTime, cam);
+    throwablesController.Draw(deltaTime, cam);
 
-    for (auto& it: collectables) {
-        it.second.Draw(cam);
-    }
+    collectablesController.Draw(cam);
 
-    for (auto& it: throwables) {
-        it.second.Update(deltaTime);
-        it.second.Draw(cam);
-    }
-
-    for (const auto& it: players) {
-        auto data = it.second;
-        data->Update(deltaTime);
-        data->Draw(cam);
-    }
+    ducksController.Draw(deltaTime, cam);
 }
 
 void Gameplay::InitGUI() {
-    uint16_t localConnectionId = client.GetLocalID();
 
-    bool isPlayer1 = true;
-    for (uint8_t i = 0; i < (uint8_t)players.size(); i++) {
-        auto playerId = PlayerIdentifier::GeneratePlayerID(localConnectionId, i);
+    PlayerData localPlayerData = ducksController.GetLocalPlayerData();
+    gui.InitPlayer1GUI(DUCK_SKIN_COLORS.at(localPlayerData.playerSkin), localPlayerData.nickname);
 
-        if (players.contains(playerId)) {
-            Color color = players[playerId]->GetSkinColor();
-            std::string nickname = players[playerId]->GetNickname();
-            if (isPlayer1) {
-                gui.InitPlayer1GUI(color, nickname);
-                isPlayer1 = false;
-            } else {
-                gui.InitPlayer2GUI(color, nickname);
-            }
-        }
+    auto secondLocalPlayerData = ducksController.GetLocalSecondPlayerData();
+    if (secondLocalPlayerData.has_value()) {
+        gui.InitPlayer2GUI(DUCK_SKIN_COLORS.at(secondLocalPlayerData.value().playerSkin),
+                           secondLocalPlayerData.value().nickname);
     }
 }
 
-Gameplay::Gameplay(Client& cl, Camera& c, bool& wasClosed, MatchStartDto matchData,
+Gameplay::Gameplay(Client& cl, GameKit& gameKit, bool& wasClosed, MatchStartDto matchData,
                    GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial):
-        BaseScreen(c, wasClosed),
+        BaseScreen(gameKit, wasClosed),
         client(cl),
         isInitial(isInitial),
-        camController(c),
+        camController(gameKit.GetCamera()),
         mapBg("bg_forest.png", Transform(Vector2D::Zero(), Vector2D(300, 300))),
         fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
-                  ColorExtension::Black().SetAlpha(0), 10),
+                  ColorExtension::Black().SetAlpha(0), 20),
         fadePanelTween(fadePanel, ColorExtension::Black().SetAlpha(255), 0.6f,
                        [this]() { running = false; }),
-        controls(this->client) {
+        controls(this->client),
+        resourceManager(gameKit.GetResourceManager()),
+        audioManager(gameKit.GetAudioManager()),
+        throwablesController(resourceManager),
+        collectablesController(resourceManager),
+        bulletsController(resourceManager, audioManager),
+        ducksController(client.GetLocalID(), camController, resourceManager, audioManager) {
+
     InitPlayers(matchData, firstSnapshot);
     InitMap(mapData);
 
-    controls.SetSecondPlayer(
-            players.contains(PlayerIdentifier::GeneratePlayerID(client.GetLocalID(), 1)));
+    controls.SetSecondPlayer(ducksController.HasSecondPlayer());
+
+    string themeMusic = resourceManager.GetMapThemeData(mapData.theme).bgMusicFile;
+    audioManager.PlayMusic(themeMusic);
 
     UpdateGame(firstSnapshot);
     InitGUI();
 }
-Gameplay::~Gameplay() = default;
+
+Gameplay::~Gameplay() { audioManager.StopMusic(); }
 
 void Gameplay::TakeInput(SDL_Event event) {
     if (finishing)
@@ -185,7 +150,7 @@ void Gameplay::InitRun() {
     finishing = false;
     camController.Reset();
     if (isInitial) {
-        showColorsPanel.Show(players);
+        showColorsPanel.Show(ducksController.GetPlayersData(), resourceManager.GetDuckData());
     }
 }
 
@@ -199,7 +164,7 @@ void Gameplay::Update(float deltaTime) {
     camController.Update(deltaTime);
     TweenManager::GetInstance().Update(deltaTime);
 
-    BulletsReapDead();
+    bulletsController.ReapDead();
 
     DrawGameWorld(deltaTime);
     GUIManager::GetInstance().Draw(cam);

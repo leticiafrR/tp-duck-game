@@ -20,11 +20,15 @@ class FontCache {
 private:
     static map<string, Font> cache;
 
+    map<string, Font> mapCache;
+
 public:
-    FontCache() = delete;
-    ~FontCache() = delete;
+    // FontCache() = delete;
+    // ~FontCache() = delete;
 
     static Font& GetData(const string& filename, int fontSize);
+
+    const Font& GetFontData(const string& filename, int fontSize);
 
     static void Clear();
 };

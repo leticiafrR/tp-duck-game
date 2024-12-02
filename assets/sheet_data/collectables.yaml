@@ -1,0 +1,75 @@
+empty:
+  file: ""
+  file_rect: { x: 0, y: 0, w: 0, h: 0 }
+  size: { x: 0, y: 0 }
+
+helmet:
+  file: defense.png
+  file_rect: { x: 585, y: 316, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+armor:
+  file: defense.png
+  file_rect: { x: 585, y: 289, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+grenade_unlock:
+  file: grenades.png
+  file_rect: { x: 17, y: 21, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+banana_peel:
+  file: grenades.png
+  file_rect: { x: 1, y: 67, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+grenade:
+  file: grenades.png
+  file_rect: { x: 1, y: 21, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+banana:
+  file: grenades.png
+  file_rect: { x: 1, y: 51, w: 16, h: 16 }
+  size: { x: 2, y: 2 }
+
+sniper:
+  file: specials.png
+  file_rect: { x: 36, y: 237, w: 33, h: 9 }
+  size: { x: 2, y: 2 }
+
+shotgun:
+  file: shotguns.png
+  file_rect: { x: 1, y: 69, w: 32, h: 32 }
+  size: { x: 4, y: 4 }
+
+laser_rifle:
+  file: laser.png
+  file_rect: { x: 1, y: 97, w: 32, h: 32 }
+  size: { x: 4, y: 4 }
+  angle: -45
+
+pew_pew_laser:
+  file: laser.png
+  file_rect: { x: 336, y: 94, w: 32, h: 32 }
+  size: { x: 4, y: 4 }
+
+ak_47:
+  file: machine_guns.png
+  file_rect: { x: 1, y: 19, w: 32, h: 32 }
+  size: { x: 4, y: 4 }
+
+cowboy_pistol:
+  file: pistols.png
+  file_rect: { x: 1, y: 20, w: 22, h: 11 }
+  size: { x: 2.8, y: 1.4 }
+
+magnum:
+  file: pistols.png
+  file_rect: { x: 1, y: 47, w: 32, h: 32 }
+  size: { x: 4, y: 4 }
+
+dueling_pistol:
+  file: pistols.png
+  file_rect: { x: 1, y: 187, w: 32, h: 32 }
+  size: { x: 4, y: 4 }

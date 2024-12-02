@@ -4,13 +4,14 @@
 
 #include "constants.h"
 
-PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<MapBlock2D> onSelect):
+PlatformOptionWidget::PlatformOptionWidget(MapThemeData& mapThemeData, GroundDto& info,
+                                           CallbackParam<MapBlock2D> onSelect):
 
         btn(
                 BUTTON_1_IMAGE,
                 RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
                 [this]() { this->onSelectClicked(this->gameBlock); }, Color(40, 40, 40), 1),
-        obj(BLOCK_MAP, BLOCK_MAP_YAML,
+        obj(mapThemeData,
             RectTransform(Transform(info.mySpace.GetPos() * 10, info.mySpace.GetSize() * 10),
                           Vector2D(0.25, 1)),
             40),
@@ -20,7 +21,7 @@ PlatformOptionWidget::PlatformOptionWidget(GroundDto& info, CallbackParam<MapBlo
                 RectTransform(Transform(Vector2D(280, 0), Vector2D(75, 40)), Vector2D(0, 1)),
                 ColorExtension::White(), 2),
         onSelectClicked(onSelect),
-        gameBlock(BLOCK_MAP, BLOCK_MAP_YAML, info.mySpace, 4) {
+        gameBlock(mapThemeData, info.mySpace) {
     bool left = info.visibleEdges.find(VISIBLE_EDGES::LEFT) != info.visibleEdges.end();
 
     bool right = info.visibleEdges.find(VISIBLE_EDGES::RIGHT) != info.visibleEdges.end();

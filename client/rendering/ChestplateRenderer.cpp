@@ -1,24 +1,25 @@
 #include "ChestplateRenderer.h"
 
-ChestplateRenderer::ChestplateRenderer(Transform& playerT, int targetFPS):
-        Object2D("defense.png", playerT),
+ChestplateRenderer::ChestplateRenderer(Transform& playerT, ArmorData data, int targetFPS):
+        Object2D(data.file, playerT),
         playerT(playerT),
-        anim(*this, "defense.yaml", "chest_equiped_idle", targetFPS) {
-    transform.SetSize(transform.GetSize() * 1.3f);
+        anim(ARMOR_DEFAULT_FRAME, data.frames, targetFPS) {
+    transform.SetSize(playerT.GetSize() * 1.05f);
 }
 
 void ChestplateRenderer::SetAnimTarget(string animTarget, bool resetIndex) {
-    if (!anim.TargetExists("chest_equiped_" + animTarget)) {
-        anim.SetTarget("chest_equiped_idle", resetIndex);
+    if (!anim.TargetExists(ARMOR_FRAME_PREFIX + animTarget)) {
+        anim.SetTarget(ARMOR_DEFAULT_FRAME, resetIndex);
         return;
     }
-    anim.SetTarget("chest_equiped_" + animTarget, resetIndex);
+    anim.SetTarget(ARMOR_FRAME_PREFIX + animTarget, resetIndex);
 }
 
 ChestplateRenderer::~ChestplateRenderer() = default;
 
 void ChestplateRenderer::Update(float deltaTime, bool flip) {
-    transform.SetPos(playerT.GetPos() + Vector2D::Down() * 0.2f);
+    transform.SetSize(playerT.GetSize() * 1.05f);
+    transform.SetPos(playerT.GetPos() + Vector2D::Down() * 0.12f);
     SetFlip(flip);
-    anim.Update(deltaTime);
+    anim.Update(deltaTime, *this);
 }

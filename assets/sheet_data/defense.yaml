@@ -6,7 +6,6 @@ chest:
 
 chest_equiped_idle:
   - { x: 451, y: 11, w: 32, h: 32 }
-  #- { x: 387, y: 11, w: 32, h: 32 }
 
 chest_equiped_run:
   - { x: 419, y: 11, w: 32, h: 32 }

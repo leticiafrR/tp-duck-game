@@ -1,8 +1,9 @@
 #include "HelmetRenderer.h"
 
-HelmetRenderer::HelmetRenderer(Transform& playerT):
-        Object2D("defense.png", Transform()), follow(transform, playerT, Vector2D(0, 0.8f)) {
-    SetSourceRect(SheetDataCache::GetData("defense.yaml")["helmet"][0]);
+HelmetRenderer::HelmetRenderer(Transform& playerT, CollectableData data):
+        follow(transform, playerT, Vector2D(0, 0.8f)) {
+    SetFileName(data.file);
+    SetSourceRect(data.rect);
     transform.SetSize(Vector2D(2.32f, 2.32f));
 }
 

@@ -9,6 +9,7 @@
 #include "data/gameScene.h"
 #include "multimedia/Camera.h"
 #include "multimedia/cache/SheetDataCache.h"
+#include "multimedia/resource/ResourceData.h"
 
 #include "MapBlockRenderData.h"
 
@@ -19,13 +20,16 @@ using namespace SDL2pp;  // NOLINT
 
 class MapBlock2D {
 protected:
-    Transform transform;
     MapBlockRenderData renderData;
+    Transform transform;
     vector<string> edges;
 
+    void DrawTop(Camera& cam, int hCount, int startXPos, int startYPos);
+    void DrawCenter(Camera& cam, int hCount, int vCount, int startXPos, int startYPos);
+    void DrawBottom(Camera& cam, int hCount, int vCount, int startXPos, int startYPos);
+
 public:
-    MapBlock2D(const string& imageFilename, const string& sheetDataFilename,
-               const Transform& transform, float tileSize);
+    MapBlock2D(MapThemeData& mapThemeData, const Transform& transform);
 
     ~MapBlock2D();
 

@@ -21,6 +21,11 @@ float Camera::GetRateDeltatime() { return rate.GetDeltaTime(); }
 
 void Camera::ClearCacheItem(const string& filename) { textureCache.ClearItem(filename); }
 
+void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect,
+                         const Transform& transform, Color color, bool flip) {
+    DrawTexture(filename, sourceRect, color, transform, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
+
 void Camera::DrawTexture(const string& filename, SDL2pp::Optional<Rect> sourceRect, Color color,
                          const Transform& transform, int flip) {
     Vector2D sprSize = transform.GetSize();

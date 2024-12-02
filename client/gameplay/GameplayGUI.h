@@ -19,18 +19,7 @@ using std::unordered_map;
 
 class LocalPlayerGUI {
 private:
-    const unordered_map<TypeCollectable, SpriteRendererData> itemsMap = {
-            {TypeCollectable::EMPTY, SpriteRendererData("", "", "")},
-            {TypeCollectable::COWBOY_PISTOL,
-             SpriteRendererData("pistols.png", "pistols.yaml", "cowboy_pistol",
-                                Vector2D(0, -0.4f))},
-            {TypeCollectable::LASER_RIFLE,
-             SpriteRendererData("laser.png", "laser.yaml", "laser_rifle", Vector2D(0, -0.5f))},
-            {TypeCollectable::ARMOR, SpriteRendererData("", "", "")},
-            {TypeCollectable::HELMET, SpriteRendererData("", "", "")}};
-
     Image imgDuck;
-    Image imgHandItem;
     Text txtNickname;
     Text shadowNickname;
 
@@ -53,8 +42,6 @@ public:
     void InitPlayer1GUI(Color color, const string& nickname);
 
     void InitPlayer2GUI(Color color, const string& nickname);
-    void SetPlayer1Weapon(TypeCollectable type);
-    void SetPlayer2Weapon(TypeCollectable type);
 };
 
 #endif

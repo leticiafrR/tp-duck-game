@@ -81,14 +81,14 @@ void ControlsScreen::InitPlayer2Keys() {
     playerKeys.emplace_back("O", Vector2D(150, -400));
 }
 
-ControlsScreen::ControlsScreen():
+ControlsScreen::ControlsScreen(GameKit& gameKit):
         imgBg(RectTransform(Vector2D::Zero(), Vector2D(2000, 2000)),
               ColorExtension::Black().SetAlpha(225), 9),
         btnBack(
                 "back_icon.png", RectTransform(Vector2D(60, -60), Vector2D(70, 70), Vector2D(0, 1)),
-                [this]() {
+                [this, &gameKit]() {
                     this->SetActive(false);
-                    AudioManager::GetInstance().PlayButtonSFX();
+                    gameKit.PlayButtonSFX();
                 },
                 ColorExtension::White(), 11) {
 

@@ -12,7 +12,6 @@ using namespace SDL2pp;  // NOLINT
 int main() {
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDLMixer sdlMixer(MIX_INIT_MP3 | MIX_INIT_OGG);
-    AudioManager::GetInstance();
     SDLTTF ttf;
 
     Window window("Duck Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 940, 940,
