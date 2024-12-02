@@ -21,7 +21,7 @@ private:
     bool flip = false;
 
 public:
-    explicit Image(const RectTransform& rect, Color color = Color(255, 255, 255),
+    explicit Image(const RectTransform& rect = RectTransform(), Color color = Color(255, 255, 255),
                    int layerOrder = 0);
 
     Image(const std::string& filename, const RectTransform& rect,

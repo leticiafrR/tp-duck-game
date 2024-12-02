@@ -18,8 +18,8 @@ protected:
     bool visible = true;
 
 public:
-    explicit GraphicUI(const RectTransform& rect, Color color = ColorExtension::White(),
-                       int layerOrder = 0);
+    GraphicUI(const RectTransform& rect = RectTransform(), Color color = ColorExtension::White(),
+              int layerOrder = 0);
 
     virtual ~GraphicUI();
 

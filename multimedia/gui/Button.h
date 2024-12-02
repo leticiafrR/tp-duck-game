@@ -24,8 +24,12 @@ private:
     bool interactable;
 
 public:
-    Button(RectTransform rect, Callback onClick, Color color = Color(255, 255, 255),
+    Button(RectTransform rect = RectTransform(), Color color = Color(255, 255, 255),
            int layerOrder = 0);
+
+    explicit Button(
+            RectTransform rect, Callback onClick = []() {}, Color color = Color(255, 255, 255),
+            int layerOrder = 0);
     Button(const std::string& filename, RectTransform rect, Callback onClick,
            Color color = Color(255, 255, 255), int layerOrder = 0);
     ~Button();

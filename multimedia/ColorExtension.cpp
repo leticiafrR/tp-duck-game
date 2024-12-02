@@ -11,6 +11,7 @@ Color ColorExtension::Purple() { return Color(128, 0, 128); }
 Color ColorExtension::Orange() { return Color(255, 165, 128); }
 Color ColorExtension::Cyan() { return Color(0, 255, 255); }
 Color ColorExtension::Yellow() { return Color(255, 255, 0); }
+Color ColorExtension::DarkGray() { return Color(40, 40, 40); }
 
 Color ColorExtension::AddValue(Color color, int value) {
     return Color(std::clamp(color.r + value, 0, 255), std::clamp(color.g + value, 0, 255),

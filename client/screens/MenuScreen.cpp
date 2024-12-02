@@ -2,35 +2,39 @@
 
 MenuScreen::MenuScreen(GameKit& kit, bool& wasClosed, string& input):
         BaseScreen(kit, wasClosed),
-        bgImage("duck_game_bg.jpg", RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
-        logoImage("duck_game_logo.png", RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
+        bgImage(RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
+        logoImage(RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
         inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),
                      ColorExtension::Black().SetAlpha(80)),
-        nicknamePlaceHolderText("Write your nickname", 50,
-                                RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)),
-                                              Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                                ColorExtension::White().SetAlpha(120)),
+        nicknamePlaceHolderText(RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
+                                              Vector2D(0.5, 0.5))),
         nicknameText("", 50,
-                     RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)), Vector2D(0.5, 0.5),
+                     RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
                                    Vector2D(0.5, 0.5)),
                      ColorExtension::White()),
-        startButton(
-                "button_1.png",
-                RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
-                              Vector2D(0.5, 0.5)),
-                [this]() {
-                    running = false;
-                    gameKit.PlayButtonSFX();
-                },
-                Color(40, 40, 40)),
-
-        buttonText("START", 200,
-                   RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
-                                 Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                   ColorExtension::White()),
+        startButton(RectTransform(Vector2D(0, -200), Vector2D(200, 80), Vector2D(0.5, 0.5),
+                                  Vector2D(0.5, 0.5)),
+                    ColorExtension::DarkGray()),
+        buttonText(RectTransform(Vector2D(0, -200), Vector2D(150, 80), Vector2D(0.5, 0.5),
+                                 Vector2D(0.5, 0.5))),
         nicknameInput(input),
         btnTween(startButton.GetTransform()),
-        textTween(buttonText.GetTransform()) {}
+        textTween(buttonText.GetTransform()) {
+    MenuData menuData = kit.GetResourceManager().GetMenuData();
+
+    bgImage.SetFile(menuData.menuBgFile);
+    logoImage.SetFile(menuData.logoBgFile);
+
+    nicknamePlaceHolderText.SetTextAndFontSize("Write your nickname", 50);
+    nicknamePlaceHolderText.SetColor(ColorExtension::White().SetAlpha(120));
+
+    startButton.SetFile(menuData.buttonImgFile);
+    startButton.SetCallback([this]() {
+        running = false;
+        gameKit.PlayButtonSFX();
+    });
+    buttonText.SetTextAndFontSize("START", 200);
+}
 
 MenuScreen::~MenuScreen() {
     cam.ClearCacheItem("duck_game_bg.jpg");

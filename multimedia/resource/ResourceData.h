@@ -53,6 +53,7 @@ public:
     string menuBgFile;
     string logoBgFile;
     string buttonImgFile;
+    string buttonBackImgFile;
     string buttonSfxFile;
 };
 

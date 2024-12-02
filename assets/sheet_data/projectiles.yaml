@@ -16,5 +16,5 @@ fragment:
   file: grenades.png
   sfx_file: bulletSFX.wav
   file_rect: { x: 0, y: 135, w: 16, h: 16 }
-  size: { x: 1, y: 1 }
+  size: { x: 2, y: 2 }
   visual_speed: 120

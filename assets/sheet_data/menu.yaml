@@ -2,4 +2,5 @@ menu_bg: duck_game_bg.jpg
 logo_bg: duck_game_logo.png
 
 button_img: button_1.png
+button_back_img: back_icon.png
 button_sfx: buttonSFX.mp3
