@@ -2,12 +2,12 @@
 
 #include "server/model/Duck.h"
 
-ThrowablesController::ThrowablesController(): unicID(1), l(nullptr) {}
+ThrowablesController::ThrowablesController(): unicID(0), l(nullptr) {}
 void ThrowablesController::RegisterListener(ThrowableEventListener* listener) { l = listener; }
 
 void ThrowablesController::Throw(std::shared_ptr<Throwable> obj, const Vector2D& origin,
                                  const Vector2D& direction) {
-    obj->BeThrown(origin, direction, l, unicID);
+    obj->BeThrown(origin, direction);
     throwables[unicID] = obj;
     unicID++;
 }
@@ -24,8 +24,10 @@ void ThrowablesController::Update(StaticMap& map, float deltaTime,
 void ThrowablesController::Reapdead() {
     for (auto it = throwables.begin(); it != throwables.end();) {
         if (it->second->IsDead()) {
+            l->Despawning(it->first);
             it = throwables.erase(it);
         } else {
+            l->Moving(it->first, it->second->GetMovingEventDto());
             ++it;
         }
     }

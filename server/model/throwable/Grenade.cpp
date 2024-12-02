@@ -14,8 +14,6 @@ void Grenade::Update(const StaticMap& map, float deltaTime) {
     timer -= deltaTime;
     if (timer <= 0) {
         Explote();
-    } else if (throwingID != NOT_THROWED) {
-        listener->Moving(throwingID, GetMovingEventDto());
     }
 }
 
@@ -26,9 +24,6 @@ void Grenade::Explote() {
                                               TypeProjectile::FRAGMENT,
                                               projectiles.GetInstantProjectileListener());
         projectiles.RelaseProjectile(fragment);
-    }
-    if (throwingID != NOT_THROWED) {
-        listener->Despawning(throwingID);
     }
     MarkAsDead();
 }
