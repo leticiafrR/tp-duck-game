@@ -7,13 +7,13 @@ void LevelsScreen::ReadAvaiableLevels() {
     auto platformsList = config[AVAILABLE_LEVELS_STR];
     std::vector<std::string> allPlatformsNames;
     widgets.clear();
-    Vector2D initialPos(0, -400);
+
     int moveDelta = 130;
     for (std::size_t i = 0; i < platformsList.size(); ++i) {
         std::string platformName = platformsList[i].as<std::string>();
         allPlatformsNames.emplace_back(platformName);
     }
-
+    Vector2D initialPos(0, -100);
     for (std::size_t i = 0; i < allPlatformsNames.size(); ++i) {
 
         widgets.emplace_back(allPlatformsNames[i], [this](const std::string& name) {
@@ -24,12 +24,20 @@ void LevelsScreen::ReadAvaiableLevels() {
     }
 }
 
-LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() {}
+LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() { ReadAvaiableLevels(); }
 LevelsScreen::~LevelsScreen() { cam.ClearCacheItem(DUCK_BACKGROUND.c_str()); }
 
-
+void LevelsScreen::UpdateWidgetListPosition(Vector2D movement) {
+    if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
+        return;
+    }
+    currentY += movement.y;
+    for (auto& widget: widgets) {
+        widget.MoveContent(movement);
+    }
+}
 string LevelsScreen::Render(bool lockerOnly) {
-    ReadAvaiableLevels();
+
     Image bg(DUCK_BACKGROUND.c_str(), RectTransform(Vector2D::Zero(), Vector2D(2133, 1200)),
              ColorExtension::White(), 0);
 
@@ -43,6 +51,10 @@ string LevelsScreen::Render(bool lockerOnly) {
                 case SDL_QUIT:
                     running = false;
                     return "";
+                case SDL_MOUSEWHEEL:
+                    Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+                    UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+                    break;
             }
             ButtonsManager::GetInstance().HandleEvent(event, cam);
         }

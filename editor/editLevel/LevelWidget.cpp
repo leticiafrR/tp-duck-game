@@ -3,10 +3,10 @@
 
 LevelWidget::LevelWidget(const string& ownerName, CallbackParam<string> onSelect):
         levelName(ownerName),
-        matchConentImage(
+        lvlConentImage(
                 RectTransform(Transform(Vector2D(0, 0), Vector2D(900, 120)), Vector2D(0.5, 1)),
                 Color(160, 160, 160), 0),
-        matchOwnerText(
+        lvlNameText(
                 ownerName, 30,
                 RectTransform(Transform(Vector2D(-280, 0), Vector2D(300, 120)), Vector2D(0.5, 1)),
                 ColorExtension::White(), 1),
@@ -22,9 +22,9 @@ LevelWidget::LevelWidget(const string& ownerName, CallbackParam<string> onSelect
 
 
 void LevelWidget::MoveContent(Vector2D movement) {
-    matchConentImage.GetRectTransform().Move(movement);
+    lvlConentImage.GetRectTransform().Move(movement);
 
-    matchOwnerText.GetRectTransform().Move(movement);
+    lvlNameText.GetRectTransform().Move(movement);
 
     selectLevelButton.GetRectTransform().Move(movement);
     selectLevelText.GetRectTransform().Move(movement);

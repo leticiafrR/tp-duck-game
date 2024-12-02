@@ -23,14 +23,15 @@ private:
     Camera& cam;
     list<LevelWidget> widgets;
 
-    // string OnSelectLevelPressed(const std::string& name);
     string selectedLvl;
     bool running = true;
+    float currentY = 0;
+    float scrollSize = 0;
     void ReadAvaiableLevels();
 
 public:
     explicit LevelsScreen(Camera& cam);
-
+    void UpdateWidgetListPosition(Vector2D movement);
     string Render(bool lockerOnly = false);
     ~LevelsScreen();
 };

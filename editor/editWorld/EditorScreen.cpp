@@ -3,6 +3,7 @@
 #include <set>
 
 #include "client/tweening/TweenManager.h"
+#include "common/Collision.h"
 #include "data/gameScene.h"
 #include "editor/constantsEditor.h"
 
@@ -62,6 +63,7 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
                 [this]() {
                     running = false;
                     writer.SaveChanges();
+                    return;
                 },
                 Color(40, 40, 40), 4),
         saveButtonText(SAVE_LABEL.c_str(), 20,
@@ -74,25 +76,24 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
                 },
-                PLAYERS_SPAWN_POINT, "white_duck.png", Vector2D(50, -40), string("Player Points"),
+                PLAYERS_SPAWN_POINT, WHITE_DUCK.c_str(), Vector2D(50, -40), PLAYER_POINT_LABEL,
                 Vector2D(30, 50)),
         collectablesPoint(
                 [this](pair<Object2D, int> _spawnPoint) {
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
                 },
-                PLAYERS_SPAWN_POINT, "box.jpg", Vector2D(200, -40), string("Collectables"),
+                PLAYERS_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(200, -40), COLLECTABLE_POINT_LABEL,
                 Vector2D(30, 30)) {
     InitMap(writer.GetGameScene());
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
     Vector2D initialPos(-200, -100);
-    Vector2D initialObj(-200, 300);
     int moveDelta = 100;
     for (size_t i = 0; i < groundBlocks.size(); i++) {
         basicsPlatform.emplace_back(groundBlocks[i],
                                     [this](MapBlock2D blockMap) { selected = blockMap; });
         Vector2D movement = Vector2D::Down() * i * moveDelta + initialPos;
-        Vector2D moveObj = Vector2D::Down() * i * moveDelta + initialObj;
+
         basicsPlatform.back().MoveContent(movement);
         basicsPlatform.back().DrawOption(cam);
     }
@@ -100,9 +101,9 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w):
 }
 
 void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
-    if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
+    /*if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
         return;
-    }
+    }*/
     currentY += movement.y;
     for (auto& widget: basicsPlatform) {
         widget.MoveContent(movement);
@@ -188,7 +189,13 @@ void EditorScreen::TakeAPlatform() {
 }
 
 void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
+
     if (event.button == SDL_BUTTON_LEFT) {
+        if (Collision::RectCollision(saveButton.GetTransform(),
+                                     Transform(Vector2D(event.x, event.y), Vector2D(1, 1)))) {
+            return;
+        }
+
         if (!selected.has_value() && !spawnPoint.has_value()) {
             TakeAPlatform();
         } else if (selected.has_value()) {

@@ -14,8 +14,8 @@ class LevelWidget {
 private:
 public:
     string levelName;
-    Image matchConentImage;
-    Text matchOwnerText;
+    Image lvlConentImage;
+    Text lvlNameText;
     Button selectLevelButton;
     Text selectLevelText;
     CallbackParam<string> onSelectClicked;
