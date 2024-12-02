@@ -60,5 +60,5 @@ const string BACKGROUND_KEY = "bg";
 
 const int PLAYERS_SPAWN_POINT = 0;
 const int COLLECTABLE_SPAWN_POINT = 1;
-const int ARMOR_SPAWN_POINT = 2;
+const int BOX_SPAWN_POINT = 2;
 #endif

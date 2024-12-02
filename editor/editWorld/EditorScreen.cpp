@@ -86,12 +86,12 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                 },
                 COLLECTABLE_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(200, -40),
                 COLLECTABLE_POINT_LABEL, Vector2D(30, 30)),
-        armorPoint(
+        boxPoint(
                 [this](pair<Object2D, int> _spawnPoint) {
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
                 },
-                ARMOR_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(-100, -40), ARMOR_POINT_LABEL,
+                BOX_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(-100, -40), BOXES_POINT_LABEL,
                 Vector2D(30, 30)) {
     InitMap(writer.GetGameScene());
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
@@ -233,12 +233,10 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
                 int mouseY = event.y;
                 Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
                 if (typeSpawnPoint.value() == PLAYERS_SPAWN_POINT) {
-                    std::cout << typeSpawnPoint.value() << std::endl;
                     writer.AddPlayerSpawnPoint(worldPos.x, worldPos.y);
                 } else if (typeSpawnPoint.value() == COLLECTABLE_SPAWN_POINT) {
-                    std::cout << worldPos.x << " " << worldPos.y << std::endl;
                     writer.AddCollectableSpawnPoint(worldPos.x, worldPos.y);
-                } else if (typeSpawnPoint.value() == ARMOR_SPAWN_POINT) {
+                } else if (typeSpawnPoint.value() == BOX_SPAWN_POINT) {
                     writer.AddArmorSpawnPoint(worldPos.x, worldPos.y);
                 }
                 spawnPoint.reset();
@@ -248,6 +246,7 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
         if (event.button == SDL_BUTTON_RIGHT) {
             selected.reset();
             spawnPoint.reset();
+            typeSpawnPoint.reset();
         }
     }
 }

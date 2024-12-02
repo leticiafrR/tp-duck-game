@@ -14,7 +14,7 @@ players_spawn_points:
   - x: 40
     y: -8
 
-armor_spawn_points:
+box_spawn_points:
   - x: 48
     y: 6
   
