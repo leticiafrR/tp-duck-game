@@ -8,7 +8,7 @@
 
 AK47::AK47(ProjectilesController& controller, const Transform& initialSpace, const Config& conf):
         Weapon(controller, initialSpace, conf.getAK47Scope(), conf.getAK47Ammo(),
-               conf.getDamageMedium(), conf.getShortDispersion(), conf.getCooldownBasic(),
+               conf.getDamageShort(), conf.getShortDispersion(), conf.getCooldownBasic(),
                TypeProjectile::BULLET),
         dispersionRate(DISPERSION_RATE_AK47),
         maxDispersionRate(conf.getSuperDispersion()) {}

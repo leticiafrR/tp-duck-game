@@ -7,7 +7,7 @@
 LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initialSpace,
                        const Config& conf):
         Weapon(controller, initialSpace, conf.getLaserRifleScope(), conf.getLaserRifleAmmo(),
-               conf.getDamageMedium(), conf.getShortDispersion(), conf.getCooldownBasic(),
+               conf.getDamageShort(), conf.getShortDispersion(), conf.getCooldownBasic(),
                TypeProjectile::LASER, conf.getLaserRifleInclination()) {}
 
 
