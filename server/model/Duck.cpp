@@ -106,19 +106,21 @@ void Duck::RegistListener(PlayerEventListener* listener) {
     // on the first iteration, everything is new
     TriggerEvent();
 }
+
+void Duck::LoseThrowableOnHand() {
+    throwableOnHand.reset();
+    typeOnHand = TypeCollectable::EMPTY;
+    TriggerEvent();
+}
 bool Duck::TryUpdateThrowable(const StaticMap& map, float deltaTime) {
     if (throwableOnHand) {
         throwableOnHand->FollowPosition(mySpace.GetPos());
         throwableOnHand->Update(map, deltaTime);
-        if (throwableOnHand->IsDead()) {
-            throwableOnHand.reset();
-            typeOnHand = TypeCollectable::EMPTY;
-            TriggerEvent();
-        }
-    } else {
-        return false;
+        if (throwableOnHand->IsDead())
+            LoseThrowableOnHand();
+        return true;
     }
-    return true;
+    return false;
 }
 void Duck::TryUpdateCollectable(float deltaTime) {
     if (itemOnHand) {

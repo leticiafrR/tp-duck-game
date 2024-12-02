@@ -46,6 +46,7 @@ private:
     bool TryThrow(ThrowablesController& throwables);
     bool TryUpdateThrowable(const StaticMap& map, float deltaTime);
     void TryUpdateCollectable(float deltaTime);
+    void LoseThrowableOnHand();
 
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf);
