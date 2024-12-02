@@ -10,8 +10,9 @@
 #define OFFSET_FROM_THROWER 2
 
 
-Throwable::Throwable(float mass):
+Throwable::Throwable(float mass, TypeCollectable type):
         DynamicObject(Transform(Vector2D::Zero(), Vector2D(THROWABLE_SIZE, THROWABLE_SIZE))),
+        type(type),
         body(mySpace, mass, COEFFICIENT_FRICTION_AIR),
         isGrounded(false),
         beenThrowed(false) {}
@@ -54,6 +55,6 @@ void Throwable::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);
 }
 
-ThrowableSpawnEventDto Throwable::GetMovingEventDto() {
-    return ThrowableSpawnEventDto(GetTypeCollectable(), mySpace.GetPos());
+ThrowableSpawnEventDto Throwable::GetMovingEventDto() const {
+    return ThrowableSpawnEventDto(type, mySpace.GetPos());
 }

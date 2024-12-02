@@ -226,9 +226,11 @@ bool Duck::TryThrow(ThrowablesController& throwables) {
 }
 
 
-void Duck::PrepareToThrow(std::shared_ptr<Throwable> throwable) {
+void Duck::PrepareToThrow(std::shared_ptr<Throwable> throwable, TypeCollectable type) {
     itemOnHand.reset();
     throwableOnHand = throwable;
+    typeOnHand = type;
+    TriggerEvent();
 }
 
 

@@ -48,6 +48,11 @@ private:
     void TryUpdateCollectable(float deltaTime);
     void LoseThrowableOnHand();
 
+    void ApplyGravity(const StaticMap& map, float deltaTime) override;
+    void HandleCollisionWithMap(const Transform& mapT) override;
+    void HandleOutOfBounds(float displacement) override;
+    void HandleDead();
+
 public:
     explicit Duck(const Vector2D& initialPos, PlayerID_t id, const Config& conf);
     void TryMoveLeft();
@@ -66,19 +71,14 @@ public:
 
     void Cuack();
     void Slide(Vector2D intensity) { body.ApplyForce(intensity); }
+    void HandleReceiveDamage(uint8_t damage);
 
     void TryEquip();
 
     void TryCollect(CollectablesController& c);
     void TryDrop(CollectablesController& collectables, ThrowablesController& throwables);
 
-    void PrepareToThrow(std::shared_ptr<Throwable> throwable);
-    void HandleCollisionWithMap(const Transform& mapT) override;
-    void HandleOutOfBounds(float displacement) override;
-    void HandleDead();
-    void HandleReceiveDamage(uint8_t damage);
-
-    void ApplyGravity(const StaticMap& map, float deltaTime) override;
+    void PrepareToThrow(std::shared_ptr<Throwable> throwable, TypeCollectable type);
     void ApplyRecoil(float intensity);
 
     void RegistListener(PlayerEventListener* listener);

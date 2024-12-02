@@ -4,13 +4,12 @@
 
 #include "ThrowableCollectable.h"
 
-
 class BananaCollectable: public ThrowableCollectable {
 public:
     explicit BananaCollectable(const Transform& initialSpace);
-    std::shared_ptr<Throwable> GetThrowable() override;
     void BeCollected(TypeCollectable& typeOnHandRef) override;
     TypeCollectable GetTypeCollectable() override;
+    bool Use(Duck* thrower) override;
     ~BananaCollectable() = default;
 };
 #endif

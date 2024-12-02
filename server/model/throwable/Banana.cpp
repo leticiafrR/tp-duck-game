@@ -7,15 +7,13 @@
 #define INTENSITY_SLIDE_DUCK(y) (y * 54)
 #define INTENSITY_SLIDE(x) (x * 14)
 
-Banana::Banana(): Throwable(MASS_BANANA), beenStepped(false) {}
+Banana::Banana(TypeCollectable type): Throwable(MASS_BANANA, type), beenStepped(false) {}
 
 void Banana::BeStepped(Duck* duck) {
     body.ApplyForce(INTENSITY_SLIDE(duck->GetLookVector(true)));
     duck->Slide(INTENSITY_SLIDE_DUCK(duck->GetLookVector(true)));
     beenStepped = true;
 }
-
-TypeCollectable Banana::GetTypeCollectable() { return TypeCollectable::BANANA; }
 
 bool Banana::IsReadyToBeStepped() { return isGrounded && beenThrowed; }
 
