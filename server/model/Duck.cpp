@@ -138,11 +138,11 @@ void Duck::UpdateHand(const StaticMap& map, float deltaTime) {
     }
 }
 
-Vector2D Duck::GetLookVector() {
-    if (isLookingUp) {
-        return Vector2D::Up();
+Vector2D Duck::GetLookVector(bool justLaterals) {
+    if (!isLookingUp || justLaterals) {
+        return ((myFlip == Flip::Left) ? Vector2D::Left() : Vector2D::Right());
     }
-    return ((myFlip == Flip::Left) ? Vector2D::Left() : Vector2D::Right());
+    return Vector2D::Up();
 }
 
 void Duck::Update(const StaticMap& map, float deltaTime) {

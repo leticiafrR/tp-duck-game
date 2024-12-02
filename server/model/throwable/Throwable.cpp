@@ -46,14 +46,13 @@ void Throwable::BeThrown(const Vector2D& origin, const Vector2D& direction,
 void Throwable::Update(const StaticMap& map, float deltaTime) {
     if (throwingID != NOT_THROWED) {
         UpdatePosition(map, deltaTime);
-        std::cout << "[Thowable]: updated pos is " << mySpace.GetPos().ToString() << std::endl;
     }
 }
 void Throwable::FollowPosition(const Vector2D& duckPos) {
     mySpace.SetPos(duckPos + (Vector2D::Right() * OFFSET_FROM_THROWER));
 }
 
-void Throwable::HandleOutOfBounds(float /* disp*/) { MarkAsDead(); }
+void Throwable::HandleOutOfBounds(float /* displacement*/) { MarkAsDead(); }
 
 void Throwable::HandleCollisionWithMap(const Transform& mapT) {
     Collision::ResolveStaticCollision(mySpace, mapT);

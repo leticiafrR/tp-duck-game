@@ -49,10 +49,14 @@ std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable 
             break;
         case TypeCollectable::MAGNUM:
             return std::make_shared<Magnum>(projectilesController, spawnPlace, conf);
+            break;
+        case TypeCollectable::BANANA:
+            return std::make_shared<BananaCollectable>(spawnPlace);
+            break;
         default:
             break;
     }
-    return std::make_shared<GrenadeCollectable>(projectilesController, spawnPlace);
+    return std::make_shared<BananaCollectable>(spawnPlace);
 }
 
 void CollectableSpawner::Update(float deltaTime, Collectables& collectables) {

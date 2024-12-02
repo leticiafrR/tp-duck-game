@@ -2,15 +2,15 @@
 #define THROWABLE_H
 #include <optional>
 #define NOT_THROWED 0
+#include <unordered_map>
+
 #include "common/RigidBody.h"
 #include "data/snapshot.h"
 #include "server/model/DynamicObj.h"
 #include "server/model/event/ThrowableEventListener.h"
-
-
+class Duck;
 class StaticMap;
 class Throwable: public DynamicObject {
-    // luce igual que un collectable (pero a este se le sacò el seguro)
 protected:
     RigidBody body;
     bool isGrounded;
@@ -24,13 +24,12 @@ public:
     explicit Throwable(float mass);
     void BeThrown(const Vector2D& origin, const Vector2D& direction, ThrowableEventListener* l,
                   ThrowableID_t throwingID);
-
     void FollowPosition(const Vector2D& duckPos);
     void ApplyGravity(const StaticMap& map, float deltaTime) override;
     void HandleCollisionWithMap(const Transform& mapT) override;
     void HandleOutOfBounds(float /* disp*/) override;
-
     virtual void Update(const StaticMap& map, float deltaTime);
+    virtual void CheckCollisionWithDucks(std::unordered_map<PlayerID_t, Duck*>& players) = 0;
     virtual ~Throwable() = default;
     virtual TypeCollectable GetTypeCollectable() = 0;
 

@@ -7,6 +7,7 @@ target_sources(taller_server
     model/event/EventsManager.cpp
     model/event/ProjectileEventListener.cpp
     model/event/PlayerEventListener.cpp
+    model/event/ThrowableEventListener.cpp
 
     model/DynamicObj.cpp
     model/Duck.cpp
@@ -37,8 +38,10 @@ target_sources(taller_server
 
     model/throwable/Throwable.cpp
     model/throwable/Grenade.cpp
+    model/throwable/Banana.cpp
     model/throwable/ThrowablesController.cpp
 
+    model/throwableCollectable/BananaCollectable.cpp
     model/throwableCollectable/GrenadeCollectable.cpp
     model/throwableCollectable/ThrowableCollectable.cpp
 
@@ -71,9 +74,9 @@ target_sources(taller_server
     model/event/EventsManager.h
     model/event/ProjectileEventListener.h
     model/event/PlayerEventListener.h
+    model/event/ThrowableEventListener.h
     
     model/Equipment.h
-    
 
     model/weaponCollectable/Weapon.h
     model/weaponCollectable/PistolaCowboy.h
@@ -101,9 +104,10 @@ target_sources(taller_server
 
     model/throwable/Throwable.h
     model/throwable/Grenade.h
+    model/throwable/Banana.h
     model/throwable/ThrowablesController.h
 
-
+    model/throwableCollectable/BananaCollectable.h
     model/throwableCollectable/GrenadeCollectable.h
     model/throwableCollectable/ThrowableCollectable.h
 

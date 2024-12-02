@@ -6,7 +6,7 @@ Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpac
                  const Config& conf):
         Weapon(controller, initialSpace, conf.getShotgunScope(),
                AMMO_WITH_RELOAD(conf.getShotgunAmmo()), conf.getDamageShort(),
-               conf.getLongDispersion(), conf.getCooldownBasic(), TypeProjectile::BULLET),
+               conf.getLongDispersion(), conf.getCooldownBasic(), TypeProjectile::FRAGMENT),
         ammoLoaded(true) {}
 
 

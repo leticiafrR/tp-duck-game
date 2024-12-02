@@ -3,6 +3,7 @@
 
 #include "server/model/collectable/Armor.h"
 #include "server/model/collectable/Helmet.h"
+#include "server/model/throwableCollectable/BananaCollectable.h"
 #include "server/model/throwableCollectable/GrenadeCollectable.h"
 #include "server/model/weaponCollectable/AK47.h"
 #include "server/model/weaponCollectable/DuelingPistol.h"

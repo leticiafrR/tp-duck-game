@@ -64,6 +64,7 @@ public:
     void StopCrouch();
 
     void Cuack();
+    void Slide(Vector2D intensity) { body.ApplyForce(intensity); }
 
     void TryEquip();
 
@@ -82,7 +83,7 @@ public:
     void RegistListener(PlayerEventListener* listener);
     void Update(const StaticMap& map, float deltaTime);
     const Flip& GetFlip() const;
-    Vector2D GetLookVector();
+    Vector2D GetLookVector(bool justLaterals = false);
     bool IsShooting() const;
 
     Duck(const Duck&) = delete;

@@ -1,5 +1,7 @@
 #ifndef GRENADE_H
 #define GRENADE_H
+#include <unordered_map>
+
 #include "server/model/projectile/ProjectilesController.h"
 
 #include "Throwable.h"
@@ -12,9 +14,10 @@ private:
 
 public:
     explicit Grenade(ProjectilesController& projectilesController);
-    void Update(const StaticMap& map, float deltaTime) override;
     ~Grenade() = default;
+    void Update(const StaticMap& map, float deltaTime) override;
     TypeCollectable GetTypeCollectable() override;
+    void CheckCollisionWithDucks(std::unordered_map<PlayerID_t, Duck*>& /*ducks*/) override;
 };
 
 

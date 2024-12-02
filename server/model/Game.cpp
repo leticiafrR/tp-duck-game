@@ -34,7 +34,7 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const C
 void GameWorld::Update(float deltaTime) {
     projectilesController.Update(map, players);
     collectablesController.Update(deltaTime);
-    throwablesController.Update(map, deltaTime);
+    throwablesController.Update(map, deltaTime, players);
     for (auto& pair: players) {
         pair.second->Update(map, deltaTime);
     }
