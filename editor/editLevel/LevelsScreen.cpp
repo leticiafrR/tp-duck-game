@@ -28,9 +28,9 @@ LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() { ReadAvaiableL
 LevelsScreen::~LevelsScreen() { cam.ClearCacheItem(DUCK_BACKGROUND.c_str()); }
 
 void LevelsScreen::UpdateWidgetListPosition(Vector2D movement) {
-    if (currentY + movement.y > scrollSize - 900 || currentY + movement.y < -20) {
+    /*if (currentY + movement.y > scrollSize - 450 || currentY + movement.y < -10) {
         return;
-    }
+    }*/
     currentY += movement.y;
     for (auto& widget: widgets) {
         widget.MoveContent(movement);

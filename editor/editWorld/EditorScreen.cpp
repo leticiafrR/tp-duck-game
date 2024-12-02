@@ -190,13 +190,11 @@ void EditorScreen::TakeAPlatform() {
 }
 
 void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
-
+    if (Collision::RectCollision(saveButton.GetTransform(),
+                                 Transform(Vector2D(event.x, event.y), saveButton.GetSize()))) {
+        return;
+    }
     if (event.button == SDL_BUTTON_LEFT) {
-        if (Collision::RectCollision(saveButton.GetTransform(),
-                                     Transform(Vector2D(event.x, event.y), Vector2D(1, 1)))) {
-            return;
-        }
-
         if (!selected.has_value() && !spawnPoint.has_value()) {
             TakeAPlatform();
         } else if (selected.has_value()) {
