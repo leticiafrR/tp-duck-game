@@ -1,10 +1,6 @@
 #include "DynamicObj.h"
 
 #include "map/staticMap.h"
-/*******************************************************************************************/
-/*                                DEFINITIONS                                              */
-/*******************************************************************************************/
-
 DynamicObject::DynamicObject(const Transform& mySpace): mySpace(mySpace), isDead(false) {}
 
 
