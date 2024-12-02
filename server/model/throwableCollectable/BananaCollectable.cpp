@@ -6,14 +6,11 @@
 BananaCollectable::BananaCollectable(const Transform& initialSpace):
         ThrowableCollectable(initialSpace) {}
 
-void BananaCollectable::BeCollected(TypeCollectable& typeOnHandRef) {
-    typeOnHandRef = TypeCollectable::BANANA;
-}
+void BananaCollectable::BeCollected(TypeItem& typeOnHandRef) { typeOnHandRef = TypeItem::BANANA; }
 
-TypeCollectable BananaCollectable::GetTypeCollectable() { return TypeCollectable::BANANA; }
+TypeItem BananaCollectable::GetTypeCollectable() { return TypeItem::BANANA; }
 
 bool BananaCollectable::Use(Duck* thrower) {
-    thrower->PrepareToThrow(std::make_shared<Banana>(TypeCollectable::BANANA_PEEL),
-                            TypeCollectable::BANANA_PEEL);
+    thrower->PrepareToThrow(std::make_shared<Banana>(TypeItem::BANANA_PEEL), TypeItem::BANANA_PEEL);
     return true;
 }

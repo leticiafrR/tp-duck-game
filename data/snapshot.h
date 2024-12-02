@@ -21,7 +21,7 @@ enum class DuckState : uint8_t {
     DEAD_BY_FALLING
 };
 // typeItem
-enum class TypeCollectable : uint8_t {
+enum class TypeItem : uint8_t {
     COWBOY_PISTOL,
     LASER_RIFLE,
     PEW_PEW_LASER,
@@ -45,7 +45,7 @@ struct PlayerEvent {
     DuckState stateTransition;
     Flip flipping;
     bool isLookingUp;
-    TypeCollectable typeOnHand;
+    TypeItem typeOnHand;
     bool isCrouched;
     bool cuacking;
     bool hasArmor;
@@ -54,8 +54,8 @@ struct PlayerEvent {
     PlayerEvent() = default;
 
     PlayerEvent(const Vector2D& _motion, DuckState _stateTransition, Flip _flipping,
-                bool _isLookingUp, TypeCollectable _typeOnHand, bool _isCrouched,
-                bool _cuacking = false, bool _hasArmor = false, bool _hasHelmet = false):
+                bool _isLookingUp, TypeItem _typeOnHand, bool _isCrouched, bool _cuacking = false,
+                bool _hasArmor = false, bool _hasHelmet = false):
             motion(_motion),
             stateTransition(_stateTransition),
             flipping(_flipping),
@@ -81,18 +81,18 @@ struct ProjectileEventDto {
 struct CollectableSpawnEventDto {
     CollectableID_t id;
     Vector2D position;
-    TypeCollectable type;
+    TypeItem type;
 
-    CollectableSpawnEventDto(CollectableID_t _id, const Vector2D& _position, TypeCollectable _type):
+    CollectableSpawnEventDto(CollectableID_t _id, const Vector2D& _position, TypeItem _type):
             id(_id), position(_position), type(_type) {}
     CollectableSpawnEventDto() = default;
 };
 
 struct ThrowableSpawnEventDto {
-    TypeCollectable type;  //    BANANA_PEEL or GRENADE_UNLOCK
+    TypeItem type;  //    BANANA_PEEL or GRENADE_UNLOCK
     Vector2D position;
     ThrowableSpawnEventDto() = default;
-    ThrowableSpawnEventDto(TypeCollectable type, const Vector2D& position):
+    ThrowableSpawnEventDto(TypeItem type, const Vector2D& position):
             type(type), position(position) {}
 };
 

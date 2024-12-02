@@ -8,9 +8,9 @@ class ThrowableCollectable: public Collectable {
 public:
     explicit ThrowableCollectable(const Transform& initialSpace): Collectable(initialSpace) {}
 
-    virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
+    virtual void BeCollected(TypeItem& typeOnHandRef) override = 0;
     virtual bool Use(Duck* thrower) override = 0;
-    virtual TypeCollectable GetTypeCollectable() override = 0;
+    virtual TypeItem GetTypeCollectable() override = 0;
 
 
     void StopUse(Duck* /*user*/) override {}

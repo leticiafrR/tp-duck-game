@@ -6,8 +6,8 @@ class PistolaCowboy: public Weapon {
 public:
     PistolaCowboy(ProjectilesController& controller, const Transform& initialSpace,
                   const Config& conf);
-    void BeCollected(TypeCollectable& typeOnHandRef) override;
-    TypeCollectable GetTypeCollectable() override;
+    void BeCollected(TypeItem& typeOnHandRef) override;
+    TypeItem GetTypeCollectable() override;
 };
 
 #endif

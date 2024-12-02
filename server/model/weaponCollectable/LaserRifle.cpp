@@ -11,8 +11,8 @@ LaserRifle::LaserRifle(ProjectilesController& controller, const Transform& initi
                TypeProjectile::LASER, conf.getLaserRifleInclination()) {}
 
 
-void LaserRifle::BeCollected(TypeCollectable& collectorTypeRef) {
-    collectorTypeRef = TypeCollectable::LASER_RIFLE;
+void LaserRifle::BeCollected(TypeItem& collectorTypeRef) {
+    collectorTypeRef = TypeItem::LASER_RIFLE;
 }
 
 void LaserRifle::Shoot(Duck* shooter) {
@@ -30,4 +30,4 @@ bool LaserRifle::Use(Duck* shooter) {
     }
     return false;
 }
-TypeCollectable LaserRifle::GetTypeCollectable() { return TypeCollectable::LASER_RIFLE; }
+TypeItem LaserRifle::GetTypeCollectable() { return TypeItem::LASER_RIFLE; }

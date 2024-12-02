@@ -8,7 +8,7 @@ DuckClientRenderer::DuckClientRenderer(Vector2D size, Color skinColor,
         anim("idle", duckData.frames, 22),
         handItem(this->transform),
         armor(this->transform, resourceManager.GetArmorData(), 22),
-        helmet(this->transform, resourceManager.GetCollectableData(TypeCollectable::HELMET)) {
+        helmet(this->transform, resourceManager.GetCollectableData(TypeItem::HELMET)) {
 
     this->skinColor = skinColor;
     SetFileName(duckData.file);

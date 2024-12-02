@@ -32,9 +32,9 @@ private:
     PlayerEventListener* l;
     Flip myFlip;
     DuckState myState;
-    std::shared_ptr<Collectable> itemOnHand;
+    std::shared_ptr<Collectable> collectableOnHand;
     std::shared_ptr<Throwable> throwableOnHand;
-    TypeCollectable typeOnHand;
+    TypeItem typeOnHand;
     Equipment equipment;
 
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
@@ -78,7 +78,7 @@ public:
     void TryCollect(CollectablesController& c);
     void TryDrop(CollectablesController& collectables, ThrowablesController& throwables);
 
-    void PrepareToThrow(std::shared_ptr<Throwable> throwable, TypeCollectable type);
+    void PrepareToThrow(std::shared_ptr<Throwable> throwable, TypeItem type);
     void ApplyRecoil(float intensity);
 
     void RegistListener(PlayerEventListener* listener);

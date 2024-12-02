@@ -22,7 +22,7 @@ public:
     explicit CollectablesController(ProjectilesController& projectilesController,
                                     const Config& conf, const std::vector<Vector2D>& positions);
     std::shared_ptr<Collectable> TryCollect(const Transform& collectorSpace,
-                                            TypeCollectable& collectorTyperRef);
+                                            TypeItem& collectorTyperRef);
     void Drop(std::shared_ptr<Collectable> obj, const Vector2D& position);
     void RegisterListener(CollectableEventListener* collectableListener);
     void Update(float deltaTime);

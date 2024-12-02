@@ -7,7 +7,7 @@
 #define INTENSITY_SLIDE_DUCK(y) (y * 54)
 #define INTENSITY_SLIDE(x) (x * 14)
 
-Banana::Banana(TypeCollectable type): Throwable(MASS_BANANA, type), beenStepped(false) {}
+Banana::Banana(TypeItem type): Throwable(MASS_BANANA, type), beenStepped(false) {}
 
 void Banana::BeStepped(Duck* duck) {
     body.ApplyForce(INTENSITY_SLIDE(duck->GetLookVector(true)));

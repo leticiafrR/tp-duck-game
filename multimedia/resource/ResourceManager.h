@@ -29,7 +29,7 @@ private:
     YamlDataCache dataCache;
     YAML::Node root;
 
-    unordered_map<TypeCollectable, CollectableData> collectablesMap;
+    unordered_map<TypeItem, CollectableData> collectablesMap;
     unordered_map<TypeProjectile, ProjectileData> projectilesMap;
 
     optional<DuckData> duckData = std::nullopt;
@@ -51,7 +51,7 @@ public:
 
     const ArmorData& GetArmorData();
 
-    CollectableData GetCollectableData(TypeCollectable type);
+    CollectableData GetCollectableData(TypeItem type);
 
     ProjectileData GetProjectilData(TypeProjectile type);
 

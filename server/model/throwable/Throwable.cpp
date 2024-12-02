@@ -10,7 +10,7 @@
 #define OFFSET_FROM_THROWER 2
 
 
-Throwable::Throwable(float mass, TypeCollectable type):
+Throwable::Throwable(float mass, TypeItem type):
         DynamicObject(Transform(Vector2D::Zero(), Vector2D(THROWABLE_SIZE, THROWABLE_SIZE))),
         type(type),
         body(mySpace, mass, COEFFICIENT_FRICTION_AIR),

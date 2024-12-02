@@ -4,7 +4,7 @@
 #define TIME_TO_EXPLOTE 4
 #define SCOPE_GRENADE 30
 #define DAMAGE_GRENADE 6
-Grenade::Grenade(ProjectilesController& projectilesController, TypeCollectable type):
+Grenade::Grenade(ProjectilesController& projectilesController, TypeItem type):
         Throwable(MASS_GRENADE, type), projectiles(projectilesController), timer(TIME_TO_EXPLOTE) {}
 
 void Grenade::Update(const StaticMap& map, float deltaTime) {

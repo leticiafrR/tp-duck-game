@@ -11,9 +11,9 @@ private:
 
 public:
     Shotgun(ProjectilesController& controller, const Transform& initialSpace, const Config& conf);
-    void BeCollected(TypeCollectable& collectorTypeRef) override;
+    void BeCollected(TypeItem& collectorTypeRef) override;
     void Shoot(Duck* shooter) override;
-    TypeCollectable GetTypeCollectable() override;
+    TypeItem GetTypeCollectable() override;
     ~Shotgun() = default;
 };
 

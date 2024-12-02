@@ -11,7 +11,7 @@
 
 #include "common/Vector2D.h"
 
-enum class TypeCollectable : uint8_t;
+enum class TypeItem : uint8_t;
 enum class TypeProjectile : uint8_t;
 class Config {
     std::vector<std::string> _availableLevels;

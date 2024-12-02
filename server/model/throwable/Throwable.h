@@ -10,7 +10,7 @@ class Duck;
 class StaticMap;
 class Throwable: public DynamicObject {
 private:
-    TypeCollectable type;
+    TypeItem type;
     Vector2D GetForceToBeThrown(const Vector2D& direction);
     void ApplyGravity(const StaticMap& map, float deltaTime) override;
     void HandleCollisionWithMap(const Transform& mapT) override;
@@ -22,7 +22,7 @@ protected:
     bool beenThrowed;
 
 public:
-    Throwable(float mass, TypeCollectable type);
+    Throwable(float mass, TypeItem type);
     void BeThrown(const Vector2D& origin, const Vector2D& direction);
     void FollowPosition(const Vector2D& duckPos);
     virtual void Update(const StaticMap& map, float deltaTime);

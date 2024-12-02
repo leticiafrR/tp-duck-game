@@ -2,6 +2,8 @@
 #define GRENADE_COLLECTABLE_H
 #include <memory>
 
+#include "server/model/projectile/ProjectilesController.h"
+
 #include "ThrowableCollectable.h"
 class GrenadeCollectable: public ThrowableCollectable {
 private:
@@ -9,8 +11,8 @@ private:
 
 public:
     GrenadeCollectable(ProjectilesController& projectilesController, const Transform& initialSpace);
-    void BeCollected(TypeCollectable& typeOnHandRef) override;
-    TypeCollectable GetTypeCollectable() override;
+    void BeCollected(TypeItem& typeOnHandRef) override;
+    TypeItem GetTypeCollectable() override;
     bool Use(Duck* thrower) override;
     ~GrenadeCollectable() = default;
 };

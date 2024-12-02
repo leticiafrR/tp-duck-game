@@ -33,11 +33,11 @@ public:
            uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,
            TypeProjectile typeProjectile, float inclination = NO_INCLINATION);
 
-    virtual void BeCollected(TypeCollectable& typeOnHandRef) override = 0;
+    virtual void BeCollected(TypeItem& typeOnHandRef) override = 0;
     virtual bool Use(Duck* shooter) override;
     void Update(float deltaTime) override;
     virtual ~Weapon() = default;
-    virtual TypeCollectable GetTypeCollectable() override = 0;
+    virtual TypeItem GetTypeCollectable() override = 0;
     bool StillReusable() override;
     void StopUse(Duck* shooter) override;
 };

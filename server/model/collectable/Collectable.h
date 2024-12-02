@@ -22,8 +22,8 @@ public:
     virtual void StopUse(Duck* user) = 0;
     virtual void Update(float deltaTime) = 0;
 
-    virtual void BeCollected(TypeCollectable& itemInHandRef) = 0;
-    virtual TypeCollectable GetTypeCollectable() = 0;
+    virtual void BeCollected(TypeItem& itemInHandRef) = 0;
+    virtual TypeItem GetTypeCollectable() = 0;
     Transform& GetTransform();
     virtual bool StillReusable();
 };

@@ -17,7 +17,7 @@ CollectablesController::CollectablesController(ProjectilesController& projectile
 
 
 std::shared_ptr<Collectable> CollectablesController::TryCollect(const Transform& collectorSpace,
-                                                                TypeCollectable& collectorType) {
+                                                                TypeItem& collectorType) {
     return collectables.PickCollectable(collectorSpace, collectorType);
 }
 

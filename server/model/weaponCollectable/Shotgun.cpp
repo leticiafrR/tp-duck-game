@@ -10,9 +10,7 @@ Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpac
         ammoLoaded(true) {}
 
 
-void Shotgun::BeCollected(TypeCollectable& collectorTypeRef) {
-    collectorTypeRef = TypeCollectable::SHOTGUN;
-}
+void Shotgun::BeCollected(TypeItem& collectorTypeRef) { collectorTypeRef = TypeItem::SHOTGUN; }
 
 void Shotgun::Shoot(Duck* shooter) {
     if (ammoLoaded) {
@@ -29,4 +27,4 @@ void Shotgun::Shoot(Duck* shooter) {
     }
 }
 
-TypeCollectable Shotgun::GetTypeCollectable() { return TypeCollectable::SHOTGUN; }
+TypeItem Shotgun::GetTypeCollectable() { return TypeItem::SHOTGUN; }

@@ -12,45 +12,45 @@ CollectableSpawner::CollectableSpawner(const Vector2D& pos,
         conf(conf) {}
 
 
-TypeCollectable CollectableSpawner::GetRandomTypeCollectable() {
+TypeItem CollectableSpawner::GetRandomTypeCollectable() {
     std::srand(std::time(nullptr));
-    int randomIndex = std::rand() % static_cast<int>(TypeCollectable::__typesCount);
-    return static_cast<TypeCollectable>(randomIndex);
+    int randomIndex = std::rand() % static_cast<int>(TypeItem::__typesCount);
+    return static_cast<TypeItem>(randomIndex);
 }
 
-std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeCollectable type) {
+std::shared_ptr<Collectable> CollectableSpawner::GetCollectable(TypeItem type) {
     switch (type) {
-        case TypeCollectable::DUELING_PISTOL:
+        case TypeItem::DUELING_PISTOL:
             return std::make_shared<DuelingPistol>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::LASER_RIFLE:
+        case TypeItem::LASER_RIFLE:
             return std::make_shared<LaserRifle>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::PEW_PEW_LASER:
+        case TypeItem::PEW_PEW_LASER:
             return std::make_shared<PewPewLaser>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::COWBOY_PISTOL:
+        case TypeItem::COWBOY_PISTOL:
             return std::make_shared<PistolaCowboy>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::SHOTGUN:
+        case TypeItem::SHOTGUN:
             return std::make_shared<Shotgun>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::ARMOR:
+        case TypeItem::ARMOR:
             return std::make_shared<Armor>(spawnPlace);
             break;
-        case TypeCollectable::HELMET:
+        case TypeItem::HELMET:
             return std::make_shared<Helmet>(spawnPlace);
             break;
-        case TypeCollectable::GRENADE:
+        case TypeItem::GRENADE:
             return std::make_shared<GrenadeCollectable>(projectilesController, spawnPlace);
             break;
-        case TypeCollectable::AK47:
+        case TypeItem::AK47:
             return std::make_shared<AK47>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::MAGNUM:
+        case TypeItem::MAGNUM:
             return std::make_shared<Magnum>(projectilesController, spawnPlace, conf);
             break;
-        case TypeCollectable::BANANA:
+        case TypeItem::BANANA:
             return std::make_shared<BananaCollectable>(spawnPlace);
             break;
         default:

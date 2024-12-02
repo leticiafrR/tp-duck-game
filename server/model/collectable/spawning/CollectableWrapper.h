@@ -13,7 +13,7 @@ public:
     CollectableWrapper() = default;
     CollectableWrapper(std::shared_ptr<Collectable> collectable,
                        std::shared_ptr<float> sourceTimer);
-    void BeCollected(TypeCollectable& itemInHandRef);
+    void BeCollected(TypeItem& itemInHandRef);
     const Transform& GetTransform() const;
 
     std::shared_ptr<Collectable> GetCollectable();

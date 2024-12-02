@@ -26,7 +26,7 @@ private:
 public:
     LocalPlayerGUI(Color duckColor, const string& nickname, bool isOne);
     ~LocalPlayerGUI();
-    void SetHandItem(TypeCollectable type);
+    void SetHandItem(TypeItem type);
     void RemoveHandItem();
 };
 

@@ -17,8 +17,8 @@ private:
     ProjectilesController& projectilesController;
     const Config& conf;
 
-    TypeCollectable GetRandomTypeCollectable();
-    std::shared_ptr<Collectable> GetCollectable(TypeCollectable type);
+    TypeItem GetRandomTypeCollectable();
+    std::shared_ptr<Collectable> GetCollectable(TypeItem type);
 
 public:
     CollectableSpawner(const Vector2D& pos, ProjectilesController& projectilesController,

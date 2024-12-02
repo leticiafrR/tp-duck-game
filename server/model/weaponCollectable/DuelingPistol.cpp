@@ -8,8 +8,8 @@ DuelingPistol::DuelingPistol(ProjectilesController& controller, const Transform&
                TypeProjectile::BULLET) {}
 
 
-void DuelingPistol::BeCollected(TypeCollectable& collectorTypeRef) {
-    collectorTypeRef = TypeCollectable::DUELING_PISTOL;
+void DuelingPistol::BeCollected(TypeItem& collectorTypeRef) {
+    collectorTypeRef = TypeItem::DUELING_PISTOL;
 }
 
 bool DuelingPistol::Use(Duck* shooter) {
@@ -17,4 +17,4 @@ bool DuelingPistol::Use(Duck* shooter) {
     return Weapon::Use(shooter);
 }
 
-TypeCollectable DuelingPistol::GetTypeCollectable() { return TypeCollectable::DUELING_PISTOL; }
+TypeItem DuelingPistol::GetTypeCollectable() { return TypeItem::DUELING_PISTOL; }

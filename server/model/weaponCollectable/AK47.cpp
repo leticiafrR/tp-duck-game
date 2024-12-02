@@ -19,9 +19,7 @@ void AK47::IncraseDispersion() {
 }
 
 
-void AK47::BeCollected(TypeCollectable& collectorTypeRef) {
-    collectorTypeRef = TypeCollectable::AK47;
-}
+void AK47::BeCollected(TypeItem& collectorTypeRef) { collectorTypeRef = TypeItem::AK47; }
 
 void AK47::Shoot(Duck* shooter) {
     BounceProjectile* projectile =
@@ -30,7 +28,7 @@ void AK47::Shoot(Duck* shooter) {
     projectilesController.RelaseProjectile(projectile);
 }
 
-TypeCollectable AK47::GetTypeCollectable() { return TypeCollectable::AK47; }
+TypeItem AK47::GetTypeCollectable() { return TypeItem::AK47; }
 
 void AK47::StopUse(Duck* shooter) {
     shooter->StopShooting();

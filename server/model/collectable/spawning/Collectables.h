@@ -24,6 +24,6 @@ public:
                           std::shared_ptr<float> sourceTimer = std::shared_ptr<float>());
 
     std::shared_ptr<Collectable> PickCollectable(const Transform& collectorSpace,
-                                                 TypeCollectable& collectorType);
+                                                 TypeItem& collectorType);
 };
 #endif

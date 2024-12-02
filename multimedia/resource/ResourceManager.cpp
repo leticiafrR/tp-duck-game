@@ -39,7 +39,7 @@ const ArmorData& ResourceManager::GetArmorData() {
     return armorData.value();
 }
 
-CollectableData ResourceManager::GetCollectableData(TypeCollectable type) {
+CollectableData ResourceManager::GetCollectableData(TypeItem type) {
     if (collectablesMap.size() == 0) {
         LoadCollectablesData();
     }

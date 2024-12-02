@@ -10,9 +10,9 @@ private:
 
 public:
     AK47(ProjectilesController& controller, const Transform& initialSpace, const Config& conf);
-    void BeCollected(TypeCollectable& collectorTypeRef) override;
+    void BeCollected(TypeItem& collectorTypeRef) override;
     void Shoot(Duck* shooter) override;
-    TypeCollectable GetTypeCollectable() override;
+    TypeItem GetTypeCollectable() override;
     void StopUse(Duck* shooter) override;
     bool Use(Duck* shooter) override;
     ~AK47() = default;

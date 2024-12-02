@@ -7,14 +7,13 @@ GrenadeCollectable::GrenadeCollectable(ProjectilesController& projectilesControl
                                        const Transform& initialSpace):
         ThrowableCollectable(initialSpace), projectilesController(projectilesController) {}
 
-void GrenadeCollectable::BeCollected(TypeCollectable& typeOnHandRef) {
-    typeOnHandRef = TypeCollectable::GRENADE;
-}
+void GrenadeCollectable::BeCollected(TypeItem& typeOnHandRef) { typeOnHandRef = TypeItem::GRENADE; }
 
-TypeCollectable GrenadeCollectable::GetTypeCollectable() { return TypeCollectable::GRENADE; }
-bool GrenadeCollectable::GrenadeCollectable::Use(Duck* thrower) {
+TypeItem GrenadeCollectable::GetTypeCollectable() { return TypeItem::GRENADE; }
+
+bool GrenadeCollectable::Use(Duck* thrower) {
     thrower->PrepareToThrow(
-            std::make_shared<Grenade>(projectilesController, TypeCollectable::GRENADE_UNLOCK),
-            TypeCollectable::GRENADE_UNLOCK);
+            std::make_shared<Grenade>(projectilesController, TypeItem::GRENADE_UNLOCK),
+            TypeItem::GRENADE_UNLOCK);
     return true;
 }

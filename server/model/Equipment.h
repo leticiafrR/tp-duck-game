@@ -4,32 +4,32 @@
 #include "data/snapshot.h"
 class Equipment {
 private:
-    TypeCollectable armor;
-    TypeCollectable helmet;
+    TypeItem armor;
+    TypeItem helmet;
 
 public:
-    Equipment(): armor(TypeCollectable::EMPTY), helmet(TypeCollectable::EMPTY) {}
-    bool HasArmor() { return (armor != TypeCollectable::EMPTY); }
-    bool HasHelmet() { return (helmet != TypeCollectable::EMPTY); }
-    bool TryEquip(TypeCollectable& item) {
+    Equipment(): armor(TypeItem::EMPTY), helmet(TypeItem::EMPTY) {}
+    bool HasArmor() { return (armor != TypeItem::EMPTY); }
+    bool HasHelmet() { return (helmet != TypeItem::EMPTY); }
+    bool TryEquip(TypeItem& item) {
 
-        if (item == TypeCollectable::ARMOR && !HasArmor()) {
+        if (item == TypeItem::ARMOR && !HasArmor()) {
             armor = item;
-            item = TypeCollectable::EMPTY;
+            item = TypeItem::EMPTY;
             return true;
         }
-        if (item == TypeCollectable::HELMET && !HasHelmet()) {
+        if (item == TypeItem::HELMET && !HasHelmet()) {
             helmet = item;
-            item = TypeCollectable::EMPTY;
+            item = TypeItem::EMPTY;
             return true;
         }
         return false;
     }
     bool AbsorbDamage() {
         if (HasHelmet()) {
-            helmet = TypeCollectable::EMPTY;
+            helmet = TypeItem::EMPTY;
         } else if (HasArmor()) {
-            armor = TypeCollectable::EMPTY;
+            armor = TypeItem::EMPTY;
         } else {
             return false;
         }

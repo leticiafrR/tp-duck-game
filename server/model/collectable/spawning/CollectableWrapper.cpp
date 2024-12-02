@@ -5,7 +5,7 @@ CollectableWrapper::CollectableWrapper(std::shared_ptr<Collectable> collectable,
         sourceTimer(sourceTimer), collectable(collectable) {}
 
 
-void CollectableWrapper::BeCollected(TypeCollectable& itemInHandRef) {
+void CollectableWrapper::BeCollected(TypeItem& itemInHandRef) {
     if (sourceTimer) {
         *sourceTimer = 0;
         sourceTimer.reset();

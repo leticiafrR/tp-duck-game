@@ -11,8 +11,8 @@ PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& ini
                conf.getCooldownBasic(), TypeProjectile::LASER, conf.getHiperDispersion()) {}
 
 
-void PewPewLaser::BeCollected(TypeCollectable& collectorTypeRef) {
-    collectorTypeRef = TypeCollectable::PEW_PEW_LASER;
+void PewPewLaser::BeCollected(TypeItem& collectorTypeRef) {
+    collectorTypeRef = TypeItem::PEW_PEW_LASER;
 }
 
 void PewPewLaser::Shoot(Duck* shooter) {
@@ -27,4 +27,4 @@ void PewPewLaser::Shoot(Duck* shooter) {
     inclination = originalInclination;
 }
 
-TypeCollectable PewPewLaser::GetTypeCollectable() { return TypeCollectable::PEW_PEW_LASER; }
+TypeItem PewPewLaser::GetTypeCollectable() { return TypeItem::PEW_PEW_LASER; }

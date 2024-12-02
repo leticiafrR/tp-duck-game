@@ -17,22 +17,21 @@ const unordered_map<string, TypeProjectile> PROJECTILES{{"machine_bullet", TypeP
                                                         {"fragment", TypeProjectile::FRAGMENT},
                                                         {"banana", TypeProjectile::BANANA}};
 
-const unordered_map<string, TypeCollectable> COLLECTABLES{
-        {"empty", TypeCollectable::EMPTY},
-        {"ak_47", TypeCollectable::AK47},
-        {"banana", TypeCollectable::BANANA},
-        {"banana_peel", TypeCollectable::BANANA_PEEL},
-        {"grenade", TypeCollectable::GRENADE},
-        {"grenade_unlock", TypeCollectable::GRENADE_UNLOCK},
-        {"cowboy_pistol", TypeCollectable::COWBOY_PISTOL},
-        {"dueling_pistol", TypeCollectable::DUELING_PISTOL},
-        {"armor", TypeCollectable::ARMOR},
-        {"helmet", TypeCollectable::HELMET},
-        {"laser_rifle", TypeCollectable::LASER_RIFLE},
-        {"magnum", TypeCollectable::MAGNUM},
-        {"pew_pew_laser", TypeCollectable::PEW_PEW_LASER},
-        {"shotgun", TypeCollectable::SHOTGUN},
-        {"sniper", TypeCollectable::SNIPER}};
+const unordered_map<string, TypeItem> COLLECTABLES{{"empty", TypeItem::EMPTY},
+                                                   {"ak_47", TypeItem::AK47},
+                                                   {"banana", TypeItem::BANANA},
+                                                   {"banana_peel", TypeItem::BANANA_PEEL},
+                                                   {"grenade", TypeItem::GRENADE},
+                                                   {"grenade_unlock", TypeItem::GRENADE_UNLOCK},
+                                                   {"cowboy_pistol", TypeItem::COWBOY_PISTOL},
+                                                   {"dueling_pistol", TypeItem::DUELING_PISTOL},
+                                                   {"armor", TypeItem::ARMOR},
+                                                   {"helmet", TypeItem::HELMET},
+                                                   {"laser_rifle", TypeItem::LASER_RIFLE},
+                                                   {"magnum", TypeItem::MAGNUM},
+                                                   {"pew_pew_laser", TypeItem::PEW_PEW_LASER},
+                                                   {"shotgun", TypeItem::SHOTGUN},
+                                                   {"sniper", TypeItem::SNIPER}};
 
 const unordered_map<uint8_t, Color> DUCK_SKIN_COLORS = {
         {0, ColorExtension::White()}, {1, ColorExtension::Yellow()},

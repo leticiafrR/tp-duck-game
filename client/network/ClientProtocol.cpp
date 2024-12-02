@@ -162,7 +162,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
         auto evState = (DuckState)assistant.receiveNumberOneByte();
         auto evFlip = (Flip)assistant.receiveNumberOneByte();
         auto lookingUp = assistant.receiveBooelan();
-        auto typeOnHand = (TypeCollectable)assistant.receiveNumberOneByte();
+        auto typeOnHand = (TypeItem)assistant.receiveNumberOneByte();
         auto isCrouched = assistant.receiveBooelan();
         auto cuacking = assistant.receiveBooelan();
         auto hasArmor = assistant.receiveBooelan();
@@ -195,7 +195,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
     for (uint8_t i = 0; i < numberSpawns; i++) {
         CollectableID_t id = assistant.receiveNumberFourBytes();
         auto position = assistant.receiveVector2D();
-        TypeCollectable type = (TypeCollectable)assistant.receiveNumberOneByte();
+        TypeItem type = (TypeItem)assistant.receiveNumberOneByte();
         _collectableSpawns[i] = CollectableSpawnEventDto{id, position, type};
     }
 
@@ -205,7 +205,7 @@ Snapshot ClientProtocol::receiveGameUpdateDto() {
             (size_t)numberThrowableSpawns);
     for (uint8_t i = 0; i < numberThrowableSpawns; i++) {
         ThrowableID_t id = assistant.receiveNumberOneByte();
-        auto type = (TypeCollectable)assistant.receiveNumberOneByte();
+        auto type = (TypeItem)assistant.receiveNumberOneByte();
         auto pos = assistant.receiveVector2D();
         _throwableSpawns[id] = ThrowableSpawnEventDto(type, pos);
     }

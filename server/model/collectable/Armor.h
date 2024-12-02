@@ -6,13 +6,11 @@
 class Armor: public Collectable {
 public:
     explicit Armor(Transform initialSpace): Collectable(initialSpace) {}
-    void BeCollected(TypeCollectable& collectorTypeRef) override {
-        collectorTypeRef = TypeCollectable::ARMOR;
-    }
+    void BeCollected(TypeItem& collectorTypeRef) override { collectorTypeRef = TypeItem::ARMOR; }
 
     void StopUse(Duck* /*user*/) override {}
     void Update(float /*deltaTime*/) override {}
-    TypeCollectable GetTypeCollectable() override { return TypeCollectable::ARMOR; }
+    TypeItem GetTypeCollectable() override { return TypeItem::ARMOR; }
 };
 
 #endif

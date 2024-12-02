@@ -5,8 +5,8 @@ PistolaCowboy::PistolaCowboy(ProjectilesController& controller, const Transform&
                conf.getDamageLong(), conf.getNoDispersion(), conf.getCooldownBasic(),
                TypeProjectile::BULLET) {}
 
-void PistolaCowboy::BeCollected(TypeCollectable& typeOnHandRef) {
-    typeOnHandRef = TypeCollectable::COWBOY_PISTOL;
+void PistolaCowboy::BeCollected(TypeItem& typeOnHandRef) {
+    typeOnHandRef = TypeItem::COWBOY_PISTOL;
 }
 
-TypeCollectable PistolaCowboy::GetTypeCollectable() { return TypeCollectable::COWBOY_PISTOL; }
+TypeItem PistolaCowboy::GetTypeCollectable() { return TypeItem::COWBOY_PISTOL; }

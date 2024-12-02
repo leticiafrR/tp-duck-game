@@ -7,8 +7,8 @@
 class BananaCollectable: public ThrowableCollectable {
 public:
     explicit BananaCollectable(const Transform& initialSpace);
-    void BeCollected(TypeCollectable& typeOnHandRef) override;
-    TypeCollectable GetTypeCollectable() override;
+    void BeCollected(TypeItem& typeOnHandRef) override;
+    TypeItem GetTypeCollectable() override;
     bool Use(Duck* thrower) override;
     ~BananaCollectable() = default;
 };

@@ -21,7 +21,7 @@ void Collectables::SpawnCollectable(std::shared_ptr<Collectable> obj,
 }
 
 std::shared_ptr<Collectable> Collectables::PickCollectable(const Transform& collectorSpace,
-                                                           TypeCollectable& collectorType) {
+                                                           TypeItem& collectorType) {
     auto it = std::find_if(
             collectablesWrapps.begin(), collectablesWrapps.end(), [&collectorSpace](auto& pair) {
                 return Collision::RectCollision(pair.second.GetTransform(), collectorSpace);

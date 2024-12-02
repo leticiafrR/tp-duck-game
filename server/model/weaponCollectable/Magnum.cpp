@@ -8,11 +8,9 @@ Magnum::Magnum(ProjectilesController& controller, const Transform& initialSpace,
                conf.getDamageLong(), conf.getShortDispersion(), conf.getCooldownBasic(),
                TypeProjectile::BULLET) {}
 
-void Magnum::BeCollected(TypeCollectable& typeOnHandRef) {
-    typeOnHandRef = TypeCollectable::MAGNUM;
-}
+void Magnum::BeCollected(TypeItem& typeOnHandRef) { typeOnHandRef = TypeItem::MAGNUM; }
 
-TypeCollectable Magnum::GetTypeCollectable() { return TypeCollectable::MAGNUM; }
+TypeItem Magnum::GetTypeCollectable() { return TypeItem::MAGNUM; }
 
 bool Magnum::Use(Duck* shooter) {
     shooter->StartShooting();
