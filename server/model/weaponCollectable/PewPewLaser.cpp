@@ -1,13 +1,14 @@
 #include "PewPewLaser.h"
 
+#include "../physicsConstants.h"
 #include "server/model/Duck.h"
 #include "server/model/projectile/Projectile.h"
-#define CUSTOM_DAMAGE(x) ((x) / 9)
+
 
 PewPewLaser::PewPewLaser(ProjectilesController& controller, const Transform& initialSpace,
                          const Config& conf):
         Weapon(controller, initialSpace, conf.getPewPewLaserScope(), conf.getPewPewLaserAmmo(),
-               CUSTOM_DAMAGE(conf.getDamageShort()), conf.getNoDispersion(),
+               DAMAGE_MULTIPLES_PROJECTILES(conf.getDamageShort()), conf.getNoDispersion(),
                conf.getCooldownBasic(), TypeProjectile::LASER, conf.getHiperDispersion()) {}
 
 

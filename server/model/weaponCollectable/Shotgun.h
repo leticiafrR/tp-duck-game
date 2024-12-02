@@ -2,11 +2,8 @@
 #define SHOTGUN_H
 #include "Weapon.h"
 
-#define AMMO_WITH_RELOAD(x) ((x)*2)
-
 class Shotgun: public Weapon {
 private:
-    /* sin disparo continuo, necesita recargar municiones */
     bool ammoLoaded;
 
 public:

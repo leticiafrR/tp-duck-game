@@ -8,9 +8,7 @@
 #include "server/model/event/ProjectileEventListener.h"
 #include "server/model/projectile/Projectile.h"
 #include "server/model/projectile/ProjectilesController.h"
-
 #define NO_INCLINATION 0
-
 class Weapon: public Collectable {
 protected:
     ProjectilesController& projectilesController;

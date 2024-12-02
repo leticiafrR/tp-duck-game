@@ -26,17 +26,20 @@ private:
     bool isCrouched;
     bool isGrounded;
     bool isWounded;
+    bool isFlapping;
+    const float cooldownFlapping;
+    float flappingTimer;
 
     MotionHandler motionHandler;
     RigidBody body;
     PlayerEventListener* l;
     Flip myFlip;
     DuckState myState;
-    std::shared_ptr<Collectable> collectableOnHand;
+    std::shared_ptr<Collectable> itemOnHand;
     std::shared_ptr<Throwable> throwableOnHand;
     TypeItem typeOnHand;
     Equipment equipment;
-
+    void UpdateFlapping(float deltaTime);
     void UpdateListener(const DuckState& initialState, const Vector2D& initialPos);
     DuckState GetLowerPriorityState();
     void UpdateState();

@@ -1,7 +1,8 @@
 #include "Magnum.h"
 
+#include "../physicsConstants.h"
 #include "server/model/Duck.h"
-#define RECOIL_MAGNUM 12
+
 Magnum::Magnum(ProjectilesController& controller, const Transform& initialSpace,
                const Config& conf):
         Weapon(controller, initialSpace, conf.getMagnumScope(), conf.getMagnumAmmo(),
