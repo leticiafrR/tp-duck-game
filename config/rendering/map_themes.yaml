@@ -19,7 +19,7 @@ FOREST:
 
 DUNGEON:
   bg_file: bg_city.png
-  music_file: bgMusic.mp3
+  music_file: dungeonMusic.mp3
   tile_set_file: dungeon_tile_set.png
 
   tile_rects:
@@ -38,7 +38,7 @@ DUNGEON:
 
 LINE:
   bg_file: bg_black.png
-  music_file: bgMusic.mp3
+  music_file: lineMusic.mp3
   tile_set_file: line_tile_set.png
 
   tile_rects:
