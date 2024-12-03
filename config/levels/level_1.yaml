@@ -7,13 +7,18 @@ collectable_spawn_points:
     y: 10
   - x: 40
     y: -10
-   
+
 players_spawn_points:
   - x: -18 
     y: 12
   - x: 40
     y: -8
-
+  - x: -9
+    y: 10
+  - x: -25
+    y: 10
+  - x: 0
+    y: 10
 box_spawn_points:
   - x: 48
     y: 5

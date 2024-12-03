@@ -52,8 +52,10 @@ void Config::setDuckConfig() {
 
 void Config::setObjectConfig() {
     YAML::Node config = YAML::LoadFile(OBJECT_PATH);
+
     boxInfo.emplace_back(config[BOX_STR][SIZE_STR].as<int>());
     boxInfo.emplace_back(config[BOX_STR][LIFE_STR].as<int>());
+
     collectableInfo.emplace_back(config[COLLECTABLE_STR][SIZE_STR].as<int>());
 }
 
