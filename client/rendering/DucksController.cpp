@@ -32,6 +32,8 @@ void DucksController::SpawnPlayers(Vector2D duckSize, vector<PlayerData> players
                                    unordered_map<PlayerID_t, PlayerEvent> initialEvents) {
 
     for (auto& pData: playersData) {
+        if (!initialEvents.contains(pData.playerID))  // In case a player has left the match
+            continue;
         playersDataMap.emplace(pData.playerID, pData);
         players.emplace(pData.playerID, std::make_shared<DuckClientRenderer>(
                                                 duckSize, DUCK_SKIN_COLORS.at(pData.playerSkin),
