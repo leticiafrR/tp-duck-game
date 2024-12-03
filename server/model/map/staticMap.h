@@ -27,7 +27,6 @@ private:
     std::vector<Vector2D> collectableSpawnPoints;
     std::unordered_map<BoxID_t, Vector2D> boxes;
 
-    // void AddTransform(const Transform& obj);
     void AddGround(const GroundDto& grd);
 
     void SetTheLevel(const std::string& filePath);
@@ -46,12 +45,12 @@ public:
 
     std::optional<Transform> CheckCollision(const Transform& dynamicT) const;
 
-    std::vector<Vector2D> GetPlayersSpawnPoints();
+    std::vector<Vector2D> GetPlayersSpawnPoints() const;
 
-    std::vector<Vector2D> GetCollectableSpawnPoints();
-    std::unordered_map<BoxID_t, Vector2D> GetBoxes();
+    std::vector<Vector2D> GetCollectableSpawnPoints() const;
+    std::unordered_map<BoxID_t, Vector2D> GetBoxes() const;
 
-    GameSceneDto GetScene();
+    GameSceneDto GetScene() const;
     ~StaticMap() {}
 };
 

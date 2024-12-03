@@ -11,17 +11,19 @@
 #include "constants.h"
 enum : int { L, R, B, T };
 
-// void StaticMap::AddTransform(const Transform& obj) { plataforms.emplace_back(obj); }
+StaticMap::StaticMap(const std::string& fileName) { SetTheLevel(fileName); }
 
-std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() { return playersSpawnPlaces; }
+std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() const { return playersSpawnPlaces; }
 
-GameSceneDto StaticMap::GetScene() { return GameSceneDto(theme, grounds); }
+GameSceneDto StaticMap::GetScene() const { return GameSceneDto(theme, grounds); }
 
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
+std::unordered_map<BoxID_t, Vector2D> StaticMap::GetBoxes() const { return boxes; }
 
-StaticMap::StaticMap(const std::string& fileName) { SetTheLevel(fileName); }
-
+std::vector<Vector2D> StaticMap::GetCollectableSpawnPoints() const {
+    return collectableSpawnPoints;
+}
 
 std::optional<std::pair<float, bool>> StaticMap::CheckCollisionRay(const Vector2D& rayOrigin,
                                                                    const Vector2D& rayDirection,
@@ -80,7 +82,7 @@ std::optional<float> StaticMap::DisplacementOutOfBounds(const Transform& dynamic
     if (xDynamic + radio > limits[R]) {
         return xDynamic + radio - limits[R];
     }
-    return std::nullopt;  // El objeto está dentro de los límites
+    return std::nullopt;  // the object is within the bounds
 }
 
 std::optional<Transform> StaticMap::CheckCollision(const Transform& dynamicT) const {
@@ -133,10 +135,10 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
     size.emplace_back(xSize);
     size_t ySize = config[FULL_MAP_STR][Y_STR].as<size_t>();
     size.emplace_back(ySize);
-    limits.emplace_back(-static_cast<int>(xSize) / HALF);  // izquierda [0]
-    limits.emplace_back(xSize / HALF);                     // derecha [1]
-    limits.emplace_back(-static_cast<int>(ySize) / HALF);  // inferior [2]
-    limits.emplace_back(ySize / HALF);                     // superior [3]
+    limits.emplace_back(-static_cast<int>(xSize) / HALF);
+    limits.emplace_back(xSize / HALF);
+    limits.emplace_back(-static_cast<int>(ySize) / HALF);
+    limits.emplace_back(ySize / HALF);
 
     auto spawnPoints = config[PLAYERS_POINTS_STR];
     for (std::size_t i = 0; i < spawnPoints.size(); ++i) {
@@ -168,6 +170,3 @@ void StaticMap::SetTheLevel(const std::string& lvelName) {
         loadPlatforms(config, platformName);
     }
 }
-
-std::vector<Vector2D> StaticMap::GetCollectableSpawnPoints() { return collectableSpawnPoints; }
-std::unordered_map<BoxID_t, Vector2D> StaticMap::GetBoxes() { return boxes; }
