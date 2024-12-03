@@ -14,10 +14,10 @@ if [[ $EUID -ne 0 ]]; then
    echo "Este script debe ejecutarse como root. Usa 'sudo'." >&2
    exit 1
 fi
-# # DISCOMMENT TO THE FINAL RELEASE
-# print_colored_message $GREEN "[DUCK GAME INSTALLER] Installing dependencies..."
-# chmod +x scripts/install_dependencies.sh
-# ./scripts/install_dependencies.sh
+
+print_colored_message $GREEN "[DUCK GAME INSTALLER] Installing dependencies..."
+chmod +x scripts/install_dependencies.sh
+./scripts/install_dependencies.sh
 
 # 2. Crear directorio para los assets y copiarlos
 print_colored_message $GREEN "\n[DUCK GAME INSTALLER] Moving assets and multimedia to /var/duckGame_g6..."
