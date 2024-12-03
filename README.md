@@ -2,8 +2,8 @@
 # Duck Game - Taller de programación I – 7542/9508 - FIUBA
 
 ## Authors
-| Nombre | Apellido |Mail FIUBA | Usuario Github|
-| ------ | -------- |-----------||-----------|
+| Nombre | Apellido | Mail FIUBA | Usuario Github|
+| ------ | -------- | ----------- | ----------- |
 | Candela | Matelica |cmatelica@fi.uba.ar|[candematelica](https://github.com/candematelica)|
 | Josué | Martel |nmartel@fi.uba.ar | [josValentin-fiuba](https://github.com/josValentin-fiuba)|
 | Leticia | Figueroa |lfigueroar@fi.uba.ar|[leticiafrR](https://github.com/leticiafrR)|
