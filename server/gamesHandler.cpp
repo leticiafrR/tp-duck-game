@@ -113,11 +113,11 @@ void GamesHandler::gameLoop() {
     while (!currentGame->IsOver()) {
         Command cmmd;
         for (int i = 0; i < MAX_CMMDS_PER_TICK && matchQueue->try_pop(std::ref(cmmd)); i++) {
-            if (cmmd.code == CommandCode::_quit)
-                // currentGame->quitPlayer(cmmd.playerId);
-                continue;
-            else
+            if (cmmd.code == CommandCode::_quit) {
+                currentGame->QuitPlayer(cmmd.playerId);
+            } else {
                 currentGame->HandleCommand(cmmd);
+            }
         }
         auto deltaTime = timeManager.updateTickTimer();
         currentGame->Update(deltaTime);

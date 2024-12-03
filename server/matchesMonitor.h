@@ -8,6 +8,8 @@
 
 #include "match.h"
 
+#define MAX_ACTIVE_MATCHES 50
+
 struct DataMatch;
 
 class MatchesMonitor {

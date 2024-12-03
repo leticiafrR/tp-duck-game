@@ -39,11 +39,10 @@ std::shared_ptr<Queue<Command>> MatchesMonitor::tryJoinMatch(
     if (it != matches.end()) {
         return matches[matchID]->logInClient(clientInfo, clientQueue, eCode);
     }
-    if (matchID == clientInfo.connectionId) {
+    if (matches.size() <= MAX_ACTIVE_MATCHES && matchID == clientInfo.connectionId) {
         matches.emplace(matchID, std::make_unique<Match>(config, matchID));
         auto matchQueue = matches[matchID]->logInClient(clientInfo, clientQueue, eCode);
         if (matchQueue == nullptr) {
-
             matches.erase(matchID);
             return nullptr;
         }
