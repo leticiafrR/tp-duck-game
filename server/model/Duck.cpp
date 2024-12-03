@@ -99,7 +99,7 @@ void Duck::RetrocessOrSlide(float intensity, bool isSlide) {
     if (intensity) {
         Vector2D dir = GetLookVector(true);
         if (!isSlide) {
-            dir.Rotate(HALF_A_TURN);
+            dir.Rotate(HALF_SPIN);
         }
         body.ApplyForce(dir * intensity);
     }
