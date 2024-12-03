@@ -10,8 +10,10 @@
 using namespace SDL2pp;  // NOLINT
 
 int main(int argc, char const* argv[]) {
-    if (argc < 3)
+    if (argc < 3) {
+        std::cout << "No hostname and servename specified\n";
         return EXIT_FAILURE;
+    }
 
     auto hostname = argv[1];
     auto servname = argv[2];
@@ -30,4 +32,5 @@ int main(int argc, char const* argv[]) {
     ClientRunner runner(render, 60, hostname, servname);
     runner.Run();
     std::cout << "Client finished\n";
+    return EXIT_SUCCESS;
 }
