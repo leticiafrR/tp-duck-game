@@ -104,7 +104,7 @@ void Config::setCooldown(const YAML::Node& config) {
     cooldown.emplace_back(config[LONG_STR].as<float>());
     cooldown.emplace_back(config[MEDIUM_STR].as<float>());
     cooldown.emplace_back(config[BASIC_STR].as<float>());
-    cooldown.emplace_back(config[TO_EXPLOTE_GRANADA_STR].as<float>());
+    cooldown.emplace_back(config[TO_EXPLOTE_GRANADE_STR].as<float>());
 }
 
 void Config::setDamage(const YAML::Node& config) {
