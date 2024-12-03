@@ -44,6 +44,8 @@ target_sources(taller_server
     model/throwableCollectable/BananaCollectable.cpp
     model/throwableCollectable/GrenadeCollectable.cpp
 
+    model/box/BoxesController.cpp
+    model/box/Box.cpp
 
     #network
     network/sender.cpp
@@ -109,6 +111,10 @@ target_sources(taller_server
     model/throwableCollectable/BananaCollectable.h
     model/throwableCollectable/GrenadeCollectable.h
     model/throwableCollectable/ThrowableCollectable.h
+
+
+    model/box/BoxesController.h
+    model/box/Box.h
 
     network/serverProtocol.h
     network/messageSender.h

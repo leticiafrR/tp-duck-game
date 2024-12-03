@@ -8,6 +8,7 @@
 #include "data/id.h"
 #include "data/snapshot.h"
 
+#include "BoxEventListener.h"
 #include "CollectableEventListener.h"
 #include "PlayerEventListener.h"
 #include "ProjectileEventListener.h"
@@ -17,6 +18,7 @@ class Duck;
 class ProjectilesController;
 class CollectablesController;
 class ThrowablesController;
+class BoxesController;
 
 class EventsManager {
 private:
@@ -28,11 +30,14 @@ private:
     std::unordered_map<ThrowableID_t, ThrowableSpawnEventDto> throwablesSpawnings;
     std::vector<ThrowableID_t> throwablesDespawnings;
 
+    std::vector<BoxID_t> destroyedBoxes;
+
 
     PlayerEventListener playerListener;
     ProjectileEventListener projectileListener;
     CollectableEventListener collectableListener;
     ThrowableEventListener throwableListener;
+    BoxEventListener boxListener;
 
 public:
     EventsManager();
@@ -41,6 +46,7 @@ public:
     void SendProjectileListener(ProjectilesController& projectilesController);
     void SendCollectableListener(CollectablesController& collectableContoller);
     void SendThrowableListener(ThrowablesController& throwablesController);
+    void SendBoxesListener(BoxesController& boxesController);
 
     Snapshot GetSnapshot(bool gameOver);
 

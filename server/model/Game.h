@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "box/BoxesController.h"
 #include "collectable/CollectablesController.h"
 #include "data/command.h"
 #include "event/EventsManager.h"
@@ -26,6 +27,7 @@ private:
     ProjectilesController projectilesController;
     CollectablesController collectablesController;
     ThrowablesController throwablesController;
+    BoxesController boxesController;
 
     void ReapDead();
     void Testing(const Vector2D& posToTest);

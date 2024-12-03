@@ -16,7 +16,8 @@ public:
     ProjectileEventListener* GetInstantProjectileListener();
     void RegisterListener(ProjectileEventListener* listener);
     void RelaseProjectile(Projectile* projectile);
-    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players);
+    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
+                std::unordered_map<BoxID_t, Box>& boxes);
     ~ProjectilesController();
 };
 #endif

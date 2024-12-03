@@ -7,12 +7,14 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
         livePlayers(playersIds.size()),
         map(sceneName),
         projectilesController(),
-        collectablesController(projectilesController, conf, map.GetCollectableSpawnPoints()) {
+        collectablesController(projectilesController, conf, map.GetCollectableSpawnPoints()),
+        boxesController(map.GetBoxes(), conf) {
     eventsManager.SendProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);
     eventsManager.SendCollectableListener(collectablesController);
     eventsManager.SendThrowableListener(throwablesController);
+    eventsManager.SendBoxesListener(boxesController);
 }
 
 GameWorld::~GameWorld() {
@@ -32,9 +34,10 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const C
 }
 
 void GameWorld::Update(float deltaTime) {
-    projectilesController.Update(map, players);
+    projectilesController.Update(map, players, boxesController.GetBoxes());
     collectablesController.Update(deltaTime);
     throwablesController.Update(map, deltaTime, players);
+    boxesController.Update(collectablesController, projectilesController);
     for (auto& pair: players) {
         pair.second->Update(map, deltaTime);
     }

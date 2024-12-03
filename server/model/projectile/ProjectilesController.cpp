@@ -16,9 +16,10 @@ void ProjectilesController::RelaseProjectile(Projectile* projectile) {
 }
 
 void ProjectilesController::Update(const StaticMap& map,
-                                   std::unordered_map<PlayerID_t, Duck*>& players) {
+                                   std::unordered_map<PlayerID_t, Duck*>& players,
+                                   std::unordered_map<BoxID_t, Box>& boxes) {
     for (auto projectile: projectiles) {
-        projectile->Update(map, players);
+        projectile->Update(map, players, boxes);
     }
     ReapDead();
 }

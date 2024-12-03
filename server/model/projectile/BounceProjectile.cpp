@@ -72,8 +72,8 @@ bool BounceProjectile::CheckCollision(const StaticMap& map,
     return true;
 }
 
-void BounceProjectile::Update(const StaticMap& map,
-                              std::unordered_map<PlayerID_t, Duck*>& players) {
+void BounceProjectile::Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
+                              std::unordered_map<BoxID_t, Box>& /*boxes*/) {
     if (!CheckCollision(map, players)) {
         l->NewProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
         MarkAsDead();

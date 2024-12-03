@@ -1,18 +1,21 @@
 #include "EventsManager.h"
 
 #include "../Duck.h"
+#include "../box/BoxesController.h"
 #include "../collectable/CollectablesController.h"
 #include "../projectile/ProjectilesController.h"
 #include "../throwable/ThrowablesController.h"
+
 EventsManager::EventsManager():
         playerListener(playerEvents),
         projectileListener(projectileEvents),
         collectableListener(collectableDespawnEvents, collectableSpawnEvents),
-        throwableListener(throwablesSpawnings, throwablesDespawnings) {}
+        throwableListener(throwablesSpawnings, throwablesDespawnings),
+        boxListener(destroyedBoxes) {}
 
 Snapshot EventsManager::GetSnapshot(bool gameOver) {
     Snapshot s(gameOver, playerEvents, projectileEvents, collectableDespawnEvents,
-               collectableSpawnEvents, throwablesSpawnings, throwablesDespawnings);
+               collectableSpawnEvents, throwablesSpawnings, throwablesDespawnings, destroyedBoxes);
 
     playerEvents.clear();
     projectileEvents.clear();
@@ -20,6 +23,7 @@ Snapshot EventsManager::GetSnapshot(bool gameOver) {
     collectableSpawnEvents.clear();
     throwablesSpawnings.clear();
     throwablesDespawnings.clear();
+    destroyedBoxes.clear();
     return s;
 }
 
@@ -39,4 +43,8 @@ void EventsManager::SendPlayersListeners(const std::unordered_map<PlayerID_t, Du
 
 void EventsManager::SendThrowableListener(ThrowablesController& throwablesController) {
     throwablesController.RegisterListener(&throwableListener);
+}
+
+void EventsManager::SendBoxesListener(BoxesController& boxesController) {
+    boxesController.RegisterListener(&boxListener);
 }

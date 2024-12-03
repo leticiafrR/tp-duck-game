@@ -19,7 +19,8 @@ public:
     BounceProjectile(const Vector2D& origin, const Vector2D& direction, float scope, uint8_t damage,
                      TypeProjectile type, ProjectileEventListener* l);
 
-    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players) override;
+    void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
+                std::unordered_map<BoxID_t, Box>& /*boxes*/) override;
     ~BounceProjectile() = default;
 };
 
