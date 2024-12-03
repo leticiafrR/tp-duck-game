@@ -13,7 +13,7 @@ const std::string MASS_STR = "mass";
 const std::string SIZE_STR = "size";
 const std::string LIFE_STR = "life";
 
-const int SPEED_INDEX = 1;
+const int SPEED_INDEX = 2;
 const int MASS_INDEX = 3;
 const int SIZE_INDEX = 0;
 const int LIFE_INDEX = 1;
