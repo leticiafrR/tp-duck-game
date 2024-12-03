@@ -18,16 +18,11 @@ class GUIManager {
 private:
     std::vector<GraphicUI*> graphics;
 
-    // std::vector<GraphicUI*> graphicsDynamic;
     ButtonsManager buttonsManager;
 
 public:
     GUIManager();
     ~GUIManager();
-
-    static GUIManager& GetInstance();
-
-    const std::vector<GraphicUI*>& GetGraphics();
 
     void AddGUI(GraphicUI* gui);
 

@@ -4,20 +4,13 @@
 
 using std::string;
 
-GUIManager::GUIManager() = default;
+GUIManager::GUIManager() {}
 
 GUIManager::~GUIManager() {
     for (auto g: graphics) {
         delete g;
     }
 }
-
-GUIManager& GUIManager::GetInstance() {
-    static GUIManager Instance;
-    return Instance;
-}
-
-const std::vector<GraphicUI*>& GUIManager::GetGraphics() { return graphics; }
 
 void GUIManager::AddGUI(GraphicUI* gui) {
     gui->onLayerChanged = [this]() { CheckSort(); };

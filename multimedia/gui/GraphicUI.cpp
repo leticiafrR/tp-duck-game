@@ -5,19 +5,15 @@
 #include "GUIManager.h"
 
 GraphicUI::GraphicUI(const RectTransform& rect, Color color, int layerOrder):
-        rect(rect), color(color), layerOrder(layerOrder) {
-    // GUIManager::GetInstance().AddGUI(this);
-}
+        rect(rect), color(color), layerOrder(layerOrder) {}
 
-GraphicUI::~GraphicUI() {
-    // GUIManager::GetInstance().RemoveGUI(this);
-}
+GraphicUI::~GraphicUI() {}
 
 void GraphicUI::SetLayerOrder(int layerOrder) {
     this->layerOrder = layerOrder;
     onLayerChanged();
-    // GUIManager::GetInstance().CheckSort();
 }
+
 int GraphicUI::GetLayerOrder() { return layerOrder; }
 
 void GraphicUI::SetVisible(bool visible) { this->visible = visible; }

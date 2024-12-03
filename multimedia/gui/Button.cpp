@@ -16,9 +16,7 @@ Button::Button(RectTransform rect, Color color, int layerOrder):
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
         interactable(true),
-        isPressed(false) {
-    // ButtonsManager::GetInstance().AddButton(this);
-}
+        isPressed(false) {}
 
 Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder):
         Image(rect, color, layerOrder),
@@ -27,9 +25,7 @@ Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
         interactable(true),
-        isPressed(false) {
-    // ButtonsManager::GetInstance().AddButton(this);
-}
+        isPressed(false) {}
 
 Button::Button(const std::string& filename, RectTransform rect, Callback onClick, Color color,
                int layerOrder):
@@ -39,13 +35,9 @@ Button::Button(const std::string& filename, RectTransform rect, Callback onClick
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
         interactable(true),
-        isPressed(false) {
-    // ButtonsManager::GetInstance().AddButton(this);
-}
+        isPressed(false) {}
 
-Button::~Button() {
-    //  ButtonsManager::GetInstance().RemoveButton(this);
-}
+Button::~Button() {}
 
 bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam) {
     Rect sdlRect = cam.RectTransformToRenderRect(rect);
@@ -54,8 +46,6 @@ bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera&
 }
 
 bool Button::IsTarget(int mouseX, int mouseY, Camera& cam, vector<GraphicUI*> graphics) {
-    // auto graphics = GUIManager::GetInstance().GetGraphics();
-
     // Search for the first same layer in th sorted vector
     auto it = std::lower_bound(
             graphics.begin(), graphics.end(), this,
@@ -116,10 +106,4 @@ void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam
         }
         isPressed = false;
     }
-}
-
-// Delete ..
-void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
-    auto graphics = GUIManager::GetInstance().GetGraphics();
-    HandleEvent(e, mouseX, mouseY, cam, graphics);
 }

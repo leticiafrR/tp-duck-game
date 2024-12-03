@@ -15,14 +15,9 @@ public:
     ButtonsManager();
     ~ButtonsManager();
 
-    static ButtonsManager& GetInstance();
-
     void AddButton(Button* btn);
 
     void RemoveButton(Button* btn);
-
-    // Compatibility, must delete
-    void HandleEvent(const SDL_Event& e, Camera& cam);
 
     void HandleEvent(const SDL_Event& e, Camera& cam, vector<GraphicUI*> graphics);
 

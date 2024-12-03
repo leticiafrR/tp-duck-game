@@ -21,8 +21,8 @@ private:
     Color normalColor;
     Color pressedColor;
     Color disabledColor;
-    bool isPressed;
     bool interactable;
+    bool isPressed;
 
 public:
     Button(RectTransform rect = RectTransform(), Color color = Color(255, 255, 255),
@@ -41,9 +41,6 @@ public:
 
     void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam,
                      vector<GraphicUI*> graphics);
-
-    // Compatibility, must delete
-    void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
 
     void SetInteractable(bool interactable);
 
