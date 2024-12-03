@@ -11,8 +11,6 @@ BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& po
                                  const Config& conf):
         listener(nullptr), conf(conf) {
     for (auto& pair: positionsPerBox) {
-        // Vector2D pos = pair.second;
-        // boxes[pair.first]= Box(pos);
         boxes.emplace(pair.first, Box(pair.second));
     }
 }
