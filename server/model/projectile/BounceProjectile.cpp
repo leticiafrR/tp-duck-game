@@ -41,7 +41,7 @@ void BounceProjectile::HandleCollisionWithMap(std::pair<float, bool> infoCollisi
 }
 
 void BounceProjectile::HandleCollisionWithDuck(std::pair<float, Duck*> infoCollision) {
-    infoCollision.second->HandleReceiveDamage(damage);
+    infoCollision.second->HandleReceiveDamage(damage, intensityExplotion);
     rayLenght = infoCollision.first;
     l->NewProjectileEvent(type, rayOrigin, rayOrigin + rayDirection * rayLenght);
     MarkAsDead();

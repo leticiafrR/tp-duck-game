@@ -17,7 +17,7 @@ bool Magnum::Use(Duck* shooter) {
     shooter->StartShooting();
     bool ret = Weapon::Use(shooter);
     if (ret)
-        shooter->ApplyRecoil(RECOIL_MAGNUM);
+        shooter->RetrocessOrSlide(RECOIL_MAGNUM);
     shooter->StopShooting();
     return ret;
 }

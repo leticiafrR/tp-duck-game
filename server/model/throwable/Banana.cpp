@@ -1,17 +1,16 @@
 #include "Banana.h"
 
+#include "../physicsConstants.h"
 #include "common/Collision.h"
 #include "server/model/Duck.h"
 
 #define MASS_BANANA 4
-#define INTENSITY_SLIDE_DUCK(y) (y * 54)
-#define INTENSITY_SLIDE(x) (x * 14)
 
 Banana::Banana(TypeItem type): Throwable(MASS_BANANA, type), beenStepped(false) {}
 
 void Banana::BeStepped(Duck* duck) {
-    body.ApplyForce(INTENSITY_SLIDE(duck->GetLookVector(true)));
-    duck->Slide(INTENSITY_SLIDE_DUCK(duck->GetLookVector(true)));
+    body.ApplyForce((duck->GetLookVector(true) * INTENSITY_SLIDE_BANANA));
+    duck->RetrocessOrSlide(INTENSITY_SLIDE_DUCK, true);
     beenStepped = true;
 }
 

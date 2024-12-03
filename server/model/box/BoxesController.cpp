@@ -1,5 +1,6 @@
 #include "BoxesController.h"
 
+#include "../physicsConstants.h"
 #include "server/config.h"
 #include "server/model/collectable/CollectablesController.h"
 #include "server/model/projectile/ProjectilesController.h"
@@ -18,12 +19,13 @@ BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& po
 
 void BoxesController::RegisterListener(BoxEventListener* l) { listener = l; }
 
-void BoxesController::Explote(Vector2D originExplotion, ProjectilesController& projectiles) {
+void BoxesController::GenerateExplotion(Vector2D originExplotion,
+                                        ProjectilesController& projectiles) {
     Vector2D dir = Vector2D::Right();
     for (int i = 0; i < 10; i++, dir.Rotate(360 / 10)) {
-        Projectile* fragment = new Projectile(originExplotion, dir, SCOPE_EXPLOTION,
-                                              DAMAGE_EXPLOTION, TypeProjectile::FRAGMENT,
-                                              projectiles.GetInstantProjectileListener());
+        Projectile* fragment = new Projectile(
+                originExplotion, dir, SCOPE_EXPLOTION, DAMAGE_EXPLOTION, TypeProjectile::FRAGMENT,
+                projectiles.GetInstantProjectileListener(), INTENSITY_EXPLOTION);
         projectiles.RelaseProjectile(fragment);
     }
 }
@@ -37,7 +39,7 @@ void BoxesController::DestroyBox(BoxID_t id, CollectablesController& collectable
         if (maybeContent.value() != nullptr) {
             collectables.AddCollectable(maybeContent.value(), boxes[id].GetTransform().GetPos());
         } else {
-            Explote(boxes[id].GetTransform().GetPos(), projectiles);
+            GenerateExplotion(boxes[id].GetTransform().GetPos(), projectiles);
         }
     }
 }

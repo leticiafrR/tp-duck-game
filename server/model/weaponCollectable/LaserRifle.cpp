@@ -25,7 +25,7 @@ void LaserRifle::Shoot(Duck* shooter) {
 bool LaserRifle::Use(Duck* shooter) {
     if (Weapon::Use(shooter)) {
         shooter->StartShooting();
-        shooter->ApplyRecoil(RECOIL_LASER);
+        shooter->RetrocessOrSlide(RECOIL_LASER);
         return true;
     }
     return false;

@@ -6,13 +6,15 @@
 #include "server/model/map/staticMap.h"
 
 Projectile::Projectile(const Vector2D& shooterPos, const Vector2D& direction, float scope,
-                       uint8_t damage, TypeProjectile type, ProjectileEventListener* l):
+                       uint8_t damage, TypeProjectile type, ProjectileEventListener* l,
+                       uint8_t intensityExplotion):
         type(type),
         isDead(false),
         rayOrigin(shooterPos),
         rayDirection(direction),
         rayLenght(scope),
         damage(damage),
+        intensityExplotion(intensityExplotion),
         l(l) {}
 
 void Projectile::CheckCollisionWithMap(const StaticMap& map) {
@@ -25,7 +27,7 @@ void Projectile::CheckCollisionWithMap(const StaticMap& map) {
 
 void Projectile::CheckCollisionWithDuck(Duck* duck) {
     if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, duck->GetTransform())) {
-        duck->HandleReceiveDamage(damage);
+        duck->HandleReceiveDamage(damage, intensityExplotion);
     }
 }
 

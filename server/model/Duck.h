@@ -37,6 +37,7 @@ private:
     DuckState myState;
     std::shared_ptr<Collectable> itemOnHand;
     std::shared_ptr<Throwable> throwableOnHand;
+
     TypeItem typeOnHand;
     Equipment equipment;
     void UpdateFlapping(float deltaTime);
@@ -73,19 +74,16 @@ public:
     void StopCrouch();
 
     void Cuack();
-    void Slide(Vector2D intensity);
-    void HandleReceiveDamage(uint8_t damage);
-
+    void HandleReceiveDamage(uint8_t damage, uint8_t intensityExplotion);
     void TryEquip();
-
     void TryCollect(CollectablesController& c);
     void TryDrop(CollectablesController& collectables, ThrowablesController& throwables);
-
     void PrepareToThrow(std::shared_ptr<Throwable> throwable, TypeItem type);
-    void ApplyRecoil(float intensity);
+    void RetrocessOrSlide(float intensity, bool isSlide = false);
 
     void RegistListener(PlayerEventListener* listener);
     void Update(const StaticMap& map, float deltaTime);
+
     const Flip& GetFlip() const;
     Vector2D GetLookVector(bool justLaterals = false);
     bool IsShooting() const;

@@ -36,7 +36,7 @@ void AK47::StopUse(Duck* shooter) {
 bool AK47::Use(Duck* shooter) {
     if (Weapon::Use(shooter)) {
         shooter->StartShooting();
-        shooter->ApplyRecoil(RECOIL_AK47);
+        shooter->RetrocessOrSlide(RECOIL_AK47);
         IncraseDispersion();
         return true;
     }

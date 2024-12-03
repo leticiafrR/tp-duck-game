@@ -70,10 +70,11 @@ void Duck::StopShooting() { isShooting = false; }
 
 void Duck::StartShooting() { isShooting = true; }
 
-void Duck::HandleReceiveDamage(uint8_t damage) {
+void Duck::HandleReceiveDamage(uint8_t damage, uint8_t intensityExplotion) {
     if (!isCrouched && !equipment.AbsorbDamage()) {
         isWounded = true;
         life -= damage;
+        RetrocessOrSlide(intensityExplotion);
         if (life <= 0) {
             HandleDead();
         }
@@ -94,8 +95,14 @@ void Duck::StopUseItem() {
     }
 }
 
-void Duck::ApplyRecoil(float intensity) {
-    body.ApplyForce(((myFlip == Flip::Left) ? Vector2D::Right() : Vector2D::Left()) * intensity);
+void Duck::RetrocessOrSlide(float intensity, bool isSlide) {
+    if (intensity) {
+        Vector2D dir = GetLookVector(true);
+        if (!isSlide) {
+            dir.Rotate(HALF_A_TURN);
+        }
+        body.ApplyForce(dir * intensity);
+    }
 }
 
 void Duck::RegistListener(PlayerEventListener* listener) {
@@ -292,4 +299,3 @@ void Duck::TryEquip() {
         TriggerEvent();
     }
 }
-void Duck::Slide(Vector2D intensity) { body.ApplyForce(intensity); }

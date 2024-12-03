@@ -23,6 +23,7 @@ protected:
     Vector2D rayDirection;
     float rayLenght;
     uint8_t damage;
+    uint8_t intensityExplotion;
     ProjectileEventListener* l;
 
     void CheckCollisionWithMap(const StaticMap& map);
@@ -31,7 +32,7 @@ protected:
 
 public:
     Projectile(const Vector2D& shooterPos, const Vector2D& direction, float scope, uint8_t damage,
-               TypeProjectile type, ProjectileEventListener* l);
+               TypeProjectile type, ProjectileEventListener* l, uint8_t intensityExplotion = 0);
 
     void RegistListener(ProjectileEventListener* listener);
     virtual void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
