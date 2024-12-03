@@ -4,10 +4,9 @@
 #include <memory>
 #include <optional>
 
-#include "server/model/projectile/ProjectilesController.h"
-
-class Collectable;
 #include "server/config.h"
+#include "server/model/projectile/ProjectilesController.h"
+class Collectable;
 
 class CollectablesFactory {
 private:

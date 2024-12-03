@@ -1,18 +1,18 @@
 #ifndef BOX_H
 #define BOX_H
-#include <cstdint>
-#include <ctime>
+
+
 #include <memory>
 #include <optional>
-#include <random>
-#include <vector>
 
-#include "data/snapshot.h"
-#include "server/model/collectable/Collectable.h"
-#include "server/model/collectable/CollectablesFactory.h"
+#include <stdint.h>
 
-class ProjectilesController;
-class Config;
+#include "common/Transform.h"
+
+class CollectablesFactory;
+class Collectable;
+
+
 class Box {
 private:
     Transform mySpace;
@@ -23,9 +23,9 @@ public:
     Box() = default;
     explicit Box(const Vector2D& pos);
     std::optional<std::shared_ptr<Collectable>> GetContent(CollectablesFactory& factory);
-    const Transform& GetTransform() const { return mySpace; }
+    const Transform& GetTransform() const;
     void ReceiveDamage(uint8_t damage);
-    bool IsDead() const { return isDead; }
+    bool IsDead() const;
 };
 
 #endif

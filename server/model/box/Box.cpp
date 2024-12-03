@@ -1,8 +1,7 @@
 #include "Box.h"
 
-#include "server/model/collectable/spawning/includesCollectables.h"
+#include "server/model/collectable/CollectablesFactory.h"
 #define LIFE_BOX 25
-
 Box::Box(const Vector2D& position):
         mySpace(position, Vector2D(2, 2)), life(LIFE_BOX), isDead(false) {}
 
@@ -17,3 +16,6 @@ void Box::ReceiveDamage(uint8_t damage) {
         life -= damage;
     }
 }
+
+bool Box::IsDead() const { return isDead; }
+const Transform& Box::GetTransform() const { return mySpace; }

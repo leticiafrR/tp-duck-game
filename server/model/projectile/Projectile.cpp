@@ -34,11 +34,19 @@ void Projectile::CheckCollisionWithDuck(Duck* duck) {
 void Projectile::RegistListener(ProjectileEventListener* listener) { l = listener; }
 
 void Projectile::CheckCollisionWithBoxes(std::unordered_map<BoxID_t, Box>& boxes) {
+    float minDistance = rayLenght;
+    BoxID_t damagedBox;
     for (auto pair: boxes) {
-        if (Collision::Raycast(rayOrigin, rayDirection, rayLenght, pair.second.GetTransform())) {
-            boxes[pair.first].ReceiveDamage(damage);
-            std::cout << "UNA CAJA FUE LASTIMADA\n";
+        std::pair<float, bool> infoCollision = Collision::RaycastDistanceAndDirection(
+                rayOrigin, rayDirection, rayLenght, pair.second.GetTransform());
+        if (infoCollision.first < rayLenght) {
+            damagedBox = pair.first;
+            minDistance = infoCollision.first;
         }
+    }
+    if (minDistance < rayLenght) {
+        boxes[damagedBox].ReceiveDamage(damage);
+        rayLenght = minDistance;
     }
 }
 
