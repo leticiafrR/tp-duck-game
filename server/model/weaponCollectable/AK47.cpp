@@ -2,7 +2,7 @@
 
 #include "../physicsConstants.h"
 #include "server/model/Duck.h"
-#include "server/model/projectile/BounceProjectile.h"
+#include "server/model/projectile/Projectile.h"
 
 AK47::AK47(ProjectilesController& controller, const Transform& initialSpace, const Config& conf):
         Weapon(controller, initialSpace, conf.getAK47Scope(), conf.getAK47Ammo(),
@@ -20,9 +20,9 @@ void AK47::IncraseDispersion() {
 void AK47::BeCollected(TypeItem& collectorTypeRef) { collectorTypeRef = TypeItem::AK47; }
 
 void AK47::Shoot(Duck* shooter) {
-    BounceProjectile* projectile =
-            new BounceProjectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter),
-                                 scope, damage, typeProjectile, l);
+    Projectile* projectile =
+            new Projectile(shooter->GetTransform().GetPos(), GetShootingDirection(shooter), scope,
+                           damage, typeProjectile, l);
     projectilesController.RelaseProjectile(projectile);
 }
 
