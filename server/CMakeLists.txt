@@ -8,6 +8,7 @@ target_sources(taller_server
     model/event/ProjectileEventListener.cpp
     model/event/PlayerEventListener.cpp
     model/event/ThrowableEventListener.cpp
+    model/event/BoxEventListener.cpp
 
     model/DynamicObj.cpp
     model/Duck.cpp
@@ -76,6 +77,7 @@ target_sources(taller_server
     model/event/ProjectileEventListener.h
     model/event/PlayerEventListener.h
     model/event/ThrowableEventListener.h
+    model/event/BoxEventListener.h
     
     model/Equipment.h
 

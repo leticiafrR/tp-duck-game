@@ -8,8 +8,8 @@ private:
     std::vector<BoxID_t>& despawns;
 
 public:
-    explicit BoxEventListener(std::vector<BoxID_t>& despawns): despawns(despawns) {}
-    void DespawnBox(BoxID_t idDestroyed) { despawns.push_back(idDestroyed); }
+    explicit BoxEventListener(std::vector<BoxID_t>& despawns);
+    void DespawnBox(BoxID_t idDestroyed);
 };
 
 
