@@ -73,7 +73,7 @@ public:
     void StopCrouch();
 
     void Cuack();
-    void Slide(Vector2D intensity) { body.ApplyForce(intensity); }
+    void Slide(Vector2D intensity);
     void HandleReceiveDamage(uint8_t damage);
 
     void TryEquip();

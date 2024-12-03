@@ -292,3 +292,4 @@ void Duck::TryEquip() {
         TriggerEvent();
     }
 }
+void Duck::Slide(Vector2D intensity) { body.ApplyForce(intensity); }
