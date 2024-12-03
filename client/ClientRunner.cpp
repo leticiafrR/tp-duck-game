@@ -121,6 +121,11 @@ void ClientRunner::PlayConnected(Client& client) try {
 
     MatchStartDto matchData = *matchDataPtr;
 
+    if (wasClosed) {
+        KillClient(client);
+        return;
+    }
+
     bool matchEnded = false;
     unordered_map<PlayerID_t, int> roundResults;
     bool isInitial = true;
@@ -140,6 +145,11 @@ void ClientRunner::PlayConnected(Client& client) try {
 
         if (!matchEnded)
             ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
+
+        if (wasClosed) {
+            KillClient(client);
+            return;
+        }
     }
 
     if (!wasClosed) {
