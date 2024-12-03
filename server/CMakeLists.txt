@@ -65,7 +65,6 @@ target_sources(taller_server
     PUBLIC
     # .h files
     config.h
-    model/types.h
     model/map/staticMap.h
     model/MotionHandler.h
     model/DynamicObj.h
