@@ -4,7 +4,6 @@
 #include <string>
 
 #include "client/tweening/TransformTween.h"
-#include "client/tweening/TweenManager.h"
 #include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"

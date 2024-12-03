@@ -1,6 +1,7 @@
 #include "ClientRunner.h"
 
-PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) {
+void ClientRunner::LoadWinner(Client& client, vector<PlayerData> players,
+                              std::optional<PlayerData>& winner) {
     PlayerID_t winnerId;
     LoadingScreen loadingWinner(
             cam, resource, wasClosed,
@@ -15,9 +16,12 @@ PlayerData ClientRunner::LoadWinner(Client& client, vector<PlayerData> players) 
             },
             "GETTING WINNER...");
     loadingWinner.Run();
+    if (wasClosed)
+        return;
+
     auto it = std::find_if(players.begin(), players.end(),
                            [&winnerId](PlayerData p) { return p.playerID == winnerId; });
-    return *it;
+    winner = *it;
 }
 
 void ClientRunner::LoadFinalGroup(Client& client, bool& isFinalGroup) {
@@ -96,21 +100,16 @@ ClientRunner::ClientRunner(Renderer& render, int fps):
 ClientRunner::~ClientRunner() = default;
 
 void ClientRunner::KillClient(Client& client) {
-    std::cout << "Esperando hilos\n";
+    std::cout << "Waiting for threads\n";
     if (client.IsConnected())
         client.KillComunicationThreads();
     client.JoinCommunicationThreads();
-    std::cout << "Hilos matados\n";
+    std::cout << "Threads run finished\n";
 }
 
 void ClientRunner::PlayConnected(Client& client) try {
     bool isOwner;
-    MatchListScreen(cam, resource, wasClosed, client, isOwner).Run();
-
-    if (wasClosed) {
-        KillClient(client);
-        return;
-    }
+    LobbiesListScreen(cam, resource, wasClosed, client, isOwner).Run();
 
     shared_ptr<MatchStartDto> matchDataPtr;
     LobbyScreen(cam, resource, wasClosed, client, isOwner, matchDataPtr).Run();
@@ -122,13 +121,11 @@ void ClientRunner::PlayConnected(Client& client) try {
 
     MatchStartDto matchData = *matchDataPtr;
 
-    // AudioManager::GetInstance().PlayGameMusic();
     bool matchEnded = false;
     unordered_map<PlayerID_t, int> roundResults;
     bool isInitial = true;
     while (!matchEnded && !wasClosed) {
         PlayRound(client, matchData, isInitial);
-
         isInitial = false;
 
         bool isFinalGroup = false;
@@ -141,20 +138,15 @@ void ClientRunner::PlayConnected(Client& client) try {
 
         LoadRoundResults(client, matchEnded, roundResults);
 
-        if (!matchEnded) {
+        if (!matchEnded)
             ShowResultsScreen(std::nullopt, matchData.playersData, roundResults);
-        }
-
-        if (wasClosed) {
-            KillClient(client);
-            return;
-        }
     }
-    // gameKit.GetAudioManager().StopMusic();
 
-    std::optional<PlayerData> winner = LoadWinner(client, matchData.playersData);
-
-    ShowResultsScreen(winner, matchData.playersData, roundResults);
+    if (!wasClosed) {
+        std::optional<PlayerData> winner;
+        LoadWinner(client, matchData.playersData, winner);
+        ShowResultsScreen(winner, matchData.playersData, roundResults);
+    }
 
     KillClient(client);
 

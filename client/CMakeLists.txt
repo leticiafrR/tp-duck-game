@@ -4,42 +4,38 @@ target_sources(taller_client
     tweening/ImageTween.cpp
     tweening/TransformTween.cpp
     tweening/Tween.cpp
-    tweening/TweenManager.cpp
 
-    utils/GameKit.cpp
     utils/Timer.cpp
     utils/Animator.cpp
     utils/TransformFollow.cpp
 
-    gameplay/ClientControls.cpp
-    gameplay/CameraController.cpp
-    gameplay/Gameplay.cpp
-    gameplay/GameplayGUI.cpp
+    game/ClientControls.cpp
+    game/CameraController.cpp
+    game/GameScreen.cpp
+    game/GameGUI.cpp
+    game/ShowColorsPanel.cpp
 
-    rendering/SpriteRendererData.cpp
-    rendering/DuckClientRenderer.cpp
-    rendering/BulletRenderer.cpp
-    rendering/CollectableRenderer.cpp
-    rendering/HandItemRenderer.cpp
-    rendering/ChestplateRenderer.cpp
-    rendering/HelmetRenderer.cpp
-    rendering/ThrowableRenderer.cpp
+    game/player/DuckPlayer.cpp
+    game/player/HandItem.cpp
+    game/player/Armor.cpp
+    game/player/Helmet.cpp
+    game/items/Projectile.cpp
+    game/items/Collectable.cpp
+    game/items/Throwable.cpp
+    game/controllers/ThrowablesController.cpp
+    game/controllers/CollectablesController.cpp
+    game/controllers/ProjectilesController.cpp
+    game/controllers/BoxesController.cpp
+    game/controllers/PlayersController.cpp
 
-    rendering/ThrowablesController.cpp
-    rendering/CollectablesController.cpp
-    rendering/BulletsController.cpp
-    rendering/DucksController.cpp
-    rendering/BoxesController.cpp
-
-    screens/MenuScreen.cpp
-    screens/LoadingScreen.cpp
-    screens/MatchListScreen.cpp
-    screens/LobbyScreen.cpp
-    screens/LobbyItemWidget.cpp
-    screens/ControlsScreen.cpp
-    screens/GameStatusScreen.cpp
-    screens/PlayersCountSelection.cpp
-    screens/ShowColorsScreen.cpp
+    menus/MenuScreen.cpp
+    menus/LoadingScreen.cpp
+    menus/LobbiesListScreen.cpp
+    menus/LobbyScreen.cpp
+    menus/LobbyItemWidget.cpp
+    menus/ControlsPanel.cpp
+    menus/GameStatusScreen.cpp
+    menus/PlayersCountSelectionPanel.cpp
 
     ClientRunner.cpp
     main.cpp
@@ -51,46 +47,44 @@ target_sources(taller_client
     PUBLIC
     # .h files
     Framework.h
+    FrameworkUI.h
 
     tweening/ImageTween.h
     tweening/TransformTween.h
     tweening/Tween.h
-    tweening/TweenManager.h
 
-    utils/GameKit.h
     utils/Timer.h
     utils/Animator.h
     utils/TransformFollow.h
 
-    gameplay/ClientControls.h
-    gameplay/CameraController.h
-    gameplay/Gameplay.h
-    gameplay/GameplayGUI.h
+    game/ClientControls.h
+    game/CameraController.h
+    game/GameScreen.h
+    game/GameGUI.h
+    game/ShowColorsPanel.h
 
-    screens/MenuScreen.h
-    screens/LoadingScreen.h
-    screens/MatchListScreen.h
-    screens/LobbyScreen.h
-    screens/LobbyItemWidget.h
-    screens/ControlsScreen.h
-    screens/GameStatusScreen.h
-    screens/PlayersCountSelection.h
-    screens/ShowColorsScreen.h
+    menus/MenuScreen.h
+    menus/LoadingScreen.h
+    menus/LobbiesListScreen.h
+    menus/LobbyScreen.h
+    menus/LobbyItemWidget.h
+    menus/ControlsPanel.h
+    menus/GameStatusScreen.h
+    menus/PlayersCountSelectionPanel.h
 
-    rendering/SpriteRendererData.h
-    rendering/DuckClientRenderer.h
-    rendering/BulletRenderer.h
-    rendering/CollectableRenderer.h
-    rendering/HandItemRenderer.h
-    rendering/ChestplateRenderer.h
-    rendering/HelmetRenderer.h
-    rendering/ThrowableRenderer.h
-
-    rendering/ThrowablesController.h
-    rendering/CollectablesController.h
-    rendering/BulletsController.h
-    rendering/DucksController.h
-    rendering/BoxesController.h
+    game/player/DuckPlayer.h
+    game/player/HandItem.h
+    game/player/Armor.h
+    game/player/Helmet.h
+    game/items/Projectile.h
+    game/items/Collectable.h
+    game/items/Throwable.h
+    game/controllers/ThrowablesController.h
+    game/controllers/CollectablesController.h
+    game/controllers/ProjectilesController.h
+    game/controllers/BoxesController.h
+    game/controllers/PlayersController.h
+    game/controllers/Controllers.h
 
     ClientRunner.h
 

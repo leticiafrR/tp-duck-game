@@ -13,10 +13,11 @@ const std::string MASS_STR = "mass";
 const std::string SIZE_STR = "size";
 const std::string LIFE_STR = "life";
 
-const int SPEED_INDEX = 0;
-const int MASS_INDEX = 1;
-const int SIZE_INDEX = 2;
-const int LIFE_INDEX = 3;
+const int SPEED_INDEX = 1;
+const int MASS_INDEX = 3;
+const int SIZE_INDEX = 0;
+const int LIFE_INDEX = 1;
+
 
 /************************************WEAPON CONFIG*******************************/
 
@@ -39,6 +40,7 @@ const std::string BASIC_STR = "basic";
 
 const std::string SHO0TING_INCLINATION_STR = "shooting_inclination";
 const std::string PROJECTILE_PER_SHOT_STR = "projectiles_per_shot";
+const std::string COLLECTABLE_STR = "collectable";
 
 
 /****************************DISPERSION****************************************/
@@ -58,6 +60,7 @@ const std::string AK47_STR = "ak47";
 const std::string DUELING_PISTOL_STR = "dueling_pistol";
 const std::string PEW_PEW_LASER_STR = "pew_pew_laser";
 const std::string BOX_STR = "box";
+const std::string TIME_STR = "time";
 
 const int BANANA_INDEX = 0;
 const int LASER_RIFLE_INDEX = 1;
@@ -87,10 +90,12 @@ const int BASIC_INDEX = 4;
 const int TO_EXPLOTE_GRANADA_INDEX = 5;
 const int SUPER_INDEX = 3;
 const int HIPER_INDEX = 4;
+const int TIME_INDEX = 1;
 
 
 /***********************************PATHS**************************************** */
 const std::string WEAPONS_PATH = "/etc/duckGame_g6/weaponConfig.yaml";
 const std::string MATCH_PATH = "/etc/duckGame_g6/matchConfig.yaml";
 const std::string DUCK_PATH = "/etc/duckGame_g6/duckConfig.yaml";
+const std::string OBJECT_PATH = "/etc/duckGame_g6/objectConfig.yaml";
 #endif

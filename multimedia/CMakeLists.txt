@@ -25,8 +25,6 @@ target_sources(taller_multimedia
     cache/TextureCache.cpp
     cache/AudioCache.cpp
     cache/FontCache.cpp
-    cache/SheetDataCache.cpp
-    cache/YamlDataCache.cpp
 
     resource/ResourceManager.cpp
     resource/ResourceParser.cpp
@@ -59,8 +57,6 @@ target_sources(taller_multimedia
     cache/TextureCache.h
     cache/AudioCache.h
     cache/FontCache.h
-    cache/SheetDataCache.h
-    cache/YamlDataCache.h
 
     resource/ResourceManager.h
     resource/ResourceParser.h

@@ -8,7 +8,6 @@
 #include "common/Transform.h"
 #include "multimedia/2d/MapBlock2D.h"
 #include "multimedia/Camera.h"
-#include "multimedia/cache/SheetDataCache.h"
 
 #include "GraphicUI.h"
 

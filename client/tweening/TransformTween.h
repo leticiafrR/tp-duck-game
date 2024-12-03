@@ -17,7 +17,7 @@ private:
     Vector2D startSize;
     Vector2D targetSize;
 
-    bool changed = false;
+    bool changed;
 
 public:
     explicit TransformTween(std::optional<Transform*> t = std::nullopt);

@@ -26,6 +26,8 @@ class Config {
     std::vector<float> dispersions;
     std::vector<float> inclinations;
     std::vector<uint8_t> projectilesPerShot;
+    std::vector<int> boxInfo;
+    std::vector<int> collectableInfo;
 
     void setAvaiableLevels();
     void setMatchConfig();
@@ -36,6 +38,7 @@ class Config {
     void setCooldown(const YAML::Node& config);
     void setDamage(const YAML::Node& config);
     void setShotConfig(const YAML::Node& config);
+    void setObjectConfig();
 
 public:
     Config();
@@ -66,6 +69,11 @@ public:
     int getDuckSize() const;
     int getDuckLife() const;
     int getDuckSpeed() const;
+
+    int getObjectSize() const;
+    int getBoxSize() const;
+    int getBoxLife() const;
+    int getRespawnTime() const;
     /****************************AMMO*********************************** */
     uint16_t getLaserRifleAmmo() const;
     uint16_t getBananaAmmo() const;

@@ -8,9 +8,6 @@ Image::Image(const std::string& filename, const RectTransform& rect, Color color
 
 Image::~Image() = default;
 
-void Image::SetSourceRect(const string& filename, const string& key, int index) {
-    this->srcRect = SheetDataCache::GetData(filename)[key][index];
-}
 void Image::SetSourceRect(const SDL2pp::Optional<Rect>& rect) { this->srcRect = rect; }
 
 void Image::SetFile(const std::string& filename) { this->filename = filename; }

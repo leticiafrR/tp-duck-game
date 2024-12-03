@@ -10,7 +10,6 @@
 
 #include "multimedia/Definitions.h"
 #include "multimedia/cache/AudioCache.h"
-#include "multimedia/cache/YamlDataCache.h"
 
 #include "ResourceConstants.h"
 #include "ResourceData.h"
@@ -27,7 +26,6 @@ struct ResourceUndefined: public std::runtime_error {
 
 class ResourceManager {
 private:
-    YamlDataCache dataCache;
     YAML::Node root;
 
     unordered_map<TypeItem, CollectableData> collectablesMap;

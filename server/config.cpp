@@ -9,6 +9,7 @@ Config::Config() {
     setMatchConfig();
     setWeaponsConfig();
     setDuckConfig();
+    setObjectConfig();
 }
 
 void Config::setShotConfig(const YAML::Node& config) {
@@ -43,33 +44,28 @@ void Config::setMatchConfig() {
 
 void Config::setDuckConfig() {
     YAML::Node config = YAML::LoadFile(DUCK_PATH);
-    try {
-        duck.emplace_back(config[SPEED_STR].as<int>());
-        duck.emplace_back(config[MASS_STR].as<int>());
-        duck.emplace_back(config[SIZE_STR].as<int>());
-        duck.emplace_back(config[LIFE_STR].as<int>());
-    } catch (const YAML::TypedBadConversion<int>& e) {
-        std::cerr << "[CONFIG]: Error converting YAML node to int for duck: "
-                  << " - " << e.what() << std::endl;
-    } catch (const YAML::Exception& e) {
-        std::cerr << "[CONFIG]: YAML exception for duck: "
-                  << " - " << e.what() << std::endl;
-    }
+    duck.emplace_back(config[SIZE_STR].as<int>());
+    duck.emplace_back(config[LIFE_STR].as<int>());
+    duck.emplace_back(config[SPEED_STR].as<int>());
+    duck.emplace_back(config[MASS_STR].as<int>());
+}
+
+void Config::setObjectConfig() {
+    YAML::Node config = YAML::LoadFile(OBJECT_PATH);
+
+    boxInfo.emplace_back(config[BOX_STR][SIZE_STR].as<int>());
+    boxInfo.emplace_back(config[BOX_STR][LIFE_STR].as<int>());
+
+    collectableInfo.emplace_back(config[COLLECTABLE_STR][SIZE_STR].as<int>());
+    collectableInfo.emplace_back(config[COLLECTABLE_STR][TIME_STR].as<int>());
 }
 
 void Config::setAWeapon(const std::string& name, const YAML::Node& config) {
-    try {
-        std::vector<uint8_t> weapon;
-        weapon.emplace_back(config[name][AMMO_STR].as<uint8_t>());
-        weapon.emplace_back(config[name][SCOPE_STR].as<uint8_t>());
-        weapons.emplace_back(weapon);
-    } catch (const YAML::TypedBadConversion<int>& e) {
-        std::cerr << "[CONFIG]: Error converting YAML node to int for weapon: " << name << " - "
-                  << e.what() << std::endl;
-    } catch (const YAML::Exception& e) {
-        std::cerr << "[CONFIG]: YAML exception for weapon: " << name << " - " << e.what()
-                  << std::endl;
-    }
+
+    std::vector<uint8_t> weapon;
+    weapon.emplace_back(config[name][AMMO_STR].as<uint8_t>());
+    weapon.emplace_back(config[name][SCOPE_STR].as<uint8_t>());
+    weapons.emplace_back(weapon);
 }
 
 void Config::setDispersion(const YAML::Node& config) {
@@ -181,3 +177,8 @@ float Config::getLaserRifleInclination() const { return inclinations[LASER_RIFLE
 uint8_t Config::getProjectilePerShotBasic() const { return projectilesPerShot[NONE_INDEX]; }
 uint8_t Config::getFragmentGranade() const { return projectilesPerShot[GRANADE_INDEX]; }
 uint8_t Config::getFragmentBox() const { return projectilesPerShot[BOX_INDEX]; }
+
+int Config::getObjectSize() const { return collectableInfo[SIZE_INDEX]; }
+int Config::getBoxSize() const { return boxInfo[SIZE_INDEX]; }
+int Config::getBoxLife() const { return boxInfo[LIFE_INDEX]; }
+int Config::getRespawnTime() const { return collectableInfo[TIME_INDEX]; }

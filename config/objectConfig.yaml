@@ -1,0 +1,6 @@
+box:
+  size: 2
+  life: 5
+collectable:
+  size: 2
+  time: 3
