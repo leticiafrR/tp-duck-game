@@ -31,7 +31,7 @@ private:
 
     void SetTheLevel(const std::string& filePath);
     void loadPlatforms(const YAML::Node& config, const std::string& platformName);
-    std::string GetRandomTheme();
+
 
 public:
     explicit StaticMap(const std::string& lvlName);

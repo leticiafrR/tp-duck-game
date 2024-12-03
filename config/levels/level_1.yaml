@@ -1,4 +1,4 @@
-theme: FOREST
+theme: DUNGEON
 full_map_size:
   x: 100
   y: 160
@@ -23,7 +23,7 @@ box_spawn_points:
   - x: 48
     y: 5
   - x: -30
-    y: 10
+    y: 9
   
 platforms:
   - platform_one
