@@ -1,4 +1,7 @@
 #include "MotionHandler.h"
+
+#include "common/Vector2D.h"
+
 MotionHandler::MotionHandler(): movingToLeft(false), movingToRight(false) {}
 void MotionHandler::StartMoveRight(Vector2D& velocity, int speedX) {
     movingToRight = true;

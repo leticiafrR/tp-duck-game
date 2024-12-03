@@ -1,8 +1,7 @@
 #ifndef MOTION_HANDLER_H
 #define MOTION_HANDLER_H
-#include <vector>
 
-#include "common/Vector2D.h"
+class Vector2D;
 class MotionHandler {
 private:
     bool movingToLeft;

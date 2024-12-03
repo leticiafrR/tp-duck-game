@@ -1,4 +1,5 @@
 #include "Equipment.h"
+
 Equipment::Equipment(): armor(TypeItem::EMPTY), helmet(TypeItem::EMPTY) {}
 bool Equipment::HasArmor() { return (armor != TypeItem::EMPTY); }
 bool Equipment::HasHelmet() { return (helmet != TypeItem::EMPTY); }

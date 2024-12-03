@@ -2,8 +2,8 @@ target_sources(taller_server
     PRIVATE
     # .cpp files
     config.cpp
-    model/MotionHandler.cpp
-    model/Equipment.cpp
+    model/duckUtility/MotionHandler.cpp
+    model/duckUtility/Equipment.cpp
 
     model/event/CollectableEventListener.cpp
     model/event/EventsManager.cpp
@@ -71,7 +71,8 @@ target_sources(taller_server
     # .h files
     config.h
     model/map/staticMap.h
-    model/MotionHandler.h
+    model/duckUtility/MotionHandler.h
+    model/duckUtility/Equipment.h
     model/DynamicObj.h
     model/Duck.h
     model/Game.h
@@ -83,7 +84,6 @@ target_sources(taller_server
     model/event/ThrowableEventListener.h
     model/event/BoxEventListener.h
     
-    model/Equipment.h
 
     model/weaponCollectable/Weapon.h
     model/weaponCollectable/PistolaCowboy.h

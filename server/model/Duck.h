@@ -4,13 +4,13 @@
 
 #include "collectable/Collectable.h"
 #include "common/RigidBody.h"
+#include "duckUtility/includesDuckUtility.h"
 #include "event/PlayerEventListener.h"
 #include "server/config.h"
 #include "throwable/Throwable.h"
 
 #include "DynamicObj.h"
-#include "Equipment.h"
-#include "MotionHandler.h"
+
 class ProjectilesController;
 class CollectablesController;
 class ThrowablesController;
