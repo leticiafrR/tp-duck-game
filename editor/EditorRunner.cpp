@@ -25,7 +25,11 @@ void EditorRunner::run() {
         } else if (option == CREATE_LVL) {
             SetLevelName newLvl(cam, resource, wasClosed);
             writeArchive.AddFileName(newLvl.Render());
-            writeArchive.AddTheme(ThemesScreen(cam, resource, wasClosed).Render());
+            string name = ThemesScreen(cam, resource, wasClosed).Render();
+            if (name == "") {
+                return;
+            }
+            writeArchive.AddTheme(name);
         } else {
             LevelsScreen listLvls(cam, resource, wasClosed);
             string name = listLvls.Render();

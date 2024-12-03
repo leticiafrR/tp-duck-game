@@ -57,7 +57,8 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                            bool& wasClosed):
         BaseScreen(cam, resourceManager, wasClosed),
         writer(w),
-        mapBg(w.GetGameScene().theme, Transform(Vector2D::Zero(), Vector2D(300, 300))),
+        mapBg(resourceManager.GetMapThemeData(w.GetGameScene().theme).bgfile,
+              Transform(Vector2D::Zero(), Vector2D(300, 300))),
         playersPoint(
                 guiManager,
                 [this](pair<Object2D, int> _spawnPoint) {
