@@ -10,7 +10,6 @@ class Grenade: public Throwable {
 private:
     ProjectilesController& projectiles;
     float timer;
-    void Explote();
 
 public:
     explicit Grenade(ProjectilesController& projectilesController, TypeItem type,

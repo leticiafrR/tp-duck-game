@@ -5,6 +5,8 @@
 #include "server/model/collectable/CollectablesController.h"
 #include "server/model/projectile/ProjectilesController.h"
 
+#define CANT_FRAGMENTS_BOX_EXPLOTION 10
+
 BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
                                  const Config& conf):
         listener(nullptr), conf(conf) {
@@ -25,7 +27,8 @@ void BoxesController::DestroyBox(BoxID_t id, CollectablesController& collectable
         if (maybeContent.value() != nullptr) {
             collectables.AddCollectable(maybeContent.value(), boxes[id].GetTransform().GetPos());
         } else {
-            projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(), 10);
+            projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(),
+                                        CANT_FRAGMENTS_BOX_EXPLOTION);
         }
     }
 }
