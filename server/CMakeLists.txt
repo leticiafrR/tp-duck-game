@@ -3,6 +3,7 @@ target_sources(taller_server
     # .cpp files
     config.cpp
     model/MotionHandler.cpp
+    model/Equipment.cpp
 
     model/event/CollectableEventListener.cpp
     model/event/EventsManager.cpp
