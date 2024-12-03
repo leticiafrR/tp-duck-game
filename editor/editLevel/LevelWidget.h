@@ -6,6 +6,7 @@
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
 #include "multimedia/gui/Button.h"
+#include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
 using std::string;
@@ -14,13 +15,14 @@ class LevelWidget {
 private:
 public:
     string levelName;
-    Image lvlConentImage;
-    Text lvlNameText;
-    Button selectLevelButton;
-    Text selectLevelText;
+    Image* lvlConentImage;
+    Text* lvlNameText;
+    Button* selectLevelButton;
+    Text* selectLevelText;
     CallbackParam<string> onSelectClicked;
 
-    explicit LevelWidget(const string& ownerName, CallbackParam<string> onSelect);
+    explicit LevelWidget(GUIManager& guiManager, const string& ownerName,
+                         CallbackParam<string> onSelect);
 
     ~LevelWidget() = default;
 

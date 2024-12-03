@@ -54,10 +54,10 @@ vector<GroundDto> EditorScreen::ReadBasicPlataforms() {
     return grounds;
 }
 
-EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceManager):
-        cam(cam),
+EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceManager,
+                           bool& wasClosed):
+        BaseScreen(cam, resourceManager, wasClosed),
         writer(w),
-        resourceManager(resourceManager),
         saveButton(
                 BUTTON_1_IMAGE,
                 RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
@@ -74,6 +74,7 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                        ColorExtension::White(), 5),
         mapBg(w.GetGameScene().theme, Transform(Vector2D::Zero(), Vector2D(300, 300))),
         playersPoint(
+                guiManager,
                 [this](pair<Object2D, int> _spawnPoint) {
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
@@ -81,6 +82,7 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                 PLAYERS_SPAWN_POINT, WHITE_DUCK.c_str(), Vector2D(50, -40), PLAYER_POINT_LABEL,
                 Vector2D(30, 50)),
         collectablesPoint(
+                guiManager,
                 [this](pair<Object2D, int> _spawnPoint) {
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
@@ -88,6 +90,7 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                 COLLECTABLE_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(200, -40),
                 COLLECTABLE_POINT_LABEL, Vector2D(30, 30)),
         boxPoint(
+                guiManager,
                 [this](pair<Object2D, int> _spawnPoint) {
                     spawnPoint = _spawnPoint.first;
                     typeSpawnPoint = _spawnPoint.second;
@@ -99,7 +102,8 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
     Vector2D initialPos(-200, -100);
     int moveDelta = 100;
     for (size_t i = 0; i < groundBlocks.size(); i++) {
-        basicsPlatform.emplace_back(resourceManager.GetMapThemeData(FOREST_KEY), groundBlocks[i],
+        basicsPlatform.emplace_back(guiManager, resourceManager.GetMapThemeData(FOREST_KEY),
+                                    groundBlocks[i],
                                     [this](MapBlock2D blockMap) { selected = blockMap; });
         Vector2D movement = Vector2D::Down() * i * moveDelta + initialPos;
 
@@ -119,7 +123,7 @@ void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
 void EditorScreen::InitMap(GameSceneDto mapData) {
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
-        mapBlocks.emplace_back(resourceManager.GetMapThemeData(FOREST_KEY), groundData.mySpace);
+        mapBlocks.emplace_back(resource.GetMapThemeData(FOREST_KEY), groundData.mySpace);
 
         bool left =
                 groundData.visibleEdges.find(VISIBLE_EDGES::LEFT) != groundData.visibleEdges.end();
@@ -183,7 +187,7 @@ void EditorScreen::TakeAPlatform() {
     Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
     optional<GroundDto> info = writer.TakePltaform(worldPos);
     if (info.has_value()) {
-        selected = MapBlock2D(resourceManager.GetMapThemeData(FOREST_KEY), info.value().mySpace);
+        selected = MapBlock2D(resource.GetMapThemeData(FOREST_KEY), info.value().mySpace);
         bool left = false, right = false, top = false, bottom = false;
         set<VISIBLE_EDGES> edges = info.value().visibleEdges;
         for (auto& i: edges) {
@@ -218,8 +222,7 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
                 Vector2D size = block.GetTransform().GetSize();
                 vector<string> edges = block.GetEdges();
                 writer.AddAPlataform(worldPos.x, worldPos.y, size.x, size.y, edges);
-                mapBlocks.emplace_back(resourceManager.GetMapThemeData(FOREST_KEY),
-                                       block.GetTransform());
+                mapBlocks.emplace_back(resource.GetMapThemeData(FOREST_KEY), block.GetTransform());
 
                 bool left = false, right = false, top = false, bottom = false;
 
@@ -260,43 +263,81 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
 }
 
 bool EditorScreen::Render() {
-    cam.InitRate();
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    running = false;
-                    return false;
-                case SDL_MOUSEBUTTONDOWN:
-                    HandleMouseClick(event.button);
-                    break;
-                case SDL_MOUSEWHEEL:
-                    Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                    UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
-                    break;
-            }
 
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
+    Run();
 
-        playersPoint.Draw(cam);
-        collectablesPoint.Draw(cam);
-        DrawOptions();
-        DrawGameWorld();
-        TakeInput();
-        if (selected.has_value()) {
-            selected.value().Draw(cam);
-        }
-        if (spawnPoint.has_value()) {
-            spawnPoint.value().Draw(cam);
-        }
-        GUIManager::GetInstance().Draw(cam);
+    return !wasClosed;
 
-        cam.Render();
-        cam.Delay();
+    // cam.InitRate();
+    // while (running) {
+    //     cam.Clean();
+    //     SDL_Event event;
+    //     while (SDL_PollEvent(&event)) {
+    //         switch (event.type) {
+    //             case SDL_QUIT:
+    //                 running = false;
+    //                 return false;
+    //             case SDL_MOUSEBUTTONDOWN:
+    //                 HandleMouseClick(event.button);
+    //                 break;
+    //             case SDL_MOUSEWHEEL:
+    //                 Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+    //                 UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+    //                 break;
+    //         }
+
+    //         ButtonsManager::GetInstance().HandleEvent(event, cam);
+    //     }
+
+    //     playersPoint.Draw(cam);
+    //     collectablesPoint.Draw(cam);
+    //     DrawOptions();
+    //     DrawGameWorld();
+    //     TakeInput();
+    //     if (selected.has_value()) {
+    //         selected.value().Draw(cam);
+    //     }
+    //     if (spawnPoint.has_value()) {
+    //         spawnPoint.value().Draw(cam);
+    //     }
+    //     GUIManager::GetInstance().Draw(cam);
+
+    //     cam.Render();
+    //     cam.Delay();
+    // }
+    // GUIManager::GetInstance().Clear();
+    // return true;
+}
+
+
+void EditorScreen::InitRun() {}
+
+void EditorScreen::TakeInput(SDL_Event event) {
+    switch (event.type) {
+        case SDL_MOUSEBUTTONDOWN:
+            HandleMouseClick(event.button);
+            break;
+        case SDL_MOUSEWHEEL:
+            Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+            UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+            break;
     }
-    GUIManager::GetInstance().Clear();
-    return true;
+
+    guiManager.HandleEvent(event, cam);
+}
+
+void EditorScreen::Update([[maybe_unused]] float deltaTime) {
+    playersPoint.Draw(cam);
+    collectablesPoint.Draw(cam);
+    DrawOptions();
+    DrawGameWorld();
+    TakeInput();
+    if (selected.has_value()) {
+        selected.value().Draw(cam);
+    }
+    if (spawnPoint.has_value()) {
+        spawnPoint.value().Draw(cam);
+    }
+
+    guiManager.Draw(cam);
 }

@@ -6,6 +6,7 @@
 #include "data/gameScene.h"
 #include "editor/constantsEditor.h"
 #include "multimedia/gui/Button.h"
+#include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/MapBlockGUI.h"
 #include "multimedia/gui/Text.h"
 #include "multimedia/resource/ResourceData.h"
@@ -15,16 +16,16 @@ using std::vector;
 class PlatformOptionWidget {
 private:
 public:
-    Button btn;
-    MapBlockGUI obj;
-    Text selectLevelText;
+    Button* btn;
+    MapBlockGUI* obj;
+    Text* selectLevelText;
     CallbackParam<MapBlock2D> onSelectClicked;
     MapBlock2D gameBlock;
 
     PlatformOptionWidget();
 
-    explicit PlatformOptionWidget(MapThemeData& mapThemeData, GroundDto& info,
-                                  CallbackParam<MapBlock2D> onSelect);
+    explicit PlatformOptionWidget(GUIManager& guiManager, MapThemeData& mapThemeData,
+                                  GroundDto& info, CallbackParam<MapBlock2D> onSelect);
 
     ~PlatformOptionWidget() = default;
     void DrawOption(Camera& cam);

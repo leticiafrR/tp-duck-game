@@ -5,6 +5,7 @@
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
 #include "multimedia/gui/Button.h"
+#include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
 
@@ -14,15 +15,16 @@ class LobbyItemWidget {
 private:
 public:
     int lobbyId;
-    Image matchConentImage;
-    Text matchOwnerText;
-    Text matchPlayersText;
-    Button matchJoinButton;
-    Text matchJoinText;
+    Image* matchConentImage;
+    Text* matchOwnerText;
+    Text* matchPlayersText;
+    Button* matchJoinButton;
+    Text* matchJoinText;
+
     CallbackParam<int> onJoinClicked;
 
-    LobbyItemWidget(int id, const string& ownerName, int playerCount, int maxPlayersCount,
-                    CallbackParam<int> onJoin);
+    LobbyItemWidget(GUIManager& guiManager, int id, const string& ownerName, int playerCount,
+                    int maxPlayersCount, CallbackParam<int> onJoin);
 
     ~LobbyItemWidget();
 

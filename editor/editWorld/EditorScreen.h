@@ -9,6 +9,7 @@
 
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/KeyboardExtension.h"
@@ -26,15 +27,13 @@
 using std::list;
 using std::optional;
 using std::vector;
-class EditorScreen {
+
+class EditorScreen: public BaseScreen {
 private:
-    Camera& cam;
     MapEditor& writer;
-    ResourceManager& resourceManager;
     list<PlatformOptionWidget> basicsPlatform;
     GroundDto loadPlatforms(const YAML::Node& config, const std::string& platformName);
     vector<GroundDto> ReadBasicPlataforms();
-    bool running = true;
     Button saveButton;
     Text saveButtonText;
     Object2D mapBg;
@@ -59,8 +58,13 @@ private:
     void TakeAPlatform();
     void UpdateWorld();
 
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
+
 public:
-    explicit EditorScreen(Camera& cam, MapEditor& writer, ResourceManager& resourceManager);
+    explicit EditorScreen(Camera& cam, MapEditor& writer, ResourceManager& resourceManager,
+                          bool& wasClosed);
     ~EditorScreen();
     bool Render();
 };

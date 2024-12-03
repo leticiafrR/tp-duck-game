@@ -11,8 +11,6 @@ target_sources(taller_client
     utils/Animator.cpp
     utils/TransformFollow.cpp
 
-    BaseScreen.cpp
-
     gameplay/ClientControls.cpp
     gameplay/CameraController.cpp
     gameplay/Gameplay.cpp
@@ -31,6 +29,7 @@ target_sources(taller_client
     rendering/CollectablesController.cpp
     rendering/BulletsController.cpp
     rendering/DucksController.cpp
+    rendering/BoxesController.cpp
 
     screens/MenuScreen.cpp
     screens/LoadingScreen.cpp
@@ -63,8 +62,6 @@ target_sources(taller_client
     utils/Animator.h
     utils/TransformFollow.h
 
-    BaseScreen.h
-
     gameplay/ClientControls.h
     gameplay/CameraController.h
     gameplay/Gameplay.h
@@ -93,6 +90,7 @@ target_sources(taller_client
     rendering/CollectablesController.h
     rendering/BulletsController.h
     rendering/DucksController.h
+    rendering/BoxesController.h
 
     ClientRunner.h
 

@@ -9,6 +9,7 @@
 #include "data/snapshot.h"
 #include "multimedia/Camera.h"
 #include "multimedia/cache/AudioCache.h"
+#include "multimedia/resource/ResourceManager.h"
 
 using std::string;
 using std::unordered_map;
@@ -16,15 +17,16 @@ using namespace SDL2pp;  // NOLINT
 
 class AudioManager {
 private:
-    const int MAX_CHANELS = 20;
-    Mixer mixer;
-    AudioCache audioCache;
+    AudioCache& audioCache;
+    Mixer& mixer;
 
 public:
-    AudioManager();
+    explicit AudioManager(AudioCache& audiocache);
     ~AudioManager();
 
     void PlaySFX(const string& filename);
+
+    void PlayButtonSFX();
 
     void PlayMusic(const string& filename);
 

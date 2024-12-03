@@ -17,11 +17,21 @@ void ButtonsManager::RemoveButton(Button* btn) {
     }
 }
 
+// Delete ..
 void ButtonsManager::HandleEvent(const SDL_Event& e, Camera& cam) {
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
 
     for (auto btn: buttons) {
         btn->HandleEvent(e, mouseX, mouseY, cam);
+    }
+}
+
+void ButtonsManager::HandleEvent(const SDL_Event& e, Camera& cam, vector<GraphicUI*> graphics) {
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    for (auto btn: buttons) {
+        btn->HandleEvent(e, mouseX, mouseY, cam, graphics);
     }
 }

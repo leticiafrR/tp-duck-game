@@ -36,9 +36,9 @@ public:
     void SetText(const string& newText);
     void SetFontSize(int fontSize);
 
-    void SetTextAndFontSize(const string& newText, int fontSize);
+    void SetActive(bool active) override;
 
-    Font& GetFont();
+    void SetTextAndFontSize(const string& newText, int fontSize);
 
     void Draw(Camera& cam) override;
 };

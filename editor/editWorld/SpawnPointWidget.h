@@ -8,6 +8,7 @@
 #include "editor/constantsEditor.h"
 #include "multimedia/2d/Object2D.h"
 #include "multimedia/gui/Button.h"
+#include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/MapBlockGUI.h"
 #include "multimedia/gui/Text.h"
 using std::pair;
@@ -16,18 +17,18 @@ using std::vector;
 class SpawnPointWidget {
 private:
 public:
-    Button btn;
-    Text selectLevelText;
+    Button* btn;
+    Text* selectLevelText;
     CallbackParam<pair<Object2D, int>> onSelectClicked;
-    Image img;
+    Image* img;
     Object2D point;
 
     int type;
 
     SpawnPointWidget();
 
-    explicit SpawnPointWidget(CallbackParam<pair<Object2D, int>> onSelect, int type,
-                              const std::string& fileName, Vector2D position,
+    explicit SpawnPointWidget(GUIManager& guiManager, CallbackParam<pair<Object2D, int>> onSelect,
+                              int type, const std::string& fileName, Vector2D position,
                               const std::string& text, Vector2D size);
 
     ~SpawnPointWidget() = default;

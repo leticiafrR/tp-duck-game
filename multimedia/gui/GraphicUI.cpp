@@ -6,14 +6,17 @@
 
 GraphicUI::GraphicUI(const RectTransform& rect, Color color, int layerOrder):
         rect(rect), color(color), layerOrder(layerOrder) {
-    GUIManager::GetInstance().AddGUI(this);
+    // GUIManager::GetInstance().AddGUI(this);
 }
 
-GraphicUI::~GraphicUI() { GUIManager::GetInstance().RemoveGUI(this); }
+GraphicUI::~GraphicUI() {
+    // GUIManager::GetInstance().RemoveGUI(this);
+}
 
 void GraphicUI::SetLayerOrder(int layerOrder) {
     this->layerOrder = layerOrder;
-    GUIManager::GetInstance().CheckSort();
+    onLayerChanged();
+    // GUIManager::GetInstance().CheckSort();
 }
 int GraphicUI::GetLayerOrder() { return layerOrder; }
 

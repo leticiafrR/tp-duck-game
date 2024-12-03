@@ -1,19 +1,12 @@
 #include "GameKit.h"
 
-GameKit::GameKit(Camera& cam):
-        cam(cam),
-        guiManager(GUIManager::GetInstance()),
-        tweenManager(TweenManager::GetInstance()) {}
-GameKit::~GameKit() = default;
+// GameKit::GameKit(Camera& cam): cam(cam) {}
+// GameKit::~GameKit() = default;
 
-Camera& GameKit::GetCamera() { return cam; }
+// Camera& GameKit::GetCamera() { return cam; }
 
-GUIManager& GameKit::GetGUIManager() { return guiManager; }
+// AudioManager& GameKit::GetAudioManager() { return audioManager; }
 
-AudioManager& GameKit::GetAudioManager() { return audioManager; }
+// ResourceManager& GameKit::GetResourceManager() { return resourceManager; }
 
-TweenManager& GameKit::GetTweenManager() { return tweenManager; }
-
-ResourceManager& GameKit::GetResourceManager() { return resourceManager; }
-
-void GameKit::PlayButtonSFX() { audioManager.PlaySFX(BUTTON_SFX_FILE); }
+// void GameKit::PlayButtonSFX() { audioManager.PlaySFX(BUTTON_SFX_FILE); }

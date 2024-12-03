@@ -13,29 +13,29 @@ using std::string;
 EditorRunner::EditorRunner(Renderer& render, int fps): cam(std::move(render), 70, Rate(fps)) {}
 void EditorRunner::run() {
     bool exit = false;
-
-    ResourceManager resourceManager;
+    bool wasClosed = false;
+    ResourceManager resource;
 
     while (!exit) {
         MapEditor writeArchive;
-        int option = MenuScreen(cam).run();
+        int option = MenuScreen(cam, resource, wasClosed).run();
         if (option == QUIT) {
             return;
         } else if (option == CREATE_LVL) {
-            SetLevelName newLvl(cam);
+            SetLevelName newLvl(cam, resource, wasClosed);
             writeArchive.AddFileName(newLvl.Render());
         } else {
-            LevelsScreen listLvls(cam);
+            LevelsScreen listLvls(cam, resource, wasClosed);
             string name = listLvls.Render();
             if (name == "") {
                 return;
             }
             writeArchive = MapEditor(name);
         }
-        EditorScreen runner(cam, writeArchive, resourceManager);
+        EditorScreen runner(cam, writeArchive, resource, wasClosed);
         if (!runner.Render()) {
             return;
         }
-        exit = ExitOptions(cam).run();
+        exit = ExitOptions(cam, resource, wasClosed).run();
     }
 }

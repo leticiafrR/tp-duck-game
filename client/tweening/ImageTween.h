@@ -13,13 +13,16 @@
 
 class ImageTween: public Tween {
 private:
-    Image& img;
+    std::optional<Image*> img;
     Color startColor;
     Color targetColor;
 
 public:
+    explicit ImageTween(std::optional<Image*> img = std::nullopt);
+
     ImageTween(
-            Image& img, Color targetColor, float duration, OnCompleteCallback onComplete = []() {});
+            std::optional<Image*> img, Color targetColor, float duration,
+            OnCompleteCallback onComplete = []() {});
 
     void OnInitLoop() override;
 

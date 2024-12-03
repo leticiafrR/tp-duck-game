@@ -1,12 +1,12 @@
 #include "MatchListScreen.h"
 
 void MatchListScreen::OnCreatePressed() {
-    gameKit.PlayButtonSFX();
+    audioPlayer.PlayButtonSFX();
     playersCountSelection.Display([this](uint8_t playersCount) {
         bool createSuccess;
         client.CreateMatch(playersCount);
         LoadingScreen loading(
-                gameKit, wasClosed,
+                cam, resource, wasClosed,
                 [this, &createSuccess]() {
                     if (!client.IsConnected()) {
                         running = false;
@@ -35,13 +35,13 @@ void MatchListScreen::OnCreatePressed() {
 }
 
 void MatchListScreen::OnJoinLobbyPressed(int id) {
-    gameKit.PlayButtonSFX();
+    audioPlayer.PlayButtonSFX();
 
     playersCountSelection.Display([this, id](uint8_t playersCount) {
         bool joinSuccess;
         client.SelectMatch(id, playersCount);
         LoadingScreen loading(
-                gameKit, wasClosed,
+                cam, resource, wasClosed,
                 [this, &joinSuccess]() {
                     std::shared_ptr<ResultJoining> joinResult = nullptr;
                     if (client.TryRecvNetworkMsg(joinResult)) {
@@ -63,16 +63,16 @@ void MatchListScreen::OnJoinLobbyPressed(int id) {
 }
 
 void MatchListScreen::OnRefreshPressed() {
-    gameKit.PlayButtonSFX();
-    refreshButton.SetInteractable(false);
+    audioPlayer.PlayButtonSFX();
+    refreshButton->SetInteractable(false);
     client.Refresh();
     WaitRefresh();
-    refreshButton.SetInteractable(true);
+    refreshButton->SetInteractable(true);
 }
 
 void MatchListScreen::WaitRefresh() {
     LoadingScreen loading(
-            gameKit, wasClosed,
+            cam, resource, wasClosed,
             [this]() {
                 std::shared_ptr<AvailableMatches> lobbyListResult = nullptr;
                 if (client.TryRecvNetworkMsg(lobbyListResult)) {
@@ -93,8 +93,8 @@ void MatchListScreen::LoadWidgetList(std::vector<DataMatch> data) {
 
     for (size_t i = 0; i < data.size(); i++) {
         auto lobbyData = data[i];
-        widgets.emplace_back(lobbyData.matchID, lobbyData.creatorNickname, lobbyData.currentPlayers,
-                             lobbyData.maxPlayers,
+        widgets.emplace_back(guiManager, lobbyData.matchID, lobbyData.creatorNickname,
+                             lobbyData.currentPlayers, lobbyData.maxPlayers,
                              [this](int id) { this->OnJoinLobbyPressed(id); });
 
         widgets.back().MoveContent(Vector2D::Down() * i * moveDelta + initialPos);
@@ -114,55 +114,59 @@ void MatchListScreen::UpdateWidgetListPosition(Vector2D movement) {
     }
 }
 
-MatchListScreen::MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool& isOwner):
-        BaseScreen(kit, wasClosed),
-        client(cl),
-        header(RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1),
-                             Vector2D(0.5, 1)),
-               ColorExtension::Black(), 3),
-        titleText("CREATE A LOBBY", 30,
-                  RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1),
-                                Vector2D(0.5, 0.5)),
-                  ColorExtension::White(), 4),
-        createButton(
-                BUTTON_FILE,
-                RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this]() { this->OnCreatePressed(); }, Color(40, 40, 40), 4),
-        createButtonText("CREATE", 20,
-                         RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                                       Vector2D(0.5, 0.5)),
-                         ColorExtension::White(), 5),
-        joinLobbyText("OR JOIN A LOBBY", 30,
-                      RectTransform(Vector2D(-180, -240), Vector2D(500, 160), Vector2D(0.5, 1),
-                                    Vector2D(0.5, 0.5)),
-                      ColorExtension::White(), 4),
-        refreshButton(
-                BUTTON_FILE,
-                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this]() { this->OnRefreshPressed(); }, Color(40, 40, 40), 4),
-        refreshButtonText("REFRESH", 20,
-                          RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1),
-                                        Vector2D(0.5, 0.5)),
-                          ColorExtension::White(), 5),
-        controlsButton(
-                BUTTON_FILE,
-                RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
-                              Vector2D(0.5, 0.5)),
-                [this]() {
-                    this->controls.SetActive(true);
-                    gameKit.PlayButtonSFX();
-                },
-                Color(40, 40, 40), 4),
-        controlsButtonText("CONTROLS", 20,
-                           RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1),
-                                         Vector2D(0.5, 0.5)),
-                           ColorExtension::White(), 5),
-        controls(gameKit),
-        playersCountSelection(gameKit),
-        isOwner(isOwner) {
+void MatchListScreen::InitHeader() {
+    guiManager.CreateImage(
+            RectTransform(Vector2D(0, 0), Vector2D(2200, 300), Vector2D(0.5, 1), Vector2D(0.5, 1)),
+            3, ColorExtension::Black());
+
+    guiManager.CreateText(RectTransform(Vector2D(0, -50), Vector2D(500, 160), Vector2D(0.5, 1)), 4,
+                          "CREATE A LOBBY", 30);
+
+    guiManager.CreateText(RectTransform(Vector2D(-180, -240), Vector2D(500, 160), Vector2D(0.5, 1)),
+                          4, "OR JOIN A LOBBY", 30);
+}
+
+void MatchListScreen::InitControlsButton() {
     controls.SetActive(false);
+
+    guiManager.CreateButton(RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1)), 4,
+                            [this]() {
+                                this->controls.SetActive(true);
+                                audioPlayer.PlayButtonSFX();
+                            });
+    guiManager.CreateText(RectTransform(Vector2D(-85, -45), Vector2D(160, 80), Vector2D(1, 1)), 5,
+                          "CONTROLS", 20);
+}
+
+void MatchListScreen::InitCreateButton() {
+    guiManager.CreateButton(RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1)),
+                            4, [this]() { this->OnCreatePressed(); });
+
+    guiManager.CreateText(RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1)), 5,
+                          "CREATE", 20);
+}
+
+void MatchListScreen::InitRefreshButton() {
+    refreshButton = guiManager.CreateButton(
+            RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1)), 4,
+            [this]() { this->OnRefreshPressed(); });
+
+    guiManager.CreateText(RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.5, 1)),
+                          5, "REFRESH", 20);
+}
+
+MatchListScreen::MatchListScreen(Camera& cam, ResourceManager& resource, bool& wasClosed,
+                                 Client& cl, bool& isOwner):
+        BaseScreen(cam, resource, wasClosed),
+        client(cl),
+        controls(audioPlayer, guiManager),
+        playersCountSelection(audioPlayer, guiManager),
+        isOwner(isOwner) {
+
+    InitHeader();
+    InitControlsButton();
+    InitCreateButton();
+    InitRefreshButton();
 }
 
 MatchListScreen::~MatchListScreen() = default;
@@ -175,13 +179,9 @@ void MatchListScreen::TakeInput(SDL_Event event) {
             break;
     }
 
-    ButtonsManager::GetInstance().HandleEvent(event, cam);
+    guiManager.HandleEvent(event, cam);
 }
-
 
 void MatchListScreen::InitRun() { WaitRefresh(); }
 
-void MatchListScreen::Update(float deltaTime) {
-    TweenManager::GetInstance().Update(deltaTime);
-    GUIManager::GetInstance().Draw(cam);
-}
+void MatchListScreen::Update([[maybe_unused]] float deltaTime) { guiManager.Draw(cam); }

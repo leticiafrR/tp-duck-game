@@ -7,10 +7,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "client/BaseScreen.h"
 #include "client/rendering/DuckClientRenderer.h"
 #include "client/utils/Timer.h"
 #include "data/dataTransferObjects.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/gui/Button.h"
@@ -26,21 +26,16 @@ using std::vector;
 
 class DuckResultItemGUI {
 private:
-    Image imgColor;
-    Text txtNickname;
-    Text txtCount;
-
 public:
-    DuckResultItemGUI(Vector2D pos, const PlayerData& duck, DuckData duckData, int count);
+    DuckResultItemGUI(Vector2D pos, GUIManager& guiManager, const PlayerData& duck,
+                      DuckData duckData, int count);
 
     ~DuckResultItemGUI();
 };
 
 class GameStatusScreen: public BaseScreen {
 private:
-    Image imgBg;
-    Text txtTitle;
-    Button btnBack;
+    Button* btnBack;
     Timer timer;
 
     list<DuckResultItemGUI> ducksGUI;
@@ -49,9 +44,9 @@ private:
                             DuckData duckData);
 
 public:
-    GameStatusScreen(GameKit& kit, bool& wasClosed, vector<PlayerData> players,
-                     unordered_map<PlayerID_t, int> gameResults, DuckData duckData,
-                     std::optional<PlayerData> winner);
+    GameStatusScreen(Camera& cam, ResourceManager& resource, bool& wasClosed,
+                     vector<PlayerData> players, unordered_map<PlayerID_t, int> gameResults,
+                     DuckData duckData, std::optional<PlayerData> winner);
 
     void InitRun() override;
     void TakeInput(SDL_Event event) override;

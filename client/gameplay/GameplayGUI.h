@@ -9,8 +9,10 @@
 #include "data/snapshot.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
+#include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Image.h"
 #include "multimedia/gui/Text.h"
+#include "multimedia/resource/ResourceData.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -19,24 +21,22 @@ using std::unordered_map;
 
 class LocalPlayerGUI {
 private:
-    Image imgDuck;
-    Text txtNickname;
-    Text shadowNickname;
-
 public:
-    LocalPlayerGUI(Color duckColor, const string& nickname, bool isOne);
+    LocalPlayerGUI(GUIManager& guiManager, DuckData duckData, Color duckColor,
+                   const string& nickname, bool isOne);
     ~LocalPlayerGUI();
-    void SetHandItem(TypeItem type);
-    void RemoveHandItem();
 };
 
 class GameplayGUI {
 private:
-    shared_ptr<LocalPlayerGUI> player1GUI;
-    shared_ptr<LocalPlayerGUI> player2GUI;
+    GUIManager& guiManager;
+    DuckData duckData;
+
+    std::optional<LocalPlayerGUI> player1GUI;
+    std::optional<LocalPlayerGUI> player2GUI;
 
 public:
-    GameplayGUI();
+    GameplayGUI(GUIManager& guiManager, DuckData duckData);
     ~GameplayGUI();
 
     void InitPlayer1GUI(Color color, const string& nickname);

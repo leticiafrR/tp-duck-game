@@ -1,19 +1,22 @@
 #ifndef BASE_SCREEN_H
 #define BASE_SCREEN_H
 
-#include "client/Framework.h"
+#include "multimedia/audio/AudioManager.h"
+#include "multimedia/gui/GUIManager.h"
 
 class BaseScreen {
 protected:
-    GameKit& gameKit;
     Camera& cam;
-    MenuData menuData;
+    ResourceManager& resource;
+
+    GUIManager guiManager;
+    AudioManager audioPlayer;
 
     bool& wasClosed;
     bool running;
 
 public:
-    explicit BaseScreen(GameKit& gameKit, bool& wasClosed);
+    explicit BaseScreen(Camera& cam, ResourceManager& resource, bool& wasClosed);
     virtual ~BaseScreen();
 
     virtual void InitRun() = 0;

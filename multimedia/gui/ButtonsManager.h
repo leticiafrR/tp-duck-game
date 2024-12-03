@@ -11,17 +11,20 @@ class ButtonsManager {
 private:
     std::vector<Button*> buttons;
 
+public:
     ButtonsManager();
     ~ButtonsManager();
 
-public:
     static ButtonsManager& GetInstance();
 
     void AddButton(Button* btn);
 
     void RemoveButton(Button* btn);
 
+    // Compatibility, must delete
     void HandleEvent(const SDL_Event& e, Camera& cam);
+
+    void HandleEvent(const SDL_Event& e, Camera& cam, vector<GraphicUI*> graphics);
 
     // Remove copy
     ButtonsManager(const ButtonsManager&) = delete;

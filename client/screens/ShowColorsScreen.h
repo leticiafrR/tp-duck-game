@@ -19,11 +19,12 @@ using std::unordered_map;
 
 class DuckColorItemGUI {
 private:
-    Image imgColor;
-    Text txtNickname;
+    Image* imgColor;
+    Text* txtNickname;
 
 public:
-    DuckColorItemGUI(Vector2D pos, const PlayerData& playerData, DuckData duckData);
+    DuckColorItemGUI(GUIManager& guiManager, Vector2D pos, const PlayerData& playerData,
+                     DuckData duckData);
     void SetActive(bool active);
     ~DuckColorItemGUI();
 };
@@ -31,7 +32,9 @@ public:
 
 class ShowColorsScreen {
 private:
-    Image bg;
+    GUIManager& guiManager;
+
+    Image* bg;
     ImageTween bgTween;
     Timer timer;
 
@@ -40,7 +43,7 @@ private:
     list<DuckColorItemGUI> ducksGUI;
 
 public:
-    ShowColorsScreen();
+    explicit ShowColorsScreen(GUIManager& guiManager);
 
     void Show(const unordered_map<PlayerID_t, PlayerData>& playersData, DuckData duckData);
 

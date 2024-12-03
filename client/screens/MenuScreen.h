@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "client/BaseScreen.h"
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/KeyboardExtension.h"
@@ -20,30 +20,29 @@ using std::string;
 class MenuScreen: public BaseScreen {
 private:
     const int MAX_NAME_SIZE = 12;
+    MenuData menuData;
 
-    Image bgImage;
-    Image logoImage;
+    Text* nicknamePlaceHolderText;
+    Text* nicknameText;
 
-    Image inputBgImage;
-
-    Text nicknamePlaceHolderText;
-
-    Text nicknameText;
-
-    Button startButton;
-    Text buttonText;
+    Button* btnStart;
+    Text* txtStartButton;
 
     string& nicknameInput;
 
-    TransformTween btnTween;
-    TransformTween textTween;
+    TransformTween btnStartTween;
+    TransformTween txtStartButtonTween;
+
+    void InitBackground();
+    void InitInput();
+    void InitStartButton();
 
     void InitRun() override;
     void TakeInput(SDL_Event event) override;
     void Update(float deltaTime) override;
 
 public:
-    explicit MenuScreen(GameKit& kit, bool& wasClosed, string& input);
+    explicit MenuScreen(Camera& cam, ResourceManager& resource, bool& wasClosed, string& input);
 
     ~MenuScreen();
 };

@@ -1,37 +1,53 @@
 #include "MenuScreen.h"
 
-MenuScreen::MenuScreen(GameKit& kit, bool& wasClosed, string& input):
-        BaseScreen(kit, wasClosed),
-        bgImage(RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
-        logoImage(RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
-        inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),
-                     ColorExtension::Black().SetAlpha(80)),
-        nicknamePlaceHolderText(RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
-                                              Vector2D(0.5, 0.5))),
-        nicknameText(RectTransform(Vector2D(0, 0), Vector2D(750, 80), Vector2D(0.5, 0.5),
-                                   Vector2D(0.5, 0.5))),
-        startButton(RectTransform(Vector2D(0, -200), Vector2D(200, 80), Vector2D(0.5, 0.5),
-                                  Vector2D(0.5, 0.5)),
-                    ColorExtension::DarkGray()),
-        buttonText(RectTransform(Vector2D(0, -200), Vector2D(150, 80), Vector2D(0.5, 0.5),
-                                 Vector2D(0.5, 0.5))),
-        nicknameInput(input),
-        btnTween(startButton.GetTransform()),
-        textTween(buttonText.GetTransform()) {
+void MenuScreen::InitBackground() {
+    guiManager.CreateImage(RectTransform(Vector2D::Zero(), Vector2D(2133, 1200)), -1,
+                           menuData.menuBgFile);
 
-    bgImage.SetFile(menuData.menuBgFile);
-    logoImage.SetFile(menuData.logoBgFile);
+    guiManager.CreateImage(RectTransform(Vector2D(0, 240), Vector2D(575, 300)), 0,
+                           menuData.logoBgFile);
 
-    nicknamePlaceHolderText.SetTextAndFontSize("Write your nickname", 50);
-    nicknamePlaceHolderText.SetColor(ColorExtension::White().SetAlpha(120));
-    nicknameText.SetTextAndFontSize("", 50);
+    guiManager.CreateImage(RectTransform(Vector2D(0, -2), Vector2D(750, 80)), 1,
+                           ColorExtension::Black().SetAlpha(80));
+}
 
-    startButton.SetFile(BUTTON_FILE);
-    startButton.SetCallback([this]() {
-        running = false;
-        gameKit.PlayButtonSFX();
-    });
-    buttonText.SetTextAndFontSize("START", 200);
+void MenuScreen::InitInput() {
+    nicknamePlaceHolderText =
+            guiManager.CreateText(RectTransform(Vector2D(0, 0), Vector2D(750, 80)), 2);
+
+    nicknamePlaceHolderText->SetTextAndFontSize("Write your nickname", 50);
+    nicknamePlaceHolderText->SetColor(ColorExtension::White().SetAlpha(120));
+
+    nicknameText = guiManager.CreateText(RectTransform(Vector2D(0, 0), Vector2D(750, 80)), 3);
+    nicknameText->SetTextAndFontSize("", 50);
+}
+
+void MenuScreen::InitStartButton() {
+    btnStart = guiManager.CreateButton(RectTransform(Vector2D(0, -200), Vector2D(200, 80)), 3,
+                                       [this]() {
+                                           running = false;
+                                           audioPlayer.PlayButtonSFX();
+                                       });
+
+    txtStartButton = guiManager.CreateText(RectTransform(Vector2D(0, -200), Vector2D(150, 80)), 4);
+    txtStartButton->SetTextAndFontSize("START", 200);
+
+    btnStartTween = TransformTween(&btnStart->GetTransform(),
+                                   btnStart->GetTransform().GetSize() * 1.1f, 0.6f);
+
+
+    txtStartButtonTween = TransformTween(&txtStartButton->GetTransform(),
+                                         txtStartButton->GetTransform().GetSize() * 1.1f, 0.6f);
+}
+
+
+MenuScreen::MenuScreen(Camera& cam, ResourceManager& resource, bool& wasClosed, string& input):
+        BaseScreen(cam, resource, wasClosed),
+        menuData(resource.GetMenuData()),
+        nicknameInput(input) {
+    InitBackground();
+    InitInput();
+    InitStartButton();
 }
 
 MenuScreen::~MenuScreen() {
@@ -70,28 +86,28 @@ void MenuScreen::TakeInput(SDL_Event event) {
         }
     }
 
-    ButtonsManager::GetInstance().HandleEvent(event, cam);
+    guiManager.HandleEvent(event, cam);
 }
 
 
 void MenuScreen::InitRun() {
-    btnTween.SetTarget(startButton.GetSize() * 1.1f, 0.6f);
-    textTween.SetTarget(buttonText.GetSize() * 1.1f, 0.6f);
+    btnStartTween.SetLoops(-1, LoopType::Yoyo);
+    txtStartButtonTween.SetLoops(-1, LoopType::Yoyo);
 
-    btnTween.SetLoops(-1, LoopType::Yoyo);
-    textTween.SetLoops(-1, LoopType::Yoyo);
-
-    btnTween.Play();
-    textTween.Play();
+    btnStartTween.Play();
+    txtStartButtonTween.Play();
 }
 
 void MenuScreen::Update(float deltaTime) {
-    nicknameText.SetText(nicknameInput);
+    nicknameText->SetText(nicknameInput);
 
-    nicknamePlaceHolderText.SetVisible(nicknameInput.size() == 0);
-    startButton.SetVisible(nicknameInput.size() != 0);
-    buttonText.SetVisible(nicknameInput.size() != 0);
+    nicknamePlaceHolderText->SetVisible(nicknameInput.size() == 0);
 
-    GUIManager::GetInstance().Draw(cam);
-    TweenManager::GetInstance().Update(deltaTime);
+    btnStart->SetVisible(nicknameInput.size() != 0);
+    txtStartButton->SetVisible(nicknameInput.size() != 0);
+
+    btnStartTween.Update(deltaTime);
+    txtStartButtonTween.Update(deltaTime);
+
+    guiManager.Draw(cam);
 }

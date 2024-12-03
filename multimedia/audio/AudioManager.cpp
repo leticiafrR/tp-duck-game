@@ -1,10 +1,13 @@
 #include "AudioManager.h"
 
-AudioManager::AudioManager(): mixer(44100, MIX_DEFAULT_FORMAT, 2, 2048) {
-    mixer.AllocateChannels(MAX_CHANELS);
-}
+#include "multimedia/cache/AudioCache.h"
+
+AudioManager::AudioManager(AudioCache& audioCache):
+        audioCache(audioCache), mixer(audioCache.GetMixer()) {}
 
 AudioManager::~AudioManager() = default;
+
+void AudioManager::PlayButtonSFX() { PlaySFX(BUTTON_SFX_FILE); }
 
 void AudioManager::PlaySFX(const string& filename) {
     const Chunk& audio = audioCache.GetAudioSFXData(filename);

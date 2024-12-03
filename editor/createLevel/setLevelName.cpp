@@ -4,94 +4,82 @@
 #include "multimedia/KeyboardExtension.h"
 
 #include "constants.h"
-void SetLevelName::TakeInput() {
-    SDL_Event event;
 
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                return;
-            case SDL_KEYDOWN: {
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+SetLevelName::SetLevelName(Camera& c, ResourceManager& resource, bool& wasClosed):
+        BaseScreen(c, resource, wasClosed) {
 
-                switch (keyEvent.keysym.sym) {
-                    case SDLK_BACKSPACE:
-                        if (nicknameInput.size() > 0)
-                            nicknameInput.pop_back();
-                        break;
-                    default:
-                        if ((int)nicknameInput.size() == MAX_NAME_SIZE)
-                            break;
-                        if (!SDLExtension::IsAlphaNumeric(keyEvent.keysym.sym))
-                            break;
+    guiManager.CreateImage(DUCK_BACKGROUND.c_str(),
+                           RectTransform(Vector2D::Zero(), Vector2D(2133, 1200)));
+    guiManager.CreateImage(DUCK_GAME_LOGO.c_str(),
+                           RectTransform(Vector2D(0, 240), Vector2D(575, 300)));
 
-                        const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    guiManager.CreateImage(RectTransform(Vector2D(0, -2), Vector2D(750, 80)),
+                           ColorExtension::Black().SetAlpha(80));
 
-                        bool shiftPressed = (currentKeyStates[SDL_SCANCODE_LSHIFT] ||
-                                             currentKeyStates[SDL_SCANCODE_RSHIFT]);
 
-                        char c = static_cast<char>(keyEvent.keysym.sym);
-                        if (shiftPressed)
-                            c = std::toupper(c);
-                        nicknameInput.push_back(c);
-                        break;
-                }
-                break;
-            }
-        }
+    nicknamePlaceHolderText = guiManager.CreateText(
+            ENTER_LVL_NAME.c_str(), 50, RectTransform(Vector2D(0, 0), Vector2D(750, 80)),
+            ColorExtension::White().SetAlpha(120));
 
-        ButtonsManager::GetInstance().HandleEvent(event, cam);
-    }
+    nicknameText = guiManager.CreateText("", 50, RectTransform(Vector2D(0, 0), Vector2D(750, 80)),
+                                         ColorExtension::White());
+
+    startButton = guiManager.CreateButton(
+            BUTTON_1_IMAGE.c_str(), RectTransform(Vector2D(0, -200), Vector2D(200, 80)),
+            [this]() { running = false; }, Color(40, 40, 40));
+
+    buttonText = guiManager.CreateText(CREATE_LABEL.c_str(), 200,
+                                       RectTransform(Vector2D(0, -200), Vector2D(150, 80)));
 }
 
+void SetLevelName::InitRun() {}
 
-SetLevelName::SetLevelName(Camera& c):
-        cam(c),
-        bgImage(DUCK_BACKGROUND.c_str(), RectTransform(Vector2D::Zero(), Vector2D(2133, 1200))),
-        logoImage(DUCK_GAME_LOGO.c_str(), RectTransform(Vector2D(0, 240), Vector2D(575, 300))),
-        inputBgImage(RectTransform(Transform(Vector2D(0, -2), Vector2D(750, 80))),
-                     ColorExtension::Black().SetAlpha(80)),
-        nicknamePlaceHolderText(ENTER_LVL_NAME.c_str(), 50,
-                                RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)),
-                                              Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                                ColorExtension::White().SetAlpha(120)),
-        nicknameText("", 50,
-                     RectTransform(Transform(Vector2D(0, 0), Vector2D(750, 80)), Vector2D(0.5, 0.5),
-                                   Vector2D(0.5, 0.5)),
-                     ColorExtension::White()),
-        startButton(
-                BUTTON_1_IMAGE.c_str(),
-                RectTransform(Transform(Vector2D(0, -200), Vector2D(200, 80)), Vector2D(0.5, 0.5),
-                              Vector2D(0.5, 0.5)),
-                [this]() { running = false; }, Color(40, 40, 40)),
+void SetLevelName::TakeInput(SDL_Event event) {
+    switch (event.type) {
+        case SDL_KEYDOWN: {
+            SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
 
-        buttonText(CREATE_LABEL.c_str(), 200,
-                   RectTransform(Transform(Vector2D(0, -200), Vector2D(150, 80)),
-                                 Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
-                   ColorExtension::White()) {}
+            switch (keyEvent.keysym.sym) {
+                case SDLK_BACKSPACE:
+                    if (nicknameInput.size() > 0)
+                        nicknameInput.pop_back();
+                    break;
+                default:
+                    if ((int)nicknameInput.size() == MAX_NAME_SIZE)
+                        break;
+                    if (!SDLExtension::IsAlphaNumeric(keyEvent.keysym.sym))
+                        break;
 
-string SetLevelName::Render() {
-    running = true;
+                    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
-    cam.InitRate();
+                    bool shiftPressed = (currentKeyStates[SDL_SCANCODE_LSHIFT] ||
+                                         currentKeyStates[SDL_SCANCODE_RSHIFT]);
 
-    while (running) {
-        cam.Clean();
-
-        TakeInput();
-
-        nicknameText.SetText(nicknameInput);
-
-        nicknamePlaceHolderText.SetVisible(nicknameInput.size() == 0);
-        startButton.SetVisible(nicknameInput.size() != 0);
-        buttonText.SetVisible(nicknameInput.size() != 0);
-
-        GUIManager::GetInstance().Draw(cam);
-
-        cam.Render();
-        cam.Delay();
+                    char c = static_cast<char>(keyEvent.keysym.sym);
+                    if (shiftPressed)
+                        c = std::toupper(c);
+                    nicknameInput.push_back(c);
+                    break;
+            }
+            break;
+        }
     }
 
+    guiManager.HandleEvent(event, cam);
+}
+
+void SetLevelName::Update([[maybe_unused]] float deltaTime) {
+    nicknameText->SetText(nicknameInput);
+
+    nicknamePlaceHolderText->SetVisible(nicknameInput.size() == 0);
+    startButton->SetVisible(nicknameInput.size() != 0);
+    buttonText->SetVisible(nicknameInput.size() != 0);
+
+    guiManager.Draw(cam);
+}
+
+string SetLevelName::Render() {
+    Run();
     return nicknameInput;
 }
 

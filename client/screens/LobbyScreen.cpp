@@ -1,35 +1,35 @@
 #include "LobbyScreen.h"
 
-LobbyScreen::LobbyScreen(GameKit& kit, bool& wasClosed, Client& client, bool isOwner,
-                         shared_ptr<MatchStartDto>& matchData):
-        BaseScreen(kit, wasClosed),
+LobbyScreen::LobbyScreen(Camera& cam, ResourceManager& resource, bool& wasClosed, Client& client,
+                         bool isOwner, shared_ptr<MatchStartDto>& matchData):
+        BaseScreen(cam, resource, wasClosed),
         client(client),
         isOwner(isOwner),
-        matchData(matchData),
-        startButton(
-                BUTTON_FILE,
-                RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                              Vector2D(0.5, 0.5)),
-                [this]() { OnStartButtonPressed(); }, Color(40, 40, 40), 4),
-        startButtonText("START", 20,
-                        RectTransform(Vector2D(0, -130), Vector2D(250, 80), Vector2D(0.5, 1),
-                                      Vector2D(0.5, 0.5)),
-                        ColorExtension::White(), 5),
-        waitingTest("Waiting the host to start the match", 45,
-                    RectTransform(Vector2D(0, 0), Vector2D(800, 150), Vector2D(0.5, 0.5),
-                                  Vector2D(0.5, 0.5)),
-                    ColorExtension::White(), 5) {}
+        matchData(matchData) {
+
+    startButton = guiManager.CreateButton(RectTransform(Vector2D(0, -130), Vector2D(250, 80),
+                                                        Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
+                                          4, [this]() { OnStartButtonPressed(); });
+
+    startButtonText = guiManager.CreateText(RectTransform(Vector2D(0, -130), Vector2D(250, 80),
+                                                          Vector2D(0.5, 1), Vector2D(0.5, 0.5)),
+                                            5, "START", 20);
+
+    waitingText = guiManager.CreateText(RectTransform(Vector2D(0, 0), Vector2D(800, 150),
+                                                      Vector2D(0.5, 0.5), Vector2D(0.5, 0.5)),
+                                        5, "Waiting the host to start the match", 20);
+}
 
 LobbyScreen::~LobbyScreen() = default;
 
 void LobbyScreen::OnStartButtonPressed() {
-    gameKit.PlayButtonSFX();
-    startButton.SetInteractable(false);
+    audioPlayer.PlayButtonSFX();
+    startButton->SetInteractable(false);
 
     client.StartMatch();
     bool startSuccess;
     LoadingScreen loading(
-            gameKit, wasClosed,
+            cam, resource, wasClosed,
             [this, &startSuccess]() {
                 std::shared_ptr<ResultStartingMatch> startResult = nullptr;
                 if (client.TryRecvNetworkMsg(startResult)) {
@@ -45,7 +45,7 @@ void LobbyScreen::OnStartButtonPressed() {
         return;
 
     if (!startSuccess) {
-        startButton.SetInteractable(true);
+        startButton->SetInteractable(true);
     } else {
         waitingToStart = true;
     }
@@ -54,24 +54,21 @@ void LobbyScreen::OnStartButtonPressed() {
 void LobbyScreen::InitRun() {
     if (!isOwner) {
         waitingToStart = true;
-        startButton.SetVisible(false);
-        startButtonText.SetVisible(false);
+        startButton->SetVisible(false);
+        startButtonText->SetVisible(false);
     }
 
-    waitingTest.SetVisible(!isOwner);
+    waitingText->SetVisible(!isOwner);
 }
 
-void LobbyScreen::TakeInput(SDL_Event event) {
-    ButtonsManager::GetInstance().HandleEvent(event, cam);
-}
+void LobbyScreen::TakeInput(SDL_Event event) { guiManager.HandleEvent(event, cam); }
 
-void LobbyScreen::Update(float deltaTime) {
+void LobbyScreen::Update([[maybe_unused]] float deltaTime) {
     if (waitingToStart) {
         if (client.TryRecvNetworkMsg(matchData)) {
             running = false;
         }
     }
 
-    TweenManager::GetInstance().Update(deltaTime);
-    GUIManager::GetInstance().Draw(cam);
+    guiManager.Draw(cam);
 }

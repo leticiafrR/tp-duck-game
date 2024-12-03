@@ -3,6 +3,8 @@
 ResourceManager::ResourceManager() { root = dataCache.GetData(SHEET_DATA_PATH + RESOURCE_ROOT); }
 ResourceManager::~ResourceManager() = default;
 
+AudioCache& ResourceManager::GetAudioCache() { return audioCache; }
+
 const MenuData& ResourceManager::GetMenuData() {
     if (!menuData.has_value()) {
         auto dataNode = dataCache.GetData(SHEET_DATA_PATH + root["menu"].as<std::string>());

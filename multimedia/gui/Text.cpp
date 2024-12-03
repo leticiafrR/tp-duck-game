@@ -20,6 +20,8 @@ void Text::SetTextAndFontSize(const string& newText, int fontSize) {
     SetFontSize(fontSize);
 }
 
+void Text::SetActive(bool active) { SetVisible(active); }
+
 void Text::Draw(Camera& cam) {
     if (text.size() == 0 || !visible) {
         return;

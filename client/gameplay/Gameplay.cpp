@@ -5,8 +5,13 @@ void Gameplay::InitPlayers(const MatchStartDto& matchData, const Snapshot& first
 }
 
 void Gameplay::InitMap(GameSceneDto mapData) {
-    MapThemeData& themeData = resourceManager.GetMapThemeData(mapData.theme);
+    MapThemeData& themeData = resource.GetMapThemeData(mapData.theme);
     mapBg.SetFileName(themeData.bgfile);
+
+    for (const auto& it: mapData.boxesPoints) {
+        std::cout << "Box Spawn\n";
+        boxesController.SpawnBox(it.first, it.second);
+    }
 
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
@@ -51,6 +56,11 @@ void Gameplay::UpdateGame(const Snapshot& snapshot) {
         std::cout << "Throwable Despawn\n";
         throwablesController.DespawnThrowable(it);
     }
+
+    for (const auto& it: snapshot.boxesDespawns) {
+        std::cout << "Box Despawn\n";
+        boxesController.DespawnBox(it);
+    }
 }
 
 void Gameplay::TakeSnapshots(Callback OnLastSnapshot) {
@@ -73,6 +83,7 @@ void Gameplay::DrawGameWorld(float deltaTime) {
         it.Draw(cam);
     }
 
+    boxesController.Draw(cam);
     bulletsController.Draw(deltaTime, cam);
     throwablesController.Draw(deltaTime, cam);
 
@@ -93,38 +104,40 @@ void Gameplay::InitGUI() {
     }
 }
 
-Gameplay::Gameplay(Client& cl, GameKit& gameKit, bool& wasClosed, MatchStartDto matchData,
-                   GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial):
-        BaseScreen(gameKit, wasClosed),
+Gameplay::Gameplay(Client& cl, Camera& cam, ResourceManager& resource, bool& wasClosed,
+                   MatchStartDto matchData, GameSceneDto mapData, Snapshot firstSnapshot,
+                   bool isInitial):
+        BaseScreen(cam, resource, wasClosed),
         client(cl),
         isInitial(isInitial),
-        camController(gameKit.GetCamera()),
+        camController(cam),
         mapBg(Transform(Vector2D::Zero(), Vector2D(250, 250))),
-        fadePanel(RectTransform(Transform(Vector2D(0, 0), Vector2D(2000, 2000))),
-                  ColorExtension::Black().SetAlpha(0), 20),
-        fadePanelTween(fadePanel, ColorExtension::Black().SetAlpha(255), 0.6f,
-                       [this]() { running = false; }),
         controls(this->client),
-        resourceManager(gameKit.GetResourceManager()),
-        audioManager(gameKit.GetAudioManager()),
-        throwablesController(resourceManager),
-        collectablesController(resourceManager),
-        bulletsController(resourceManager, audioManager),
-        ducksController(client.GetLocalID(), camController, resourceManager, audioManager) {
+        throwablesController(resource),
+        collectablesController(resource),
+        bulletsController(resource, audioPlayer),
+        ducksController(client.GetLocalID(), camController, resource, audioPlayer),
+        gui(guiManager, resource.GetDuckData()),
+        showColorsPanel(guiManager) {
+
+    Image* fadePanel = guiManager.CreateImage(RectTransform(Vector2D(0, 0), Vector2D(2000, 2000)),
+                                              20, ColorExtension::Empty());
+    fadePanelTween =
+            ImageTween(fadePanel, ColorExtension::Black(), 0.6f, [this]() { running = false; });
 
     InitPlayers(matchData, firstSnapshot);
     InitMap(mapData);
 
     controls.SetSecondPlayer(ducksController.HasSecondPlayer());
 
-    string themeMusic = resourceManager.GetMapThemeData(mapData.theme).bgMusicFile;
-    audioManager.PlayMusic(themeMusic);
+    string themeMusic = resource.GetMapThemeData(mapData.theme).bgMusicFile;
+    audioPlayer.PlayMusic(themeMusic);
 
     UpdateGame(firstSnapshot);
     InitGUI();
 }
 
-Gameplay::~Gameplay() { audioManager.StopMusic(); }
+Gameplay::~Gameplay() { audioPlayer.StopMusic(); }
 
 void Gameplay::TakeInput(SDL_Event event) {
     if (finishing)
@@ -141,7 +154,7 @@ void Gameplay::InitRun() {
     finishing = false;
     camController.Reset();
     if (isInitial) {
-        showColorsPanel.Show(ducksController.GetPlayersData(), resourceManager.GetDuckData());
+        showColorsPanel.Show(ducksController.GetPlayersData(), resource.GetDuckData());
     }
 }
 
@@ -153,10 +166,10 @@ void Gameplay::Update(float deltaTime) {
     }
 
     camController.Update(deltaTime);
-    TweenManager::GetInstance().Update(deltaTime);
+    fadePanelTween.Update(deltaTime);
 
     bulletsController.ReapDead();
 
     DrawGameWorld(deltaTime);
-    GUIManager::GetInstance().Draw(cam);
+    guiManager.Draw(cam);
 }

@@ -1,10 +1,13 @@
 #include "Button.h"
 
+#include <vector>
+
 #include "multimedia/ColorExtension.h"
 
 #include "ButtonsManager.h"
 #include "GUIManager.h"
 
+using std::vector;
 
 Button::Button(RectTransform rect, Color color, int layerOrder):
         Image(rect, color, layerOrder),
@@ -12,8 +15,9 @@ Button::Button(RectTransform rect, Color color, int layerOrder):
         normalColor(color),
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
-        interactable(true) {
-    ButtonsManager::GetInstance().AddButton(this);
+        interactable(true),
+        isPressed(false) {
+    // ButtonsManager::GetInstance().AddButton(this);
 }
 
 Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder):
@@ -22,8 +26,9 @@ Button::Button(RectTransform rect, Callback onClick, Color color, int layerOrder
         normalColor(color),
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
-        interactable(true) {
-    ButtonsManager::GetInstance().AddButton(this);
+        interactable(true),
+        isPressed(false) {
+    // ButtonsManager::GetInstance().AddButton(this);
 }
 
 Button::Button(const std::string& filename, RectTransform rect, Callback onClick, Color color,
@@ -33,11 +38,14 @@ Button::Button(const std::string& filename, RectTransform rect, Callback onClick
         normalColor(color),
         pressedColor(ColorExtension::AddValue(color, -50)),
         disabledColor(color.SetAlpha(120)),
-        interactable(true) {
-    ButtonsManager::GetInstance().AddButton(this);
+        interactable(true),
+        isPressed(false) {
+    // ButtonsManager::GetInstance().AddButton(this);
 }
 
-Button::~Button() { ButtonsManager::GetInstance().RemoveButton(this); }
+Button::~Button() {
+    //  ButtonsManager::GetInstance().RemoveButton(this);
+}
 
 bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam) {
     Rect sdlRect = cam.RectTransformToRenderRect(rect);
@@ -45,8 +53,8 @@ bool Button::IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera&
            mouseY < sdlRect.y + sdlRect.h;
 }
 
-bool Button::IsTarget(int mouseX, int mouseY, Camera& cam) {
-    auto graphics = GUIManager::GetInstance().GetGraphics();
+bool Button::IsTarget(int mouseX, int mouseY, Camera& cam, vector<GraphicUI*> graphics) {
+    // auto graphics = GUIManager::GetInstance().GetGraphics();
 
     // Search for the first same layer in th sorted vector
     auto it = std::lower_bound(
@@ -81,14 +89,15 @@ void Button::SetInteractable(bool interactable) {
     this->interactable = interactable;
 }
 
-void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
+void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam,
+                         vector<GraphicUI*> graphics) {
     if (!interactable || !GetVisible())
         return;
 
     bool isMouseOver = IsMouseOver(GetRectTransform(), mouseX, mouseY, cam);
 
     if (isMouseOver)
-        isMouseOver = IsTarget(mouseX, mouseY, cam);
+        isMouseOver = IsTarget(mouseX, mouseY, cam, graphics);
 
     if (e.type == SDL_MOUSEMOTION && !isPressed) {
         SetColor(isMouseOver ? ColorExtension::AddValue(normalColor, -12) : normalColor);
@@ -107,4 +116,10 @@ void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam
         }
         isPressed = false;
     }
+}
+
+// Delete ..
+void Button::HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam) {
+    auto graphics = GUIManager::GetInstance().GetGraphics();
+    HandleEvent(e, mouseX, mouseY, cam, graphics);
 }

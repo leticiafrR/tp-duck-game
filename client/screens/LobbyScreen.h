@@ -2,10 +2,10 @@
 #define LOBBY_SCREEN_H
 #include <memory>
 
-#include "client/BaseScreen.h"
 #include "client/network/Client.h"
 #include "client/tweening/TweenManager.h"
 #include "data/networkMsg.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/audio/AudioManager.h"
@@ -24,10 +24,9 @@ private:
     shared_ptr<MatchStartDto>& matchData;
     bool waitingToStart = false;
 
-    Button startButton;
-
-    Text startButtonText;
-    Text waitingTest;
+    Button* startButton;
+    Text* startButtonText;
+    Text* waitingText;
 
     void OnStartButtonPressed();
 
@@ -36,8 +35,8 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    LobbyScreen(GameKit& kit, bool& wasClosed, Client& client, bool isOwner,
-                shared_ptr<MatchStartDto>& matchData);
+    LobbyScreen(Camera& cam, ResourceManager& resource, bool& wasClosed, Client& client,
+                bool isOwner, shared_ptr<MatchStartDto>& matchData);
 
     ~LobbyScreen();
 };

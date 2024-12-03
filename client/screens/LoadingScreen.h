@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "client/BaseScreen.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/Definitions.h"
@@ -13,14 +13,11 @@
 
 class LoadingScreen: public BaseScreen {
 private:
-    Image bg;
-    Text titleText;
-
     Function<bool> endFunction;
 
 public:
-    LoadingScreen(GameKit& kit, bool& wasClosed, Function<bool> endFunction,
-                  const string& text = "", bool lockerOnly = false);
+    LoadingScreen(Camera& cam, ResourceManager& resource, bool& wasClosed,
+                  Function<bool> endFunction, const string& text = "", bool lockerOnly = false);
 
     ~LoadingScreen();
 

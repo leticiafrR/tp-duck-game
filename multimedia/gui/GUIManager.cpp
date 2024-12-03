@@ -1,9 +1,16 @@
 #include "GUIManager.h"
 
-#include "Button.h"
+#include <string>
+
+using std::string;
 
 GUIManager::GUIManager() = default;
-GUIManager::~GUIManager() = default;
+
+GUIManager::~GUIManager() {
+    for (auto g: graphics) {
+        delete g;
+    }
+}
 
 GUIManager& GUIManager::GetInstance() {
     static GUIManager Instance;
@@ -13,6 +20,7 @@ GUIManager& GUIManager::GetInstance() {
 const std::vector<GraphicUI*>& GUIManager::GetGraphics() { return graphics; }
 
 void GUIManager::AddGUI(GraphicUI* gui) {
+    gui->onLayerChanged = [this]() { CheckSort(); };
     graphics.push_back(gui);
     CheckSort();
 }
@@ -45,6 +53,63 @@ void GUIManager::Draw(Camera& cam) {
     }
 }
 
-// Button* GUIManager::CreateButton() {
+void GUIManager::HandleEvent(const SDL_Event& e, Camera& cam) {
+    buttonsManager.HandleEvent(e, cam, graphics);
+}
 
-// }
+MapBlockGUI* GUIManager::CreateMapBlockGUI(MapThemeData& MapThemeData, const RectTransform& rect,
+                                           float tileSize, int layerOrder) {
+    MapBlockGUI* mapBlock = new MapBlockGUI(MapThemeData, rect, tileSize, layerOrder);
+    AddGUI(mapBlock);
+    return mapBlock;
+}
+
+Image* GUIManager::CreateImage(const string& file, RectTransform rect, Color color,
+                               int layerOrder) {
+    return CreateImage(rect, layerOrder, file, color);
+}
+
+Image* GUIManager::CreateImage(RectTransform rect, int layerOrder, const string& file,
+                               Color color) {
+    Image* image = new Image(file, rect, color, layerOrder);
+    AddGUI(image);
+    return image;
+}
+
+Image* GUIManager::CreateImage(RectTransform rect, Color color, int layerOrder) {
+    Image* image = new Image(rect, color, layerOrder);
+    AddGUI(image);
+    return image;
+}
+
+Image* GUIManager::CreateImage(RectTransform rect, int layerOrder, Color color) {
+    Image* image = new Image(rect, color, layerOrder);
+    AddGUI(image);
+    return image;
+}
+
+Text* GUIManager::CreateText(const string& text, int fontSize, RectTransform rect, Color color,
+                             int layerOrder) {
+    return CreateText(rect, layerOrder, text, fontSize, color);
+}
+
+Text* GUIManager::CreateText(RectTransform rect, int layerOrder, const string& textStr,
+                             int fontSize, Color color) {
+    Text* text = new Text(textStr, fontSize, rect, color, layerOrder);
+    AddGUI(text);
+    return text;
+}
+
+Button* GUIManager::CreateButton(const string& file, RectTransform rect, Callback callback,
+                                 Color color, int layerOrder) {
+    return CreateButton(rect, layerOrder, callback, file, color);
+}
+
+Button* GUIManager::CreateButton(RectTransform rect, int layerOrder, Callback callback,
+                                 const string& file, Color color) {
+    Button* button = new Button(file, rect, callback, color, layerOrder);
+    AddGUI(button);
+    buttonsManager.AddButton(button);
+
+    return button;
+}

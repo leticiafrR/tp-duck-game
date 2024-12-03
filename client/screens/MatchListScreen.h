@@ -6,11 +6,11 @@
 #include <string>
 #include <vector>
 
-#include "client/BaseScreen.h"
 #include "client/network/Client.h"
 #include "client/tweening/ImageTween.h"
 #include "client/tweening/TweenManager.h"
 #include "data/networkMsg.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/gui/Button.h"
@@ -37,19 +37,7 @@ private:
     float currentY = 0;
     float scrollSize = 0;
 
-    Image header;
-    Text titleText;
-
-    Button createButton;
-    Text createButtonText;
-
-    Text joinLobbyText;
-
-    Button refreshButton;
-    Text refreshButtonText;
-
-    Button controlsButton;
-    Text controlsButtonText;
+    Button* refreshButton;
 
     ControlsScreen controls;
 
@@ -69,12 +57,18 @@ private:
 
     void UpdateWidgetListPosition(Vector2D movement);
 
+    void InitHeader();
+    void InitControlsButton();
+    void InitCreateButton();
+    void InitRefreshButton();
+
     void InitRun() override;
     void TakeInput(SDL_Event event) override;
     void Update(float deltaTime) override;
 
 public:
-    MatchListScreen(GameKit& kit, bool& wasClosed, Client& cl, bool& isOwner);
+    MatchListScreen(Camera& cam, ResourceManager& resource, bool& wasClosed, Client& cl,
+                    bool& isOwner);
 
     ~MatchListScreen();
 };

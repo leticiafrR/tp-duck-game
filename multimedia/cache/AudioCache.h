@@ -16,23 +16,21 @@ using std::map;
 using std::string;
 using std::vector;
 
+const int MAX_CHANELS = 20;
+
 class AudioCache {
 private:
-    static map<string, Chunk> sfxCache;
-    static map<string, Music> musicCache;
-
+    Mixer audioMixer;
     map<string, Chunk> sfxMapCache;
     map<string, Music> musicMapCache;
 
 public:
-    // AudioCache() = delete;
-    // ~AudioCache() = delete;
+    AudioCache();
 
-    static Chunk& GetSFXData(const string& filename);
-    static Music& GetMusicData(const string& filename);
+    Chunk& GetAudioSFXData(const string& filename);
+    Music& GetAudioMusicData(const string& filename);
 
-    const Chunk& GetAudioSFXData(const string& filename);
-    const Music& GetAudioMusicData(const string& filename);
+    Mixer& GetMixer();
 
     static void Clear();
 };

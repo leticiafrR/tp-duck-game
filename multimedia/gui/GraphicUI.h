@@ -17,7 +17,11 @@ protected:
     bool canTarget = true;
     bool visible = true;
 
+    Callback onLayerChanged = []() {};
+
 public:
+    friend class GUIManager;
+
     GraphicUI(const RectTransform& rect = RectTransform(), Color color = ColorExtension::White(),
               int layerOrder = 0);
 
@@ -34,7 +38,7 @@ public:
     void SetCanTarget(bool target);
     bool GetCanTarget();
 
-    void SetActive(bool visible);
+    virtual void SetActive(bool visible);
 
     void SetRectTransform(const RectTransform& rect);
     RectTransform& GetRectTransform();

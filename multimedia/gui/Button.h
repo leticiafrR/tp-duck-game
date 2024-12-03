@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
@@ -36,8 +37,12 @@ public:
 
     static bool IsMouseOver(RectTransform rect, float mouseX, float mouseY, Camera& cam);
 
-    bool IsTarget(int mouseX, int mouseY, Camera& cam);
+    bool IsTarget(int mouseX, int mouseY, Camera& cam, vector<GraphicUI*> graphics);
 
+    void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam,
+                     vector<GraphicUI*> graphics);
+
+    // Compatibility, must delete
     void HandleEvent(const SDL_Event& e, int mouseX, int mouseY, Camera& cam);
 
     void SetInteractable(bool interactable);

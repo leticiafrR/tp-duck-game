@@ -29,8 +29,8 @@ using std::vector;
 class ClientRunner {
 private:
     Camera cam;
+    ResourceManager resource;
     bool wasClosed;
-    GameKit gameKit;
 
     PlayerData LoadWinner(Client& client, vector<PlayerData> players);
 

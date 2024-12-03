@@ -1,9 +1,9 @@
 #include "BaseScreen.h"
 
-BaseScreen::BaseScreen(GameKit& gameKit, bool& wasClosed):
-        gameKit(gameKit),
-        cam(gameKit.GetCamera()),
-        menuData(gameKit.GetResourceManager().GetMenuData()),
+BaseScreen::BaseScreen(Camera& cam, ResourceManager& resource, bool& wasClosed):
+        cam(cam),
+        resource(resource),
+        audioPlayer(resource.GetAudioCache()),
         wasClosed(wasClosed),
         running(false) {}
 

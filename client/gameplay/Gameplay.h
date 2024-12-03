@@ -8,10 +8,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "client/BaseScreen.h"
 #include "client/gameplay/CameraController.h"
 #include "client/gameplay/GameplayGUI.h"
 #include "client/network/Client.h"
+#include "client/rendering/BoxesController.h"
 #include "client/rendering/BulletRenderer.h"
 #include "client/rendering/BulletsController.h"
 #include "client/rendering/CollectableRenderer.h"
@@ -26,6 +26,7 @@
 #include "common/playerIdentifier.h"
 #include "multimedia/2d/MapBlock2D.h"
 #include "multimedia/2d/Object2D.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Definitions.h"
 #include "multimedia/gui/GUIManager.h"
 #include "multimedia/gui/Image.h"
@@ -45,23 +46,19 @@ private:
     CameraController camController;
     Object2D mapBg;
 
-    Image fadePanel;
     ImageTween fadePanelTween;
 
     vector<MapBlock2D> mapBlocks;
-    ShowColorsScreen showColorsPanel;
-
-    GameplayGUI gui;
 
     ClientControls controls;
-
-    ResourceManager& resourceManager;
-    AudioManager& audioManager;
 
     ThrowablesController throwablesController;
     CollectablesController collectablesController;
     BulletsController bulletsController;
+    BoxesController boxesController;
     DucksController ducksController;
+    GameplayGUI gui;
+    ShowColorsScreen showColorsPanel;
 
     bool finishing = true;
 
@@ -82,8 +79,8 @@ private:
     void Update(float deltaTime) override;
 
 public:
-    Gameplay(Client& cl, GameKit& gameKit, bool& wasClosed, MatchStartDto matchData,
-             GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial);
+    Gameplay(Client& cl, Camera& cam, ResourceManager& resource, bool& wasClosed,
+             MatchStartDto matchData, GameSceneDto mapData, Snapshot firstSnapshot, bool isInitial);
     ~Gameplay();
 };
 

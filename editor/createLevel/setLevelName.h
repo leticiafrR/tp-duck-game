@@ -5,6 +5,7 @@
 
 #include "client/tweening/TransformTween.h"
 #include "client/tweening/TweenManager.h"
+#include "multimedia/BaseScreen.h"
 #include "multimedia/Camera.h"
 #include "multimedia/ColorExtension.h"
 #include "multimedia/gui/Button.h"
@@ -14,31 +15,24 @@
 
 using std::string;
 
-class SetLevelName {
+class SetLevelName: public BaseScreen {
 private:
     const int MAX_NAME_SIZE = 12;
 
-    Camera& cam;
+    Text* nicknamePlaceHolderText;
+    Text* nicknameText;
 
-    Image bgImage;
-    Image logoImage;
+    Button* startButton;
+    Text* buttonText;
 
-    Image inputBgImage;
-
-    Text nicknamePlaceHolderText;
-
-    Text nicknameText;
-
-    Button startButton;
-    Text buttonText;
-
-    bool running = true;
     string nicknameInput = "";
 
-    void TakeInput();
+    void InitRun() override;
+    void TakeInput(SDL_Event event) override;
+    void Update(float deltaTime) override;
 
 public:
-    explicit SetLevelName(Camera& c);
+    explicit SetLevelName(Camera& c, ResourceManager& resource, bool& wasclosed);
 
     string Render();
 

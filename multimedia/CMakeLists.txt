@@ -5,6 +5,7 @@ target_sources(taller_multimedia
     Rate.cpp
     KeyboardExtension.cpp
     ColorExtension.cpp
+    BaseScreen.cpp
 
     2d/Object2D.cpp
     2d/MapBlock2D.cpp
@@ -38,6 +39,7 @@ target_sources(taller_multimedia
     Definitions.h
     KeyboardExtension.h
     ColorExtension.h
+    BaseScreen.h
     
     2d/Object2D.h
     2d/MapBlock2D.h

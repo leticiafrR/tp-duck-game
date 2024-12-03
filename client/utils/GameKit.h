@@ -1,30 +1,26 @@
-#ifndef GAME_KIT_H
-#define GAME_KIT_H
+// #ifndef GAME_KIT_H
+// #define GAME_KIT_H
 
-#include "client/FrameworkUI.h"
-#include "client/tweening/TweenManager.h"
-#include "multimedia/audio/AudioManager.h"
-#include "multimedia/resource/ResourceManager.h"
+// #include "client/FrameworkUI.h"
+// #include "client/tweening/TweenManager.h"
+// #include "multimedia/audio/AudioManager.h"
+// #include "multimedia/resource/ResourceManager.h"
 
-class GameKit {
-private:
-    Camera& cam;
-    GUIManager& guiManager;
-    AudioManager audioManager;
-    TweenManager& tweenManager;
-    ResourceManager resourceManager;
+// class GameKit {
+// private:
+//     Camera& cam;
+//     AudioManager audioManager;
+//     ResourceManager resourceManager;
 
-public:
-    explicit GameKit(Camera& cam);
-    ~GameKit();
+// public:
+//     explicit GameKit(Camera& cam);
+//     ~GameKit();
 
-    Camera& GetCamera();
-    GUIManager& GetGUIManager();
-    AudioManager& GetAudioManager();
-    TweenManager& GetTweenManager();
-    ResourceManager& GetResourceManager();
+//     Camera& GetCamera();
+//     AudioManager& GetAudioManager();
+//     ResourceManager& GetResourceManager();
 
-    void PlayButtonSFX();
-};
+//     void PlayButtonSFX();
+// };
 
-#endif
+// #endif

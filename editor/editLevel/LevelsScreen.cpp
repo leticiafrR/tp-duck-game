@@ -16,7 +16,7 @@ void LevelsScreen::ReadAvaiableLevels() {
     Vector2D initialPos(0, -100);
     for (std::size_t i = 0; i < allPlatformsNames.size(); ++i) {
 
-        widgets.emplace_back(allPlatformsNames[i], [this](const std::string& name) {
+        widgets.emplace_back(guiManager, allPlatformsNames[i], [this](const std::string& name) {
             selectedLvl = name;
             running = false;
         });
@@ -24,7 +24,10 @@ void LevelsScreen::ReadAvaiableLevels() {
     }
 }
 
-LevelsScreen::LevelsScreen(Camera& cam): cam(cam), selectedLvl() { ReadAvaiableLevels(); }
+LevelsScreen::LevelsScreen(Camera& cam, ResourceManager& resource, bool& wasClosed):
+        BaseScreen(cam, resource, wasClosed), selectedLvl() {
+    ReadAvaiableLevels();
+}
 LevelsScreen::~LevelsScreen() { cam.ClearCacheItem(DUCK_BACKGROUND.c_str()); }
 
 void LevelsScreen::UpdateWidgetListPosition(Vector2D movement) {
@@ -38,29 +41,29 @@ void LevelsScreen::UpdateWidgetListPosition(Vector2D movement) {
 }
 string LevelsScreen::Render(bool lockerOnly) {
 
-    Image bg(DUCK_BACKGROUND.c_str(), RectTransform(Vector2D::Zero(), Vector2D(2133, 1200)),
-             ColorExtension::White(), 0);
+    Image* bg = guiManager.CreateImage(DUCK_BACKGROUND.c_str(),
+                                       RectTransform(Vector2D::Zero(), Vector2D(2133, 1200)),
+                                       ColorExtension::White(), 0);
 
-    bg.SetVisible(!lockerOnly);
-    cam.InitRate();
-    while (running) {
-        cam.Clean();
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    running = false;
-                    return "";
-                case SDL_MOUSEWHEEL:
-                    Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-                    UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
-                    break;
-            }
-            ButtonsManager::GetInstance().HandleEvent(event, cam);
-        }
-        GUIManager::GetInstance().Draw(cam);
-        cam.Render();
-        cam.Delay();
-    }
+    bg->SetVisible(!lockerOnly);
+
+    Run();
+
+    if (wasClosed)
+        return "";
+
     return selectedLvl;
 }
+
+void LevelsScreen::InitRun() {}
+
+void LevelsScreen::TakeInput(SDL_Event event) {
+    switch (event.type) {
+        case SDL_MOUSEWHEEL:
+            Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
+            UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
+            break;
+    }
+    guiManager.HandleEvent(event, cam);
+}
+void LevelsScreen::Update([[maybe_unused]] float deltaTime) { guiManager.Draw(cam); }

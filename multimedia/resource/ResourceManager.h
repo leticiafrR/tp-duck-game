@@ -9,6 +9,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "multimedia/Definitions.h"
+#include "multimedia/cache/AudioCache.h"
 #include "multimedia/cache/YamlDataCache.h"
 
 #include "ResourceConstants.h"
@@ -39,9 +40,13 @@ private:
 
     unordered_map<string, MapThemeData> mapThemesData;
 
+    AudioCache audioCache;
+
 public:
     ResourceManager();
     ~ResourceManager();
+
+    AudioCache& GetAudioCache();
 
     const MenuData& GetMenuData();
 

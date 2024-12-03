@@ -1,17 +1,20 @@
 #include "TransformTween.h"
 
-TransformTween::TransformTween(Transform& t):
-        Tween(1.0f, []() {}),
-        transform(t),
-        startSize(transform.GetSize()),
-        targetSize(transform.GetSize()) {}
+TransformTween::TransformTween(std::optional<Transform*> t): Tween(1.0f, []() {}), transform(t) {
+    if (transform.has_value()) {
+        startSize = transform.value()->GetSize();
+        targetSize = transform.value()->GetSize();
+    }
+}
 
-TransformTween::TransformTween(Transform& transform, Vector2D targetSize, float duration,
+TransformTween::TransformTween(std::optional<Transform*> t, Vector2D targetSize, float duration,
                                OnCompleteCallback onComplete):
-        Tween(duration, onComplete),
-        transform(transform),
-        startSize(transform.GetSize()),
-        targetSize(targetSize) {}
+        Tween(duration, onComplete), transform(t) {
+    if (transform.has_value()) {
+        startSize = transform.value()->GetSize();
+        this->targetSize = targetSize;
+    }
+}
 
 TransformTween::~TransformTween() = default;
 
@@ -22,9 +25,13 @@ void TransformTween::SetTarget(Vector2D targetSize, float duration, OnCompleteCa
 }
 
 void TransformTween::OnInitLoop() {
+    if (!transform.has_value()) {
+        return;
+    }
+
     switch (loopType) {
         case LoopType::Restart:
-            transform.SetSize(startSize);
+            transform.value()->SetSize(startSize);
             break;
         case LoopType::Yoyo:
             changed = false;
@@ -36,6 +43,10 @@ void TransformTween::OnInitLoop() {
 }
 
 void TransformTween::DoTween(float t) {
+    if (!transform.has_value()) {
+        return;
+    }
+
     switch (loopType) {
         case LoopType::Restart:
 
@@ -56,5 +67,5 @@ void TransformTween::DoTween(float t) {
         default:
             break;
     }
-    transform.SetSize(Vector2D::Lerp(startSize, targetSize, t));
+    transform.value()->SetSize(Vector2D::Lerp(startSize, targetSize, t));
 }
