@@ -9,6 +9,7 @@
 
 #include "box/BoxesController.h"
 #include "collectable/CollectablesController.h"
+#include "collectable/CollectablesFactory.h"
 #include "data/command.h"
 #include "event/EventsManager.h"
 #include "map/staticMap.h"
@@ -25,9 +26,11 @@ private:
     std::unordered_map<PlayerID_t, Duck*> players;
     EventsManager eventsManager;
     ProjectilesController projectilesController;
+    CollectablesFactory collectablesFactory;
     CollectablesController collectablesController;
     ThrowablesController throwablesController;
     BoxesController boxesController;
+
 
     void ReapDead();
     void Testing(const Vector2D& posToTest);

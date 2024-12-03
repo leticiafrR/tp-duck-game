@@ -5,6 +5,7 @@
 #include <random>
 
 #include "common/Vector2D.h"
+#include "server/model/collectable/CollectablesFactory.h"
 
 #include "includesCollectables.h"
 
@@ -13,16 +14,11 @@ class CollectableSpawner {
 private:
     const float timeToRespawn;
     std::shared_ptr<float> timer;
-    const Transform spawnPlace;
-    ProjectilesController& projectilesController;
-    const Config& conf;
-
-    TypeItem GetRandomTypeCollectable();
-    std::shared_ptr<Collectable> GetCollectable(TypeItem type);
+    const Vector2D position;
+    CollectablesFactory& factory;
 
 public:
-    CollectableSpawner(const Vector2D& pos, ProjectilesController& projectilesController,
-                       const Config& conf);
+    CollectableSpawner(const Vector2D& pos, CollectablesFactory& collectablesFactory);
     void Update(float deltaTime, Collectables& collectables);
 };
 

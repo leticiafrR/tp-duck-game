@@ -7,6 +7,8 @@
 
 #include "spawning/CollectableSpawner.h"
 #include "spawning/Collectables.h"
+
+#include "CollectablesFactory.h"
 class Transform;
 class Collectable;
 class CollectableEventListener;
@@ -19,12 +21,11 @@ private:
     std::vector<CollectableSpawner> spawners;
 
 public:
-    explicit CollectablesController(ProjectilesController& projectilesController,
-                                    const Config& conf, const std::vector<Vector2D>& positions);
+    explicit CollectablesController(CollectablesFactory& collectablesFactory,
+                                    const std::vector<Vector2D>& positions);
     std::shared_ptr<Collectable> TryCollect(const Transform& collectorSpace,
                                             TypeItem& collectorTyperRef);
-    void AddCollectable(std::shared_ptr<Collectable> obj, const Vector2D& position);
-
+    void AddCollectable(std::shared_ptr<Collectable> obj);
     void RegisterListener(CollectableEventListener* collectableListener);
     void Update(float deltaTime);
 };

@@ -3,13 +3,13 @@
 #include "../physicsConstants.h"
 #include "server/config.h"
 #include "server/model/collectable/CollectablesController.h"
+#include "server/model/collectable/CollectablesFactory.h"
 #include "server/model/projectile/ProjectilesController.h"
-
 #define CANT_FRAGMENTS_BOX_EXPLOTION 10
 
 BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
-                                 const Config& conf):
-        listener(nullptr), conf(conf) {
+                                 CollectablesFactory& factory):
+        factory(factory), listener(nullptr) {
     for (auto& pair: positionsPerBox) {
         boxes.emplace(pair.first, Box(pair.second));
     }
@@ -18,14 +18,13 @@ BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& po
 void BoxesController::RegisterListener(BoxEventListener* l) { listener = l; }
 
 
-void BoxesController::DestroyBox(BoxID_t id, CollectablesController& collectables,
-                                 ProjectilesController& projectiles) {
+void BoxesController::RelaseContent(BoxID_t id, CollectablesController& collectables,
+                                    ProjectilesController& projectiles) {
     std::optional<std::shared_ptr<Collectable>> maybeContent =
-            boxes.find(id)->second.GetContent(projectiles, conf);
+            boxes.find(id)->second.GetContent(factory);
     if (maybeContent.has_value()) {
-        std::cout << "[BOX destroyed]: contengo algo\n";
         if (maybeContent.value() != nullptr) {
-            collectables.AddCollectable(maybeContent.value(), boxes[id].GetTransform().GetPos());
+            collectables.AddCollectable(maybeContent.value());
         } else {
             projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(),
                                         CANT_FRAGMENTS_BOX_EXPLOTION);
@@ -37,9 +36,8 @@ void BoxesController::Update(CollectablesController& collectables,
                              ProjectilesController& projectiles) {
     for (auto it = boxes.begin(); it != boxes.end();) {
         if (it->second.IsDead()) {
-
             std::cout << "una caja habia sido destruida :0 \n";
-            DestroyBox(it->first, collectables, projectiles);
+            RelaseContent(it->first, collectables, projectiles);
             listener->DespawnBox(it->first);
             it = boxes.erase(it);
         } else {

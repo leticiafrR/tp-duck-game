@@ -7,8 +7,10 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
         livePlayers(playersIds.size()),
         map(sceneName),
         projectilesController(),
-        collectablesController(projectilesController, conf, map.GetCollectableSpawnPoints()),
-        boxesController(map.GetBoxes(), conf) {
+        collectablesFactory(projectilesController, conf),
+        collectablesController(collectablesFactory, map.GetCollectableSpawnPoints()),
+        boxesController(map.GetBoxes(), collectablesFactory) {
+
     eventsManager.SendProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
     eventsManager.SendPlayersListeners(players);

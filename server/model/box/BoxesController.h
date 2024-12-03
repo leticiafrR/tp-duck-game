@@ -14,17 +14,18 @@ class CollectablesController;
 class Config;
 class BoxesController {
 private:
+    CollectablesFactory& factory;
     std::unordered_map<BoxID_t, Box> boxes;
     BoxEventListener* listener;
-    const Config& conf;
+    void RelaseContent(BoxID_t id, CollectablesController& collectables,
+                       ProjectilesController& projectiles);
 
 public:
     explicit BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
-                             const Config& conf);
+                             CollectablesFactory& collectablesFactory);
     void RegisterListener(BoxEventListener* l);
-    void DestroyBox(BoxID_t id, CollectablesController& collectables,
-                    ProjectilesController& projectiles);
-    void Update(CollectablesController& collectables, ProjectilesController& projectiles);
+    void Update(CollectablesController& collectablesController,
+                ProjectilesController& projectilesController);
     std::unordered_map<BoxID_t, Box>& GetBoxes();
 };
 

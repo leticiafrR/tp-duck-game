@@ -53,6 +53,8 @@ target_sources(taller_server
     model/box/BoxesController.cpp
     model/box/Box.cpp
 
+    model/collectable/CollectablesFactory.cpp
+
     #network
     network/sender.cpp
     network/receiver.cpp
@@ -121,6 +123,8 @@ target_sources(taller_server
 
     model/box/BoxesController.h
     model/box/Box.h
+
+    model/collectable/CollectablesFactory.h
 
     network/serverProtocol.h
     network/messageSender.h

@@ -9,6 +9,7 @@
 
 #include "data/snapshot.h"
 #include "server/model/collectable/Collectable.h"
+#include "server/model/collectable/CollectablesFactory.h"
 
 class ProjectilesController;
 class Config;
@@ -18,18 +19,10 @@ private:
     uint8_t life;
     bool isDead;
 
-    TypeItem GetRandomTypeContent();
-    std::shared_ptr<Collectable> GetSelectionCollectable(TypeItem type,
-                                                         ProjectilesController& projectiles,
-                                                         const Config& conf);
-    void Explote();
-    void ReleaseRandomContent();
-
 public:
     Box() = default;
     explicit Box(const Vector2D& pos);
-    std::optional<std::shared_ptr<Collectable>> GetContent(ProjectilesController& projectiles,
-                                                           const Config& conf);
+    std::optional<std::shared_ptr<Collectable>> GetContent(CollectablesFactory& factory);
     const Transform& GetTransform() const { return mySpace; }
     void ReceiveDamage(uint8_t damage);
     bool IsDead() const { return isDead; }
