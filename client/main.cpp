@@ -9,7 +9,13 @@
 
 using namespace SDL2pp;  // NOLINT
 
-int main() {
+int main(int argc, char const* argv[]) {
+    if (argc < 3)
+        return EXIT_FAILURE;
+
+    auto hostname = argv[1];
+    auto servname = argv[2];
+
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDLMixer sdlMixer(MIX_INIT_MP3 | MIX_INIT_OGG);
     SDLTTF ttf;
@@ -21,7 +27,7 @@ int main() {
     render.SetDrawBlendMode(SDL_BlendMode::SDL_BLENDMODE_BLEND);  // Allows transparency
     render.SetDrawColor(100, 100, 100, 255);
 
-    ClientRunner runner(render, 60);
+    ClientRunner runner(render, 60, hostname, servname);
     runner.Run();
-    std::cout << "Program end OK!\n";
+    std::cout << "Client finished\n";
 }

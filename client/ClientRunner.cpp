@@ -94,8 +94,11 @@ void ClientRunner::ShowResultsScreen(std::optional<PlayerData> winner,
     GameStatusScreen(cam, resource, wasClosed, players, gameResults, duckData, winner).Run();
 }
 
-ClientRunner::ClientRunner(Renderer& render, int fps):
-        cam(std::move(render), 70, Rate(fps)), wasClosed(false) {}
+ClientRunner::ClientRunner(Renderer& render, int fps, const char* hostName, const char* servName):
+        cam(std::move(render), 70, Rate(fps)),
+        wasClosed(false),
+        hostName(hostName),
+        servName(servName) {}
 
 ClientRunner::~ClientRunner() = default;
 
@@ -181,7 +184,7 @@ void ClientRunner::Run() {
         return;
 
     try {
-        Client client("8080", "localhost", nickname);
+        Client client(servName, hostName, nickname);
         PlayConnected(client);
 
     } catch (std::exception& e) {

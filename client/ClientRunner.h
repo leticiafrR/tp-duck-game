@@ -27,6 +27,8 @@ private:
     Camera cam;
     ResourceManager resource;
     bool wasClosed;
+    const char* hostName;
+    const char* servName;
 
     void LoadWinner(Client& client, vector<PlayerData> players, std::optional<PlayerData>& winner);
 
@@ -48,7 +50,7 @@ private:
     void PlayConnected(Client& client);
 
 public:
-    ClientRunner(Renderer& render, int fps);
+    ClientRunner(Renderer& render, int fps, const char* hostName, const char* servName);
     ~ClientRunner();
 
     void Run();
