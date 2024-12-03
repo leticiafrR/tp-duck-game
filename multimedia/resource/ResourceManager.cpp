@@ -27,7 +27,7 @@ MapThemeData& ResourceManager::GetMapThemeData(string theme) {
     }
 
     if (!mapThemesData.contains(theme)) {
-        std::cout << theme << "\n";
+        std::cerr << "Undefined theme resource: " << theme << "\n";
         throw ResourceUndefined();
     }
 
@@ -48,7 +48,7 @@ CollectableData ResourceManager::GetCollectableData(TypeItem type) {
     }
 
     if (!collectablesMap.contains(type)) {
-        std::cout << (int)type << "\n";
+        std::cerr << "Undefined collectable resource: " << (int)type << "\n";
         throw ResourceUndefined();
     }
 
@@ -61,7 +61,7 @@ ProjectileData ResourceManager::GetProjectilData(TypeProjectile type) {
     }
 
     if (!projectilesMap.contains(type)) {
-        std::cout << (int)type << "\n";
+        std::cerr << "Undefined projectile resource: " << (int)type << "\n";
         throw ResourceUndefined();
     }
 
