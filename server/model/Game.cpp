@@ -59,7 +59,7 @@ void GameWorld::ReapDead() {
 
 void GameWorld::QuitPlayer(PlayerID_t id) {
     if (players.contains(id)) {
-        players[id]->MarkAsDead();
+        players[id]->Quit();
     }
 }
 

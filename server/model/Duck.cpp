@@ -283,9 +283,7 @@ void Duck::HandleOutOfBounds(float displacement) {
         mySpace.Move(add);
     } else {
         std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
-        myState = DuckState::DEAD_BY_FALLING;
-        TriggerEvent();
-        MarkAsDead();
+        Quit();
     }
 }
 
@@ -298,4 +296,10 @@ void Duck::TryEquip() {
         itemOnHand.reset();
         TriggerEvent();
     }
+}
+
+void Duck::Quit() {
+    myState = DuckState::DEAD_BY_FALLING;
+    TriggerEvent();
+    MarkAsDead();
 }

@@ -83,6 +83,7 @@ public:
 
     void RegistListener(PlayerEventListener* listener);
     void Update(const StaticMap& map, float deltaTime);
+    void Quit();
 
     const Flip& GetFlip() const;
     Vector2D GetLookVector(bool justLaterals = false);
