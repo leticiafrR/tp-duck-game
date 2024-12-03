@@ -4,7 +4,7 @@ shooting_inclination:
 
 projectiles_per_shot:
   basic: 1
-  granade: 5
+  granade: 10
   box: 6
 
 cooldown:
