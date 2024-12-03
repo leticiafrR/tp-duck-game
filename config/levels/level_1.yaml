@@ -22,7 +22,7 @@ players_spawn_points:
 box_spawn_points:
   - x: 48
     y: 5
-  - x: -18
+  - x: -30
     y: 10
   
 platforms:

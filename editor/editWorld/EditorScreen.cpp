@@ -270,46 +270,6 @@ bool EditorScreen::Render() {
     Run();
 
     return !wasClosed;
-
-    // cam.InitRate();
-    // while (running) {
-    //     cam.Clean();
-    //     SDL_Event event;
-    //     while (SDL_PollEvent(&event)) {
-    //         switch (event.type) {
-    //             case SDL_QUIT:
-    //                 running = false;
-    //                 return false;
-    //             case SDL_MOUSEBUTTONDOWN:
-    //                 HandleMouseClick(event.button);
-    //                 break;
-    //             case SDL_MOUSEWHEEL:
-    //                 Vector2D wheelDir = Vector2D::Down() * event.wheel.y;
-    //                 UpdateWidgetListPosition(wheelDir * cam.GetRateDeltatime() * 2500);
-    //                 break;
-    //         }
-
-    //         ButtonsManager::GetInstance().HandleEvent(event, cam);
-    //     }
-
-    //     playersPoint.Draw(cam);
-    //     collectablesPoint.Draw(cam);
-    //     DrawOptions();
-    //     DrawGameWorld();
-    //     TakeInput();
-    //     if (selected.has_value()) {
-    //         selected.value().Draw(cam);
-    //     }
-    //     if (spawnPoint.has_value()) {
-    //         spawnPoint.value().Draw(cam);
-    //     }
-    //     GUIManager::GetInstance().Draw(cam);
-
-    //     cam.Render();
-    //     cam.Delay();
-    // }
-    // GUIManager::GetInstance().Clear();
-    // return true;
 }
 
 
