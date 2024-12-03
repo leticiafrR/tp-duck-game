@@ -60,6 +60,7 @@ const std::string AK47_STR = "ak47";
 const std::string DUELING_PISTOL_STR = "dueling_pistol";
 const std::string PEW_PEW_LASER_STR = "pew_pew_laser";
 const std::string BOX_STR = "box";
+const std::string TIME_STR = "time";
 
 const int BANANA_INDEX = 0;
 const int LASER_RIFLE_INDEX = 1;
@@ -89,6 +90,7 @@ const int BASIC_INDEX = 4;
 const int TO_EXPLOTE_GRANADA_INDEX = 5;
 const int SUPER_INDEX = 3;
 const int HIPER_INDEX = 4;
+const int TIME_INDEX = 1;
 
 
 /***********************************PATHS**************************************** */

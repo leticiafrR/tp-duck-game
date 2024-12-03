@@ -57,6 +57,7 @@ void Config::setObjectConfig() {
     boxInfo.emplace_back(config[BOX_STR][LIFE_STR].as<int>());
 
     collectableInfo.emplace_back(config[COLLECTABLE_STR][SIZE_STR].as<int>());
+    collectableInfo.emplace_back(config[COLLECTABLE_STR][TIME_STR].as<int>());
 }
 
 void Config::setAWeapon(const std::string& name, const YAML::Node& config) {
@@ -180,3 +181,4 @@ uint8_t Config::getFragmentBox() const { return projectilesPerShot[BOX_INDEX]; }
 int Config::getObjectSize() const { return collectableInfo[SIZE_INDEX]; }
 int Config::getBoxSize() const { return boxInfo[SIZE_INDEX]; }
 int Config::getBoxLife() const { return boxInfo[LIFE_INDEX]; }
+int Config::getRespawnTime() const { return collectableInfo[TIME_INDEX]; }

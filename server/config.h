@@ -73,7 +73,7 @@ public:
     int getObjectSize() const;
     int getBoxSize() const;
     int getBoxLife() const;
-
+    int getRespawnTime() const;
     /****************************AMMO*********************************** */
     uint16_t getLaserRifleAmmo() const;
     uint16_t getBananaAmmo() const;
