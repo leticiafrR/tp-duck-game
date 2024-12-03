@@ -48,6 +48,7 @@ target_sources(taller_server
 
     model/throwableCollectable/BananaCollectable.cpp
     model/throwableCollectable/GrenadeCollectable.cpp
+    model/throwableCollectable/ThrowableCollectable.cpp
 
     model/box/BoxesController.cpp
     model/box/Box.cpp
