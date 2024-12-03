@@ -2,12 +2,12 @@
 # Duck Game - Taller de programación I – 7542/9508 - FIUBA
 
 ## Authors
-| Nombre | Apellido |
-| ------ | -------- |
-| Candela | Matelica |
-| Josué | Martel |
-| Leticia | Figueroa |
-| Andrea | Figueroa |
+| Nombre | Apellido |Mail FIUBA | Usuario Github|
+| ------ | -------- |-----------||-----------|
+| Candela | Matelica |cmatelica@fi.uba.ar|[candematelica](https://github.com/candematelica)|
+| Josué | Martel |nmartel@fi.uba.ar | [josValentin-fiuba](https://github.com/josValentin-fiuba)|
+| Leticia | Figueroa |lfigueroar@fi.uba.ar|[leticiafrR](https://github.com/leticiafrR)|
+| Andrea | Figueroa |afigueroa@fi.uba.ar|[AndreaFigueroaR](https://github.com/AndreaFigueroaR)|
 
 
 <!-- # Ejemplo de CMAKE para el TP Final
