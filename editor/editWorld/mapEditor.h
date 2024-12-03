@@ -26,7 +26,6 @@ private:
     int platformsCounter;
     string fileName;
     string filePath;
-    ThemeInfo parser;
 
 public:
     MapEditor();

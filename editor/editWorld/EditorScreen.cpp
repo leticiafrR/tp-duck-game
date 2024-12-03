@@ -126,7 +126,8 @@ void EditorScreen::UpdateWidgetListPosition(Vector2D movement) {
 void EditorScreen::InitMap(GameSceneDto mapData) {
     for (size_t i = 0; i < mapData.groundBlocks.size(); i++) {
         auto groundData = mapData.groundBlocks[i];
-        mapBlocks.emplace_back(resource.GetMapThemeData(FOREST_KEY), groundData.mySpace);
+        mapBlocks.emplace_back(resource.GetMapThemeData(writer.GetGameScene().theme),
+                               groundData.mySpace);
 
         bool left =
                 groundData.visibleEdges.find(VISIBLE_EDGES::LEFT) != groundData.visibleEdges.end();
@@ -190,7 +191,8 @@ void EditorScreen::TakeAPlatform() {
     Vector2D worldPos = cam.ScreenToWorldPoint(Vector2D(mouseX, mouseY));
     optional<GroundDto> info = writer.TakePltaform(worldPos);
     if (info.has_value()) {
-        selected = MapBlock2D(resource.GetMapThemeData(FOREST_KEY), info.value().mySpace);
+        selected = MapBlock2D(resource.GetMapThemeData(writer.GetGameScene().theme),
+                              info.value().mySpace);
         bool left = false, right = false, top = false, bottom = false;
         set<VISIBLE_EDGES> edges = info.value().visibleEdges;
         for (auto& i: edges) {
@@ -225,7 +227,8 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
                 Vector2D size = block.GetTransform().GetSize();
                 vector<string> edges = block.GetEdges();
                 writer.AddAPlataform(worldPos.x, worldPos.y, size.x, size.y, edges);
-                mapBlocks.emplace_back(resource.GetMapThemeData(FOREST_KEY), block.GetTransform());
+                mapBlocks.emplace_back(resource.GetMapThemeData(writer.GetGameScene().theme),
+                                       block.GetTransform());
 
                 bool left = false, right = false, top = false, bottom = false;
 
