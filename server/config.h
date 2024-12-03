@@ -101,5 +101,7 @@ public:
 
     /********************PROJECTILES PER SHOT**************************** */
     uint8_t getProjectilePerShotBasic() const;
+    uint8_t getFragmentGranade() const;
+    uint8_t getFragmentBox() const;
 };
 #endif

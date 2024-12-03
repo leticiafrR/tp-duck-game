@@ -4,6 +4,8 @@ shooting_inclination:
 
 projectiles_per_shot:
   basic: 1
+  granade: 5
+  box: 6
 
 cooldown:
   none: 0
@@ -11,7 +13,7 @@ cooldown:
   short: 1
   medium: 2.5
   long: 7.5
-  to_explote_granada: 4
+  to_explote_granade: 4
 
 damage:
   minimun: 10
@@ -30,7 +32,7 @@ banana:
   scope: 13
   ammo: 1
 
-granada:
+granade:
   scope: 25
   ammo: 1
 

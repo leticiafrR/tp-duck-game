@@ -16,6 +16,8 @@ void Config::setShotConfig(const YAML::Node& config) {
     inclinations.emplace_back(config[SHO0TING_INCLINATION_STR][LASER_RIFLE_STR].as<float>());
 
     projectilesPerShot.emplace_back(config[PROJECTILE_PER_SHOT_STR][BASIC_STR].as<uint8_t>());
+    projectilesPerShot.emplace_back(config[PROJECTILE_PER_SHOT_STR][BOX_STR].as<uint8_t>());
+    projectilesPerShot.emplace_back(config[PROJECTILE_PER_SHOT_STR][GRANADE_STR].as<uint8_t>());
 }
 
 void Config::setAvaiableLevels() {
@@ -86,7 +88,7 @@ void Config::setWeaponsConfig() {
     setDamage(config[DAMAGE_STR]);
     setAWeapon(BANANA_STR, config);
     setAWeapon(LASER_RIFLE_STR, config);
-    setAWeapon(GRANADA_STR, config);
+    setAWeapon(GRANADE_STR, config);
     setAWeapon(COWBOY_PISTOL_STR, config);
     setAWeapon(AK47_STR, config);
     setAWeapon(DUELING_PISTOL_STR, config);
@@ -132,8 +134,8 @@ uint16_t Config::getCowboyPistolAmmo() const {
     return (uint16_t)weapons[COWBOY_PISTOL_INDEX][AMMO_INDEX];
 }
 int Config::getCowboyPistolScope() const { return (int)weapons[COWBOY_PISTOL_INDEX][SCOPE_INDEX]; }
-uint16_t Config::getGranadaAmmo() const { return (uint16_t)weapons[GRANADA_INDEX][AMMO_INDEX]; }
-int Config::getGranadaScope() const { return (int)weapons[GRANADA_INDEX][SCOPE_INDEX]; }
+uint16_t Config::getGranadaAmmo() const { return (uint16_t)weapons[GRANADE_INDEX][AMMO_INDEX]; }
+int Config::getGranadaScope() const { return (int)weapons[GRANADE_INDEX][SCOPE_INDEX]; }
 uint16_t Config::getAK47Ammo() const { return (uint16_t)weapons[AK47_INDEX][SCOPE_INDEX]; }
 int Config::getAK47Scope() const { return (int)weapons[AK47_INDEX][AMMO_INDEX]; }
 uint16_t Config::getDuelingPistolAmmo() const {
@@ -177,3 +179,5 @@ float Config::getLaserRifleInclination() const { return inclinations[LASER_RIFLE
 
 /********************PROJECTILES PER SHOT**************************** */
 uint8_t Config::getProjectilePerShotBasic() const { return projectilesPerShot[NONE_INDEX]; }
+uint8_t Config::getFragmentGranade() const { return projectilesPerShot[GRANADE_INDEX]; }
+uint8_t Config::getFragmentBox() const { return projectilesPerShot[BOX_INDEX]; }
