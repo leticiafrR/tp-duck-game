@@ -105,9 +105,9 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
     Vector2D initialPos(-200, -100);
     int moveDelta = 100;
     for (size_t i = 0; i < groundBlocks.size(); i++) {
-        basicsPlatform.emplace_back(guiManager, resourceManager.GetMapThemeData(FOREST_KEY),
-                                    groundBlocks[i],
-                                    [this](MapBlock2D blockMap) { selected = blockMap; });
+        basicsPlatform.emplace_back(
+                guiManager, resourceManager.GetMapThemeData(writer.GetGameScene().theme),
+                groundBlocks[i], [this](MapBlock2D blockMap) { selected = blockMap; });
         Vector2D movement = Vector2D::Down() * i * moveDelta + initialPos;
 
         basicsPlatform.back().MoveContent(movement);

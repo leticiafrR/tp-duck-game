@@ -12,6 +12,8 @@ target_sources(taller_editor
     editWorld/EditorScreen.cpp
     editWorld/SpawnPointWidget.cpp
     ExitOptions.cpp
+    selectTheme/themesScreen.cpp 
+    selectTheme/themeWidget.cpp 
     main.cpp
     PUBLIC
     # .h files
@@ -25,4 +27,6 @@ target_sources(taller_editor
     editWorld/EditorScreen.h
     editWorld/SpawnPointWidget.h
     ExitOptions.h
+    selectTheme/themesScreen.h
+    selectTheme/themeWidget.h
     )

@@ -50,13 +50,13 @@ const string BLOCK_MAP = "tile_set.png";
 const string BLOCK_MAP_YAML = "tile_set.yaml";
 const string WHITE_DUCK = "white_duck.png";
 const string BOX_IMG = "box.jpg";
-const string TILE_KEY = "tile";
+const string TILE_KEY = "tile_set_file";
 const string FOREST_KEY = "FOREST";
 const string TILE_DATA_KEY = "tile_data";
 const string AVAILABLE_THEMES_PATH = "themes.yaml";
-const string BACKGROUND_KEY = "bg";
+const string BACKGROUND_KEY = "bg_file";
 
-
+const string THEME_PATH = "/etc/duckGame_g6/map_themes.yaml";
 const int PLAYERS_SPAWN_POINT = 0;
 const int COLLECTABLE_SPAWN_POINT = 1;
 const int BOX_SPAWN_POINT = 2;

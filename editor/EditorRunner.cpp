@@ -5,6 +5,7 @@
 #include "createLevel/setLevelName.h"
 #include "editLevel/LevelsScreen.h"
 #include "editWorld/EditorScreen.h"
+#include "selectTheme/themesScreen.h"
 
 #include "ExitOptions.h"
 #include "MenuScreen.h"
@@ -24,6 +25,7 @@ void EditorRunner::run() {
         } else if (option == CREATE_LVL) {
             SetLevelName newLvl(cam, resource, wasClosed);
             writeArchive.AddFileName(newLvl.Render());
+            writeArchive.AddTheme(ThemesScreen(cam, resource, wasClosed).Render());
         } else {
             LevelsScreen listLvls(cam, resource, wasClosed);
             string name = listLvls.Render();
@@ -31,6 +33,7 @@ void EditorRunner::run() {
                 return;
             }
             writeArchive = MapEditor(name);
+            writeArchive.AddTheme(ThemesScreen(cam, resource, wasClosed).Render());
         }
         EditorScreen runner(cam, writeArchive, resource, wasClosed);
         if (!runner.Render()) {

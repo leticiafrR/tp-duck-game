@@ -199,7 +199,6 @@ vector<GroundDto> MapEditor::GetPlatforms() {
     return grounds;
 }
 GameSceneDto MapEditor::GetGameScene() {
-
     return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms(),
                         GetBoxes());
 }
