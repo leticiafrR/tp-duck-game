@@ -1,6 +1,8 @@
 
 # Duck Game - Taller de programación I – 7542/9508 - FIUBA
 
+## Presentation
+This project presents the implementation of a simplified version of *Duck Game*, originally developed by Landon Podbielski in 2014. 
 ## Authors
 | Name | Surname | Mail FIUBA | User Github|
 | ------ | -------- | ----------- | ----------- |
@@ -9,6 +11,12 @@
 | Leticia | Figueroa |lfigueroar@fi.uba.ar|[leticiafrR](https://github.com/leticiafrR)|
 | Andrea | Figueroa |afigueroa@fi.uba.ar|[AndreaFigueroaR](https://github.com/AndreaFigueroaR)|
 
+
+## Credits 
+This implementation utilizes *sockets*, *threads*, and *queues* provided by the head of practical work of the course, distributed under the GPL v2 license.
+
+- [Sockets](https://github.com/eldipa/sockets-en-cpp)  
+- [Threads and Queues](https://github.com/eldipa/hands-on-threads)
 
 <!-- # Ejemplo de CMAKE para el TP Final
 
