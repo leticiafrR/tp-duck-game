@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <random>
 #include <set>
 
 #include <yaml-cpp/yaml.h>
@@ -128,9 +129,31 @@ void StaticMap::loadPlatforms(const YAML::Node& config, const std::string& platf
     AddGround(GroundDto(Transform(Vector2D(x, y), Vector2D(w, h), 0), edges));
 }
 
+std::string StaticMap::GetRandomTheme() {
+    YAML::Node config = YAML::LoadFile(THEME_PATH);
+    std::vector<string> themes;
+    for (YAML::const_iterator it = config.begin(); it != config.end(); ++it) {
+        themes.emplace_back(it->first.as<std::string>());
+        std::cout << it->first.as<std::string>() << std::endl;
+    }
+
+    int size = themes.size();
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<int> distribucion(0, size);
+
+
+    int index = distribucion(gen);
+
+    return themes[index];
+}
+
 void StaticMap::SetTheLevel(const std::string& lvelName) {
     YAML::Node config = YAML::LoadFile(RELATIVE_LEVEL_PATH + lvelName + YAML_FILE);
-    theme = config[THEME_STR].as<std::string>();
+    // theme = config[THEME_STR].as<std::string>();
+    theme = GetRandomTheme();
     size_t xSize = config[FULL_MAP_STR][X_STR].as<size_t>();
     size.emplace_back(xSize);
     size_t ySize = config[FULL_MAP_STR][Y_STR].as<size_t>();
