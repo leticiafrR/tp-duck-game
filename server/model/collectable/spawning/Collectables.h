@@ -11,9 +11,7 @@ class Collectables {
 private:
     CollectableEventListener* listener;
     CollectableID_t unicID;
-    std::unordered_map<CollectableID_t, CollectableWrapper>
-            collectablesWrapps;  // agregar liberacion de memoria del collectable en el destructor
-                                 // del wrapper
+    std::unordered_map<CollectableID_t, CollectableWrapper> collectablesWrapps;
 
 public:
     Collectables();

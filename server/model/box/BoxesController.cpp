@@ -1,17 +1,17 @@
 #include "BoxesController.h"
 
 #include "../physicsConstants.h"
-#include "server/config.h"
 #include "server/model/collectable/CollectablesController.h"
 #include "server/model/collectable/CollectablesFactory.h"
 #include "server/model/projectile/ProjectilesController.h"
-#define CANT_FRAGMENTS_BOX_EXPLOTION 10
 
 BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
-                                 CollectablesFactory& factory):
-        factory(factory), listener(nullptr) {
+                                 CollectablesFactory& factory, const Config& conf):
+        factory(factory), conf(conf), listener(nullptr) {
     for (auto& pair: positionsPerBox) {
-        boxes.emplace(pair.first, Box(pair.second));
+        boxes.emplace(pair.first,
+                      Box(Transform(pair.second, Vector2D(conf.getBoxSize(), conf.getBoxSize())),
+                          conf.getBoxLife()));
     }
 }
 
@@ -26,8 +26,7 @@ void BoxesController::RelaseContent(BoxID_t id, CollectablesController& collecta
         if (maybeContent.value() != nullptr) {
             collectables.AddCollectable(maybeContent.value());
         } else {
-            projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(),
-                                        CANT_FRAGMENTS_BOX_EXPLOTION);
+            projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(), conf.getFragmentBox());
         }
     }
 }
@@ -36,7 +35,6 @@ void BoxesController::Update(CollectablesController& collectables,
                              ProjectilesController& projectiles) {
     for (auto it = boxes.begin(); it != boxes.end();) {
         if (it->second.IsDead()) {
-            std::cout << "una caja habia sido destruida :0 \n";
             RelaseContent(it->first, collectables, projectiles);
             listener->DespawnBox(it->first);
             it = boxes.erase(it);

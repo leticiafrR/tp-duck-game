@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include <cmath>
-#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -18,7 +17,7 @@
 #include "throwable/ThrowablesController.h"
 
 #include "Duck.h"
-#define ID_PLAYER_UNIQUE_TEST 1
+
 class GameWorld {
 private:
     size_t livePlayers;

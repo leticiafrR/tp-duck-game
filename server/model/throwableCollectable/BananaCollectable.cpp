@@ -1,5 +1,7 @@
 #include "BananaCollectable.h"
 
+#include <memory>
+
 #include "server/model/Duck.h"
 #include "server/model/throwable/Banana.h"
 

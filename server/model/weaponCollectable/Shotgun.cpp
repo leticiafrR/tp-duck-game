@@ -1,8 +1,9 @@
 #include "Shotgun.h"
 
 #include "server/model/Duck.h"
+#include "server/model/physicsConstants.h"
 #include "server/model/projectile/Projectile.h"
-#define AMMO_WITH_RELOAD(x) ((x)*2)
+
 Shotgun::Shotgun(ProjectilesController& controller, const Transform& initialSpace,
                  const Config& conf):
         Weapon(controller, initialSpace, conf.getShotgunScope(),

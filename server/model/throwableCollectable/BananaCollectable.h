@@ -1,6 +1,6 @@
 #ifndef BANANA_COLLECTABLE_H
 #define BANANA_COLLECTABLE_H
-#include <memory>
+
 
 #include "ThrowableCollectable.h"
 

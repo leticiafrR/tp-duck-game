@@ -17,6 +17,7 @@
 #define RECOIL_LASER 15
 #define RECOIL_MAGNUM 13
 #define DAMAGE_MULTIPLES_PROJECTILES(x) ((x) / 9)
+#define AMMO_WITH_RELOAD(x) ((x)*2)
 
 // explotion
 #define INTENSITY_EXPLOTION 30

@@ -283,7 +283,6 @@ void Duck::HandleOutOfBounds(float displacement) {
                                                 (Vector2D::Left() * displacement);
         mySpace.Move(add);
     } else {
-        std::cout << "[DUCK]: me salì del lìmite posterior. Morì.\n";
         Quit();
     }
 }

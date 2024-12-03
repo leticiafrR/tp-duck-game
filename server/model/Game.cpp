@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include "data/command.h"
-
 GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::string& sceneName,
                      const Config& conf):
         livePlayers(playersIds.size()),
@@ -9,7 +7,7 @@ GameWorld::GameWorld(const std::vector<PlayerID_t>& playersIds, const std::strin
         projectilesController(),
         collectablesFactory(projectilesController, conf),
         collectablesController(collectablesFactory, map.GetCollectableSpawnPoints()),
-        boxesController(map.GetBoxes(), collectablesFactory) {
+        boxesController(map.GetBoxes(), collectablesFactory, conf) {
 
     eventsManager.SendProjectileListener(projectilesController);
     CreatePlayers(playersIds, conf);
@@ -30,8 +28,6 @@ void GameWorld::CreatePlayers(const std::vector<PlayerID_t>& playersIds, const C
     std::vector<Vector2D> spawnPoints = map.GetPlayersSpawnPoints();
     for (size_t i = 0; i < playersIds.size(); i++) {
         players[playersIds[i]] = new Duck(spawnPoints[i], playersIds[i], conf);
-        std::cout << "Duck [" << playersIds[i] << "] spwaned on " << (spawnPoints[i]).ToString()
-                  << std::endl;
     }
 }
 
@@ -49,7 +45,6 @@ void GameWorld::Update(float deltaTime) {
 void GameWorld::ReapDead() {
     for (auto it = players.begin(); it != players.end();) {
         if (it->second->IsDead()) {
-            std::cout << "muriò el jugador con ID: [" << it->first << "]\n";
             delete it->second;
             it = players.erase(it);
             livePlayers--;
@@ -68,8 +63,6 @@ void GameWorld::QuitPlayer(PlayerID_t id) {
 void GameWorld::HandleCommand(const Command& cmmd) {
     if (players.contains(cmmd.playerId)) {
         ExecCommand(players[cmmd.playerId], cmmd.code);
-    } else {
-        std::cout << "[GAME WORLD]: tratas de mover un jugador muerto\n";
     }
 }
 

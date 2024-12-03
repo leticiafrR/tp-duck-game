@@ -1,9 +1,9 @@
 #include "Box.h"
 
 #include "server/model/collectable/CollectablesFactory.h"
-#define LIFE_BOX 25
-Box::Box(const Vector2D& position):
-        mySpace(position, Vector2D(2, 2)), life(LIFE_BOX), isDead(false) {}
+
+Box::Box(const Transform& initialSpace, int life):
+        mySpace(initialSpace), life(life), isDead(false) {}
 
 std::optional<std::shared_ptr<Collectable>> Box::GetContent(CollectablesFactory& factory) {
     return factory.MaybeRandomCollectable(mySpace.GetPos());

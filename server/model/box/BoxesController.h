@@ -4,17 +4,16 @@
 #include <optional>
 #include <unordered_map>
 
-// #include "server/model/collectable/Collectable.h"
+#include "server/config.h"
 #include "server/model/event/BoxEventListener.h"
 
 #include "Box.h"
-
 class ProjectilesController;
 class CollectablesController;
-class Config;
 class BoxesController {
 private:
     CollectablesFactory& factory;
+    const Config& conf;
     std::unordered_map<BoxID_t, Box> boxes;
     BoxEventListener* listener;
     void RelaseContent(BoxID_t id, CollectablesController& collectables,
@@ -22,7 +21,7 @@ private:
 
 public:
     explicit BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
-                             CollectablesFactory& collectablesFactory);
+                             CollectablesFactory& collectablesFactory, const Config& conf);
     void RegisterListener(BoxEventListener* l);
     void Update(CollectablesController& collectablesController,
                 ProjectilesController& projectilesController);

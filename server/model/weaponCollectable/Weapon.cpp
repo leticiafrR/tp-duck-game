@@ -1,6 +1,7 @@
 #include "Weapon.h"
 
 #include "server/model/Duck.h"
+#include "server/model/projectile/Projectile.h"
 
 Weapon::Weapon(ProjectilesController& projectilesController, const Transform& initialSpace,
                float scope, uint16_t ammo, uint8_t damage, float dispersionRange, float cooldown,

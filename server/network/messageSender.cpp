@@ -44,6 +44,7 @@ void GamesRecountSender::execute(ServerProtocol& protocol) const {
 MatchExitSender::MatchExitSender(PlayerID_t finalWinner): finalWinner(finalWinner) {}
 
 void MatchExitSender::execute(ServerProtocol& protocol) const {
+    std::cout << "msg finaliza PARTIDA\n";
     if (finalWinner != 0) {
         protocol.sendMatchWinner(finalWinner);
     }
