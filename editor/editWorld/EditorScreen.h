@@ -34,8 +34,8 @@ private:
     list<PlatformOptionWidget> basicsPlatform;
     GroundDto loadPlatforms(const YAML::Node& config, const std::string& platformName);
     vector<GroundDto> ReadBasicPlataforms();
-    Button saveButton;
-    Text saveButtonText;
+    Button* saveButton;
+    Text* saveButtonText;
     Object2D mapBg;
     vector<MapBlock2D> mapBlocks;
     vector<Object2D> boxes;

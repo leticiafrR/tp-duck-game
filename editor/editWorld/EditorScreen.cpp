@@ -58,20 +58,6 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                            bool& wasClosed):
         BaseScreen(cam, resourceManager, wasClosed),
         writer(w),
-        saveButton(
-                BUTTON_1_IMAGE,
-                RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
-                              Vector2D(0.5, 0.5)),
-                [this]() {
-                    running = false;
-                    writer.SaveChanges();
-                    return;
-                },
-                Color(40, 40, 40), 4),
-        saveButtonText(SAVE_LABEL.c_str(), 20,
-                       RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
-                                     Vector2D(0.5, 0.5)),
-                       ColorExtension::White(), 5),
         mapBg(w.GetGameScene().theme, Transform(Vector2D::Zero(), Vector2D(300, 300))),
         playersPoint(
                 guiManager,
@@ -97,6 +83,24 @@ EditorScreen::EditorScreen(Camera& cam, MapEditor& w, ResourceManager& resourceM
                 },
                 BOX_SPAWN_POINT, BOX_IMG.c_str(), Vector2D(-100, -40), BOXES_POINT_LABEL,
                 Vector2D(30, 30)) {
+
+
+    saveButton = guiManager.CreateButton(
+            BUTTON_1_IMAGE,
+            RectTransform(Vector2D(180, -240), Vector2D(250, 80), Vector2D(0.65, 0.45),
+                          Vector2D(0.5, 0.5)),
+            [this]() {
+                running = false;
+                writer.SaveChanges();
+                return;
+            },
+            Color(40, 40, 40), 4);
+
+    saveButtonText = guiManager.CreateText(SAVE_LABEL.c_str(), 20,
+                                           RectTransform(Vector2D(180, -240), Vector2D(250, 80),
+                                                         Vector2D(0.65, 0.45), Vector2D(0.5, 0.5)),
+                                           ColorExtension::White(), 5);
+
     InitMap(writer.GetGameScene());
     vector<GroundDto> groundBlocks = ReadBasicPlataforms();
     Vector2D initialPos(-200, -100);
@@ -206,8 +210,8 @@ void EditorScreen::TakeAPlatform() {
 }
 
 void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
-    if (Collision::RectCollision(saveButton.GetTransform(),
-                                 Transform(Vector2D(event.x, event.y), saveButton.GetSize()))) {
+    if (Collision::RectCollision(saveButton->GetTransform(),
+                                 Transform(Vector2D(event.x, event.y), saveButton->GetSize()))) {
         return;
     }
     if (event.button == SDL_BUTTON_LEFT) {
