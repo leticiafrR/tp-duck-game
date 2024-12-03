@@ -11,6 +11,12 @@ This project presents the implementation of a simplified version of *Duck Game*,
 | Leticia | Figueroa |lfigueroar@fi.uba.ar|[leticiafrR](https://github.com/leticiafrR)|
 | Andrea | Figueroa |afigueroa@fi.uba.ar|[AndreaFigueroaR](https://github.com/AndreaFigueroaR)|
 
+## Run using Valgrind
+To run the program with valgrind use the follow command:
+
+`valgrind --leak-check=yes <taller_program> <params>`
+
+
 
 ## Credits 
 This implementation utilizes *sockets*, *threads*, and *queues* provided by the head of practical work of the course, distributed under the GPL v2 license.
