@@ -11,19 +11,10 @@ void Grenade::Update(const StaticMap& map, float deltaTime) {
     Throwable::Update(map, deltaTime);
     timer -= deltaTime;
     if (timer <= 0) {
-        Explote();
+        projectiles.RelaseExplotion(mySpace.GetPos(), 5);
+        MarkAsDead();
     }
 }
 
-void Grenade::Explote() {
-    Vector2D dir = Vector2D::Right();
-    for (int i = 0; i < 5; i++, dir.Rotate(FULL_SPIN / 5)) {
-        Projectile* fragment = new Projectile(
-                mySpace.GetPos(), dir, SCOPE_EXPLOTION, DAMAGE_EXPLOTION, TypeProjectile::FRAGMENT,
-                projectiles.GetInstantProjectileListener(), INTENSITY_EXPLOTION);
-        projectiles.RelaseProjectile(fragment);
-    }
-    MarkAsDead();
-}
 
 void Grenade::CheckCollisionWithDucks(std::unordered_map<PlayerID_t, Duck*>& /*ducks*/) {}

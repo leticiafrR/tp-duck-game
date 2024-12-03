@@ -1,19 +1,9 @@
 
 #include "ProjectilesController.h"
 
+#include "../physicsConstants.h"
+
 ProjectilesController::ProjectilesController(): instantProjectileListener(nullptr) {}
-
-ProjectileEventListener* ProjectilesController::GetInstantProjectileListener() {
-    return instantProjectileListener;
-}
-
-void ProjectilesController::RegisterListener(ProjectileEventListener* listener) {
-    instantProjectileListener = listener;
-}
-
-void ProjectilesController::RelaseProjectile(Projectile* projectile) {
-    projectiles.push_back(projectile);
-}
 
 void ProjectilesController::Update(const StaticMap& map,
                                    std::unordered_map<PlayerID_t, Duck*>& players,
@@ -33,6 +23,30 @@ void ProjectilesController::ReapDead() {
         return false;
     });
     projectiles.erase(deleter, projectiles.end());
+}
+
+void ProjectilesController::RelaseExplotion(const Vector2D& origin, int cantFragments) {
+    if (cantFragments > 0) {
+        Vector2D dir = Vector2D::Right();
+        for (int i = 0; i < cantFragments; i++, dir.Rotate(FULL_SPIN / cantFragments)) {
+            Projectile* fragment = new Projectile(origin, dir, SCOPE_EXPLOTION, DAMAGE_EXPLOTION,
+                                                  TypeProjectile::FRAGMENT,
+                                                  instantProjectileListener, INTENSITY_EXPLOTION);
+            RelaseProjectile(fragment);
+        }
+    }
+}
+
+ProjectileEventListener* ProjectilesController::GetInstantProjectileListener() {
+    return instantProjectileListener;
+}
+
+void ProjectilesController::RegisterListener(ProjectileEventListener* listener) {
+    instantProjectileListener = listener;
+}
+
+void ProjectilesController::RelaseProjectile(Projectile* projectile) {
+    projectiles.push_back(projectile);
 }
 
 ProjectilesController::~ProjectilesController() {

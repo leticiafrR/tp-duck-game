@@ -15,17 +15,6 @@ BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& po
 
 void BoxesController::RegisterListener(BoxEventListener* l) { listener = l; }
 
-void BoxesController::GenerateExplotion(Vector2D originExplotion,
-                                        ProjectilesController& projectiles) {
-    Vector2D dir = Vector2D::Right();
-    for (int i = 0; i < 10; i++, dir.Rotate(FULL_SPIN / 10)) {
-        Projectile* fragment =
-                new Projectile(originExplotion, dir, SCOPE_EXPLOTION, conf.getDamageShort() / 2,
-                               TypeProjectile::FRAGMENT, projectiles.GetInstantProjectileListener(),
-                               INTENSITY_EXPLOTION);
-        projectiles.RelaseProjectile(fragment);
-    }
-}
 
 void BoxesController::DestroyBox(BoxID_t id, CollectablesController& collectables,
                                  ProjectilesController& projectiles) {
@@ -36,7 +25,7 @@ void BoxesController::DestroyBox(BoxID_t id, CollectablesController& collectable
         if (maybeContent.value() != nullptr) {
             collectables.AddCollectable(maybeContent.value(), boxes[id].GetTransform().GetPos());
         } else {
-            GenerateExplotion(boxes[id].GetTransform().GetPos(), projectiles);
+            projectiles.RelaseExplotion(boxes[id].GetTransform().GetPos(), 10);
         }
     }
 }

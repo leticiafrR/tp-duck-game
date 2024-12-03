@@ -44,8 +44,7 @@ public:
     bool IsOver();
     PlayerID_t WhoWon();
     Snapshot GetSnapshot();
-
-    // void quitPlayer(PlayerID_t);
+    void QuitPlayer(PlayerID_t id);
     ~GameWorld();
 };
 #endif

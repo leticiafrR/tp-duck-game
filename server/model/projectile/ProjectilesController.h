@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Projectile.h"
-
 class ProjectilesController {
 private:
     std::vector<Projectile*> projectiles;
@@ -16,6 +15,7 @@ public:
     ProjectileEventListener* GetInstantProjectileListener();
     void RegisterListener(ProjectileEventListener* listener);
     void RelaseProjectile(Projectile* projectile);
+    void RelaseExplotion(const Vector2D& origin, int cantFragments);
     void Update(const StaticMap& map, std::unordered_map<PlayerID_t, Duck*>& players,
                 std::unordered_map<BoxID_t, Box>& boxes);
     ~ProjectilesController();

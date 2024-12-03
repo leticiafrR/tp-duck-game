@@ -22,7 +22,6 @@ public:
     explicit BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
                              const Config& conf);
     void RegisterListener(BoxEventListener* l);
-    void GenerateExplotion(Vector2D originExplotion, ProjectilesController& projectiles);
     void DestroyBox(BoxID_t id, CollectablesController& collectables,
                     ProjectilesController& projectiles);
     void Update(CollectablesController& collectables, ProjectilesController& projectiles);

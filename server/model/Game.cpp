@@ -57,6 +57,12 @@ void GameWorld::ReapDead() {
     }
 }
 
+void GameWorld::QuitPlayer(PlayerID_t id) {
+    if (players.contains(id)) {
+        players[id]->MarkAsDead();
+    }
+}
+
 void GameWorld::HandleCommand(const Command& cmmd) {
     if (players.contains(cmmd.playerId)) {
         ExecCommand(players[cmmd.playerId], cmmd.code);
