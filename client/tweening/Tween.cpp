@@ -2,13 +2,14 @@
 
 #include <iostream>
 
-#include "TweenManager.h"
 Tween::Tween(float duration, Callback onComplete):
-        duration(duration), timming(duration), onComplete(onComplete), alive(true), started(false) {
-    TweenManager::GetInstance().AddTween(this);
-}
+        duration(duration),
+        timming(duration),
+        onComplete(onComplete),
+        alive(true),
+        started(false) {}
 
-Tween::~Tween() { TweenManager::GetInstance().RemoveTween(this); }
+Tween::~Tween() {}
 
 float Tween::InverseLerp(float a, float b, float x) { return (x - a) / (b - a); }
 void Tween::Play() { started = true; }

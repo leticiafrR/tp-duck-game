@@ -7,7 +7,6 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "multimedia/Camera.h"
-#include "multimedia/cache/SheetDataCache.h"
 
 #include "GraphicUI.h"
 #include "RectTransform.h"
@@ -28,7 +27,6 @@ public:
           Color color = Color(255, 255, 255), int layerOrder = 0);
     ~Image();
 
-    void SetSourceRect(const string& filename, const string& key, int index = 0);
     void SetSourceRect(const SDL2pp::Optional<Rect>& rect);
 
     void SetFile(const std::string& filename);

@@ -8,7 +8,6 @@
 #include "common/Transform.h"
 #include "data/gameScene.h"
 #include "multimedia/Camera.h"
-#include "multimedia/cache/SheetDataCache.h"
 #include "multimedia/resource/ResourceData.h"
 
 #include "MapBlockRenderData.h"

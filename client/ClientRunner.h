@@ -11,13 +11,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "gameplay/Gameplay.h"
+#include "game/GameScreen.h"
+#include "menus/Menus.h"
 #include "network/Client.h"
-#include "screens/GameStatusScreen.h"
-#include "screens/LoadingScreen.h"
-#include "screens/LobbyScreen.h"
-#include "screens/MatchListScreen.h"
-#include "screens/MenuScreen.h"
 
 #include "Framework.h"
 
@@ -32,7 +28,7 @@ private:
     ResourceManager resource;
     bool wasClosed;
 
-    PlayerData LoadWinner(Client& client, vector<PlayerData> players);
+    void LoadWinner(Client& client, vector<PlayerData> players, std::optional<PlayerData>& winner);
 
     void LoadFinalGroup(Client& client, bool& isFinalGroup);
 

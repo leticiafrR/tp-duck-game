@@ -10,11 +10,11 @@ laser_ray:
   sfx_file: laserSFX.mp3
   file_rect: { x: 1, y: 156, w: 32, h: 16 }
   size: { x: 3, y: 1.5 }
-  visual_speed: 120
+  visual_speed: 160
 
 fragment:
   file: grenades.png
-  sfx_file: bulletSFX.wav
+  sfx_file: fragment.mp3
   file_rect: { x: 0, y: 135, w: 16, h: 16 }
   size: { x: 2, y: 2 }
-  visual_speed: 120
+  visual_speed: 110

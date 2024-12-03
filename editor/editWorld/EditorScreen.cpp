@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <set>
 
-#include "client/tweening/TweenManager.h"
 #include "common/Collision.h"
 #include "data/gameScene.h"
 #include "editor/constantsEditor.h"

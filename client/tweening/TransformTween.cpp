@@ -1,18 +1,23 @@
 #include "TransformTween.h"
 
-TransformTween::TransformTween(std::optional<Transform*> t): Tween(1.0f, []() {}), transform(t) {
+TransformTween::TransformTween(std::optional<Transform*> t):
+        Tween(1.0f, []() {}), transform(t), changed(false) {
     if (transform.has_value()) {
         startSize = transform.value()->GetSize();
         targetSize = transform.value()->GetSize();
+    } else {
+        startSize = targetSize = Vector2D::Zero();
     }
 }
 
 TransformTween::TransformTween(std::optional<Transform*> t, Vector2D targetSize, float duration,
                                OnCompleteCallback onComplete):
-        Tween(duration, onComplete), transform(t) {
+        Tween(duration, onComplete), transform(t), changed(false) {
     if (transform.has_value()) {
         startSize = transform.value()->GetSize();
         this->targetSize = targetSize;
+    } else {
+        startSize = targetSize = Vector2D::Zero();
     }
 }
 

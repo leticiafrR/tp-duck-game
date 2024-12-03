@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "multimedia/cache/SheetDataCache.h"
 #include "multimedia/resource/ResourceData.h"
 
 using std::string;
