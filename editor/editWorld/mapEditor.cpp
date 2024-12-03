@@ -7,7 +7,7 @@
 #include "common/Transform.h"
 #include "common/Vector2D.h"
 
-MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0), parser() {
+MapEditor::MapEditor(): config(YAML::Node(YAML::NodeType::Map)), platformsCounter(0) {
     config[THEME_STR] = FOREST_KEY;
     config[FULL_MAP_STR][X_STR] = 100;
     config[FULL_MAP_STR][Y_STR] = 160;
@@ -17,8 +17,7 @@ MapEditor::MapEditor(const string& _fileName):
         config(YAML::LoadFile(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE)),
         platformsCounter(0),
         fileName(_fileName),
-        filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE),
-        parser() {
+        filePath(RELATIVE_LEVEL_PATH + _fileName + YAML_FILE) {
 
     if (config[PLATFORMS_STR] && config[PLATFORMS_STR].IsSequence()) {
         platformsCounter = config[PLATFORMS_STR].size();
@@ -199,8 +198,7 @@ vector<GroundDto> MapEditor::GetPlatforms() {
     return grounds;
 }
 GameSceneDto MapEditor::GetGameScene() {
-    return GameSceneDto(parser.GetBackgroundPath(config[THEME_STR].as<string>()), GetPlatforms(),
-                        GetBoxes());
+    return GameSceneDto(config[THEME_STR].as<string>(), GetPlatforms(), GetBoxes());
 }
 unordered_map<BoxID_t, Vector2D> MapEditor::GetBoxes() {
     BoxID_t id = 0;
