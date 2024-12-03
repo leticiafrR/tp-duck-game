@@ -34,6 +34,8 @@ target_sources(taller_server
     model/collectable/spawning/Collectables.cpp
     model/collectable/CollectablesController.cpp
     model/collectable/Collectable.cpp
+    model/collectable/Armor.cpp
+    model/collectable/Helmet.cpp
 
 
 
