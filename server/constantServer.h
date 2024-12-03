@@ -98,4 +98,5 @@ const std::string WEAPONS_PATH = "/etc/duckGame_g6/weaponConfig.yaml";
 const std::string MATCH_PATH = "/etc/duckGame_g6/matchConfig.yaml";
 const std::string DUCK_PATH = "/etc/duckGame_g6/duckConfig.yaml";
 const std::string OBJECT_PATH = "/etc/duckGame_g6/objectConfig.yaml";
+const std::string THEME_PATH = "/etc/duckGame_g6/map_themes.yaml";
 #endif
