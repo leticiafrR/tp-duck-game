@@ -258,11 +258,11 @@ void EditorScreen::HandleMouseClick(const SDL_MouseButtonEvent& event) {
                 typeSpawnPoint.reset();
             }
         }
-        if (event.button == SDL_BUTTON_RIGHT) {
-            selected.reset();
-            spawnPoint.reset();
-            typeSpawnPoint.reset();
-        }
+    }
+    if (event.button == SDL_BUTTON_RIGHT) {
+        selected.reset();
+        spawnPoint.reset();
+        typeSpawnPoint.reset();
     }
 }
 
