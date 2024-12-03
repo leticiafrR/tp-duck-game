@@ -4,7 +4,7 @@
 #include <functional>
 
 #define TEXTURE_PATH "/var/duckGame_g6/assets/sprites/"
-#define SHEET_DATA_PATH "/var/duckGame_g6/assets/sheet_data/"
+#define RESOURCE_DATA_PATH "/etc/duckGame_g6/rendering/"
 #define FONT_PATH "/var/duckGame_g6/assets/fonts/"
 #define AUDIO_PATH "/var/duckGame_g6/assets/audio/"
 

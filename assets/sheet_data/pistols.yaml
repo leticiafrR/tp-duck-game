@@ -1,6 +1,0 @@
-cowboy_pistol:
-  - { x: 1, y: 20, w: 22, h: 11 }
-magnum:
-  - { x: 1, y: 47, w: 32, h: 32 }
-dueling_pistol:
-  - { x: 1, y: 187, w: 32, h: 32 }

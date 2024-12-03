@@ -1,6 +1,6 @@
 #include "Rate.h"
 
-Rate::Rate(int target): target(target) { Init(); }
+Rate::Rate(int target): target(target), deltaTime(0) { Init(); }
 Rate::~Rate() = default;
 
 int Rate::GetTargetMiliseconds() const { return 1000.0f / target; }

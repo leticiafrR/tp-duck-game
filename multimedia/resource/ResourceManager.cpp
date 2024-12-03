@@ -1,13 +1,13 @@
 #include "ResourceManager.h"
 
-ResourceManager::ResourceManager(): root(YAML::LoadFile(SHEET_DATA_PATH + RESOURCE_ROOT)) {}
+ResourceManager::ResourceManager(): root(YAML::LoadFile(RESOURCE_DATA_PATH + RESOURCE_ROOT)) {}
 ResourceManager::~ResourceManager() = default;
 
 AudioCache& ResourceManager::GetAudioCache() { return audioCache; }
 
 const MenuData& ResourceManager::GetMenuData() {
     if (!menuData.has_value()) {
-        auto dataNode = YAML::LoadFile(SHEET_DATA_PATH + root["menu"].as<std::string>());
+        auto dataNode = YAML::LoadFile(RESOURCE_DATA_PATH + root["menu"].as<std::string>());
         menuData = ResourceParser::ParseMenu(dataNode);
     }
     return menuData.value();
@@ -15,7 +15,7 @@ const MenuData& ResourceManager::GetMenuData() {
 
 const DuckData& ResourceManager::GetDuckData() {
     if (!duckData.has_value()) {
-        auto dataNode = YAML::LoadFile(SHEET_DATA_PATH + root["duck"].as<std::string>());
+        auto dataNode = YAML::LoadFile(RESOURCE_DATA_PATH + root["duck"].as<std::string>());
         duckData = ResourceParser::ParseDuck(dataNode);
     }
     return duckData.value();
@@ -27,6 +27,7 @@ MapThemeData& ResourceManager::GetMapThemeData(string theme) {
     }
 
     if (!mapThemesData.contains(theme)) {
+        std::cout << theme << "\n";
         throw ResourceUndefined();
     }
 
@@ -35,7 +36,7 @@ MapThemeData& ResourceManager::GetMapThemeData(string theme) {
 
 const ArmorData& ResourceManager::GetArmorData() {
     if (!armorData.has_value()) {
-        auto dataNode = YAML::LoadFile(SHEET_DATA_PATH + root["armor"].as<std::string>());
+        auto dataNode = YAML::LoadFile(RESOURCE_DATA_PATH + root["armor"].as<std::string>());
         armorData = ResourceParser::ParseArmor(dataNode);
     }
     return armorData.value();
@@ -47,6 +48,7 @@ CollectableData ResourceManager::GetCollectableData(TypeItem type) {
     }
 
     if (!collectablesMap.contains(type)) {
+        std::cout << (int)type << "\n";
         throw ResourceUndefined();
     }
 
@@ -59,6 +61,7 @@ ProjectileData ResourceManager::GetProjectilData(TypeProjectile type) {
     }
 
     if (!projectilesMap.contains(type)) {
+        std::cout << (int)type << "\n";
         throw ResourceUndefined();
     }
 
@@ -66,7 +69,8 @@ ProjectileData ResourceManager::GetProjectilData(TypeProjectile type) {
 }
 
 void ResourceManager::LoadMapThemesData() {
-    YAML::Node themesNode = YAML::LoadFile(SHEET_DATA_PATH + root["map_themes"].as<std::string>());
+    YAML::Node themesNode =
+            YAML::LoadFile(RESOURCE_DATA_PATH + root["map_themes"].as<std::string>());
 
     for (const auto& itemData: themesNode) {
         const string key = itemData.first.as<string>();
@@ -77,7 +81,7 @@ void ResourceManager::LoadMapThemesData() {
 
 void ResourceManager::LoadCollectablesData() {
     YAML::Node collectablesNode =
-            YAML::LoadFile(SHEET_DATA_PATH + root["collectables"].as<std::string>());
+            YAML::LoadFile(RESOURCE_DATA_PATH + root["collectables"].as<std::string>());
 
     for (const auto& itemData: collectablesNode) {
         const string key = itemData.first.as<string>();
@@ -91,7 +95,7 @@ void ResourceManager::LoadCollectablesData() {
 
 void ResourceManager::LoadProjectilesData() {
     YAML::Node projectilesNode =
-            YAML::LoadFile(SHEET_DATA_PATH + root["projectiles"].as<std::string>());
+            YAML::LoadFile(RESOURCE_DATA_PATH + root["projectiles"].as<std::string>());
 
     for (const auto& itemData: projectilesNode) {
         const string key = itemData.first.as<string>();
