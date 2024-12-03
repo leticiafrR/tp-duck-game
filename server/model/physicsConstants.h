@@ -13,9 +13,9 @@
 
 // weapons
 #define DISPERSION_RATE_AK47 0.3
-#define RECOIL_AK47 12
-#define RECOIL_LASER 13
-#define RECOIL_MAGNUM 12
+#define RECOIL_AK47 14
+#define RECOIL_LASER 15
+#define RECOIL_MAGNUM 13
 #define DAMAGE_MULTIPLES_PROJECTILES(x) ((x) / 9)
 
 // explotion
