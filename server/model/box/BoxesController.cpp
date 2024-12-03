@@ -4,9 +4,7 @@
 #include "server/config.h"
 #include "server/model/collectable/CollectablesController.h"
 #include "server/model/projectile/ProjectilesController.h"
-#define SCOPE_EXPLOTION 30
 
-#define DAMAGE_EXPLOTION 6
 BoxesController::BoxesController(const std::unordered_map<BoxID_t, Vector2D>& positionsPerBox,
                                  const Config& conf):
         listener(nullptr), conf(conf) {
@@ -20,10 +18,11 @@ void BoxesController::RegisterListener(BoxEventListener* l) { listener = l; }
 void BoxesController::GenerateExplotion(Vector2D originExplotion,
                                         ProjectilesController& projectiles) {
     Vector2D dir = Vector2D::Right();
-    for (int i = 0; i < 10; i++, dir.Rotate(360 / 10)) {
-        Projectile* fragment = new Projectile(
-                originExplotion, dir, SCOPE_EXPLOTION, DAMAGE_EXPLOTION, TypeProjectile::FRAGMENT,
-                projectiles.GetInstantProjectileListener(), INTENSITY_EXPLOTION);
+    for (int i = 0; i < 10; i++, dir.Rotate(FULL_SPIN / 10)) {
+        Projectile* fragment =
+                new Projectile(originExplotion, dir, SCOPE_EXPLOTION, conf.getDamageShort() / 2,
+                               TypeProjectile::FRAGMENT, projectiles.GetInstantProjectileListener(),
+                               INTENSITY_EXPLOTION);
         projectiles.RelaseProjectile(fragment);
     }
 }
