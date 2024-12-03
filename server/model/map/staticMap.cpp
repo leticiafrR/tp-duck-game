@@ -15,7 +15,7 @@ StaticMap::StaticMap(const std::string& fileName) { SetTheLevel(fileName); }
 
 std::vector<Vector2D> StaticMap::GetPlayersSpawnPoints() const { return playersSpawnPlaces; }
 
-GameSceneDto StaticMap::GetScene() const { return GameSceneDto(theme, grounds); }
+GameSceneDto StaticMap::GetScene() const { return GameSceneDto(theme, grounds, boxes); }
 
 void StaticMap::AddGround(const GroundDto& grd) { grounds.emplace_back(grd); }
 
