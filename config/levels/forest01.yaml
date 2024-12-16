@@ -1,0 +1,262 @@
+theme: FOREST
+full_map_size:
+  x: 160
+  y: 100
+  
+collectable_spawn_points:
+  - x: 0
+    y: 25
+  - x: 35
+    y: 15
+  - x: -35
+    y: 15
+
+players_spawn_points:
+  - x: 55
+    y: 10
+  - x: -55
+    y: 10
+  - x: 55
+    y: 25
+  - x: -55
+    y: 25
+
+box_spawn_points:
+  - x: 20
+    y: 5
+  - x: -20
+    y: 5
+  - x: 10
+    y: 25
+  - x: -10
+    y: 25
+  - x: 50
+    y: -45
+  - x: -50
+    y: -45
+  
+platforms:
+  - platform_one
+  - platform_two
+  - platform_three
+  - platform_four
+  - platform_five
+  - platform_six
+  - platform_eight
+  - platform_nine
+  - platform_ten
+  - platform_eleven
+  - platform_twelve
+  - platform_thirdteen
+  - platform_fourteen
+  - platform_fifthteen
+  - platform_sixteen
+  - platform_seventeen
+  - platform_nineteen
+  - platform_eighteen
+  - platform_20
+  - platform_twentyone
+
+platform_one:
+  x: 0
+  y: 0
+  w: 50
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_two:
+  x: 0
+  y: 20
+  w: 40
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_three:
+  x: -35
+  y: 10
+  w: 20
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_four:
+  x: 35
+  y: 10
+  w: 20
+  h: 8  
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_five:
+  x: 55
+  y: 0
+  w: 15
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT  
+
+platform_six:
+  x: -55
+  y: 0
+  w: 15
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_eight:
+  x: 55
+  y: 20
+  w: 10
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_nine:
+  x: -55
+  y: 20
+  w: 10
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_ten:
+  x: -45
+  y: -50
+  w: 40
+  h: 8
+  edges: 
+  - TOP
+  - BOTTOM
+  - RIGHT
+
+platform_eleven:
+  x: 45
+  y: -50
+  w: 40
+  h: 8
+  edges: 
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_twelve:
+  x: -65
+  y: -45
+  w: 10
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+
+platform_thirdteen:
+  x: -65
+  y: -50
+  w: 10
+  h: 8
+  edges: 
+  - BOTTOM
+  - LEFT
+
+platform_fourteen:
+  x: 65
+  y: -45
+  w: 10
+  h: 8
+  edges: 
+  - LEFT
+  - TOP
+
+platform_fifthteen:
+  x: 65
+  y: -50
+  w: 10
+  h: 8
+  edges: 
+  - BOTTOM
+  - RIGHT
+
+platform_sixteen:
+  x: -72
+  y: -45
+  w: 8
+  h: 8
+  edges: 
+  - BOTTOM
+  - LEFT
+
+platform_seventeen:
+  x: 72
+  y: -45
+  w: 8
+  h: 8
+  edges: 
+  - BOTTOM
+  - RIGHT
+
+platform_eighteen:
+  x: -72
+  y: -21
+  w: 8
+  h: 40
+  edges: 
+  - TOP
+  - LEFT
+  - RIGHT
+
+platform_nineteen:
+  x: 72
+  y: -21
+  w: 8
+  h: 40
+  edges:
+  - TOP
+  - LEFT
+  - RIGHT
+
+platform_20:
+  x: -35
+  y: -10
+  w: 20
+  h: 8
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
+
+platform_twentyone:
+  x: 35
+  y: -10
+  w: 20
+  h: 8  
+  edges: 
+  - RIGHT
+  - TOP
+  - BOTTOM
+  - LEFT
