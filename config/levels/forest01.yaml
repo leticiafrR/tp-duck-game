@@ -60,7 +60,7 @@ platforms:
 platform_one:
   x: 0
   y: 0
-  w: 50
+  w: 48
   h: 8
   edges: 
   - RIGHT
@@ -71,7 +71,7 @@ platform_one:
 platform_two:
   x: 0
   y: 20
-  w: 40
+  w: 48
   h: 8
   edges: 
   - RIGHT
@@ -82,7 +82,7 @@ platform_two:
 platform_three:
   x: -35
   y: 10
-  w: 20
+  w: 24
   h: 8
   edges: 
   - RIGHT
@@ -93,7 +93,7 @@ platform_three:
 platform_four:
   x: 35
   y: 10
-  w: 20
+  w: 24
   h: 8  
   edges: 
   - RIGHT
@@ -104,7 +104,7 @@ platform_four:
 platform_five:
   x: 55
   y: 0
-  w: 15
+  w: 16
   h: 8
   edges: 
   - RIGHT
@@ -115,7 +115,7 @@ platform_five:
 platform_six:
   x: -55
   y: 0
-  w: 15
+  w: 16
   h: 8
   edges: 
   - RIGHT
@@ -126,7 +126,7 @@ platform_six:
 platform_eight:
   x: 55
   y: 20
-  w: 10
+  w: 16
   h: 8
   edges: 
   - RIGHT
@@ -137,7 +137,7 @@ platform_eight:
 platform_nine:
   x: -55
   y: 20
-  w: 10
+  w: 16
   h: 8
   edges: 
   - RIGHT
@@ -148,7 +148,7 @@ platform_nine:
 platform_ten:
   x: -45
   y: -50
-  w: 40
+  w: 48
   h: 8
   edges: 
   - TOP
@@ -158,7 +158,7 @@ platform_ten:
 platform_eleven:
   x: 45
   y: -50
-  w: 40
+  w: 48
   h: 8
   edges: 
   - TOP
@@ -168,7 +168,7 @@ platform_eleven:
 platform_twelve:
   x: -65
   y: -45
-  w: 10
+  w: 16
   h: 8
   edges: 
   - RIGHT
@@ -177,7 +177,7 @@ platform_twelve:
 platform_thirdteen:
   x: -65
   y: -50
-  w: 10
+  w: 16
   h: 8
   edges: 
   - BOTTOM
@@ -186,7 +186,7 @@ platform_thirdteen:
 platform_fourteen:
   x: 65
   y: -45
-  w: 10
+  w: 16
   h: 8
   edges: 
   - LEFT
@@ -195,14 +195,14 @@ platform_fourteen:
 platform_fifthteen:
   x: 65
   y: -50
-  w: 10
+  w: 16
   h: 8
   edges: 
   - BOTTOM
   - RIGHT
 
 platform_sixteen:
-  x: -72
+  x: -76
   y: -45
   w: 8
   h: 8
@@ -211,7 +211,7 @@ platform_sixteen:
   - LEFT
 
 platform_seventeen:
-  x: 72
+  x: 76
   y: -45
   w: 8
   h: 8
@@ -220,7 +220,7 @@ platform_seventeen:
   - RIGHT
 
 platform_eighteen:
-  x: -72
+  x: -76
   y: -21
   w: 8
   h: 40
@@ -230,7 +230,7 @@ platform_eighteen:
   - RIGHT
 
 platform_nineteen:
-  x: 72
+  x: 76
   y: -21
   w: 8
   h: 40
@@ -242,7 +242,7 @@ platform_nineteen:
 platform_20:
   x: -35
   y: -10
-  w: 20
+  w: 24
   h: 8
   edges: 
   - RIGHT
@@ -253,7 +253,7 @@ platform_20:
 platform_twentyone:
   x: 35
   y: -10
-  w: 20
+  w: 24
   h: 8  
   edges: 
   - RIGHT

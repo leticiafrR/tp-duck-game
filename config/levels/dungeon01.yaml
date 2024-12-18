@@ -59,7 +59,7 @@ platforms:
 platform_1:
   x: 0
   y: -25
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -70,7 +70,7 @@ platform_1:
 platform_2:
   x: 25
   y: -45
-  w: 30
+  w: 16
   h: 8
   edges:
   - TOP
@@ -81,7 +81,7 @@ platform_2:
 platform_3:
   x: -25
   y: -45
-  w: 30
+  w: 16
   h: 8
   edges:
   - TOP
@@ -92,7 +92,7 @@ platform_3:
 platform_4:
   x: 50
   y: -35
-  w: 30
+  w: 16
   h: 8
   edges:
   - TOP
@@ -103,7 +103,7 @@ platform_4:
 platform_5:
   x: -50
   y: -35
-  w: 30
+  w: 16
   h: 8
   edges:
   - TOP
@@ -114,7 +114,7 @@ platform_5:
 platform_6:
   x: -65
   y: -25
-  w: 10
+  w: 16
   h: 8
   edges:
   - TOP
@@ -125,7 +125,7 @@ platform_6:
 platform_7:
   x: 65
   y: -25
-  w: 10
+  w: 16
   h: 8
   edges:
   - TOP
@@ -135,8 +135,8 @@ platform_7:
 
 platform_8:
   x: 60
-  y: -10
-  w: 10
+  y: -5
+  w: 16
   h: 8
   edges:
   - TOP
@@ -146,8 +146,8 @@ platform_8:
 
 platform_9:
   x: -60
-  y: -10
-  w: 10
+  y: -5
+  w: 16
   h: 8
   edges:
   - TOP
@@ -156,9 +156,9 @@ platform_9:
   - RIGHT
 
 platform_10:
-  x: 75
+  x: 80
   y: -15
-  w: 10
+  w: 16
   h: 8
   edges:
   - TOP
@@ -167,9 +167,9 @@ platform_10:
   - RIGHT
 
 platform_11:
-  x: -75
+  x: -80
   y: -15
-  w: 10
+  w: 16
   h: 8
   edges:
   - TOP
@@ -178,9 +178,9 @@ platform_11:
   - RIGHT
 
 platform_12:
-  x: 40
+  x: 45
   y: -15
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -189,9 +189,9 @@ platform_12:
   - RIGHT
 
 platform_13:
-  x: -40
+  x: -45
   y: -15
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -202,7 +202,7 @@ platform_13:
 platform_14:
   x: 20
   y: -10
-  w: 15
+  w: 16
   h: 8
   edges:
   - TOP
@@ -211,9 +211,9 @@ platform_14:
   - RIGHT
 
 platform_15:
-  x: -15
+  x: -20
   y: -10
-  w: 15
+  w: 16
   h: 8
   edges:
   - TOP
@@ -224,7 +224,7 @@ platform_15:
 platform_16:
   x: 2.5
   y: 0
-  w: 15
+  w: 16
   h: 8
   edges:
   - TOP
@@ -235,7 +235,7 @@ platform_16:
 platform_17:
   x: 22.5
   y: 10
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -246,7 +246,7 @@ platform_17:
 platform_18:
   x: -20
   y: 10
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -257,7 +257,7 @@ platform_18:
 platform_19:
   x: 2.5
   y: 20
-  w: 15
+  w: 16
   h: 8
   edges:
   - TOP
@@ -268,7 +268,7 @@ platform_19:
 platform_20:
   x: 20
   y: 30
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
@@ -279,7 +279,7 @@ platform_20:
 platform_21:
   x: -20
   y: 30
-  w: 20
+  w: 16
   h: 8
   edges:
   - TOP
