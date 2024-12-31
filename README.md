@@ -4,12 +4,12 @@
 ## Presentation
 This project presents the implementation of a simplified version of *Duck Game*, originally developed by Landon Podbielski in 2014. 
 ## Authors
-| Name | Surname | Mail FIUBA | User Github|
-| ------ | -------- | ----------- | ----------- |
-| Candela | Matelica |cmatelica@fi.uba.ar|[candematelica](https://github.com/candematelica)|
-| Josué | Martel |nmartel@fi.uba.ar | [josValentin-fiuba](https://github.com/josValentin-fiuba)|
-| Leticia | Figueroa |lfigueroar@fi.uba.ar|[leticiafrR](https://github.com/leticiafrR)|
-| Andrea | Figueroa |afigueroa@fi.uba.ar|[AndreaFigueroaR](https://github.com/AndreaFigueroaR)|
+| Nombre   | Apellido  | Correo FIUBA         | Usuario de Github                                 |
+|----------|-----------|----------------------|--------------------------------------------------|
+| Candela  | Matelica  | cmatelica@fi.uba.ar | [candematelica](https://github.com/candematelica)|
+| Josué    | Martel    | nmartel@fi.uba.ar   | [josValentin-fiuba](https://github.com/josValentin-fiuba) |
+| Leticia  | Figueroa  | lfigueroar@fi.uba.ar| [leticiafrR](https://github.com/leticiafrR)      |
+| Andrea   | Figueroa  | afigueroa@fi.uba.ar | [AndreaFigueroaR](https://github.com/AndreaFigueroaR)      |
 
 ## Run using Valgrind
 To run the program with valgrind use the follow command:
