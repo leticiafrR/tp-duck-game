@@ -5,11 +5,11 @@ full_map_size:
   
 collectable_spawn_points:
   - x: 0
-    y: 25
+    y: 30
   - x: 35
-    y: 15
+    y: 17
   - x: -35
-    y: 15
+    y: 17
 
 players_spawn_points:
   - x: 55
@@ -27,9 +27,9 @@ box_spawn_points:
   - x: -20
     y: 5
   - x: 10
-    y: 25
+    y: 30
   - x: -10
-    y: 25
+    y: 30
   - x: 50
     y: -45
   - x: -50
@@ -70,7 +70,7 @@ platform_one:
 
 platform_two:
   x: 0
-  y: 20
+  y: 25
   w: 48
   h: 8
   edges: 
@@ -81,7 +81,7 @@ platform_two:
 
 platform_three:
   x: -35
-  y: 10
+  y: 12
   w: 24
   h: 8
   edges: 
@@ -92,7 +92,7 @@ platform_three:
 
 platform_four:
   x: 35
-  y: 10
+  y: 12
   w: 24
   h: 8  
   edges: 
@@ -125,7 +125,7 @@ platform_six:
 
 platform_eight:
   x: 55
-  y: 20
+  y: 25
   w: 16
   h: 8
   edges: 
@@ -136,7 +136,7 @@ platform_eight:
 
 platform_nine:
   x: -55
-  y: 20
+  y: 25
   w: 16
   h: 8
   edges: 
@@ -241,7 +241,7 @@ platform_nineteen:
 
 platform_20:
   x: -35
-  y: -10
+  y: -13
   w: 24
   h: 8
   edges: 
@@ -252,7 +252,7 @@ platform_20:
 
 platform_twentyone:
   x: 35
-  y: -10
+  y: -13
   w: 24
   h: 8  
   edges: 
