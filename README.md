@@ -1,5 +1,6 @@
 
 # Duck Game - Taller de programación I – 7542/9508 - FIUBA
+![DuckGame logo](assets/logoDuckGame.jpg)
 
 ## Presentation
 This project presents the implementation of a simplified version of *Duck Game*, originally developed by Landon Podbielski in 2014. 
