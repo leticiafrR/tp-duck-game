@@ -3,7 +3,7 @@
 ![DuckGame logo](assets/logoDuckGame.jpg)
 
 ## Presentation
-This project presents the implementation of a simplified version of *Duck Game*, originally developed by Landon Podbielski in 2014. 
+This project presents the implementation of a remake of *Duck Game*, originally developed by Landon Podbielski in 2014, including the server and client applications.
 ## Authors
 | Nombre   | Apellido  | Correo FIUBA         | Usuario de Github                                 |
 |----------|-----------|----------------------|--------------------------------------------------|
